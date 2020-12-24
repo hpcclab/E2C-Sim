@@ -16,24 +16,52 @@ import matplotlib.pyplot as plt
 
 
 class ArrivalPattern:
-    # Using method in this class, the distribution of tasks arrival times
-    # in the speicified interval of time is generated. 
-    # The time interval begins at start_time and ends at end_time.
-    # no_of_tasks arrive to the system during this time interval. So,
-    # the length of arrival times distribution should be no_of_tasks.
-    # It means that for each task, an arrival time is generated.
+    # Using this class, a pattern (distribution) is used to generate the
+    # arrival times. 
+    # Each arrival pattern begins at start_time and ends at end_time.
+    # During this time interval, the number of tasks that arrive to the 
+    # system is no_of_tasks.
+    # To generate the arrival times, a sample of size no_of_tasks is
+    # drawn from the pattern.
     
+    def __init__(self, pattern, start_time, end_time, no_of_tasks):
+        self.pattern = pattern
+        self.start_time = start_time
+        self.end_time = end_time
+        self.no_of_tasks = no_of_tasks
+        
     
-    def uniform(self, start_time, end_time, no_of_tasks):
+    def arrival_generator(self):
+        # It generates the arrival times distribution based on arrival
+        # pattern, time interval, and no_of_tasks arrive.
+        # len(distribution) is no_of_tasks.
+        
+        if self.pattern == 'uniform':
+            distribution = self.uniform()
+        
+        elif self.pattern == 'normal':
+            distribution = self.normal()
+        
+        elif self.pattern == 'exponential':
+            distribution = self.exponential()
+        
+        elif self.pattern == 'spiky':
+            distribution = self.spiky()
+        
+        
+        return distribution
+    
+    def uniform(self):
         # Here, a sample of arrival times are drawn from the uniform
         # distribution. In other words, any value within the given
         # interval is equally likely to be drawn by uniform sampling.
         
-        distribution = np.random.uniform(start_time, end_time, no_of_tasks)        
+        distribution = np.random.uniform(self.start_time, self.end_time,
+                                         self.no_of_tasks)        
         return distribution
     
     
-    def normal(self, start_time, end_time, no_of_tasks):
+    def normal(self):
         # Here, a sample of arrival times are drawn from the normal
         # distribution. 
         # the mean of the normal distribution is considered to be
@@ -41,18 +69,18 @@ class ArrivalPattern:
         # Also, the standard deviation is considered in a way that
         # the given time interval located in 6 standard deviations.
         # <start_tim-------- 6 sigma --------- end_time> 
-        mu = (start_time + end_time) / 2.0
-        sigma = (end_time - start_time) / 6.0             
+        mu = (self.start_time + self.end_time) / 2.0
+        sigma = (self.end_time - self.start_time) / 6.0             
         
-        distribution = np.random.normal(mu, sigma, no_of_tasks)
+        distribution = np.random.normal(mu, sigma, self.no_of_tasks)
         # The distribution is truncated to fit the given timeinterval.
-        distribution[distribution > end_time] =end_time
-        distribution[distribution < start_time] = start_time
+        distribution[distribution > self.end_time] =self.end_time
+        distribution[distribution < self.start_time] = self.start_time
         
         return distribution
         
     
-    def exponential(self, start_time, end_time, no_of_tasks):
+    def exponential(self):
         # Here, a sample of arrival times are drawn from the exponential
         # distribution. 
         # the scale parameter (beta) of exponential distribution is 
@@ -60,15 +88,16 @@ class ArrivalPattern:
         # of a task being less than the end_time is 99.9%.         
         # CDF = 1 - exp(-time_interval/beta) = 0.999 
         # --> beta = time_interval / ln(1000)
-        beta = (end_time - start_time) / np.log(1000)
+        beta = (self.end_time - self.start_time) / np.log(1000)
         # The distribution is shifted to start_time.
-        distribution = start_time + np.random.exponential(beta, no_of_tasks)
+        distribution = self.start_time + np.random.exponential(
+            beta, self.no_of_tasks)
         # The distribution is truncated to fit the given time interval.
-        distribution[distribution > end_time] = end_time
+        distribution[distribution > self.end_time] = self.end_time
         
         return distribution
     
-    def spiky(self, start_time, end_time, no_of_tasks, no_of_spikes = 10):
+    def spiky(self, no_of_spikes = 10):
         # Here, tasks are considered to be arrived in spiky manner. The spikes
         # occured at random positions but have same width.
         # The number of tasks arrive at each spike is also a random variable.
@@ -76,14 +105,15 @@ class ArrivalPattern:
         # interval [start_time, end_time]
         
         # Each spike width is 1% of the time interval.
-        spike_width = 0.01 * (end_time - start_time)   
+        spike_width = 0.01 * (self.end_time - self.start_time)   
         # Each spike begins at a random position which is drawn from a 
         # uniform distribution.
-        spike_starts = np.random.uniform(start_time , end_time, no_of_spikes)
+        spike_starts = np.random.uniform(self.start_time , 
+                                         self.end_time, no_of_spikes)
         
         distribution = []
         # remaining_tasks is the number of tasks that arrive afterward.       
-        remaining_tasks = no_of_tasks
+        remaining_tasks = self.no_of_tasks
         # A loop to generate spikes sequentially
         for spikes_no in range(no_of_spikes):
             # no_of_tasks_in_spike: Number of tasks arrive at each spike
@@ -100,10 +130,10 @@ class ArrivalPattern:
     
 def test():
     
-    uniform = ArrivalPattern().uniform(10,30,1000)
-    normal = ArrivalPattern().normal(10,30,1000)
-    exponential = ArrivalPattern().exponential(10, 30, 1000)
-    spiky = ArrivalPattern().spiky(10, 30, 1000)
+    uniform = ArrivalPattern('uniform',10,30,1000).arrival_generator()
+    normal = ArrivalPattern('normal',10,30,1000).arrival_generator()
+    exponential = ArrivalPattern('exponential',10,30,1000).arrival_generator()
+    spiky = ArrivalPattern('spiky',10,30,1000).arrival_generator()
     
     data = {'uniform':uniform, 'normal': normal, 'exponential':exponential,
             'spiky':spiky}      
@@ -116,5 +146,6 @@ def test():
     plt.show()
        
     return data
-    
-data = test()
+
+# Just for Test -->
+#data = test()
