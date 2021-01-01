@@ -117,7 +117,7 @@ class ArrivalPattern:
         # A loop to generate spikes sequentially
         for spikes_no in range(no_of_spikes):
             # no_of_tasks_in_spike: Number of tasks arrive at each spike
-            no_of_tasks_in_spike = np.random.randint(remaining_tasks)
+            no_of_tasks_in_spike = np.random.randint(remaining_tasks+1)
             # spike: distribution of tasks arrival time in each spike
             spike = np.random.uniform(spike_starts[spikes_no], 
                                       spike_starts[spikes_no]+spike_width,

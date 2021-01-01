@@ -23,6 +23,7 @@ class ArrivalScenario:
         self.scenario_name = scenario_name
         self.scenario_start_time = scenario_start_time
         self.scenario_end_time = scenario_end_time
+        self.arrival_times = {}
         
     def add_task_arrival(self, task_type_ID, pattern, no_of_tasks):
         # This method adds the arrival times of a task to the arrival_times
@@ -40,9 +41,9 @@ class ArrivalScenario:
 def test():
     # A test for debugging
     sc_shopping = ArrivalScenario('shopping', 0, 600)
-    sc_shopping.add_task_arrival('1','uniform',600)
-    sc_shopping.add_task_arrival('2','normal',600)
-    sc_shopping.add_task_arrival('3','spiky',600)     
+    sc_shopping.add_task_arrival(1,'uniform',600)
+    sc_shopping.add_task_arrival(2,'normal',600)
+    sc_shopping.add_task_arrival(3,'spiky',600)     
     sns.displot(sc_shopping.arrival_times, kind = 'ecdf' )
     plt.show()    
     plt.figure()
@@ -51,7 +52,8 @@ def test():
     
     return sc_shopping.arrival_times
 
-test()
+#Just for test
+#test()
    
     
         
