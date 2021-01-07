@@ -17,7 +17,7 @@ class ArrivalScenario:
     # The arrival scenario with the name of "scenario_name" starts at
     # scenario_start_time and ends at scenario_end_time.
         
-    arrival_times = {}
+    #arrival_times = {}
     
     def __init__(self, scenario_name, scenario_start_time, scenario_end_time):
         self.scenario_name = scenario_name

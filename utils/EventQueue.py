@@ -15,6 +15,7 @@ to sort the queue.
 import heapq
 
 
+
 class Event:
     # An event explains different stages of processing a task, from
     # arriving to completing the task.
@@ -56,8 +57,10 @@ class EventQueue:
     # Min-heap data struture. It can help sorting the queue based on the 
     # event.time with reseaonable time complexity.   
     
-    def __init__(self):
-        self.event_list=[]
+    
+    event_list=[]
+    # def __init__(self):
+    #     self.event_list=[]
         
     def add_event(self,event):
         # Insert an event into the event_list.
@@ -76,7 +79,8 @@ class EventQueue:
     def remove(self,event):
         # It removes the event from the event_list. Then, the resulted
         # event_list is heapified again. 
-        
+        print(self.event_list)
+        print('\n\n\n')
         self.event_list.remove(event)
         heapq.heapify(self.event_list)
         
@@ -106,4 +110,4 @@ def test():
     print(eq.get_first_event().event_type)
 
 
-test()
+#test()
