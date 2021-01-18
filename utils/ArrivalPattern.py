@@ -57,7 +57,9 @@ class ArrivalPattern:
         # interval is equally likely to be drawn by uniform sampling.
         
         distribution = np.random.uniform(self.start_time, self.end_time,
-                                         self.no_of_tasks)        
+                                         self.no_of_tasks)
+        distribution = [round(x,3) for x in distribution]
+        
         return distribution
     
     
@@ -76,6 +78,7 @@ class ArrivalPattern:
         # The distribution is truncated to fit the given timeinterval.
         distribution[distribution > self.end_time] =self.end_time
         distribution[distribution < self.start_time] = self.start_time
+        distribution = [round(x,3) for x in distribution]
         
         return distribution
         
@@ -94,6 +97,7 @@ class ArrivalPattern:
             beta, self.no_of_tasks)
         # The distribution is truncated to fit the given time interval.
         distribution[distribution > self.end_time] = self.end_time
+        distribution = [round(x,3) for x in distribution]
         
         return distribution
     
@@ -124,6 +128,7 @@ class ArrivalPattern:
                                       no_of_tasks_in_spike)
             remaining_tasks -= no_of_tasks_in_spike
             distribution = np.concatenate((distribution,spike))
+        distribution = [round(x,3) for x in distribution]
         
         return distribution
             

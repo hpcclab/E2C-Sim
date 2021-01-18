@@ -10,9 +10,10 @@ or completing_task)
 
 '''
 
-from Machines import *
+from Machine import *
+import Config
 
-
+Config.init()
 event_queue = EventQueue()
 simulator = Simulator()
 
@@ -20,9 +21,28 @@ m1 = Machine(1, 'CPU')
 m1.start()
 
 Tasks = []
-Tasks.append(Task(1,1,0.1 , 0.15, 0))
-Tasks.append(Task(2,1,0.2 , 0.25, 0.1))
-Tasks.append(Task(3,1,0.1 , 0.25, 0.35))
+
+with open('ArrivalTimes.txt','r') as data_file:
+    
+    for task in data_file:
+        task = task.strip()
+        task_details = [x.strip() for x in task.split(',')]
+        #print(task_details)
+        if task[0] == '#':            
+            machine_types = [x.split('_')[-1] for x in task.split(',')[3:6]]            
+        else:     
+            task_id = int(task_details[0])
+            task_type_id = int(task_details[1])
+            arrival_time = float(task_details[2])
+            estimated_time = {machine_types[0]: float(task_details[3]),
+                              machine_types[1]: float(task_details[4]),
+                              machine_types[2]: float(task_details[5])}
+            execution_time = {machine_types[0]: float(task_details[6]),
+                              machine_types[1]: float( task_details[7]),
+                              machine_types[2]: float(task_details[8])}
+            
+            Tasks.append(Task(task_id, task_type_id, estimated_time,
+                              execution_time, arrival_time))
 
 for task in Tasks:
     event = Event(task.arrival_time, 'arrival', task)
@@ -47,8 +67,8 @@ while event_queue.event_list:
 print(3*'\n'+ 40*"*")
 for task in m1.completion_queue:
     print("task#:" + str(task.task_id) +
-          "\tmachine#:" +str(m1.machine_id) +
-          "\tCompletion_Time: "+str(task.completion_time))
+          "\t \t machine#:" +str(m1.machine_id) +
+          "\t \t Completion_Time: "+str(round(task.completion_time,3)))
         
         
 

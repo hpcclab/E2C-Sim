@@ -57,10 +57,7 @@ class EventQueue:
     # Min-heap data struture. It can help sorting the queue based on the 
     # event.time with reseaonable time complexity.   
     
-    
-    event_list=[]
-    # def __init__(self):
-    #     self.event_list=[]
+    event_list=[]   
         
     def add_event(self,event):
         # Insert an event into the event_list.
@@ -83,31 +80,3 @@ class EventQueue:
         print('\n\n\n')
         self.event_list.remove(event)
         heapq.heapify(self.event_list)
-        
-        
-def test():
-    
-    eq= EventQueue()  
-    
-    event1=Event(1,"e1",[])    
-    event2=Event(5,"e2",[])
-    event3=Event(2,"e3",[])
-    event4=Event(3,"e4",[])
-    
-    eq.add_event(event1)
-    eq.add_event(event2)    
-    eq.add_event(event3) 
-    eq.add_event(event4) 
-    
-    eq.remove(event4)
-    eq.remove(event1)
-    
-    print(len(eq.event_list))
-    print(eq.get_first_event().event_type)
-    print(len(eq.event_list))
-    print(eq.get_first_event().event_type)
-    print(len(eq.event_list))
-    print(eq.get_first_event().event_type)
-
-
-#test()

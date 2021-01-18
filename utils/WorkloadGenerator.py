@@ -10,12 +10,17 @@ the values of the arrival times.
 '''
 
 from ArrivalScenario import *
+from ReadExecutionTimes import *
+from Simulator import * 
 
 
 class Workload:
     # The Workload class read scenarios from the file in path_to_scenarios.
     # Then, the arrival times of tasks and their task types are written to
     # "ArrivalTimes.txt" located in path_to_output.
+    
+    simulator = Simulator()
+    read_data = ReadData()
     
     def __init__(self,path_to_scenarios='./',
                  path_to_output='./'):
@@ -156,9 +161,16 @@ class Workload:
             print("\nWriting arrival times to "+
                   self.path_to_output+'ArrivalTimes.txt ===>>>'+ 
                   " Total Number of Tasks = "+str(total_no_of_tasks))
+            outputfile.writelines('#, task_type_id, arrival_time')
+            for machine_type in self.simulator.machine_types:
+                outputfile.writelines(',\testimated_time_'+machine_type)
+            for machine_type in self.simulator.machine_types:
+                outputfile.writelines(',\texecution_time_'+machine_type)            
+            outputfile.writelines('\n')
             
             for count_task in range(0,total_no_of_tasks):
-                min_arrival_times = float('inf')                
+                min_arrival_times = float('inf') 
+                
                 for task_type_ID in sorted_dict_times.keys():
                     arr_tt = sorted_dict_times[task_type_ID]                    
                     if len(arr_tt) and min_arrival_times > arr_tt[0] :
@@ -166,8 +178,24 @@ class Workload:
                         min_id = task_type_ID                    
                 all_tasks_arrival_times.append(min_arrival_times)
                 all_tasks_id.append(min_id)
-                outputfile.writelines(str(min_id)+','+str(min_arrival_times)+
-                                      '\n')                
+                outputfile.writelines(str(count_task+1)+',\t'+ str(min_id)+
+                                      ',\t'+ str(min_arrival_times))
+                
+                for machine_type in self.simulator.machine_types:
+                    estimated_time = self.read_data.sampled_execution_times(
+                        min_id, machine_type)[0]                    
+                    outputfile.writelines(',\t\t\t'+str(estimated_time))
+                    
+                for machine_type in self.simulator.machine_types:
+                    execution_time = self.read_data.sampled_execution_times(
+                        min_id, machine_type)[0]                    
+                    outputfile.writelines(',\t\t\t'+str(execution_time))
+                    
+                outputfile.writelines('\n')
+                    
+                
+                
+                    
                 sorted_dict_times[min_id] = np.delete(sorted_dict_times[min_id],[0])
                 
         return all_tasks_arrival_times,all_tasks_id

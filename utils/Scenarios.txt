@@ -17,11 +17,11 @@
 # __,2, normal, 800
 # __,3, spiky, 400
 #############################################################################
-Shopping, 0, 10
-__,1,uniform, 50
-__,2,normal, 100
-__,3, spiky, 50
-Walking, 11, 20
-__,1, uniform, 70
-__,2, normal, 30
-__,3, spiky, 100
+Shopping, 0, 2
+__,1,uniform, 1
+__,2,normal, 2
+__,3, spiky, 2
+Walking, 2, 3
+__,1, uniform, 1
+__,2, normal, 2
+__,3, spiky, 2

@@ -15,6 +15,8 @@ methods.
 from Task import *
 from EventQueue import *
 from  Simulator import *
+import Config
+#from ReadExecutionTimes import * 
 
 class Machine:
     # Machine class is used to imitate machines in the system. Each
@@ -29,14 +31,15 @@ class Machine:
     # machine_id: an integer assigned to the machine which is specific to
     # each machine.
     # machine_type: string explains the type of machine. It can be "CPU",
-    # "GPU", or "ASIC".
+    # "GPU", or "FPGA".
     # status: It shows the machine status that can be "shutdown", "running",
     # or "idle". "shutdown" status means that the machine cannot accept any
     # task added to its pending queue. "idle" meanse that there is no task
     # neither in the pending_queue or currently be executed in the machine.
+    # queue_length: An integer that indicates the length of machine queue
     # pending_queue: the machine queue
     # completion_queue: a queue that completed task append to it
-    # expected_queue_length: the expected or estimation of completion time
+    # expected_available_time: the expected or estimation of completion time
     # last task in pending_queue.
     # running_task: It is a single element list contain the task currently
     # running in the machine. 
@@ -49,9 +52,10 @@ class Machine:
         self.machine_id = machine_id
         self.machine_type = machine_type
         self.status = 'shutdown'
+        self.queue_length = Config.queue_length
         self.pending_queue = []
         self.completion_queue = []
-        self.expected_queue_length = 0.0
+        self.expected_available_time = 0.0 
         self.running_task=[];
         
     
@@ -70,7 +74,7 @@ class Machine:
         # It take a task and adds it to the pending_queue.
         # By adding a task to the pending_queue, its status changed to
         # "pending". 
-        # The expected_queue_length is also incremented by task
+        # The expected_available_time is also incremented by task
         # estimation of its execution time on this machine.
         # Finally, running_queue() is called to check if there is not
         # running_task, then the machine start executing current task.
@@ -79,9 +83,9 @@ class Machine:
             "Task "+ str(task.task_id)+" cannot be assigned to the machine " \
                 +str(self.machine_id) + " that is currently " + self.status
                 
-        task.status = 'pending'
+        task.status = 'pending'       
         self.pending_queue.append(task)
-        self.expected_queue_length += task.estimated_time
+        self.expected_available_time += task.estimated_time[self.machine_type]
         self.running_queue()
     
     def start_task(self, task):
@@ -91,11 +95,9 @@ class Machine:
         # execution time and a "completion" event is added to event_queue.
         
         task.status ='executing'
-        self.running_task.append(task)
-        #print(self.simulator.get_current_time(),  task.execution_time)
-        task.completion_time = self.simulator.get_current_time() + task.execution_time        
-        # print("completion time of task "+ str(task.task_id) + 
-        #       " is "+ str(task.completion_time))
+        self.running_task.append(task)        
+        task.completion_time = self.simulator.get_current_time() + \
+            task.execution_time[self.machine_type]
         event = Event(task.completion_time, 'completion',
                       task)
         self.event_queue.add_event(event)

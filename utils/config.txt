@@ -1,0 +1,4 @@
+$ queue_length = 3
+$ machine_types = [CPU , GPU, FPGA]
+$ task_types = [object_recog, face_recog , text_recog , speech_recog]
+
