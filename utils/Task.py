@@ -25,13 +25,15 @@ class Task:
     # status: 'arriving'/'pending'/'executing'/'completed'/'dropped'
     
     def __init__(self, task_id, task_type_id, estimated_time,
-                 execution_time, arrival_time):        
+                 execution_time, arrival_time, task_size=0.0):        
         self.task_id = task_id
         self.task_type_id = task_type_id
         self.estimated_time = estimated_time
         self.execution_time = execution_time
         self.arrival_time = arrival_time
+        self.task_size = task_size
         self.start_time = float('inf')
         self.completion_time = float('inf')
         self.drop_time = float('inf')
-        self.status = 'arriving' 
+        self.status = 'arriving'
+        self.mapped_machine_id = None

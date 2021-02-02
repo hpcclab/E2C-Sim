@@ -47,16 +47,19 @@ class Machine:
     
     simulator = Simulator()
     event_queue = EventQueue()
+    config = Config.read_config()
     
-    def __init__(self, machine_id, machine_type):
+    def __init__(self, machine_id, machine_type, spec_detail):
         self.machine_id = machine_id
         self.machine_type = machine_type
         self.status = 'shutdown'
-        self.queue_length = Config.queue_length
+        #self.queue_length = spec_detail['queue_length']
+        self.queue_length = 3
         self.pending_queue = []
         self.completion_queue = []
         self.expected_available_time = 0.0 
         self.running_task=[];
+        self.spec_detail = spec_detail
         
     
     def start(self):
@@ -83,7 +86,8 @@ class Machine:
             "Task "+ str(task.task_id)+" cannot be assigned to the machine " \
                 +str(self.machine_id) + " that is currently " + self.status
                 
-        task.status = 'pending'       
+        task.status = 'pending'  
+        task.mapped_machine_id = self.machine_id
         self.pending_queue.append(task)
         self.expected_available_time += task.estimated_time[self.machine_type]
         self.running_queue()
@@ -103,21 +107,15 @@ class Machine:
         self.event_queue.add_event(event)
     
     
-    def completing_task(self):
+    def completing_task(self, task):
         # A completing_task is called whenever a "completion" event occurs.
         # It changed the status of "executing" task to "completed" and set
         # the completion time of the task. 
         # the task is also added to the completion_queue of the machine.
-        
-        task = self.running_task[0]        
-        assert(self.status == 'running' or self.status == 'idle'), \
-            "Task "+ str(task.task_id)+" cannot be assigned to the machine " \
-                +str(self.machine_id) + " that is currently " + self.status 
-        # the current time is set as completion time of the task.        
-        task.completion_time = self.simulator.get_current_time() 
+                            
         task.status = 'completed'
-        self.completion_queue.append(task)
-        self.running_task=[]
+        self.completion_queue.append(task)        
+        self.running_task.remove(task)
         self.running_queue()        
         
     
