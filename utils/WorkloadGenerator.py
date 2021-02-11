@@ -22,7 +22,8 @@ class Workload:
     
     simulator = Simulator()
     read_data = ReadData()
-    Config.init()
+    #Config.init()
+    machine_types= ['CPU', 'GPU', 'FPGA']
     
     def __init__(self,path_to_scenarios='./',
                  path_to_output='./'):
@@ -164,9 +165,9 @@ class Workload:
                   self.path_to_output+'ArrivalTimes.txt ===>>>'+ 
                   " Total Number of Tasks = "+str(total_no_of_tasks))
             outputfile.writelines('#, task_type_id, arrival_time')
-            for machine_type in Config.machine_types:
+            for machine_type in self.machine_types:
                 outputfile.writelines(',\testimated_time_'+machine_type)
-            for machine_type in Config.machine_types:
+            for machine_type in self.machine_types:
                 outputfile.writelines(',\texecution_time_'+machine_type)            
                        
             outputfile.writelines(',\texecution_time_CLOUD') 
@@ -186,7 +187,7 @@ class Workload:
                 outputfile.writelines(str(count_task+1)+',\t'+ str(min_id)+
                                       ',\t'+ str(min_arrival_times))
                 
-                for machine_type in Config.machine_types:                   
+                for machine_type in self.machine_types:                   
                     estimated_time = self.read_data.sampled_execution_times(
                         min_id, machine_type)[0]                    
                     outputfile.writelines(',\t\t\t'+str(estimated_time))
@@ -195,7 +196,7 @@ class Workload:
                         min_id, 'CLOUD')[0]                    
                 outputfile.writelines(',\t\t\t'+str(estimated_time))
                     
-                for machine_type in Config.machine_types:
+                for machine_type in self.machine_types:
                     execution_time = self.read_data.sampled_execution_times(
                         min_id, machine_type)[0]                    
                     outputfile.writelines(',\t\t\t'+str(execution_time))             
