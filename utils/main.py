@@ -19,9 +19,11 @@ config = Config.read_config()
 event_queue = EventQueue()
 simulator = Simulator()
 
+Config.process_config()
+
 computing_tiers = []
 machine_id = 0
-all_machines={}
+all_machines = {}
 for tier_item in config['computing_tiers']:
     
     tier = ComputingTier(tier_item['name'])
