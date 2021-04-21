@@ -12,6 +12,9 @@ class Scheduler:
         self._stats.workSubmitted = 0
         self._stats.workCompleted = 0
 
+    def get_machine(self):
+        return self._machineInterfaces
+
     def add_machine(self, machineInterface):
         self._machineInterfaces.append(machineInterface)
         self._config.maxWorkPending += 1
