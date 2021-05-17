@@ -19,4 +19,8 @@ class MachineInterface:
         self._stats.unstartedExeTime.add(Task.execution_time)
 
     def pendingEstimation(self, currentTime):
-        return self._workingTask.EstimateExeTime- (currentTime-self._stats.currentTaskStartTime) + self._stats.unstartedExeTime
+        return self._workingTask.EstimateExeTime - (currentTime-self._stats.currentTaskStartTime) + self._stats.unstartedExeTime
+
+    def getQueueLen(self):
+        return len(self._machineQueue)
+
