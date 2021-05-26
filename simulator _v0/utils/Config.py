@@ -6,18 +6,19 @@ This module reads configuration parameters from the json file.
 
 """
 import json
-
+import ComputingTier
+from Machine import *
 
 def read_config(path='./config.txt'):
     # This function read configuration parameters from the json file 
     # located in path
     with open(path) as f:
         data = f.read()
-        # reconstructing the data as a dictionary
+    # reconstructing the data as a dictionary
     config = json.loads(data)
 
     return config
-
+    
 
 def process_config():
     computing_tiers = []
@@ -25,7 +26,7 @@ def process_config():
     all_machines = {}
     for tier_item in read_config()['computing_tiers']:
 
-        tier = ComputingTier(tier_item['name'])
+        tier = ComputingTier.ComputingTier(tier_item['name'])
         print('\n' + 80 * '=' + '\n\n Tier ' + tier.name + ' is created ...')
 
         for computing_unit_item in tier_item['computing_units']:
@@ -38,7 +39,7 @@ def process_config():
                   '\n\t Network Bandwidth: ' +
                   str(computing_unit_item['network_bandwidth']) + ' [MB/Sec]')
 
-            computing_unit = ComputingUnit(computing_unit_item['id'],
+            computing_unit = ComputingTier.ComputingUnit(computing_unit_item['id'],
                                            computing_unit_item['initial_energy'],
                                            computing_unit_item['power_limit'],
                                            computing_unit_item['network_bandwidth'])

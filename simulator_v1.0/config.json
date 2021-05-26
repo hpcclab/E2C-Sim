@@ -1,0 +1,57 @@
+{
+
+    "global_parameters":[
+        {
+            "queue_size":3,
+            "batch_queue_size":9
+        }        
+    ],
+    "task_types": [
+        {
+            "id":1,
+            "name":"object_recog"
+        },
+        {
+            "id":2,
+            "name":"face_recog"
+        },
+        {
+            "id":3,
+            "name":"text_recog"
+        },
+        {
+            "id":4,
+            "name":"speech_recog"
+        }
+       
+    ],
+
+    "machine_types":[
+        {
+            "id":1,
+            "name":"CPU",
+            "power": 65.0
+        },
+        {
+            "id":2,
+            "name":"RX 6800",
+            "power": 235.4
+        },
+        {
+            "id":3,
+            "name":"GTX 1650",
+            "power": 82.5
+        },
+        {
+            "id":4,
+            "name":"GPU-1",
+            "power": 50.0
+        }
+    ],
+
+    "cloud":[
+        {
+            "bandwidth":20.0
+        }
+    ]
+}

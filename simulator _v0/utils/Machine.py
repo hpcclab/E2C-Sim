@@ -59,7 +59,7 @@ class Machine:
         self.pending_queue = []
         self.completion_queue = []
         self.expected_available_time = 0.0
-        self.running_task = [];
+        self.running_task = []
         self.spec_detail = spec_detail
 
     def start(self):

@@ -53,7 +53,7 @@ def test():
     return sc_shopping.arrival_times
 
 #Just for test
-test()
+# test()
    
     
         

@@ -19,7 +19,7 @@ config = Config.read_config()
 event_queue = EventQueue()
 simulator = Simulator()
 
-Config.process_config()
+#Config.process_config()
 
 computing_tiers = []
 machine_id = 0
