@@ -1,4 +1,4 @@
-import BaseMachine
+import BaseMachine, datetime
 
 class machine(BaseMachine):
 
@@ -18,38 +18,43 @@ class machine(BaseMachine):
 
     def admit(self, task):
         self._queue.append(task)
-        self._available_time += task.execution_time
+        self._available_time += task._est_exec_time
         task.assigned_machine_id = self._id
-        task._status = super().tasks_status['offloaded']
+        task._status = super().tasks_status['pending']
 
     def select(self):
         return self.queue[0]
 
     def execute(self, algorithm):
-        toBeRun = algorithm() #not sure how the algorithm will be used
+        toBeRun = algorithm()
         toBeRun._status = super().tasks_status['executing']
         return toBeRun
 
     def terminate(self, task):
         if task._status == super().tasks_status['completed']:
             self._completed.append(task._id)
+            self._available_time -= task.execution_time
         else:
-            self._missed.append(task._id)
+            self._missed.append(task._id)  #what should the task status be set to if it was dropped?
+        task.drop_time = datetime.now()
         self._queue.remove(task)
 
     def run(self):
         while self._queue != []:
-            task = self.execute(algorithm)  #not sure how to choose the algorithm
+            task = self.execute(algorithm)  #where does algorithm come from?
             task_id = task._id
-                                    #not sure what the code would be to run task on the machine
+            task.start_time = datetime.now()
+            #code to run task on machine
+            task.completion_time = datetime.now()
+            task._status = super().tasks_status['completed']
             self.terminate(task)
         if self._queue != []: return 1
         else: return 0
 
     def shutdown(self):
-        self.status = 'off'
         while self._queue != []:
             self.terminate(_queue[0])
+        self.status = 'off'
 
     def info(self):
         completed = ""
