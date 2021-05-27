@@ -5,7 +5,7 @@ class BaseTask:
 
     __metaClass__ = ABCMeta
 
-    tasks_status = ['arriving' , 'offloaded', 'pending', 'executing', 'completed']
+    tasks_status = ['arriving' , 'offloaded', 'pending', 'executing', 'completed','dropped']
 
     def __init__(self):
         pass

@@ -103,3 +103,12 @@ class BaseMachine:
                 task types and etc.
 
         """
+
+    @abstractmethod
+    def algorithm(self):
+        """ algorithm used to select the next task to be ran
+
+            Note:
+                only a placeholder for now
+            -Jett
+        """
