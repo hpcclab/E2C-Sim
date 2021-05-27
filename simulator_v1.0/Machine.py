@@ -50,6 +50,7 @@ class machine(BaseMachine):
             self.terminate(_queue[0])
 
     def info(self):
-        completed =
-        dictionary = "ID: " + self._id + ", Type: " + self._type + ", Power: " + ", Estimated Available Time: " + self._available_time + ", Queue: " + self._queue + ", Running Task: " + "Completed Tasks: Total: " + len(self._completed) + completed
+        completed = ""
+
+        dictionary = "ID: " + self._id + ", Type: " + self._type + ", Status: " + self._status + ", Specs: " + self._specs + ", Power: " + ", Estimated Available Time: " + self._available_time + ", Queue: " + self._queue + ", Running Task: " + "Completed Tasks: Total: " + len(self._completed) + completed + ", Missed: " + self._missed
         return dictionary
