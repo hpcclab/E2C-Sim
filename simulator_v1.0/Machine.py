@@ -28,7 +28,7 @@ class machine(BaseMachine):
     def execute(self, algorithm):
         toBeRun = algorithm() #not sure how the algorithm will be used
         toBeRun._status = super().tasks_status['executing']
-        return toBeRun._id
+        return toBeRun
 
     def terminate(self, task):
         if task._status == super().tasks_status['completed']:
@@ -39,10 +39,12 @@ class machine(BaseMachine):
 
     def run(self):
         while self._queue != []:
-            self.execute(algorithm)  #not sure how to choose the algorithm
-                                #not sure what the code would be to run task on the machine
-            return 1
-        return 0
+            task = self.execute(algorithm)  #not sure how to choose the algorithm
+            task_id = task._id
+                                    #not sure what the code would be to run task on the machine
+            self.terminate(task)
+        if self._queue != []: return 1
+        else: return 0
 
     def shutdown(self):
         self.status = 'off'
