@@ -3,7 +3,7 @@ from BaseTask import BaseTask
 
 class Task(BaseTask):
 
-
+    status_list = super().tasks_status
 
     def __init__(self, id, type, est_exec_time,
                  execution_time, arrival_time, task_size=0.0):        
@@ -16,7 +16,7 @@ class Task(BaseTask):
         self.start_time = float('inf')
         self.completion_time = float('inf')
         self.drop_time = float('inf')
-        self.status = super().tasks_status['arriving']
+        self.status = self.status_list['arriving']
         self.assigned_machine_id = None
 
 

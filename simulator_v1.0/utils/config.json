@@ -30,22 +30,20 @@
         {
             "id":1,
             "name":"CPU",
-            "power": 65.0
+            "power": 65.0,
+            "replicas" : 8
         },
         {
             "id":2,
-            "name":"RX 6800",
-            "power": 235.4
-        },
+            "name":"RX6800",
+            "power": 235.4,
+            "replicas" : 2
+        },        
         {
             "id":3,
-            "name":"GTX 1650",
-            "power": 82.5
-        },
-        {
-            "id":4,
-            "name":"GPU-1",
-            "power": 50.0
+            "name":"FPGA",
+            "power": 50.0,
+            "replicas" : 1
         }
     ],
 

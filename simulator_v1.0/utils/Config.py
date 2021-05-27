@@ -6,7 +6,9 @@ from TaskType import TaskType
 
 
 machine_types = []
+machines = []
 task_types = []
+tasks = []
 queue_size = None
 current_time = 0.0 
 
@@ -19,7 +21,9 @@ for machine_type in config['machine_types']:
         _id = machine_type['id']
         _name = machine_type['name']
         _power = machine_type['power']
-        machine_types.append(MachineType(_id, _name, _power))
+        _replicas = machine_type['replicas']
+        machine_types.append(MachineType(_id, _name, _power, _replicas))
+
 
 for task_type in config['task_types']:
         _id = task_type['id']

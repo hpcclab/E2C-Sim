@@ -10,18 +10,27 @@ class BaseScheduler:
 
 
     def __init__(self, machines_state):
-        self._machines_state = machines_state
-        self._batch_queue_size = Config.batch_queue_size
-        self._batch_queue = [None]* self._batch_queue_size
+        self.machines_state = machines_state
+        self.batch_queue_size = Config.batch_queue_size
+        self.batch_queue = [None]* Config.batch_queue_size
+        self.unlimited_queue = []
+        
     
 
+    @abstractmethod
+    def feed(self):
+        """ It takes tasks from unlimited queue and fed them to
+        the batch_queue
+        it does nothing if there is no task in unlimited queue or
+        returns a warning message if batch_queue is already full
+        """
 
     @abstractmethod
     def choose(self):
         """ Choose a task from batch queue for mapping decision
 
             returns:
-                selected task object
+                index and value of selected task object 
 
         """
 

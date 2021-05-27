@@ -45,7 +45,7 @@ class BaseMachine:
                 the selected task object
 
         """
-
+    
     @abstractmethod
     def execute(self, algorithm):
         """ The algorithm selects a task from queue and execute it on the machine
