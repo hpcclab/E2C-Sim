@@ -77,7 +77,7 @@ class BaseMachine:
              
             Note:
                 Here, the method execute(self, algorithm) should be used for
-                selecting rom the machine queue and running it on machine
+                selecting from the machine queue and running it on machine
             returns:
                 0: idle machine
                 1: busy machine
@@ -85,7 +85,7 @@ class BaseMachine:
         """
 
     @abstractmethod
-    def shutdow(self):
+    def shutdown(self):
         """ shutdown the machine and change its status
 
             Note:
@@ -102,4 +102,13 @@ class BaseMachine:
                 content of queue, running task, number of completed task grouped by 
                 task types and etc.
 
+        """
+
+    @abstractmethod
+    def algorithm(self):
+        """ algorithm used to select the next task to be ran
+
+            Note:
+                only a placeholder for now
+            -Jett
         """
