@@ -1,4 +1,6 @@
 
+from enum import Enum, unique
+
 class Event:
     # An event explains different stages of processing a task, from
     # arriving to completing the task.
@@ -31,3 +33,8 @@ class Event:
     
     def __ge__(self,other):
         return self.time >= other.time
+
+class EventTypes(Enum):
+    ARRIVING = 1
+    COMPLETION = 2
+    

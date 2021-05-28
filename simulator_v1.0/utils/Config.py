@@ -1,35 +1,56 @@
 
 import json
-
+from EventQueue import EventQueue
 from MachineType import MachineType
 from TaskType import TaskType
+from Machine import Machine
 
 
+event_queue = EventQueue()
 machine_types = []
 machines = []
 task_types = []
 tasks = []
-queue_size = None
+
 current_time = 0.0 
+
 
 with open(file='./config.json') as f:
     data = f.read()
 # reconstructing the data as a dictionary
 config = json.loads(data)
 
+global_parameters = config['global_parameters']
+queue_size = global_parameters[0]['queue_size']
+batch_queue_size = global_parameters[0]['batch_queue_size']
+
+machine_id = 1
 for machine_type in config['machine_types']:
-        _id = machine_type['id']
-        _name = machine_type['name']
-        _power = machine_type['power']
-        _replicas = machine_type['replicas']
-        machine_types.append(MachineType(_id, _name, _power, _replicas))
+        type_id = machine_type['id']
+        name = machine_type['name']
+        power = machine_type['power']
+        replicas = machine_type['replicas']
+        type = MachineType(type_id, name, power, replicas)
+        machine_types.append(type)
+        for _ in range (replicas):                
+                machine = Machine(machine_id, type, {} )
+                machines.append(machine)
+                machine_id +=1
+
 
 
 for task_type in config['task_types']:
         _id = task_type['id']
         _name = task_type['name']
-        task_types.append(TaskType(_id, _name))
+        _deadline = task_type['deadline']
+        task_types.append(TaskType(_id, _name, _deadline))
 
-global_parameters = config['global_parameters']
-queue_size = global_parameters[0]['queue_size']
-batch_queue_size = global_parameters[0]['batch_queue_size']
+def find_task_types(id):
+
+        for type in task_types:
+                if type.id == id:
+                        return type
+        return None
+                
+
+

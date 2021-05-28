@@ -1,15 +1,13 @@
 from abc import ABCMeta,abstractmethod
+from enum import Enum, unique
 
 
 class BaseTask:
 
-    __metaClass__ = ABCMeta
-
-    tasks_status = ['arriving' , 'offloaded', 'pending', 'executing', 'completed','dropped']
+    __metaClass__ = ABCMeta   
 
     def __init__(self):
-        pass
-        
+        pass        
 
 
     @abstractmethod
@@ -21,3 +19,14 @@ class BaseTask:
                 it is mapped, etc.
 
         """
+@unique
+class TaskStatus(Enum):
+    ARRIVING = 1
+    PENDING = 2
+    RUNNING = 3
+    COMPLETED = 4
+    OFFLOADED = 5
+    DROPPED = 6
+    DEFERRED = 7
+    MISSED = 8
+

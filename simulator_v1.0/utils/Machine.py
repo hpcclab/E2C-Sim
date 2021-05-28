@@ -1,74 +1,97 @@
-import BaseMachine, datetime
+from BaseMachine import BaseMachine, MachineStatus
+from BaseTask import TaskStatus
+from Event import Event, EventTypes
+import Config
 
-class machine(BaseMachine):
+
+
+class Machine(BaseMachine):
+
+    
 
     def __init__(self, id, type, specs):
-        self._id = id
-        self._type = type
-        self._specs = specs
-        self._queue_size = Config.queue_size
-        self._queue = [None] * self._queue_size
-        self._status = 'off'
-        self._available_time = 0.0
-        self._completed = []
-        self._missed = []
+        self.id = id
+        self.type = type
+        self.specs = specs
+        self.queue_size = Config.queue_size
+        self.queue = [None] * Config.queue_size
+        self.status = MachineStatus.IDLE
+        self.available_time = 0.0
+        self.completed_tasks = []
+        self.running_task = []
+        self.missed = []
+        self.stats = {  'assigned_tasks':0,
+                        'completed_tasks':0,
+                        'missed_tasks':0,
+                        'energy_usage':0}
 
     def start(self):
-        self.status = 'on'
+        self.status = MachineStatus.IDLE
 
     def admit(self, task):
-        self._queue.append(task)
-        self._available_time += task._est_exec_time
-        task.assigned_machine_id = self._id
-        task._status = super().tasks_status['pending']
+        if (None in self.queue):
+            empty_slot = self.queue.index(None)
+            self.queue[empty_slot] = task
+            task.status = TaskStatus.PENDING
+            self.available_time += task.est_exec_time[self.type.name]           
+            self.stats['assigned_tasks'] +=1
+            print("Task " + task.type.name + " successfully assigned to "+
+            "machine " + self.type.name + " " + str(self.id))
+            return 1
+        else:
+            print("Warning: Task "+ str(task.id) +" mapped to machine " + 
+            str(self.id) + " that has no empty slot\n")
+            return 0
+            
+
 
     def select(self):
-        return self.queue[0]
+        if self.queue[0] != None:
+            index = 0
+            return index
+        else:
+            print('Warning: No more task for running on machine '+str(self.id ))
+            self.status = MachineStatus.IDLE
+            return None
 
     def execute(self):
-        toBeRun = algorithm()
-        return toBeRun
+        index = self.select()
+        if index != None and not(self.running_task):
+            task  = self.queue[index]
+            task.status = TaskStatus.RUNNING
+            self.running_task.append(task)
+            self.queue = self.queue[:index] + self.queue[index+1:]+ [None]
+            task.completion_time = Config.current_time + task.execution_time[self.type.name]
+            event = Event(task.completion_time, EventTypes.COMPLETION,task)
+            Config.event_queue.add_event(event)
+        
 
-    def terminate(self, task):
-        if task._status == super().tasks_status['completed']:
-            self._completed.append(task._id)
-            self._available_time -= task.execution_time
+
+    def terminate(self):
+        task = self.running_task.pop()
+        if task.completion_time <= task.deadline:
+            task.status = TaskStatus.COMPLETED
+            self.completed_tasks.append(task)
+            self.stats['completed_tasks'] +=1
+            
         else:
-            self._missed.append(task._id)
-            task.status = super().tasks_status['dropped']
-            task.drop_time = datetime.now()
-            self._available_time -= task.execution_time
-        self._queue.remove(task)
+            self.missed.append(task)
+            task.status = TaskStatus.MISSED
+            task.drop_time = Config.current_time
 
-    def run(self):
-        while len(self._queue) != 0:
-            task = self.execute()
-            task._status = super().tasks_status['executing']
-            task_id = task._id
-            task.start_time = datetime.now()
-            #code to run task on machine
-            task.completion_time = datetime.now()
-            task._status = super().tasks_status['completed']
-            self.terminate(task)
-        if len(self._queue) != 0: return 1
-        else: return 0
+        self.available_time -= task.est_exec_time[self.type.name]        
+        self.execute()
 
     def shutdown(self):
-        while len(self._queue) != 0:
-            self.terminate(_queue[0])
-        self.status = 'off'
+        
+        self.status = MachineStatus.OFF
 
     def info(self):
         completed = ""
 
-        dictionary = ("ID: " + self._id + ", Type: " + self._type +
-                      ", Status: " + self._status + ", Specs: " +
-                      self._specs + ", Power: " + ", Estimated Available Time: " +
-                      self._available_time + ", Queue: " + self._queue +
-                      ", Running Task: " + "Completed Tasks: Total: " +
-                      len(self._completed) + completed + ", Missed: " +
-                      self._missed)
+        dictionary = ("ID: " + self.id + ", Type: " + self.type +
+                      ", Status: " + self.status)
+        print(dictionary)
         return dictionary
 
-    def algorithm(self):
-        return self._queue[0]
+    

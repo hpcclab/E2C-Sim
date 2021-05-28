@@ -9,8 +9,7 @@ class BaseScheduler:
 
 
 
-    def __init__(self, machines_state):
-        self.machines_state = machines_state
+    def __init__(self):        
         self.batch_queue_size = Config.batch_queue_size
         self.batch_queue = [None]* Config.batch_queue_size
         self.unlimited_queue = []

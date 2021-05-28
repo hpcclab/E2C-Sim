@@ -1,19 +1,23 @@
 
-from abc import ABCMeta,abstractmethod
 import Config
+
+from abc import ABCMeta,abstractmethod
+from enum import Enum, unique
+
+@unique
+class MachineStatus(Enum):
+    OFF = 0
+    RUNNING = 1
+    IDLE = 2
 
 
 class BaseMachine:
 
     __metaclass__ = ABCMeta
-
-
+    
+    
     def __init__(self, id, type, specs):
-        self._id = id
-        self._type = type        
-        self._specs = specs
-        self._queue_size = Config.queue_size
-        self._queue = [None]*self._queue_size
+        pass
         
 
 
@@ -38,7 +42,7 @@ class BaseMachine:
 
     @abstractmethod
     def select(self):
-        """ The implementation of the taht selects a task from queue for running
+        """ It selects a task from queue for running
 
            
             Returns:
@@ -47,7 +51,7 @@ class BaseMachine:
         """
     
     @abstractmethod
-    def execute(self, algorithm):
+    def execute(self, index):
         """ The algorithm selects a task from queue and execute it on the machine
 
             Note:
@@ -71,19 +75,7 @@ class BaseMachine:
         """
 
 
-    @abstractmethod
-    def run(self):
-        """ while the queue is non-empty, it continues executing tasks
-             
-            Note:
-                Here, the method execute(self, algorithm) should be used for
-                selecting from the machine queue and running it on machine
-            returns:
-                0: idle machine
-                1: busy machine
-
-        """
-
+   
     @abstractmethod
     def shutdown(self):
         """ shutdown the machine and change its status
@@ -102,13 +94,4 @@ class BaseMachine:
                 content of queue, running task, number of completed task grouped by 
                 task types and etc.
 
-        """
-
-    @abstractmethod
-    def algorithm(self):
-        """ algorithm used to select the next task to be ran
-
-            Note:
-                only a placeholder for now
-            -Jett
         """

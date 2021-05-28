@@ -14,7 +14,7 @@ to sort the queue.
 '''
 import heapq
 
-import Event
+from Event import Event
 
 class EventQueue:
     # All events are queued in EventQueue.

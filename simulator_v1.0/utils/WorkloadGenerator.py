@@ -169,11 +169,12 @@ class Workload:
             outputfile.writelines('#, task_type_id, arrival_time')
             for machine_type in Config.machine_types:
                 outputfile.writelines(',\testimated_time_'+ machine_type.name)
+            outputfile.writelines(',\testimated_time_CLOUD') 
             for machine_type in Config.machine_types:
                 outputfile.writelines(',\texecution_time_'+ machine_type.name)            
                        
             outputfile.writelines(',\texecution_time_CLOUD') 
-            outputfile.writelines(',\testimated_time_CLOUD') 
+            
             outputfile.writelines('\n')
             
             for count_task in range(0,total_no_of_tasks):

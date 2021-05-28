@@ -1,12 +1,14 @@
+from BaseTask import TaskStatus
 from BaseScheduler import BaseScheduler
 import Config
+
 
 
 class FCFS(BaseScheduler):
     
     machine_index = 0
 
-    def __init__(self, machines_state):
+    def __init__(self):
         super().__init__()
     
 
@@ -21,15 +23,17 @@ class FCFS(BaseScheduler):
 
     def choose(self):
         index = 0
+        print(self.batch_queue)
         if self.batch_queue[index] != None:
-            task = self.batch_queue[0]
+            task = self.batch_queue[index]
+            self.batch_queue = self.batch_queue[:index] + self.batch_queue[index+1:]+[None]
+            self.feed()
+            return task
         else:
             print("No more task for scheduling ... \n")
+            return None
         
-        self.batch_queue = self.batch_queue[:index] + self.batch_queue[index+1:]+[None]
-        self.feed()
-
-        return index, task
+        
 
 
 
@@ -38,10 +42,14 @@ class FCFS(BaseScheduler):
 
     
     def defer(self, task):
-        replaced_task = self.batch_queue[-1]
-        self.unlimited_queue = [replaced_task] + self.unlimited_queue
-        self.batch_queue[-1] = task
-        task.status =  task.status_list['deferred']
+        if None in self.batch_queue:
+            empty_slot = self.batch_queue.index(None)
+            self.batch_queue[empty_slot] = task
+        else:
+            replaced_task = self.batch_queue[-1]
+            self.unlimited_queue = [replaced_task] + self.unlimited_queue
+            self.batch_queue[-1] = task
+        task.status =  TaskStatus.DEFERRED
 
 
         
@@ -52,28 +60,33 @@ class FCFS(BaseScheduler):
         task.drop_time = Config.current_time
 
     def map(self, task, machine):
-        if (None in machine._queue):
-            empty_slot = machine._queue.index(None)
-            machine._queue[empty_slot] = task
-            task.status = task.status_list['pending']
-            return 1
-        else:
-            print("Warning: Task "+ task._id +" mapped to machine " + 
-            machine._id + " that has no empty slot\n")
-            self.defer(self, task)
-            print("Task "+ task._id +" is deferred")
-            return 0
+        assignment = machine.admit(task)
+
+        if  assignment:
+            task.assigned_machine = machine
+            print('Task '+ str(task.id) + " assigned to " +
+            machine.type.name + " " + str(machine.id))
+        else: 
+            self.defer(task)
+            print("Task "+ str(task.id) +" is deferred")
+    
     
 
 
 
     def schedule(self):
-        _ , task = self.choose(self)
-        self.map(self,task, Config.machines[self.machine_index] )
-        if self.machine_index == len(Config.machines) -1 :
-            self.machine_index = 0
+        task = self.choose()
+
+        if task != None:       
+            assigned_machine = Config.machines[self.machine_index]
+            self.map(task, assigned_machine )        
+            if self.machine_index == len(Config.machines) -1 :
+                self.machine_index = 0
+            else:
+                self.machine_index += 1 
+            return assigned_machine
         else:
-            self.machine_index += 1 
+            return None
 
 
         

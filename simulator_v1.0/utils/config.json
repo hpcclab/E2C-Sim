@@ -2,26 +2,30 @@
 
     "global_parameters":[
         {
-            "queue_size":3,
-            "batch_queue_size":9
+            "queue_size":1,
+            "batch_queue_size":3
         }        
     ],
     "task_types": [
         {
             "id":1,
-            "name":"object_recog"
+            "name":"object_recog",
+            "deadline": 100
         },
         {
             "id":2,
-            "name":"face_recog"
+            "name":"face_recog",
+            "deadline": 100
         },
         {
             "id":3,
-            "name":"text_recog"
+            "name":"text_recog",
+            "deadline": 100
         },
         {
             "id":4,
-            "name":"speech_recog"
+            "name":"speech_recog",
+            "deadline": 100
         }
        
     ],
@@ -31,19 +35,19 @@
             "id":1,
             "name":"CPU",
             "power": 65.0,
-            "replicas" : 8
+            "replicas" : 1
         },
         {
             "id":2,
             "name":"RX6800",
             "power": 235.4,
-            "replicas" : 2
+            "replicas" : 0
         },        
         {
             "id":3,
             "name":"FPGA",
             "power": 50.0,
-            "replicas" : 1
+            "replicas" : 0
         }
     ],
 
