@@ -3,14 +3,13 @@ from BaseScheduler import BaseScheduler
 import Config
 
 
-class FCFS(BaseScheduler):
+class Min1(BaseScheduler):
     machine_index = 0
 
     def __init__(self):
-        super().__init__()
+        super.__init__()
 
     def feed(self):
-
         while self.unlimited_queue and (None in self.batch_queue):
             task = self.unlimited_queue.pop(0)
             empty_slot = self.batch_queue.index(None)
@@ -58,14 +57,17 @@ class FCFS(BaseScheduler):
 
     def schedule(self):
         task = self.choose()
+        quickest = Config.machines[0]
 
         if task is not None:
-            assigned_machine = Config.machines[self.machine_index]
-            self.map(task, assigned_machine)
+            for m in Config.machines:
+                if m.available_time < quickest.available_time:
+                    quickest = m
+            self.map(task, quickest)
             if self.machine_index == len(Config.machines) - 1:
                 self.machine_index = 0
             else:
                 self.machine_index += 1
-            return assigned_machine
+            return quickest
         else:
             return None

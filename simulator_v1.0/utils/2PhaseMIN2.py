@@ -1,16 +1,17 @@
+from abc import ABC
+
 from BaseTask import TaskStatus
 from BaseScheduler import BaseScheduler
 import Config
 
 
-class FCFS(BaseScheduler):
+class PhaseMIN2(BaseScheduler, ABC):
     machine_index = 0
 
     def __init__(self):
-        super().__init__()
+        super.__init__()
 
     def feed(self):
-
         while self.unlimited_queue and (None in self.batch_queue):
             task = self.unlimited_queue.pop(0)
             empty_slot = self.batch_queue.index(None)
@@ -57,15 +58,16 @@ class FCFS(BaseScheduler):
             print("Task " + str(task.id) + " is deferred")
 
     def schedule(self):
-        task = self.choose()
-
-        if task is not None:
-            assigned_machine = Config.machines[self.machine_index]
-            self.map(task, assigned_machine)
-            if self.machine_index == len(Config.machines) - 1:
-                self.machine_index = 0
-            else:
-                self.machine_index += 1
-            return assigned_machine
+        if list is not None:
+            for i in list:
+                quickest = list[i][0]
+                for j in list[i]:
+                    if list[i][j].est_exec_time < quickest.est_exec_time:
+                        quickest = list[i][j]
+                self.map(quickest, Config.machines[i])
+                list.remove(list[i][j])
         else:
-            return None
+            print("No more tasks for scheduling in set... \n")
+        for k in list:
+            for l in list[k]:
+                self.batch_queue.append(list[k][l])
