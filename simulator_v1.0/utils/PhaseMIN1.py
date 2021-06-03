@@ -3,11 +3,11 @@ from BaseScheduler import BaseScheduler
 import Config
 
 
-class Min1(BaseScheduler):
+class PhaseMIN1(BaseScheduler):
     machine_index = 0
 
     def __init__(self):
-        super.__init__()
+        super().__init__()
 
     def feed(self):
         while self.unlimited_queue and (None in self.batch_queue):
@@ -44,30 +44,26 @@ class Min1(BaseScheduler):
         task.status = task.status_list['dropped']
         task.drop_time = Config.current_time
 
-    def map(self, task, machine):
-        assignment = machine.admit(task)
-
-        if assignment:
-            task.assigned_machine = machine
-            print('Task ' + str(task.id) + " assigned to " +
-                  machine.type.name + " " + str(machine.id))
-        else:
-            self.defer(task)
-            print("Task " + str(task.id) + " is deferred")
+    def map(self, task):
+        pass
 
     def schedule(self):
+        machines = []
+        output = []
+        for m in Config.machines:
+            machines.append(m)
         task = self.choose()
-        quickest = Config.machines[0]
+        quickest = machines[0]
 
         if task is not None:
             for m in Config.machines:
                 if m.available_time < quickest.available_time:
                     quickest = m
-            self.map(task, quickest)
+            output.append((quickest.id, task))
             if self.machine_index == len(Config.machines) - 1:
                 self.machine_index = 0
             else:
                 self.machine_index += 1
-            return quickest
+            return output
         else:
-            return None
+            return output

@@ -3,11 +3,11 @@ from BaseScheduler import BaseScheduler
 import Config
 
 
-class PhaseMIN1(BaseScheduler):
+class PhaseMIN2(BaseScheduler):
     machine_index = 0
 
     def __init__(self):
-        super.__init__()
+        super().__init__()
 
     def feed(self):
         while self.unlimited_queue and (None in self.batch_queue):
@@ -44,20 +44,29 @@ class PhaseMIN1(BaseScheduler):
         task.status = task.status_list['dropped']
         task.drop_time = Config.current_time
 
-    def schedule(self):
-        pairs = [[]]
-        task = self.choose()
-        quickest = Config.machines[0]
+    def map(self, task, machine):
+        assignment = machine.admit(task)
 
-        if task is not None:
-            for m in Config.machines:
-                if m.available_time < quickest.available_time:
-                    quickest = m
-            pairs[quickest.id].append(task)
-            if self.machine_index == len(Config.machines) - 1:
-                self.machine_index = 0
-            else:
-                self.machine_index += 1
-            return pairs
+        if assignment:
+            task.assigned_machine = machine
+            print('Task ' + str(task.id) + " assigned to " +
+                  machine.type.name + " " + str(machine.id))
         else:
-            return pairs
+            self.defer(task)
+            print("Task " + str(task.id) + " is deferred")
+
+    def schedule(self, minlist):
+        print(minlist)
+        if minlist is not None:
+            for i in minlist:
+                quickest = minlist[i][0]
+                for j in minlist[i]:
+                    if minlist[i][j].est_exec_time < quickest.est_exec_time:
+                        quickest = minlist[i][j]
+                self.map(quickest, Config.machines[i])
+                minlist.remove(minlist[i][j])
+        else:
+            print("No more tasks for scheduling in set... \n")
+        for k in minlist:
+            for l in minlist[k]:
+                self.batch_queue.append(minlist[k][l])

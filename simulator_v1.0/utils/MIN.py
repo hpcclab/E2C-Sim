@@ -1,15 +1,13 @@
-from abc import ABC
-
 from BaseTask import TaskStatus
 from BaseScheduler import BaseScheduler
 import Config
 
 
-class PhaseMIN2(BaseScheduler, ABC):
+class Min1(BaseScheduler):
     machine_index = 0
 
     def __init__(self):
-        super.__init__()
+        super().__init__()
 
     def feed(self):
         while self.unlimited_queue and (None in self.batch_queue):
@@ -58,16 +56,18 @@ class PhaseMIN2(BaseScheduler, ABC):
             print("Task " + str(task.id) + " is deferred")
 
     def schedule(self):
-        if list is not None:
-            for i in list:
-                quickest = list[i][0]
-                for j in list[i]:
-                    if list[i][j].est_exec_time < quickest.est_exec_time:
-                        quickest = list[i][j]
-                self.map(quickest, Config.machines[i])
-                list.remove(list[i][j])
+        task = self.choose()
+        quickest = Config.machines[0]
+
+        if task is not None:
+            for m in Config.machines:
+                if m.available_time < quickest.available_time:
+                    quickest = m
+            self.map(task, quickest)
+            if self.machine_index == len(Config.machines) - 1:
+                self.machine_index = 0
+            else:
+                self.machine_index += 1
+            return quickest
         else:
-            print("No more tasks for scheduling in set... \n")
-        for k in list:
-            for l in list[k]:
-                self.batch_queue.append(list[k][l])
+            return None
