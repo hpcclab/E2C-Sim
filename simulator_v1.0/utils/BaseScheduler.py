@@ -1,20 +1,14 @@
-from abc import ABCMeta,abstractmethod
+from abc import ABCMeta, abstractmethod
 import Config
 
 
-
 class BaseScheduler:
-
     __metaclass__ = ABCMeta
 
-
-
-    def __init__(self):        
+    def __init__(self):
         self.batch_queue_size = Config.batch_queue_size
-        self.batch_queue = [None]* Config.batch_queue_size
+        self.batch_queue = [None] * Config.batch_queue_size
         self.unlimited_queue = []
-        
-    
 
     @abstractmethod
     def feed(self):
@@ -39,7 +33,6 @@ class BaseScheduler:
             
         """
 
-    
     @abstractmethod
     def defer(self, task):
         """  defer the task for future mapping events
@@ -59,13 +52,14 @@ class BaseScheduler:
         """
 
     @abstractmethod
-    def map(self, task):\
-        """ map a task to a machine
+    def map(self, task): \
+            """ map a task to a machine
 
             returns:
             (task, assigned_machine)
 
         """
+
     @abstractmethod
     def schedule(self, task):
         """
@@ -78,6 +72,3 @@ class BaseScheduler:
             
 
         """
-
-
-
