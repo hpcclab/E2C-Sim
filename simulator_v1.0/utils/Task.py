@@ -3,9 +3,8 @@ from BaseTask import BaseTask, TaskStatus
 
 class Task(BaseTask):
 
-    
     def __init__(self, id, type, est_exec_time,
-                 execution_time, arrival_time, task_size=0.0):        
+                 execution_time, arrival_time, task_size=0.0):
         self.id = id
         self.type = type
         self.deadline = arrival_time + type.deadline
@@ -18,13 +17,10 @@ class Task(BaseTask):
         self.drop_time = float('inf')
         self.status = TaskStatus.ARRIVING
         self.assigned_machine = None
-        
-
-
 
     def info(self):
         """
             Returns:
             The details of the tasks as a dictionary of lists
-        """
 
+        """

@@ -9,19 +9,19 @@ from PhaseMIN2 import PhaseMIN2
 # The following creates the GUI window
 import tkinter as tk
 window = tk.Tk()
-window.title("Scheduler")
-window.geometry('1000x1000')
+window.title("Scheduler GUI")
+window.geometry('1000x650')
 
 tArrivalTime = tk.Text(window, height=10, width=100)
 tCompletionTime = tk.Text(window, height=10, width=100)
 tTaskStatus = tk.Text(window, height=10, width=100)
 
 lbl1 = tk.Label(window, text="Task Arrival Times")
-lbl1.config(font=("Courier", 14))
+lbl1.config(font=("Helvetica", 14))
 lbl2 = tk.Label(window, text="Task Completion Times")
-lbl2.config(font=("Courier", 14))
+lbl2.config(font=("Helvetica", 14))
 lbl3 = tk.Label(window, text="Task Statuses")
-lbl3.config(font=("Courier", 14))
+lbl3.config(font=("Helvetica", 14))
 
 b = tk.Button(window, text="Exit", command=window.destroy)
 
@@ -65,6 +65,7 @@ for task in Tasks:
 
 '''
 # Code for 2 phase scheduling: Work in progress
+# Available Algorithms: PhaseMIN1(), PhaseMIN2()
 scheduler1 = PhaseMIN1()
 scheduler2 = PhaseMIN2()
 
@@ -117,7 +118,8 @@ while Config.event_queue.event_list:
                   "\t status = " + task.status.name)
 '''
 # To change scheduling method, change what scheduler variable is set to
-scheduler = Min1()
+# Available Algorithm methods: FCFS(), Min1()
+scheduler = FCFS()
 while Config.event_queue.event_list:
 
     print(80 * '=' + '\n\n Reading events from event queue ===>>>')

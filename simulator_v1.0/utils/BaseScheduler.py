@@ -37,8 +37,6 @@ class BaseScheduler:
     def defer(self, task):
         """  defer the task for future mapping events
 
-           
-
         """
 
     @abstractmethod
@@ -53,7 +51,7 @@ class BaseScheduler:
 
     @abstractmethod
     def map(self, task): \
-            """ map a task to a machine
+        """ map a task to a machine
 
             returns:
             (task, assigned_machine)
@@ -66,9 +64,7 @@ class BaseScheduler:
             It takes a task object and decide which actions should be taken
             as a scheduler.
             The action space is (drop, defer, offload, map).
-            Each action is implemented separatedly, like map(self, task) and etc.
+            Each action is implemented separately, like map(self, task) and etc.
             The task is selected using choose(self) method.
-
-            
 
         """

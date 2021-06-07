@@ -56,18 +56,21 @@ class Min1(BaseScheduler):
             print("Task " + str(task.id) + " is deferred")
 
     def schedule(self):
-        task = self.choose()
-        quickest = Config.machines[0]
+        try:
+            task = self.choose()
+            quickest = Config.machines[0]
 
-        if task is not None:
-            for m in Config.machines:
-                if m.available_time < quickest.available_time:
-                    quickest = m
-            self.map(task, quickest)
-            if self.machine_index == len(Config.machines) - 1:
-                self.machine_index = 0
+            if task is not None:
+                for m in Config.machines:
+                    if m.available_time < quickest.available_time:
+                        quickest = m
+                self.map(task, quickest)
+                if self.machine_index == len(Config.machines) - 1:
+                    self.machine_index = 0
+                else:
+                    self.machine_index += 1
+                return quickest
             else:
-                self.machine_index += 1
-            return quickest
-        else:
-            return None
+                return None
+        finally:
+            print("Error with Config.machines list.")
