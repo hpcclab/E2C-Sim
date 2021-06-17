@@ -56,8 +56,42 @@ class PhaseMIN2(BaseScheduler):
             print("Task " + str(task.id) + " is deferred")
 
     def schedule(self, minlist):
+        print("Incoming List:")
         print(minlist)
+        toMap = []
+        machines = []
+        # builds a list containing lists with each first index as a machine id
+        for m in Config.machines:
+            toMap.append([m.id])
+            machines.append(m)
+        # adds all of the tasks assigned to the list with its corresponding machine id
         if minlist is not None:
+            for i in minlist:
+                for k in toMap:
+                    if i[0] == k[0]:
+                        k.append(i[1])
+                        minlist.remove(i)
+        # finds the task assigned to each machine with the quickest execution time and maps it
+        print("Lists: ")
+        print(minlist)
+        print(toMap)
+        for machine in toMap:
+            quickest = machine[1]
+            print(machine[1].est_exec_time)
+            count = 1
+            for task in machine:
+                if machine[count].est_exec_time < quickest.est_exec_time:
+                    quickest = task
+                count += 1
+            self.map(task, machine[0])
+            machine[0].remove(task)
+
+        for machine in toMap:
+            for task in machine:
+                if task != machine[0]:
+                    minlist.append([machine[0], task])
+
+            """
             for i in minlist:
                 quickest = minlist[i][0]
                 for j in minlist[i]:
@@ -70,3 +104,4 @@ class PhaseMIN2(BaseScheduler):
         for k in minlist:
             for l in minlist[k]:
                 self.batch_queue.append(minlist[k][l])
+            """

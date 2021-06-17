@@ -12,9 +12,9 @@ window = tk.Tk()
 window.title("Scheduler GUI")
 window.geometry('1000x650')
 
-tArrivalTime = tk.Text(window, height=10, width=100)
-tCompletionTime = tk.Text(window, height=10, width=100)
-tTaskStatus = tk.Text(window, height=10, width=100)
+tArrivalTime = tk.Text(window, height=10, width=75)
+tCompletionTime = tk.Text(window, height=10, width=75)
+tTaskStatus = tk.Text(window, height=12, width=50)
 
 lbl1 = tk.Label(window, text="Task Arrival Times")
 lbl1.config(font=("Helvetica", 14))
@@ -33,7 +33,6 @@ lbl3.pack()
 tTaskStatus.pack()
 b.pack()
 # end of GUI window code
-
 Tasks = []
 
 with open('ArrivalTimes.txt', 'r') as data_file:
@@ -63,7 +62,7 @@ for task in Tasks:
     event = Event(task.arrival_time, EventTypes.ARRIVING, task)
     Config.event_queue.add_event(event)
 
-'''
+
 # Code for 2 phase scheduling: Work in progress
 # Available Algorithms: PhaseMIN1(), PhaseMIN2()
 scheduler1 = PhaseMIN1()
@@ -116,7 +115,8 @@ while Config.event_queue.event_list:
             print("  Task id = " + str(task.id) +
                   '\t assigned to ' + str(task.assigned_machine) +
                   "\t status = " + task.status.name)
-'''
+
+"""
 # To change scheduling method, change what scheduler variable is set to
 # Available Algorithm methods: FCFS(), Min1()
 scheduler = FCFS()
@@ -176,10 +176,15 @@ while Config.event_queue.event_list:
 
             # the next two lines format text to be added to the window and then it adds it into the "Task Statuses"
             # section.
-            string = (str(task.id) + " Status: " + str(task.status.name) + "\n")
-            tTaskStatus.insert(tk.END, string)
+            string = ("Task " + str(task.id) + " Status: " + str(task.status.name))
+            if tTaskStatus.get(float(task.id)) is not None:
+                tTaskStatus.replace(float(task.id), tk.END,  string + " \n")
+            else:
+                tTaskStatus.insert(tk.END, string)
+
         else:
             print("  Task id = " + str(task.id) +
                   '\t assigned to ' + str(task.assigned_machine) +
                   "\t status = " + task.status.name)
+"""
 window.mainloop()

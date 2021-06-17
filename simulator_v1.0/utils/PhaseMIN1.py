@@ -1,6 +1,7 @@
 from BaseTask import TaskStatus
 from BaseScheduler import BaseScheduler
 import Config
+from array import *
 
 
 class PhaseMIN1(BaseScheduler):
@@ -59,7 +60,7 @@ class PhaseMIN1(BaseScheduler):
             for m in Config.machines:
                 if m.available_time < quickest.available_time:
                     quickest = m
-            output.append((quickest.id, task))
+            output.insert(len(output), [quickest.id, task])
             if self.machine_index == len(Config.machines) - 1:
                 self.machine_index = 0
             else:
