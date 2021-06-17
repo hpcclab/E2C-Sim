@@ -22,6 +22,9 @@ class Machine(BaseMachine):
                       'missed_tasks': 0,
                       'energy_usage': 0}
 
+    def getType(self):
+        return self.type.name
+
     def start(self):
         self.status = MachineStatus.IDLE
 

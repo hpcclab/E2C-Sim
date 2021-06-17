@@ -1,6 +1,7 @@
 from BaseTask import TaskStatus
 from BaseScheduler import BaseScheduler
 import Config
+from ReadExecutionTimes import ReadData
 
 
 class PhaseMIN2(BaseScheduler):
@@ -56,42 +57,45 @@ class PhaseMIN2(BaseScheduler):
             print("Task " + str(task.id) + " is deferred")
 
     def schedule(self, minlist):
-        print("Incoming List:")
-        print(minlist)
+        reader = ReadData()
         toMap = []
-        machines = []
-        # builds a list containing lists with each first index as a machine id
+        machines1 = []
+        # builds a list containing lists with each first index as a machine id and the second as the machine type
+        # it also builds a list of the machines
         for m in Config.machines:
-            toMap.append([m.id])
-            machines.append(m)
+            toMap.append([m.id, m.getType()])
+            machines1.append(m)
         # adds all of the tasks assigned to the list with its corresponding machine id
         if minlist is not None:
-            for i in minlist:
-                for k in toMap:
-                    if i[0] == k[0]:
-                        k.append(i[1])
-                        minlist.remove(i)
+            for taskpairs in minlist:
+                for machines in toMap:
+                    if taskpairs[0] == machines[0]:
+                        machines.append(taskpairs[1])
+                        minlist.remove(taskpairs)
+
         # finds the task assigned to each machine with the quickest execution time and maps it
-        print("Lists: ")
-        print(minlist)
-        print(toMap)
         for machine in toMap:
-            quickest = machine[1]
-            print(machine[1].est_exec_time)
-            count = 1
-            for task in machine:
-                if machine[count].est_exec_time < quickest.est_exec_time:
-                    quickest = task
-                count += 1
-            self.map(task, machine[0])
-            machine[0].remove(task)
+            if len(machine) > 2:
+                quickest = machine[2]
+                count = 2
+                for task in machine:
+                    if task != machine[0] and task != machine[1]:
+                        print(reader.read_execution_time(task.type.id, machine[1]))
+                        # if machine[count].est_exec_time < quickest.est_exec_time:
+                        # quickest = task
+                        count += 1
+                self.map(task, machines1[machine[0] - 1])
+                machine.remove(task)
+            else:
+                pass
 
         for machine in toMap:
             for task in machine:
-                if task != machine[0]:
+                if task != machine[0] and task != machine[1]:
                     minlist.append([machine[0], task])
+        return machines1[machine[0]-1]
 
-            """
+"""
             for i in minlist:
                 quickest = minlist[i][0]
                 for j in minlist[i]:
