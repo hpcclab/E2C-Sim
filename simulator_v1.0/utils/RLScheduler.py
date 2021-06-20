@@ -4,7 +4,7 @@ import Config
 
 
 
-class FCFS(BaseScheduler):
+class RLS(BaseScheduler):
     
     machine_index = 0
 
@@ -68,9 +68,11 @@ class FCFS(BaseScheduler):
             task.assigned_machine = machine
             print('Task '+ str(task.id) + " assigned to " +
             machine.type.name + " " + str(machine.id))
+            return 1
         else: 
             self.defer(task)
             print("Task "+ str(task.id) +" is deferred")
+            return 0
     
     
 

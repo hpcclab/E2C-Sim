@@ -6,9 +6,7 @@ import Config
 
 
 class Machine(BaseMachine):
-
     
-
     def __init__(self, id, type, specs):
         self.id = id
         self.type = type

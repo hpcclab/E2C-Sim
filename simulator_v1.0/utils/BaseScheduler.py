@@ -13,6 +13,7 @@ class BaseScheduler:
         self.batch_queue_size = Config.batch_queue_size
         self.batch_queue = [None]* Config.batch_queue_size
         self.unlimited_queue = []
+        self.unmapped_task = None
         
     
 
@@ -26,7 +27,8 @@ class BaseScheduler:
 
     @abstractmethod
     def choose(self):
-        """ Choose a task from batch queue for mapping decision
+        """ Choose a task from batch queue for mapping decision and 
+         assgin it to the unmapped_task
 
             returns:
                 index and value of selected task object 
