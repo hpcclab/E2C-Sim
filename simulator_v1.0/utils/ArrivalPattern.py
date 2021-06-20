@@ -1,4 +1,4 @@
-'''
+"""
 Authors: Ali Mokhtari
 Created on Dec. 22, 2020.
 
@@ -8,7 +8,7 @@ distribution that indicates the arrival time of the tasks in the
 specified interval of time is generated.
 "uniform", "normal", "exponential", and "spiky" pattern are considered.
 
-'''
+"""
 
 import numpy as np
 import seaborn as sns
@@ -23,46 +23,43 @@ class ArrivalPattern:
     # system is no_of_tasks.
     # To generate the arrival times, a sample of size no_of_tasks is
     # drawn from the pattern.
-    
+
     def __init__(self, pattern, start_time, end_time, no_of_tasks):
         self.pattern = pattern
         self.start_time = start_time
         self.end_time = end_time
         self.no_of_tasks = no_of_tasks
-        
-    
+
     def arrival_generator(self):
         # It generates the arrival times distribution based on arrival
         # pattern, time interval, and no_of_tasks arrive.
         # len(distribution) is no_of_tasks.
-        
+
         if self.pattern == 'uniform':
             distribution = self.uniform()
-        
+
         elif self.pattern == 'normal':
             distribution = self.normal()
-        
+
         elif self.pattern == 'exponential':
             distribution = self.exponential()
-        
+
         elif self.pattern == 'spiky':
             distribution = self.spiky()
-        
-        
+
         return distribution
-    
+
     def uniform(self):
         # Here, a sample of arrival times are drawn from the uniform
         # distribution. In other words, any value within the given
         # interval is equally likely to be drawn by uniform sampling.
-        
+
         distribution = np.random.uniform(self.start_time, self.end_time,
                                          self.no_of_tasks)
-        distribution = [round(x,3) for x in distribution]
-        
+        distribution = [round(x, 3) for x in distribution]
+
         return distribution
-    
-    
+
     def normal(self):
         # Here, a sample of arrival times are drawn from the normal
         # distribution. 
@@ -72,17 +69,16 @@ class ArrivalPattern:
         # the given time interval located in 6 standard deviations.
         # <start_tim-------- 6 sigma --------- end_time> 
         mu = (self.start_time + self.end_time) / 2.0
-        sigma = (self.end_time - self.start_time) / 6.0             
-        
+        sigma = (self.end_time - self.start_time) / 6.0
+
         distribution = np.random.normal(mu, sigma, self.no_of_tasks)
         # The distribution is truncated to fit the given timeinterval.
-        distribution[distribution > self.end_time] =self.end_time
+        distribution[distribution > self.end_time] = self.end_time
         distribution[distribution < self.start_time] = self.start_time
-        distribution = [round(x,3) for x in distribution]
-        
+        distribution = [round(x, 3) for x in distribution]
+
         return distribution
-        
-    
+
     def exponential(self):
         # Here, a sample of arrival times are drawn from the exponential
         # distribution. 
@@ -97,60 +93,62 @@ class ArrivalPattern:
             beta, self.no_of_tasks)
         # The distribution is truncated to fit the given time interval.
         distribution[distribution > self.end_time] = self.end_time
-        distribution = [round(x,3) for x in distribution]
-        
+        distribution = [round(x, 3) for x in distribution]
+
         return distribution
-    
-    def spiky(self, no_of_spikes = 10):
+
+    def spiky(self, no_of_spikes=10):
         # Here, tasks are considered to be arrived in spiky manner. The spikes
-        # occured at random positions but have same width.
+        # occurred at random positions but have same width.
         # The number of tasks arrive at each spike is also a random variable.
         # no_of_spikes: It is the number of spikes in the given time
         # interval [start_time, end_time]
-        
+
         # Each spike width is 1% of the time interval.
-        spike_width = 0.01 * (self.end_time - self.start_time)   
+        spike_width = 0.01 * (self.end_time - self.start_time)
         # Each spike begins at a random position which is drawn from a 
         # uniform distribution.
-        spike_starts = np.random.uniform(self.start_time , 
-                                         self.end_time, no_of_spikes)
-        
-        distribution = []
-        # remaining_tasks is the number of tasks that arrive afterward.       
-        remaining_tasks = self.no_of_tasks
-        # A loop to generate spikes sequentially
-        for spikes_no in range(no_of_spikes):
-            # no_of_tasks_in_spike: Number of tasks arrive at each spike
-            no_of_tasks_in_spike = np.random.randint(remaining_tasks+1)
-            # spike: distribution of tasks arrival time in each spike
-            spike = np.random.uniform(spike_starts[spikes_no], 
-                                      spike_starts[spikes_no]+spike_width,
-                                      no_of_tasks_in_spike)
-            remaining_tasks -= no_of_tasks_in_spike
-            distribution = np.concatenate((distribution,spike))
-        distribution = [round(x,3) for x in distribution]
-        
-        return distribution
-            
-    
+        if no_of_spikes is int:
+            spike_starts = np.random.uniform(self.start_time,
+                                             self.end_time, no_of_spikes)
+            distribution = []
+            # remaining_tasks is the number of tasks that arrive afterward.
+            remaining_tasks = self.no_of_tasks
+            # A loop to generate spikes sequentially
+            for spikes_no in range(no_of_spikes):
+                # no_of_tasks_in_spike: Number of tasks arrive at each spike
+                no_of_tasks_in_spike = np.random.randint(remaining_tasks + 1)
+                # spike: distribution of tasks arrival time in each spike
+                spike = np.random.uniform(spike_starts[spikes_no],
+                                          spike_starts[spikes_no] + spike_width,
+                                          no_of_tasks_in_spike)
+                remaining_tasks -= no_of_tasks_in_spike
+                distribution = np.concatenate((distribution, spike))
+            distribution = [round(x, 3) for x in distribution]
+
+            return distribution
+        else:
+            print("Invalid amount of spikes.")
+            pass
+
+
 def test():
-    
-    uniform = ArrivalPattern('uniform',10,30,1000).arrival_generator()
-    normal = ArrivalPattern('normal',10,30,1000).arrival_generator()
-    exponential = ArrivalPattern('exponential',10,30,1000).arrival_generator()
-    spiky = ArrivalPattern('spiky',10,30,1000).arrival_generator()
-    
-    data = {'uniform':uniform, 'normal': normal, 'exponential':exponential,
-            'spiky':spiky}      
-       
-    sns.displot(data, kind = 'ecdf' )
+    uniform = ArrivalPattern('uniform', 10, 30, 1000).arrival_generator()
+    normal = ArrivalPattern('normal', 10, 30, 1000).arrival_generator()
+    exponential = ArrivalPattern('exponential', 10, 30, 1000).arrival_generator()
+    spiky = ArrivalPattern('spiky', 10, 30, 1000).arrival_generator()
+
+    data = {'uniform': uniform, 'normal': normal, 'exponential': exponential,
+            'spiky': spiky}
+
+    sns.displot(data, kind='ecdf')
     plt.show()
-    
+
     plt.figure()
-    sns.displot(data, kind = 'kde' , fill = True )
+    sns.displot(data, kind='kde', fill=True)
     plt.show()
-       
+
     return data
 
 # Just for Test -->
-#data = test()
+# data = test()

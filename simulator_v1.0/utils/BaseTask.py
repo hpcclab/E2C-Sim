@@ -1,14 +1,12 @@
-from abc import ABCMeta,abstractmethod
+from abc import ABCMeta, abstractmethod
 from enum import Enum, unique
 
 
 class BaseTask:
-
-    __metaClass__ = ABCMeta   
+    __metaClass__ = ABCMeta
 
     def __init__(self):
-        pass        
-
+        pass
 
     @abstractmethod
     def info(self):
@@ -19,6 +17,8 @@ class BaseTask:
                 it is mapped, etc.
 
         """
+
+
 @unique
 class TaskStatus(Enum):
     ARRIVING = 1
@@ -29,4 +29,3 @@ class TaskStatus(Enum):
     DROPPED = 6
     DEFERRED = 7
     MISSED = 8
-

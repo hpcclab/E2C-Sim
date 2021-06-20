@@ -1,8 +1,8 @@
-
 import Config
 
-from abc import ABCMeta,abstractmethod
+from abc import ABCMeta, abstractmethod
 from enum import Enum, unique
+
 
 @unique
 class MachineStatus(Enum):
@@ -12,14 +12,10 @@ class MachineStatus(Enum):
 
 
 class BaseMachine:
-
     __metaclass__ = ABCMeta
-    
-    
+
     def __init__(self, id, type, specs):
         pass
-        
-
 
     @abstractmethod
     def start(self):
@@ -29,7 +25,7 @@ class BaseMachine:
                 It should change the machine's status
 
         """
-    
+
     @abstractmethod
     def admit(self, task):
         """ it assigns the task to the machine. That is, the task is appended
@@ -49,7 +45,7 @@ class BaseMachine:
                 the selected task object
 
         """
-    
+
     @abstractmethod
     def execute(self, index):
         """ The algorithm selects a task from queue and execute it on the machine
@@ -74,8 +70,6 @@ class BaseMachine:
 
         """
 
-
-   
     @abstractmethod
     def shutdown(self):
         """ shutdown the machine and change its status
@@ -84,7 +78,7 @@ class BaseMachine:
                 it should also check the machine queue for further actions.
 
         """
-    
+
     @abstractmethod
     def info(self):
         """ it gives the details about the machine
