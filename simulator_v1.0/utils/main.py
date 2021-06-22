@@ -64,7 +64,8 @@ for task in Tasks:
     Config.event_queue.add_event(event)
 
 # Code for 2 phase scheduling: Work in progress
-# Available Algorithms: PhaseMIN1(), PhaseMIN2()
+# Available Phase 1 Algorithms: PhaseMIN1()
+# Available Phase 2 Algorithms: PhaseMIN2()
 scheduler1 = PhaseMIN1()
 scheduler2 = PhaseMIN2()
 
@@ -83,11 +84,15 @@ while Config.event_queue.event_list:
 
         scheduler1.unlimited_queue.append(task)
         scheduler1.feed()
+
         minList = scheduler1.schedule()
         print(minList)
-        assigned_machine = scheduler2.schedule(minList)
-        if assigned_machine:
-            assigned_machine.execute()
+        assigned_machines = scheduler2.schedule(minList)
+        count = 0
+        if assigned_machines is not None:
+            execute = assigned_machines.pop(count)
+            execute.execute()
+            count += 1
 
     elif event.event_type == EventTypes.COMPLETION:
 

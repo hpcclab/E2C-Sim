@@ -74,26 +74,30 @@ class PhaseMIN2(BaseScheduler):
                         minlist.remove(taskpairs)
 
         # finds the task assigned to each machine with the quickest execution time and maps it
+        readyMachines = []
         for machine in toMap:
             if len(machine) > 2:
                 quickest = machine[2]
-                count = 2
                 for task in machine:
                     if task != machine[0] and task != machine[1]:
                         print(reader.read_execution_time(task.type.id, machine[1]))
-                        # if machine[count].est_exec_time < quickest.est_exec_time:
-                        # quickest = task
-                        count += 1
-                self.map(task, machines1[machine[0] - 1])
-                machine.remove(task)
+                        if reader.read_execution_time(task.type.id, machine[1]) < reader.read_execution_time(
+                                quickest.type.id, machine[1]):
+                            quickest = task
+                            minlist.append([machine[0], quickest])
+                        else:
+                            minlist.append([machine[0], quickest])
+                self.map(quickest, machines1[machine[0] - 1])
+                readyMachines.append(machines1[machine[0]-1])
+                machine.remove(quickest)
             else:
                 pass
 
         for machine in toMap:
             for task in machine:
                 if task != machine[0] and task != machine[1]:
-                    minlist.append([machine[0], task])
-        return machines1[machine[0]-1]
+                    self.batch_queue.append([machine[0], task])
+        return readyMachines
 
 """
             for i in minlist:

@@ -11,7 +11,7 @@ class PhaseMIN1(BaseScheduler):
         super().__init__()
 
     def feed(self):
-        while self.unlimited_queue and (None in self.batch_queue):
+        while self.unlimited_queue:
             task = self.unlimited_queue.pop(0)
             empty_slot = self.batch_queue.index(None)
             self.batch_queue[empty_slot] = task
