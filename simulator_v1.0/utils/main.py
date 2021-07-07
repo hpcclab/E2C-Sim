@@ -11,18 +11,21 @@ import tkinter as tk
 
 window = tk.Tk()
 window.title("Scheduler GUI")
-window.geometry('1000x650')
+window.geometry('1920x1260')
 
 tArrivalTime = tk.Text(window, height=10, width=75)
 tCompletionTime = tk.Text(window, height=10, width=75)
-tTaskStatus = tk.Text(window, height=12, width=50)
+tTaskStatus = tk.Text(window, height=10, width=75)
+tStatistics = tk.Text(window, height=10, width=75)
 
 lbl1 = tk.Label(window, text="Task Arrival Times")
 lbl1.config(font=("Helvetica", 14))
 lbl2 = tk.Label(window, text="Task Completion Times")
 lbl2.config(font=("Helvetica", 14))
-lbl3 = tk.Label(window, text="Task Statuses")
+lbl3 = tk.Label(window, text="Current Task Statuses")
 lbl3.config(font=("Helvetica", 14))
+lbl4 = tk.Label(window, text="Statistics")
+lbl4.config(font=("Helvetica", 14))
 
 b = tk.Button(window, text="Exit", command=window.destroy)
 
@@ -32,8 +35,15 @@ lbl2.pack()
 tCompletionTime.pack()
 lbl3.pack()
 tTaskStatus.pack()
+lbl4.pack()
+tStatistics.pack()
 b.pack()
+tStatistics.insert(tk.END, "Total Arrived Tasks: 0\n")
+tStatistics.insert(tk.END, "Total Completed Tasks: 0\n")
+tStatistics.insert(tk.END, "Total tasks completed by each machine: \n")
+
 # end of GUI window code
+
 Tasks = []
 
 with open('ArrivalTimes.txt', 'r') as data_file:
@@ -69,6 +79,13 @@ for task in Tasks:
 scheduler1 = PhaseMIN1()
 scheduler2 = PhaseMIN2()
 
+completed_count = 0
+arrived_count = 0
+machine_counts = []
+for _ in Config.machines:
+    machine_counts.append(0)
+    tStatistics.insert(tk.END, "Placeholder \n")
+
 while Config.event_queue.event_list:
 
     print(80 * '=' + '\n\n Reading events from event queue ===>>>')
@@ -80,6 +97,8 @@ while Config.event_queue.event_list:
         string = ('Task ' + str(task.id) + ' arrived at ' +
                   str(Config.current_time) + ' sec\n')
         tArrivalTime.insert(tk.END, string)
+        arrived_count += 1
+        tStatistics.replace(0.0, 2.0, "Total Arrived Tasks: " + str(arrived_count) + "\n")
         print(string)
 
         scheduler1.unlimited_queue.append(task)
@@ -112,6 +131,15 @@ while Config.event_queue.event_list:
                   ', and machine id: ' + str(machine.id) + "\n")
         tCompletionTime.insert(tk.END, string)
 
+        # the next couple lines update the total number of completed tasks
+        completed_count += 1
+        tStatistics.replace(2.0, 3.0, "Total Completed Tasks: " + str(completed_count) + "\n")
+
+        # the next several lines update the individual machines' number of completed tasks
+        machine_counts.insert(int(machine.id)-1, 1 + machine_counts[machine.id-1])
+        stats = "Total Completed tasks on " + str(machine.type.name) + ": " + str(machine_counts[machine.id-1]) + "\n"
+        tStatistics.replace((2.0+float(machine.id)), (3.0+float(machine.id)), stats)
+
         machine.terminate()
         scheduler1.feed()
         assigned_machine = scheduler1.schedule()
@@ -128,16 +156,16 @@ while Config.event_queue.event_list:
                   "\t status = " + task.status.name)
             # the next two lines format text to be added to the window and then it adds it into the "Task Statuses"
             # section.
-            string = ("Task " + str(task.id) + " Status: " + str(task.status.name))
+            string = ("Task " + str(task.id) + " Status: " + str(task.status.name) + "\n")
             if tTaskStatus.get(float(task.id)) is not None:
-                tTaskStatus.replace(float(task.id), tk.END, string + " \n")
+                tTaskStatus.replace(float(task.id), tk.END, string)
             else:
                 tTaskStatus.insert(tk.END, string)
         else:
             print("  Task id = " + str(task.id) +
                   '\t assigned to ' + str(task.assigned_machine) +
                   "\t status = " + task.status.name)
-            string = "Task " + str(task.id) + " Status: " + str(task.status.name) + " \n"
+            string = "Task " + str(task.id) + " Status: " + str(task.status.name)
             tTaskStatus.insert(tk.END, string)
 
 """
