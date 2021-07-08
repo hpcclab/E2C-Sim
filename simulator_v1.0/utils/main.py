@@ -72,8 +72,8 @@ with open('ArrivalTimes.txt', 'r') as data_file:
 for task in Tasks:
     event = Event(task.arrival_time, EventTypes.ARRIVING, task)
     Config.event_queue.add_event(event)
-
-# Code for 2 phase scheduling: Work in progress
+""""
+# Code for 2 phase scheduling
 # Available Phase 1 Algorithms: PhaseMIN1()
 # Available Phase 2 Algorithms: PhaseMIN2()
 scheduler1 = PhaseMIN1()
@@ -94,6 +94,8 @@ while Config.event_queue.event_list:
 
     if event.event_type == EventTypes.ARRIVING:
         task = event.event_details
+        
+        # The next few lines format text to b e added to the window and then inserts it into the "Task arriving section"
         string = ('Task ' + str(task.id) + ' arrived at ' +
                   str(Config.current_time) + ' sec\n')
         tArrivalTime.insert(tk.END, string)
@@ -135,10 +137,10 @@ while Config.event_queue.event_list:
         completed_count += 1
         tStatistics.replace(2.0, 3.0, "Total Completed Tasks: " + str(completed_count) + "\n")
 
-        # the next several lines update the individual machines' number of completed tasks
-        machine_counts.insert(int(machine.id)-1, 1 + machine_counts[machine.id-1])
-        stats = "Total Completed tasks on " + str(machine.type.name) + ": " + str(machine_counts[machine.id-1]) + "\n"
-        tStatistics.replace((2.0+float(machine.id)), (3.0+float(machine.id)), stats)
+        # the next several lines update the individual machines' number of completed tasks machine_counts[int(
+        machine.id) - 1] = machine_counts[int(machine.id) - 1] + 1 stats = "Total Completed tasks on " + str(
+        machine.type.name) + " (ID " + str(machine.id) + "): " + str(machine_counts[machine.id - 1]) + "\n" 
+        tStatistics.replace((3.0 + float(machine.id)), (4.0 + float(machine.id)), stats) 
 
         machine.terminate()
         scheduler1.feed()
@@ -165,13 +167,21 @@ while Config.event_queue.event_list:
             print("  Task id = " + str(task.id) +
                   '\t assigned to ' + str(task.assigned_machine) +
                   "\t status = " + task.status.name)
-            string = "Task " + str(task.id) + " Status: " + str(task.status.name)
+            string = "Task " + str(task.id) + " Status: " + str(task.status.name) + "\n"
             tTaskStatus.insert(tk.END, string)
 
 """
 # To change scheduling method, change what scheduler variable is set to
 # Available Algorithm methods: FCFS(), Min1()
-scheduler = FCFS()
+scheduler = Min1()
+
+completed_count = 0
+arrived_count = 0
+machine_counts = []
+for _ in Config.machines:
+    machine_counts.append(0)
+    tStatistics.insert(tk.END, "Placeholder \n")
+
 while Config.event_queue.event_list:
 
     print(80 * '=' + '\n\n Reading events from event queue ===>>>')
@@ -186,6 +196,9 @@ while Config.event_queue.event_list:
         string = ('Task ' + str(task.id) + ' arrived at ' +
                   str(Config.current_time) + ' sec\n')
         tArrivalTime.insert(tk.END, string)
+        arrived_count += 1
+        tStatistics.replace(0.0, 2.0, "Total Arrived Tasks: " + str(arrived_count) + "\n")
+        print(string)
 
         scheduler.unlimited_queue.append(task)
         scheduler.feed()
@@ -210,6 +223,15 @@ while Config.event_queue.event_list:
                   ' machine type: ' + machine.type.name +
                   ', and machine id: ' + str(machine.id) + "\n")
         tCompletionTime.insert(tk.END, string)
+
+        # the next couple lines update the total number of completed tasks
+        completed_count += 1
+        tStatistics.replace(2.0, 3.0, "Total Completed Tasks: " + str(completed_count) + "\n")
+
+        # the next several lines update the individual machines' number of completed tasks
+        machine_counts[int(machine.id) - 1] = machine_counts[int(machine.id) - 1] + 1
+        stats = "Total Completed tasks on " + str(machine.type.name) + " (ID " + str(machine.id) + "): " + str(machine_counts[machine.id - 1]) + "\n"
+        tStatistics.replace((3.0 + float(machine.id)), (4.0 + float(machine.id)), stats)
 
         machine.terminate()
         scheduler.feed()
@@ -240,6 +262,6 @@ while Config.event_queue.event_list:
                   "\t status = " + task.status.name)
             string = "Task " + str(task.id) + " Status: " + str(task.status.name) + " \n"
             tTaskStatus.insert(tk.END, string)
-"""
+
 
 window.mainloop()
