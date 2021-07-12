@@ -255,13 +255,25 @@ while Config.event_queue.event_list:
                 tTaskStatus.replace(float(task.id), tk.END,  string + " \n")
             else:
                 tTaskStatus.insert(tk.END, string)
-
         else:
             print("  Task id = " + str(task.type) +
                   '\t assigned to ' + str(task.assigned_machine) +
                   "\t status = " + task.status.name)
             string = "Task " + str(task.id) + " Status: " + str(task.status.name) + " \n"
             tTaskStatus.insert(tk.END, string)
+        tag = task.id
+        if task.status.name == "COMPLETED":
+            tag_name = str(tag) + "completed"
+            tTaskStatus.tag_add(tag_name, tag + 0.15, tag + 0.24)
+            tTaskStatus.tag_config(tag_name, foreground="green")
+        elif task.status.name == "DEFERRED":
+            tag_name = str(tag) + "deferred"
+            tTaskStatus.tag_add(tag_name, tag + 0.15, tag + 0.24)
+            tTaskStatus.tag_config(tag_name, foreground="red")
+        else:
+            tag_name = str(tag) + "running"
+            tTaskStatus.tag_add(tag_name, tag + 0.15, tag + 0.24)
+            tTaskStatus.tag_config(tag_name, foreground="yellow")
 
 
 window.mainloop()
