@@ -47,7 +47,7 @@
             "id":3,
             "name":"FPGA",
             "power": 50.0,
-            "replicas" : 1
+            "replicas" : 0
         }
     ],
 

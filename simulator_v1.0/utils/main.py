@@ -41,32 +41,35 @@ b.pack()
 tStatistics.insert(tk.END, "Total Arrived Tasks: 0\n")
 tStatistics.insert(tk.END, "Total Completed Tasks: 0\n")
 tStatistics.insert(tk.END, "Total tasks completed by each machine: \n")
+tCompletionTime.insert(tk.END, "Green: under 2 seconds, Yellow: under 5 seconds, Red: over 5 seconds")
 
 
 # end of GUI window code
 # the find function is used to add visualization of the status of tasks
 def find():
-    tTaskStatus.tag_remove('found', '1.0', tk.END)
     s = ["COMPLETED", "DEFERRED", "RUNNING", "ARRIVING", "PENDING", "OFFLOADED", "DROPPED", "MISSED"]
+    done = []
     for stat in s:
-        idx = '1.0'
-        while 1:
-            idx = tTaskStatus.search(stat, idx, nocase=1, stopindex=tk.END)
+        idx = '0.0'
+        while True:
+            idx = tTaskStatus.search(stat, idx, stopindex=tk.END)
             if not idx:
                 break
+            done.append(idx)
             lastidx = '%s+%dc' % (idx, len(s) + 1)
-            tTaskStatus.tag_add('found', idx, lastidx)
-            idx = lastidx
             if stat == "COMPLETED" or stat == "OFFLOADED":
-                tTaskStatus.tag_config('found', foreground='green')
+                tTaskStatus.tag_add('green', idx, lastidx)
+                tTaskStatus.tag_config('green', foreground='green')
             elif stat == "RUNNING" or stat == "PENDING" or stat == "ARRIVING":
-                tTaskStatus.tag_config('found', foreground='yellow')
+                tTaskStatus.tag_add('yellow', idx, lastidx)
+                tTaskStatus.tag_config('yellow', foreground='yellow')
             elif stat == "DEFERRED" or stat == "DROPPED" or stat == "MISSED":
-                tTaskStatus.tag_config('found', foreground='red')
+                tTaskStatus.tag_add('red', idx, lastidx)
+                tTaskStatus.tag_config('red', foreground='red')
+            idx = lastidx
 
 
 Tasks = []
-
 with open('ArrivalTimes.txt', 'r') as data_file:
     for task in data_file:
         task = task.strip()
@@ -115,7 +118,7 @@ while Config.event_queue.event_list:
 
     if event.event_type == EventTypes.ARRIVING:
         task = event.event_details
-        
+
         # The next few lines format text to b e added to the window and then inserts it into the "Task arriving section"
         string = ('Task ' + str(task.id) + ' arrived at ' +
                   str(Config.current_time) + ' sec\n')
@@ -139,19 +142,43 @@ while Config.event_queue.event_list:
     elif event.event_type == EventTypes.COMPLETION:
         task = event.event_details
         machine = task.assigned_machine
-        string = ('\n\t Task ' + str(task.id) + ' completed at ' +
-                  str(Config.current_time) + ' sec on :' +
-                  '\n\t\t machine type: ' + machine.type.name +
-                  '\n\t\t machine id : ' + str(machine.id))
+        time = Config.current_time
+        string = (' Task ' + str(task.id) + ' completed at ' + str(
+            Config.current_time) + ' sec on machine type ' + machine.type.name + ' machine id : ' + str(machine.id))
         print(string)
 
         # the next five lines format text to be added to the window and then it adds it into the "Task Completion
         # Time" Section.
-        string = ('Task ' + str(task.id) + ' completed at ' +
-                  str(round(Config.current_time, 3)) + ' sec on' +
-                  ' machine type: ' + machine.type.name +
-                  ', and machine id: ' + str(machine.id) + "\n")
-        tCompletionTime.insert(tk.END, string)
+        if time - task.arrival_time < 2:
+            tCompletionTime.insert(tk.END, 'Task ' + str(task.id) + ' completed at ')
+            s = str(round(Config.current_time, 3)) + ' sec '
+            tCompletionTime.insert(tk.END, s)
+            idx = tCompletionTime.search(s, 1.0, tk.END)
+            lastidx = '%s+%dc' % (idx, len(s))
+            tCompletionTime.tag_add("good", idx, lastidx)
+            tCompletionTime.tag_config("good", foreground="green")
+            tCompletionTime.insert(tk.END, 'on' + ' machine type: ' + machine.type.name + ', and machine id: ' + str(
+                machine.id) + "\n")
+        elif time - task.arrival_time <= 5:
+            tCompletionTime.insert(tk.END, 'Task ' + str(task.id) + ' completed at ')
+            s = str(round(Config.current_time, 3)) + ' sec '
+            tCompletionTime.insert(tk.END, s)
+            idx = tCompletionTime.search(s, 1.0, tk.END)
+            lastidx = '%s+%dc' % (idx, len(s))
+            tCompletionTime.tag_add("okay", idx, lastidx)
+            tCompletionTime.tag_config("okay", foreground="yellow")
+            tCompletionTime.insert(tk.END, 'on' + ' machine type: ' + machine.type.name + ', and machine id: ' + str(
+                machine.id) + "\n")
+        else:
+            tCompletionTime.insert(tk.END, 'Task ' + str(task.id) + ' completed at ')
+            s = str(round(Config.current_time, 3)) + ' sec '
+            tCompletionTime.insert(tk.END, s)
+            idx = tCompletionTime.search(s, 1.0, tk.END)
+            lastidx = '%s+%dc' % (idx, len(s))
+            tCompletionTime.tag_add("bad", idx, lastidx)
+            tCompletionTime.tag_config("bad", foreground="red")
+            tCompletionTime.insert(tk.END, 'on' + ' machine type: ' + machine.type.name + ', and machine id: ' + str(
+                machine.id) + "\n")
 
         # the next couple lines update the total number of completed tasks
         completed_count += 1
@@ -161,7 +188,7 @@ while Config.event_queue.event_list:
         machine_counts[int(machine.id) - 1] = machine_counts[int(machine.id) - 1] + 1
         stats = "Total Completed tasks on " + str(machine.type.name) + " (ID " + str(machine.id) + "): " + \
                 str(machine_counts[machine.id - 1]) + "\n"
-        tStatistics.replace((3.0 + float(machine.id)), (4.0 + float(machine.id)), stats) 
+        tStatistics.replace((3.0 + float(machine.id)), (4.0 + float(machine.id)), stats)
 
         machine.terminate()
         scheduler1.feed()
