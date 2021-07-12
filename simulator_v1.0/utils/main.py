@@ -42,7 +42,28 @@ tStatistics.insert(tk.END, "Total Arrived Tasks: 0\n")
 tStatistics.insert(tk.END, "Total Completed Tasks: 0\n")
 tStatistics.insert(tk.END, "Total tasks completed by each machine: \n")
 
+
 # end of GUI window code
+# the find function is used to add visualization of the status of tasks
+def find():
+    tTaskStatus.tag_remove('found', '1.0', tk.END)
+    s = ["COMPLETED", "DEFERRED", "RUNNING", "ARRIVING", "PENDING", "OFFLOADED", "DROPPED", "MISSED"]
+    for stat in s:
+        idx = '1.0'
+        while 1:
+            idx = tTaskStatus.search(stat, idx, nocase=1, stopindex=tk.END)
+            if not idx:
+                break
+            lastidx = '%s+%dc' % (idx, len(s) + 1)
+            tTaskStatus.tag_add('found', idx, lastidx)
+            idx = lastidx
+            if stat == "COMPLETED" or stat == "OFFLOADED":
+                tTaskStatus.tag_config('found', foreground='green')
+            elif stat == "RUNNING" or stat == "PENDING" or stat == "ARRIVING":
+                tTaskStatus.tag_config('found', foreground='yellow')
+            elif stat == "DEFERRED" or stat == "DROPPED" or stat == "MISSED":
+                tTaskStatus.tag_config('found', foreground='red')
+
 
 Tasks = []
 
@@ -72,7 +93,7 @@ with open('ArrivalTimes.txt', 'r') as data_file:
 for task in Tasks:
     event = Event(task.arrival_time, EventTypes.ARRIVING, task)
     Config.event_queue.add_event(event)
-""""
+
 # Code for 2 phase scheduling
 # Available Phase 1 Algorithms: PhaseMIN1()
 # Available Phase 2 Algorithms: PhaseMIN2()
@@ -116,7 +137,6 @@ while Config.event_queue.event_list:
             count += 1
 
     elif event.event_type == EventTypes.COMPLETION:
-
         task = event.event_details
         machine = task.assigned_machine
         string = ('\n\t Task ' + str(task.id) + ' completed at ' +
@@ -137,9 +157,10 @@ while Config.event_queue.event_list:
         completed_count += 1
         tStatistics.replace(2.0, 3.0, "Total Completed Tasks: " + str(completed_count) + "\n")
 
-        # the next several lines update the individual machines' number of completed tasks machine_counts[int(
-        machine.id) - 1] = machine_counts[int(machine.id) - 1] + 1 stats = "Total Completed tasks on " + str(
-        machine.type.name) + " (ID " + str(machine.id) + "): " + str(machine_counts[machine.id - 1]) + "\n" 
+        # the next several lines update the individual machines' number of completed tasks
+        machine_counts[int(machine.id) - 1] = machine_counts[int(machine.id) - 1] + 1
+        stats = "Total Completed tasks on " + str(machine.type.name) + " (ID " + str(machine.id) + "): " + \
+                str(machine_counts[machine.id - 1]) + "\n"
         tStatistics.replace((3.0 + float(machine.id)), (4.0 + float(machine.id)), stats) 
 
         machine.terminate()
@@ -230,7 +251,8 @@ while Config.event_queue.event_list:
 
         # the next several lines update the individual machines' number of completed tasks
         machine_counts[int(machine.id) - 1] = machine_counts[int(machine.id) - 1] + 1
-        stats = "Total Completed tasks on " + str(machine.type.name) + " (ID " + str(machine.id) + "): " + str(machine_counts[machine.id - 1]) + "\n"
+        stats = "Total Completed tasks on " + str(machine.type.name) + " (ID " + str(machine.id) + "): " + str(
+            machine_counts[machine.id - 1]) + "\n"
         tStatistics.replace((3.0 + float(machine.id)), (4.0 + float(machine.id)), stats)
 
         machine.terminate()
@@ -238,42 +260,29 @@ while Config.event_queue.event_list:
         assigned_machine = scheduler.schedule()
         if assigned_machine:
             assigned_machine.execute()
-
     print('\n' + 50 * '.')
+"""
+# Current Task Statuses are updated here
+for task in Tasks:
+    if task.assigned_machine is not None:
+        print("  Task id = " + str(task.type.id) +
+              '\t assigned to ' + str(task.assigned_machine.type.name) +
+              " " + str(task.assigned_machine.id) +
+              "\t status = " + task.status.name)
 
-    for task in Tasks:
-        if task.assigned_machine is not None:
-            print("  Task id = " + str(task.type.id) +
-                  '\t assigned to ' + str(task.assigned_machine.type.name) +
-                  " " + str(task.assigned_machine.id) +
-                  "\t status = " + task.status.name)
-
-            # the next two lines format text to be added to the window and then it adds it into the "Task Statuses"
-            # section.
-            string = ("Task " + str(task.id) + " Status: " + str(task.status.name))
-            if tTaskStatus.get(float(task.id)) is not None:
-                tTaskStatus.replace(float(task.id), tk.END,  string + " \n")
-            else:
-                tTaskStatus.insert(tk.END, string)
+        # the next two lines format text to be added to the window and then it adds it into the "Task Statuses"
+        # section.
+        string = ("Task " + str(task.id) + " Status: " + str(task.status.name))
+        if tTaskStatus.get(float(task.id)) is not None:
+            tTaskStatus.replace(float(task.id), tk.END, string + " \n")
         else:
-            print("  Task id = " + str(task.type) +
-                  '\t assigned to ' + str(task.assigned_machine) +
-                  "\t status = " + task.status.name)
-            string = "Task " + str(task.id) + " Status: " + str(task.status.name) + " \n"
             tTaskStatus.insert(tk.END, string)
-        tag = task.id
-        if task.status.name == "COMPLETED":
-            tag_name = str(tag) + "completed"
-            tTaskStatus.tag_add(tag_name, tag + 0.15, tag + 0.24)
-            tTaskStatus.tag_config(tag_name, foreground="green")
-        elif task.status.name == "DEFERRED":
-            tag_name = str(tag) + "deferred"
-            tTaskStatus.tag_add(tag_name, tag + 0.15, tag + 0.24)
-            tTaskStatus.tag_config(tag_name, foreground="red")
-        else:
-            tag_name = str(tag) + "running"
-            tTaskStatus.tag_add(tag_name, tag + 0.15, tag + 0.24)
-            tTaskStatus.tag_config(tag_name, foreground="yellow")
-
+    else:
+        print("  Task id = " + str(task.type) +
+              '\t assigned to ' + str(task.assigned_machine) +
+              "\t status = " + task.status.name)
+        string = "Task " + str(task.id) + " Status: " + str(task.status.name) + " \n"
+        tTaskStatus.insert(tk.END, string)
+    find()
 
 window.mainloop()
