@@ -70,8 +70,7 @@ class PhaseMIN2(BaseScheduler):
             for taskpairs in minlist:
                 for machines in toMap:
                     if taskpairs[0] == machines[0]:
-                        machines.append(taskpairs[1])
-                        minlist.remove(taskpairs)
+                        machines.append(taskpairs.pop(1))
 
         # finds the task assigned to each machine with the quickest execution time and maps it
         readyMachines = []
@@ -81,8 +80,7 @@ class PhaseMIN2(BaseScheduler):
                 for task in machine:
                     if task != machine[0] and task != machine[1]:
                         print(reader.read_execution_time(task.type.id, machine[1]))
-                        if reader.read_execution_time(task.type.id, machine[1]) < reader.read_execution_time(
-                                quickest.type.id, machine[1]):
+                        if task.est_exec_time[machine[1]] < quickest.est_exec_time[machine[1]]:
                             quickest = task
                             minlist.append([machine[0], quickest])
                         else:
@@ -96,7 +94,7 @@ class PhaseMIN2(BaseScheduler):
         for machine in toMap:
             for task in machine:
                 if task != machine[0] and task != machine[1]:
-                    self.batch_queue.append([machine[0], task])
+                    self.batch_queue.append(task)
         return readyMachines
 
 """

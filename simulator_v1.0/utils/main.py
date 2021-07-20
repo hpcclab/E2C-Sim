@@ -41,7 +41,7 @@ b.pack()
 tStatistics.insert(tk.END, "Total Arrived Tasks: 0\n")
 tStatistics.insert(tk.END, "Total Completed Tasks: 0\n")
 tStatistics.insert(tk.END, "Total tasks completed by each machine: \n")
-tCompletionTime.insert(tk.END, "Green: under 2 seconds, Yellow: under 5 seconds, Red: over 5 seconds")
+tCompletionTime.insert(tk.END, "Green: under 2 seconds, Yellow: under 5 seconds, Red: over 5 seconds\n")
 
 
 # end of GUI window code
@@ -134,7 +134,7 @@ while Config.event_queue.event_list:
         print(minList)
         assigned_machines = scheduler2.schedule(minList)
         count = 0
-        if assigned_machines is not None:
+        while len(assigned_machines) > count:
             execute = assigned_machines.pop(count)
             execute.execute()
             count += 1
