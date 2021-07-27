@@ -57,7 +57,6 @@ class PhaseMIN2(BaseScheduler):
             print("Task " + str(task.id) + " is deferred")
 
     def schedule(self, minlist):
-        reader = ReadData()
         toMap = []
         machines1 = []
         # builds a list containing lists with each first index as a machine id and the second as the machine type
@@ -79,7 +78,6 @@ class PhaseMIN2(BaseScheduler):
                 quickest = machine[2]
                 for task in machine:
                     if task != machine[0] and task != machine[1]:
-                        print(reader.read_execution_time(task.type.id, machine[1]))
                         if task.est_exec_time[machine[1]] < quickest.est_exec_time[machine[1]]:
                             quickest = task
                             minlist.append([machine[0], quickest])
