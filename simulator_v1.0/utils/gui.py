@@ -1,9 +1,18 @@
 import Config
 import tkinter as tk
+from PhaseMIN1 import PhaseMIN1
+from PhaseMIN2 import PhaseMIN2
 
 
 class Gui:
     main = False
+    main_queue = []
+    colors = [None, "green", "yellow", "red", "blue", "purple"]
+    coords = []
+    m_coords = []
+    scheduler1 = PhaseMIN1()
+    scheduler2 = PhaseMIN2()
+    nextIn = 0
 
     def __init__(self, title, geometry, height, width):
         self.window = tk.Tk()
@@ -11,36 +20,36 @@ class Gui:
         self.window.geometry(geometry)
         self.height = height
         self.width = width
-        self.canvas = tk.Canvas(
-            self.window,
-            height=height,
-            width=width,
-            bg="#fff"
-        )
+        self.canvas = tk.Canvas(self.window, bg="#fff")
+        self.canvas.place(relx=0.05, rely=0.05, relwidth=.9, relheight=.9)
         self.x2 = 0
         b = tk.Button(self.window, text="Exit", command=self.window.destroy)
-        self.canvas.pack()
-        b.pack()
+        b.pack(side='bottom')
 
     # main queue
-    def create_main_queue(self):
+    def create_main_queue(self, length):
         self.main = True
-        x1, y1, self.x2 = 50, 300, 90
-        for k in range(8):
+        self.main_queue = []
+        x1, self.x2 = 50, 90
+
+        for k in range(length):
+            self.main_queue.append([k, False, None])
             self.canvas.create_rectangle(x1, self.height / 2 + 20, self.x2, self.height / 2 - 20, outline="black")
+            self.coords.append(
+                [x1 + 10, self.height / 2 + 10, x1 + 30, self.height / 2 + 10, x1 + 10, self.height / 2 - 5])
             x1 += 40
             self.x2 += 40
+        self.coords.reverse()
         self.canvas.create_oval(x1, self.height / 2 + 20, self.x2, self.height / 2 - 20, outline="black")
 
     # Tasks and object legend
     def create_legend(self):
         k1, k2, y = 50, 100, 10
-        colors = [None, "green", "yellow", "red", "blue"]
         for name in Config.task_types:
             self.canvas.create_text(k1, self.height / 32 + y, fill="black", font="Times 10 italic bold", text=name.name)
-            self.canvas.create_polygon(k2, self.height / 32 + y - 5, k2 + 15, self.height / 32 + y + 10, k2,
+            self.canvas.create_polygon(k2, self.height / 32 + y - 5, k2 + 20, self.height / 32 + y + 10, k2,
                                        self.height / 32 + y + 10,
-                                       outline="black", fill=colors[name.id])
+                                       outline="black", fill=self.colors[name.id])
             y += 20
 
     # List of machine names
@@ -53,6 +62,9 @@ class Gui:
             # creates the individual machine queues
             for k in range(name.queue_size):
                 self.canvas.create_rectangle(620 - shrink, z1, 650 - shrink, z2)
+                self.m_coords.append(
+                    [(620 - shrink + 650 - shrink) / 2 - 10, (z1 + z2) / 2 + 10, (620 - shrink + 650 - shrink) / 2 + 10,
+                     (z1 + z2) / 2 + 10, (620 - shrink + 650 - shrink) / 2 - 10, (z1 + z2) / 2 - 5])
                 shrink += 30
             # displays the machine names
             self.canvas.create_rectangle(w1, z1, w2, z2)
@@ -80,17 +92,57 @@ class Gui:
         self.canvas.create_text(250, self.height / 32 + 75, text="Missed Tasks")
         self.canvas.create_text(325, self.height / 32 + 75, text=0, tags="missed")
 
+    def create_speed_control(self):
+        b = tk.Button(self.canvas, text='Full Send', )
+        b.pack(side='bottom')
+        b = tk.Button(self.canvas, text='Accept Task', )
+        b.pack(side='bottom')
+        b = tk.Button(self.canvas, text='Execute Task', )
+        b.pack(side='bottom')
+
     def arrived_total(self, arrived_count):
         self.canvas.delete("arrived")
         self.canvas.create_text(325, self.height / 32 + 15, text=arrived_count, tags="arrived")
 
-    def completed_total(self, completed_count):
-        self.canvas.delete("completed")
-        self.canvas.create_text(325, self.height / 32 + 45, text=completed_count, tags="completed")
-
     def missed_total(self, missed_count):
         self.canvas.delete("missed")
         self.canvas.create_text(325, 95, text=missed_count, tags="missed")
+
+    def task_queueing(self, task):
+        count = 0
+        for spot in self.main_queue:
+            if not spot[1]:
+                k = spot[0]
+                marker = self.canvas.create_polygon(self.coords[k][0], self.coords[k][1], self.coords[k][2],
+                                                    self.coords[k][3],
+                                                    self.coords[k][4], self.coords[k][5], outline="black",
+                                                    fill=self.colors[task.type.id], tags=task)
+                spot[1] = True
+                spot[2] = marker
+                if spot[0] == 0:
+                    self.nextIn = spot[2]
+                count += 1
+                break
+
+    def task_executed(self, task):
+        m_id = task.assigned_machine.id - 1
+        self.canvas.moveto(self.nextIn, self.m_coords[m_id][0], self.m_coords[m_id][5])
+        self.main_queue[0][1] = False
+        self.main_queue[0][2] = None
+        k = 0
+        for spot in self.main_queue:
+            if spot[1] and not self.main_queue[k-1][1]:
+                spot[1] = False
+                self.main_queue[k - 1][1] = True
+                self.canvas.move(spot[2], 40, 0)
+                if self.main_queue[k-1][0] == 0:
+                    self.nextIn = spot[2]
+            k += 1
+
+    def completed_total(self, task, completed_count):
+        self.canvas.delete(task)
+        self.canvas.delete("completed")
+        self.canvas.create_text(325, self.height / 32 + 45, text=completed_count, tags="completed")
 
     def begin(self):
         self.window.mainloop()

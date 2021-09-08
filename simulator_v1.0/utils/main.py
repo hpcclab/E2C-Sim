@@ -6,14 +6,16 @@ from MIN import Min1
 from PhaseMIN1 import PhaseMIN1
 from PhaseMIN2 import PhaseMIN2
 import gui
+import tkinter as tk
 
 gui1 = gui.Gui("Scheduler GUI", '1000x800', 700, 800)
-gui1.create_main_queue()
+gui1.create_main_queue(8)
 gui1.create_machine_names()
 gui1.create_legend()
 gui1.create_task_stats()
-# gui1.begin()
+gui1.create_speed_control()
 
+# Task set up
 Tasks = []
 with open('ArrivalTimes.txt', 'r') as data_file:
     for task in data_file:
@@ -54,6 +56,7 @@ missed_count = 0
 machine_counts = []
 for _ in Config.machines:
     machine_counts.append(0)
+
 while Config.event_queue.event_list:
     print(80 * '=' + '\n\n Reading events from event queue ===>>>')
     event = Config.event_queue.get_first_event()
@@ -61,15 +64,16 @@ while Config.event_queue.event_list:
 
     if event.event_type == EventTypes.ARRIVING:
         task = event.event_details
-        print('Task ' + str(task.id) + ' arrived at ' + str(Config.current_time) + ' sec\n')
         # function to add arrived task total
         arrived_count += 1
         gui1.arrived_total(arrived_count)
-
         scheduler1.unlimited_queue.append(task)
+
+        print('Task ' + str(task.id) + ' arrived at ' + str(Config.current_time) + ' sec\n')
+
         scheduler1.feed()
         minList = scheduler1.schedule()
-        print(minList)
+        gui1.task_queueing(task)
         assigned_machines = scheduler2.schedule(minList)
         count = 0
         while len(assigned_machines) > count:
@@ -81,11 +85,14 @@ while Config.event_queue.event_list:
         task = event.event_details
         machine = task.assigned_machine
         time = Config.current_time
-        print(' Task ' + str(task.id) + ' completed at ' + str(Config.current_time) + ' sec on machine type ' + machine.type.name + ' machine id : ' + str(machine.id))
+        print(' Task ' + str(task.id) + ' completed at ' + str(
+            Config.current_time) + ' sec on machine type ' + machine.type.name + ' machine id : ' + str(machine.id))
 
         # function to update the completed total
         completed_count += 1
-        gui1.completed_total(completed_count)
+
+        gui1.task_executed(task)
+        gui1.completed_total(task, completed_count)
         # the next several lines update the individual machines' number of completed tasks
         machine_counts[int(machine.id) - 1] = machine_counts[int(machine.id) - 1] + 1
         stats = "Total Completed tasks on " + str(machine.type.name) + " (ID " + str(machine.id) + "): " + \
@@ -101,16 +108,14 @@ while Config.event_queue.event_list:
         gui1.missed_total(missed_count)
 
     print('\n' + 50 * '.')
-
     for task in Tasks:
         if task.assigned_machine is not None:
             print("  Task id = " + str(task.id) +
                   '\t assigned to ' + str(task.assigned_machine.type.name) +
                   " " + str(task.assigned_machine.id) +
                   "\t status = " + task.status.name)
-            # the next two lines format text to be added to the window and then it adds it into the "Task Statuses"
-            # section.
-            string = ("Task " + str(task.id) + " Status: " + str(task.status.name) + "\n")
+
+gui1.begin()
 
 """
 # To change scheduling method, change what scheduler variable is set to
@@ -183,12 +188,3 @@ while Config.event_queue.event_list:
             assigned_machine.execute()
     print('\n' + 50 * '.')
 """
-# Current Task Statuses are updated here
-for task in Tasks:
-    if task.assigned_machine is not None:
-        print("  Task id = " + str(task.type.id) +
-              '\t assigned to ' + str(task.assigned_machine.type.name) +
-              " " + str(task.assigned_machine.id) +
-              "\t status = " + task.status.name)
-
-gui1.begin()
