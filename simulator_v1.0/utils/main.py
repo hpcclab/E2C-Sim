@@ -13,7 +13,7 @@ gui1.create_main_queue(8)
 gui1.create_machine_names()
 gui1.create_legend()
 gui1.create_task_stats()
-gui1.create_speed_control()
+# gui1.create_speed_control()
 
 # Task set up
 Tasks = []
@@ -72,12 +72,13 @@ while Config.event_queue.event_list:
         print('Task ' + str(task.id) + ' arrived at ' + str(Config.current_time) + ' sec\n')
 
         scheduler1.feed()
-        minList = scheduler1.schedule()
         gui1.task_queueing(task)
+        minList = scheduler1.schedule()
         assigned_machines = scheduler2.schedule(minList)
         count = 0
         while len(assigned_machines) > count:
             execute = assigned_machines.pop(count)
+            gui1.task_assigned(execute.queue[0])
             execute.execute()
             count += 1
 
@@ -90,9 +91,7 @@ while Config.event_queue.event_list:
 
         # function to update the completed total
         completed_count += 1
-
-        gui1.task_executed(task)
-        gui1.completed_total(task, completed_count)
+        gui1.task_completed(task, completed_count)
         # the next several lines update the individual machines' number of completed tasks
         machine_counts[int(machine.id) - 1] = machine_counts[int(machine.id) - 1] + 1
         stats = "Total Completed tasks on " + str(machine.type.name) + " (ID " + str(machine.id) + "): " + \

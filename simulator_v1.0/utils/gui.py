@@ -10,6 +10,7 @@ class Gui:
     colors = [None, "green", "yellow", "red", "blue", "purple"]
     coords = []
     m_coords = []
+    assigned_queue = []
     scheduler1 = PhaseMIN1()
     scheduler2 = PhaseMIN2()
     nextIn = 0
@@ -116,7 +117,7 @@ class Gui:
                 marker = self.canvas.create_polygon(self.coords[k][0], self.coords[k][1], self.coords[k][2],
                                                     self.coords[k][3],
                                                     self.coords[k][4], self.coords[k][5], outline="black",
-                                                    fill=self.colors[task.type.id], tags=task)
+                                                    fill=self.colors[task.type.id])
                 spot[1] = True
                 spot[2] = marker
                 if spot[0] == 0:
@@ -124,10 +125,11 @@ class Gui:
                 count += 1
                 break
 
-    def task_executed(self, task):
+    def task_assigned(self, task):
         m_id = task.assigned_machine.id - 1
         self.canvas.moveto(self.nextIn, self.m_coords[m_id][0], self.m_coords[m_id][5])
         self.main_queue[0][1] = False
+        self.assigned_queue.append([task, self.nextIn])
         self.main_queue[0][2] = None
         k = 0
         for spot in self.main_queue:
@@ -139,8 +141,10 @@ class Gui:
                     self.nextIn = spot[2]
             k += 1
 
-    def completed_total(self, task, completed_count):
-        self.canvas.delete(task)
+    def task_completed(self, task, completed_count):
+        for atask in self.assigned_queue:
+            if atask[0] == task:
+                self.canvas.delete(atask[1])
         self.canvas.delete("completed")
         self.canvas.create_text(325, self.height / 32 + 45, text=completed_count, tags="completed")
 
