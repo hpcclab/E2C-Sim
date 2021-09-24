@@ -13,10 +13,12 @@ gui1.create_main_queue(8)
 gui1.create_machine_names()
 gui1.create_legend()
 gui1.create_task_stats()
-# gui1.create_speed_control()
+gui1.create_speed_control()
+
+gui1.begin()
 
 # Task set up
-Tasks = []
+"""Tasks = []
 with open('ArrivalTimes.txt', 'r') as data_file:
     for task in data_file:
         task = task.strip()
@@ -47,6 +49,7 @@ for task in Tasks:
 # Code for 2 phase scheduling
 # Available Phase 1 Algorithms: PhaseMIN1()
 # Available Phase 2 Algorithms: PhaseMIN2()
+
 scheduler1 = PhaseMIN1()
 scheduler2 = PhaseMIN2()
 
@@ -113,8 +116,11 @@ while Config.event_queue.event_list:
                   '\t assigned to ' + str(task.assigned_machine.type.name) +
                   " " + str(task.assigned_machine.id) +
                   "\t status = " + task.status.name)
+gui1.begin()                  
+                  """
 
-gui1.begin()
+
+
 
 """
 # To change scheduling method, change what scheduler variable is set to

@@ -1,5 +1,8 @@
 import Config
+from Task import Task
+from Event import Event, EventTypes
 import tkinter as tk
+import tkinter.ttk as tk1
 from PhaseMIN1 import PhaseMIN1
 from PhaseMIN2 import PhaseMIN2
 
@@ -26,6 +29,139 @@ class Gui:
         self.x2 = 0
         b = tk.Button(self.window, text="Exit", command=self.window.destroy)
         b.pack(side='bottom')
+        self.speed_increment = 500
+        self.speed = tk.IntVar()
+        self.speed.set(500)
+        self.pb = None
+        self.Tasks = []
+        self.pause = 0
+
+    def create_speed_control(self):
+        start_b = tk.Button(self.canvas, text="Start", command=self.start, width=10)
+        start_b.place(x=100, y=450)
+        stop_b = tk.Button(self.canvas, text="Pause", command=self.stop, width=10)
+        # stop_b.place(x=175, y=450)
+        reset_b = tk.Button(self.canvas, text="Reset", command=self.reset, width=10)
+        reset_b.place(x=250, y=450)
+
+        slow = tk.Radiobutton(self.canvas, text='.25x Speed', variable=self.speed, command=self.set_speed, indicator=0, value=2000, width=10)
+        slow.place(x=25, y=400)
+        slow = tk.Radiobutton(self.canvas, text='.5x Speed', variable=self.speed, command=self.set_speed, indicator=0, value=1000, width=10)
+        slow.place(x=100, y=400)
+        default = tk.Radiobutton(self.canvas, text='Default', variable=self.speed, command=self.set_speed, indicator=0, value=500, width=10)
+        default.place(x=175, y=400)
+        default.select()
+        fast = tk.Radiobutton(self.canvas, text='2x Speed', variable=self.speed, command=self.set_speed, indicator=0, value=250, width=10)
+        fast.place(x=250, y=400)
+        fast = tk.Radiobutton(self.canvas, text='5x Speed', variable=self.speed, command=self.set_speed, indicator=0, value=100, width=10)
+        fast.place(x=325, y=400)
+        self.pb = tk1.Progressbar(self.canvas, orient='horizontal', length=800, mode='determinate')
+        self.pb.place(x=50, y=675)
+
+    def set_speed(self):
+        self.speed_increment = self.speed.get()
+
+    def stop(self):
+        self.pause = 1
+
+    def reset(self):
+        self.arrived_total(0)
+        self.missed_total(0)
+        self.task_completed(None, 0)
+        self.pb['value'] = 0
+        self.Tasks = []
+        self.pause = 0
+
+    def start(self):
+        speed = 0
+        with open('ArrivalTimes.txt', 'r') as data_file:
+            for task in data_file:
+                task = task.strip()
+                task_details = [x.strip() for x in task.split(',')]
+
+                if task[0] == '#':
+                    machine_types = [x.split('_')[-1] for x in task.split(',')[3:6]]
+                else:
+                    task_id = int(task_details[0])
+                    task_type_id = int(task_details[1])
+                    arrival_time = float(task_details[2])
+                    estimated_time = {machine_types[0]: float(task_details[3]),
+                                      machine_types[1]: float(task_details[4]),
+                                      machine_types[2]: float(task_details[5]),
+                                      'CLOUD': float(task_details[6])}
+                    execution_time = {machine_types[0]: float(task_details[7]),
+                                      machine_types[1]: float(task_details[8]),
+                                      machine_types[2]: float(task_details[9]),
+                                      'CLOUD': float(task_details[10])}
+
+                    type1 = Config.find_task_types(task_type_id)
+                    self.Tasks.append(Task(task_id, type1, estimated_time,
+                                      execution_time, arrival_time))
+        for task in self.Tasks:
+            event = Event(task.arrival_time, EventTypes.ARRIVING, task)
+            Config.event_queue.add_event(event)
+        completed_count = 0
+        arrived_count = 0
+        missed_count = 0
+        machine_counts = []
+        for _ in Config.machines:
+            machine_counts.append(0)
+
+        while Config.event_queue.event_list:
+            print(80 * '=' + '\n\n Reading events from event queue ===>>>')
+            event = Config.event_queue.get_first_event()
+            Config.current_time = event.time
+            if event.event_type == EventTypes.ARRIVING:
+                task = event.event_details
+                # function to add arrived task total
+                arrived_count += 1
+                speed += self.speed_increment
+                self.window.after(speed, self.arrived_total, arrived_count)
+                self.scheduler1.unlimited_queue.append(task)
+                print('Task ' + str(task.id) + ' arrived at ' + str(Config.current_time) + ' sec\n')
+                self.scheduler1.feed()
+
+                self.window.after(speed, self.task_queueing, task)
+                minList = self.scheduler1.schedule()
+                assigned_machines = self.scheduler2.schedule(minList)
+                count = 0
+                while len(assigned_machines) > count:
+                    execute = assigned_machines.pop(count)
+                    speed += self.speed_increment
+                    self.window.after(speed, self.task_assigned, execute.queue[0])
+                    execute.execute()
+                    count += 1
+            elif event.event_type == EventTypes.COMPLETION:
+                task = event.event_details
+                machine = task.assigned_machine
+                time = Config.current_time
+                print(' Task ' + str(task.id) + ' completed at ' + str(
+                    Config.current_time) + ' sec on machine type ' + machine.type.name + ' machine id : ' + str(
+                    machine.id))
+                # function to update the completed total
+                completed_count += 1
+                speed += self.speed_increment
+                self.window.after(speed, self.task_completed, task, completed_count)
+                # the next several lines update the individual machines' number of completed tasks
+                machine_counts[int(machine.id) - 1] = machine_counts[int(machine.id) - 1] + 1
+                stats = "Total Completed tasks on " + str(machine.type.name) + " (ID " + str(machine.id) + "): " + \
+                        str(machine_counts[machine.id - 1]) + "\n"
+                machine.terminate()
+                self.scheduler1.feed()
+                assigned_machine = self.scheduler1.schedule()
+                if assigned_machine:
+                    assigned_machine.execute()
+            else:
+                missed_count += 1
+                speed += self.speed_increment
+                self.window.after(speed, self.missed_total, missed_count)
+            print('\n' + 50 * '.')
+            for task in self.Tasks:
+                if task.assigned_machine is not None:
+                    print("  Task id = " + str(task.id) +
+                          '\t assigned to ' + str(task.assigned_machine.type.name) +
+                          " " + str(task.assigned_machine.id) +
+                          "\t status = " + task.status.name)
 
     # main queue
     def create_main_queue(self, length):
@@ -93,14 +229,6 @@ class Gui:
         self.canvas.create_text(250, self.height / 32 + 75, text="Missed Tasks")
         self.canvas.create_text(325, self.height / 32 + 75, text=0, tags="missed")
 
-    def create_speed_control(self):
-        b = tk.Button(self.canvas, text='Full Send', )
-        b.pack(side='bottom')
-        b = tk.Button(self.canvas, text='Accept Task', )
-        b.pack(side='bottom')
-        b = tk.Button(self.canvas, text='Execute Task', )
-        b.pack(side='bottom')
-
     def arrived_total(self, arrived_count):
         self.canvas.delete("arrived")
         self.canvas.create_text(325, self.height / 32 + 15, text=arrived_count, tags="arrived")
@@ -133,11 +261,11 @@ class Gui:
         self.main_queue[0][2] = None
         k = 0
         for spot in self.main_queue:
-            if spot[1] and not self.main_queue[k-1][1]:
+            if spot[1] and not self.main_queue[k - 1][1]:
                 spot[1] = False
                 self.main_queue[k - 1][1] = True
                 self.canvas.move(spot[2], 40, 0)
-                if self.main_queue[k-1][0] == 0:
+                if self.main_queue[k - 1][0] == 0:
                     self.nextIn = spot[2]
             k += 1
 
@@ -147,63 +275,7 @@ class Gui:
                 self.canvas.delete(atask[1])
         self.canvas.delete("completed")
         self.canvas.create_text(325, self.height / 32 + 45, text=completed_count, tags="completed")
+        self.pb['value'] += 100/len(self.Tasks)
 
     def begin(self):
         self.window.mainloop()
-
-
-""""
-lbl1.pack()
-tArrivalTime.pack()
-lbl2.pack()
-tCompletionTime.pack()
-lbl3.pack()
-tTaskStatus.pack()
-lbl4.pack()
-tStatistics.pack()
-tStatistics.insert(tk.END, "Total Arrived Tasks: 0\n")
-tStatistics.insert(tk.END, "Total Completed Tasks: 0\n")
-tStatistics.insert(tk.END, "Total tasks completed by each machine: \n")
-tCompletionTime.insert(tk.END, "Green: under 2 seconds, Yellow: under 5 seconds, Red: over 5 seconds\n")
-"""
-
-# end of GUI window code
-# the find function is used to add visualization of the status of tasks
-"""
-def find():
-    s = ["COMPLETED", "DEFERRED", "RUNNING", "ARRIVING", "PENDING", "OFFLOADED", "DROPPED", "MISSED"]
-    done = []
-    for stat in s:
-        idx = '0.0'
-        while True:
-            idx = tTaskStatus.search(stat, idx, stopindex=tk.END)
-            if not idx:
-                break
-            done.append(idx)
-            lastidx = '%s+%dc' % (idx, len(s) + 1)
-            if stat == "COMPLETED" or stat == "OFFLOADED":
-                tTaskStatus.tag_add('green', idx, lastidx)
-                tTaskStatus.tag_config('green', foreground='green')
-            elif stat == "RUNNING" or stat == "PENDING" or stat == "ARRIVING":
-                tTaskStatus.tag_add('yellow', idx, lastidx)
-                tTaskStatus.tag_config('yellow', foreground='yellow')
-            elif stat == "DEFERRED" or stat == "DROPPED" or stat == "MISSED":
-                tTaskStatus.tag_add('red', idx, lastidx)
-                tTaskStatus.tag_config('red', foreground='red')
-            idx = lastidx
-"""
-"""
-tArrivalTime = tk.Text(window, height=10, width=75)
-tCompletionTime = tk.Text(window, height=10, width=75)
-tTaskStatus = tk.Text(window, height=10, width=75)
-tStatistics = tk.Text(window, height=10, width=75)
-
-lbl1 = tk.Label(window, text="Task Arrival Times")
-lbl1.config(font=("Helvetica", 14))
-lbl2 = tk.Label(window, text="Task Completion Times")
-lbl2.config(font=("Helvetica", 14))
-lbl3 = tk.Label(window, text="Current Task Statuses")
-lbl3.config(font=("Helvetica", 14))
-lbl4 = tk.Label(window, text="Statistics")
-lbl4.config(font=("Helvetica", 14))
-"""
