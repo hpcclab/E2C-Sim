@@ -1,0 +1,210 @@
+model input parameters 32 100 20 1 512 256 38 25 TPS ResNet BiLSTM Attn
+loading pretrained model from TPS-ResNet-BiLSTM-Attn.pth
+--------------------------------------------------------------------------------
+image_path               	predicted_labels         	confidence score
+--------------------------------------------------------------------------------
+demo_image/word_1108.png 	promod                   	0.9672
+TIME=0:03.77 real,CPU USAGE=98%
+model input parameters 32 100 20 1 512 256 38 25 TPS ResNet BiLSTM Attn
+loading pretrained model from TPS-ResNet-BiLSTM-Attn.pth
+--------------------------------------------------------------------------------
+image_path               	predicted_labels         	confidence score
+--------------------------------------------------------------------------------
+demo_image/word_1117.png 	imiculn                  	0.0120
+TIME=0:03.78 real,CPU USAGE=99%
+model input parameters 32 100 20 1 512 256 38 25 TPS ResNet BiLSTM Attn
+loading pretrained model from TPS-ResNet-BiLSTM-Attn.pth
+--------------------------------------------------------------------------------
+image_path               	predicted_labels         	confidence score
+--------------------------------------------------------------------------------
+demo_image/word_1204.png 	exit                     	0.9920
+TIME=0:04.00 real,CPU USAGE=93%
+model input parameters 32 100 20 1 512 256 38 25 TPS ResNet BiLSTM Attn
+loading pretrained model from TPS-ResNet-BiLSTM-Attn.pth
+--------------------------------------------------------------------------------
+image_path               	predicted_labels         	confidence score
+--------------------------------------------------------------------------------
+demo_image/word_1297.png 	sale                     	0.9999
+TIME=0:03.77 real,CPU USAGE=99%
+model input parameters 32 100 20 1 512 256 38 25 TPS ResNet BiLSTM Attn
+loading pretrained model from TPS-ResNet-BiLSTM-Attn.pth
+--------------------------------------------------------------------------------
+image_path               	predicted_labels         	confidence score
+--------------------------------------------------------------------------------
+demo_image/word_1391.png 	timei                    	0.9525
+TIME=0:03.80 real,CPU USAGE=98%
+model input parameters 32 100 20 1 512 256 38 25 TPS ResNet BiLSTM Attn
+loading pretrained model from TPS-ResNet-BiLSTM-Attn.pth
+--------------------------------------------------------------------------------
+image_path               	predicted_labels         	confidence score
+--------------------------------------------------------------------------------
+demo_image/word_1413.png 	main                     	0.9997
+TIME=0:03.77 real,CPU USAGE=99%
+model input parameters 32 100 20 1 512 256 38 25 TPS ResNet BiLSTM Attn
+loading pretrained model from TPS-ResNet-BiLSTM-Attn.pth
+--------------------------------------------------------------------------------
+image_path               	predicted_labels         	confidence score
+--------------------------------------------------------------------------------
+demo_image/word_1421.png 	boss                     	1.0000
+TIME=0:03.77 real,CPU USAGE=99%
+model input parameters 32 100 20 1 512 256 38 25 TPS ResNet BiLSTM Attn
+loading pretrained model from TPS-ResNet-BiLSTM-Attn.pth
+--------------------------------------------------------------------------------
+image_path               	predicted_labels         	confidence score
+--------------------------------------------------------------------------------
+demo_image/word_1461.png 	valve                    	0.9996
+TIME=0:03.78 real,CPU USAGE=99%
+model input parameters 32 100 20 1 512 256 38 25 TPS ResNet BiLSTM Attn
+loading pretrained model from TPS-ResNet-BiLSTM-Attn.pth
+--------------------------------------------------------------------------------
+image_path               	predicted_labels         	confidence score
+--------------------------------------------------------------------------------
+demo_image/word_1470.png 	management               	0.9968
+TIME=0:03.77 real,CPU USAGE=99%
+model input parameters 32 100 20 1 512 256 38 25 TPS ResNet BiLSTM Attn
+loading pretrained model from TPS-ResNet-BiLSTM-Attn.pth
+--------------------------------------------------------------------------------
+image_path               	predicted_labels         	confidence score
+--------------------------------------------------------------------------------
+demo_image/word_1634.png 	city                     	0.9996
+TIME=0:03.78 real,CPU USAGE=99%
+model input parameters 32 100 20 1 512 256 38 25 TPS ResNet BiLSTM Attn
+loading pretrained model from TPS-ResNet-BiLSTM-Attn.pth
+--------------------------------------------------------------------------------
+image_path               	predicted_labels         	confidence score
+--------------------------------------------------------------------------------
+demo_image/word_1644.png 	concers                  	0.0052
+TIME=0:03.81 real,CPU USAGE=99%
+model input parameters 32 100 20 1 512 256 38 25 TPS ResNet BiLSTM Attn
+loading pretrained model from TPS-ResNet-BiLSTM-Attn.pth
+--------------------------------------------------------------------------------
+image_path               	predicted_labels         	confidence score
+--------------------------------------------------------------------------------
+demo_image/word_1655.png 	platter                  	0.9998
+TIME=0:03.79 real,CPU USAGE=99%
+model input parameters 32 100 20 1 512 256 38 25 TPS ResNet BiLSTM Attn
+loading pretrained model from TPS-ResNet-BiLSTM-Attn.pth
+--------------------------------------------------------------------------------
+image_path               	predicted_labels         	confidence score
+--------------------------------------------------------------------------------
+demo_image/word_1676.png 	s100                     	0.9170
+TIME=0:03.80 real,CPU USAGE=99%
+model input parameters 32 100 20 1 512 256 38 25 TPS ResNet BiLSTM Attn
+loading pretrained model from TPS-ResNet-BiLSTM-Attn.pth
+--------------------------------------------------------------------------------
+image_path               	predicted_labels         	confidence score
+--------------------------------------------------------------------------------
+demo_image/word_1816.png 	cinemas                  	0.9999
+TIME=0:03.80 real,CPU USAGE=99%
+model input parameters 32 100 20 1 512 256 38 25 TPS ResNet BiLSTM Attn
+loading pretrained model from TPS-ResNet-BiLSTM-Attn.pth
+--------------------------------------------------------------------------------
+image_path               	predicted_labels         	confidence score
+--------------------------------------------------------------------------------
+demo_image/word_1866.png 	round                    	0.9811
+TIME=0:04.14 real,CPU USAGE=91%
+model input parameters 32 100 20 1 512 256 38 25 TPS ResNet BiLSTM Attn
+loading pretrained model from TPS-ResNet-BiLSTM-Attn.pth
+--------------------------------------------------------------------------------
+image_path               	predicted_labels         	confidence score
+--------------------------------------------------------------------------------
+demo_image/word_196.png  	patch                    	0.9998
+TIME=0:03.78 real,CPU USAGE=99%
+model input parameters 32 100 20 1 512 256 38 25 TPS ResNet BiLSTM Attn
+loading pretrained model from TPS-ResNet-BiLSTM-Attn.pth
+--------------------------------------------------------------------------------
+image_path               	predicted_labels         	confidence score
+--------------------------------------------------------------------------------
+demo_image/word_25.png   	shop                     	1.0000
+TIME=0:03.78 real,CPU USAGE=99%
+model input parameters 32 100 20 1 512 256 38 25 TPS ResNet BiLSTM Attn
+loading pretrained model from TPS-ResNet-BiLSTM-Attn.pth
+--------------------------------------------------------------------------------
+image_path               	predicted_labels         	confidence score
+--------------------------------------------------------------------------------
+demo_image/word_342.png  	organi                   	0.9999
+TIME=0:03.80 real,CPU USAGE=99%
+model input parameters 32 100 20 1 512 256 38 25 TPS ResNet BiLSTM Attn
+loading pretrained model from TPS-ResNet-BiLSTM-Attn.pth
+--------------------------------------------------------------------------------
+image_path               	predicted_labels         	confidence score
+--------------------------------------------------------------------------------
+demo_image/word_381.png  	edition                  	0.9691
+TIME=0:03.77 real,CPU USAGE=99%
+model input parameters 32 100 20 1 512 256 38 25 TPS ResNet BiLSTM Attn
+loading pretrained model from TPS-ResNet-BiLSTM-Attn.pth
+--------------------------------------------------------------------------------
+image_path               	predicted_labels         	confidence score
+--------------------------------------------------------------------------------
+demo_image/word_410.png  	notal                    	0.2967
+TIME=0:03.78 real,CPU USAGE=99%
+model input parameters 32 100 20 1 512 256 38 25 TPS ResNet BiLSTM Attn
+loading pretrained model from TPS-ResNet-BiLSTM-Attn.pth
+--------------------------------------------------------------------------------
+image_path               	predicted_labels         	confidence score
+--------------------------------------------------------------------------------
+demo_image/word_452.png  	cafe                     	0.9980
+TIME=0:03.79 real,CPU USAGE=99%
+model input parameters 32 100 20 1 512 256 38 25 TPS ResNet BiLSTM Attn
+loading pretrained model from TPS-ResNet-BiLSTM-Attn.pth
+--------------------------------------------------------------------------------
+image_path               	predicted_labels         	confidence score
+--------------------------------------------------------------------------------
+demo_image/word_456.png  	abur                     	0.9993
+TIME=0:03.76 real,CPU USAGE=99%
+model input parameters 32 100 20 1 512 256 38 25 TPS ResNet BiLSTM Attn
+loading pretrained model from TPS-ResNet-BiLSTM-Attn.pth
+--------------------------------------------------------------------------------
+image_path               	predicted_labels         	confidence score
+--------------------------------------------------------------------------------
+demo_image/word_587.png  	and                      	1.0000
+TIME=0:03.79 real,CPU USAGE=99%
+model input parameters 32 100 20 1 512 256 38 25 TPS ResNet BiLSTM Attn
+loading pretrained model from TPS-ResNet-BiLSTM-Attn.pth
+--------------------------------------------------------------------------------
+image_path               	predicted_labels         	confidence score
+--------------------------------------------------------------------------------
+demo_image/word_643.png  	peecious                 	0.1873
+TIME=0:03.78 real,CPU USAGE=99%
+model input parameters 32 100 20 1 512 256 38 25 TPS ResNet BiLSTM Attn
+loading pretrained model from TPS-ResNet-BiLSTM-Attn.pth
+--------------------------------------------------------------------------------
+image_path               	predicted_labels         	confidence score
+--------------------------------------------------------------------------------
+demo_image/word_663.png  	freal                    	0.1146
+TIME=0:03.76 real,CPU USAGE=99%
+model input parameters 32 100 20 1 512 256 38 25 TPS ResNet BiLSTM Attn
+loading pretrained model from TPS-ResNet-BiLSTM-Attn.pth
+--------------------------------------------------------------------------------
+image_path               	predicted_labels         	confidence score
+--------------------------------------------------------------------------------
+demo_image/word_69.png   	serangoon                	0.9977
+TIME=0:03.79 real,CPU USAGE=99%
+model input parameters 32 100 20 1 512 256 38 25 TPS ResNet BiLSTM Attn
+loading pretrained model from TPS-ResNet-BiLSTM-Attn.pth
+--------------------------------------------------------------------------------
+image_path               	predicted_labels         	confidence score
+--------------------------------------------------------------------------------
+demo_image/word_706.png  	topo                     	0.9201
+TIME=0:03.81 real,CPU USAGE=97%
+model input parameters 32 100 20 1 512 256 38 25 TPS ResNet BiLSTM Attn
+loading pretrained model from TPS-ResNet-BiLSTM-Attn.pth
+--------------------------------------------------------------------------------
+image_path               	predicted_labels         	confidence score
+--------------------------------------------------------------------------------
+demo_image/word_9.png    	from                     	1.0000
+TIME=0:03.78 real,CPU USAGE=99%
+model input parameters 32 100 20 1 512 256 38 25 TPS ResNet BiLSTM Attn
+loading pretrained model from TPS-ResNet-BiLSTM-Attn.pth
+--------------------------------------------------------------------------------
+image_path               	predicted_labels         	confidence score
+--------------------------------------------------------------------------------
+demo_image/word_942.png  	exit                     	0.8909
+TIME=0:03.78 real,CPU USAGE=99%
+model input parameters 32 100 20 1 512 256 38 25 TPS ResNet BiLSTM Attn
+loading pretrained model from TPS-ResNet-BiLSTM-Attn.pth
+--------------------------------------------------------------------------------
+image_path               	predicted_labels         	confidence score
+--------------------------------------------------------------------------------
+demo_image/word_944.png  	robinsons                	0.9099
+TIME=0:03.79 real,CPU USAGE=99%

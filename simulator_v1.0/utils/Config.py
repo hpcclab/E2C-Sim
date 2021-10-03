@@ -10,9 +10,7 @@ machines = []
 task_types = []
 tasks = []
 
-current_time = 0.0 
-episode = 5
-
+current_time = 0.0
 
 with open(file='./config.json') as f:
     data = f.read()

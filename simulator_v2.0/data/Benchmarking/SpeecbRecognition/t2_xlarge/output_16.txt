@@ -1,0 +1,300 @@
+TensorFlow: v2.2.0-24-g1c1b2b9
+DeepSpeech: v0.8.2-0-g02e4c76
+2020-09-14 16:46:30.075487: I tensorflow/core/platform/cpu_feature_guard.cc:143] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+Loading model from file deepspeech-0.8.1-models.pbmm
+Loaded model in 0.0101s.
+Loading scorer from files deepspeech-0.8.1-models.scorer
+Loaded scorer in 0.000177s.
+Running inference.
+Inference took 3.046s for 3.705s audio file.
+only there are two sorts of cloud and fire
+TensorFlow: v2.2.0-24-g1c1b2b9
+DeepSpeech: v0.8.2-0-g02e4c76
+2020-09-14 16:46:33.312645: I tensorflow/core/platform/cpu_feature_guard.cc:143] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+Loading model from file deepspeech-0.8.1-models.pbmm
+Loaded model in 0.0102s.
+Loading scorer from files deepspeech-0.8.1-models.scorer
+Loaded scorer in 0.000175s.
+Running inference.
+Inference took 1.532s for 1.870s audio file.
+i me
+TensorFlow: v2.2.0-24-g1c1b2b9
+DeepSpeech: v0.8.2-0-g02e4c76
+2020-09-14 16:46:35.036527: I tensorflow/core/platform/cpu_feature_guard.cc:143] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+Loading model from file deepspeech-0.8.1-models.pbmm
+Loaded model in 0.0103s.
+Loading scorer from files deepspeech-0.8.1-models.scorer
+Loaded scorer in 0.000186s.
+Running inference.
+Inference took 13.751s for 16.720s audio file.
+on the table in token that the sentiment of old english hospitality had not been left behind stood a large pewter tankard at the bottom of which had hester or pearl peeped into it they might have seen the frothy remnant of a recent draught of ale
+TensorFlow: v2.2.0-24-g1c1b2b9
+DeepSpeech: v0.8.2-0-g02e4c76
+2020-09-14 16:46:48.984333: I tensorflow/core/platform/cpu_feature_guard.cc:143] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+Loading model from file deepspeech-0.8.1-models.pbmm
+Loaded model in 0.0105s.
+Loading scorer from files deepspeech-0.8.1-models.scorer
+Loaded scorer in 0.000196s.
+Running inference.
+Inference took 3.742s for 4.505s audio file.
+the hair was of brown yarn and hung down on her neck and several neat braids
+TensorFlow: v2.2.0-24-g1c1b2b9
+DeepSpeech: v0.8.2-0-g02e4c76
+2020-09-14 16:46:52.917874: I tensorflow/core/platform/cpu_feature_guard.cc:143] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+Loading model from file deepspeech-0.8.1-models.pbmm
+Loaded model in 0.0102s.
+Loading scorer from files deepspeech-0.8.1-models.scorer
+Loaded scorer in 0.000171s.
+Running inference.
+Inference took 3.038s for 3.695s audio file.
+but we're not exactly welcome
+TensorFlow: v2.2.0-24-g1c1b2b9
+DeepSpeech: v0.8.2-0-g02e4c76
+2020-09-14 16:46:56.146131: I tensorflow/core/platform/cpu_feature_guard.cc:143] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+Loading model from file deepspeech-0.8.1-models.pbmm
+Loaded model in 0.0102s.
+Loading scorer from files deepspeech-0.8.1-models.scorer
+Loaded scorer in 0.000178s.
+Running inference.
+Inference took 9.003s for 10.945s audio file.
+he was a splendid figure of a boy tall and straight as a young pine tree with a handsome head and stormy grey eyes deeply set under a serious brow
+TensorFlow: v2.2.0-24-g1c1b2b9
+DeepSpeech: v0.8.2-0-g02e4c76
+2020-09-14 16:47:05.340803: I tensorflow/core/platform/cpu_feature_guard.cc:143] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+Loading model from file deepspeech-0.8.1-models.pbmm
+Loaded model in 0.0104s.
+Loading scorer from files deepspeech-0.8.1-models.scorer
+Loaded scorer in 0.000188s.
+Running inference.
+Inference took 3.134s for 3.700s audio file.
+they think you are proud because you've been away to school or something
+TensorFlow: v2.2.0-24-g1c1b2b9
+DeepSpeech: v0.8.2-0-g02e4c76
+2020-09-14 16:47:08.669599: I tensorflow/core/platform/cpu_feature_guard.cc:143] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+Loading model from file deepspeech-0.8.1-models.pbmm
+Loaded model in 0.0106s.
+Loading scorer from files deepspeech-0.8.1-models.scorer
+Loaded scorer in 0.000177s.
+Running inference.
+Inference took 6.492s for 7.805s audio file.
+but as we descend the social scale the point is presently reached where the duties of icarus leisure in consumption devolve on the wife alone
+TensorFlow: v2.2.0-24-g1c1b2b9
+DeepSpeech: v0.8.2-0-g02e4c76
+2020-09-14 16:47:15.353705: I tensorflow/core/platform/cpu_feature_guard.cc:143] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+Loading model from file deepspeech-0.8.1-models.pbmm
+Loaded model in 0.0102s.
+Loading scorer from files deepspeech-0.8.1-models.scorer
+Loaded scorer in 0.000184s.
+Running inference.
+Inference took 2.924s for 3.495s audio file.
+in this monotonous life of mind that was a pleasant event
+TensorFlow: v2.2.0-24-g1c1b2b9
+DeepSpeech: v0.8.2-0-g02e4c76
+2020-09-14 16:47:18.467280: I tensorflow/core/platform/cpu_feature_guard.cc:143] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+Loading model from file deepspeech-0.8.1-models.pbmm
+Loaded model in 0.0103s.
+Loading scorer from files deepspeech-0.8.1-models.scorer
+Loaded scorer in 0.00018s.
+Running inference.
+Inference took 17.041s for 20.375s audio file.
+he had a good appetite could tell a good story without laughing was celebrated for his witty relates in his sociable manners but he spent his life at home seldom going out and seeing hardly any one because he always had a pipe in his mouth and was surrounded by at least twenty cats with which he would amuse himself all day
+TensorFlow: v2.2.0-24-g1c1b2b9
+DeepSpeech: v0.8.2-0-g02e4c76
+2020-09-14 16:47:35.702127: I tensorflow/core/platform/cpu_feature_guard.cc:143] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+Loading model from file deepspeech-0.8.1-models.pbmm
+Loaded model in 0.0101s.
+Loading scorer from files deepspeech-0.8.1-models.scorer
+Loaded scorer in 0.000177s.
+Running inference.
+Inference took 10.557s for 12.605s audio file.
+his housekeeper had the management of everything she never allowed him to be in need of anything and she gave no account of his money which she kept altogether because he never asked her to render any accounts
+TensorFlow: v2.2.0-24-g1c1b2b9
+DeepSpeech: v0.8.2-0-g02e4c76
+2020-09-14 16:47:46.456193: I tensorflow/core/platform/cpu_feature_guard.cc:143] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+Loading model from file deepspeech-0.8.1-models.pbmm
+Loaded model in 0.0104s.
+Loading scorer from files deepspeech-0.8.1-models.scorer
+Loaded scorer in 0.000183s.
+Running inference.
+Inference took 9.818s for 11.895s audio file.
+and so the story of mormonism runs on its final has not yet been written the current press presents continuously new stages of its progress new developments of its plan
+TensorFlow: v2.2.0-24-g1c1b2b9
+DeepSpeech: v0.8.2-0-g02e4c76
+2020-09-14 16:47:56.469355: I tensorflow/core/platform/cpu_feature_guard.cc:143] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+Loading model from file deepspeech-0.8.1-models.pbmm
+Loaded model in 0.0103s.
+Loading scorer from files deepspeech-0.8.1-models.scorer
+Loaded scorer in 0.000186s.
+Running inference.
+Inference took 4.378s for 5.350s audio file.
+there it clothes itself in word masks in metaphor rags
+TensorFlow: v2.2.0-24-g1c1b2b9
+DeepSpeech: v0.8.2-0-g02e4c76
+2020-09-14 16:48:01.039664: I tensorflow/core/platform/cpu_feature_guard.cc:143] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+Loading model from file deepspeech-0.8.1-models.pbmm
+Loaded model in 0.0107s.
+Loading scorer from files deepspeech-0.8.1-models.scorer
+Loaded scorer in 0.00018s.
+Running inference.
+Inference took 3.861s for 4.670s audio file.
+father these unjust fillip he's going into business
+TensorFlow: v2.2.0-24-g1c1b2b9
+DeepSpeech: v0.8.2-0-g02e4c76
+2020-09-14 16:48:05.094699: I tensorflow/core/platform/cpu_feature_guard.cc:143] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+Loading model from file deepspeech-0.8.1-models.pbmm
+Loaded model in 0.0103s.
+Loading scorer from files deepspeech-0.8.1-models.scorer
+Loaded scorer in 0.000182s.
+Running inference.
+Inference took 5.594s for 6.820s audio file.
+always irritable cold indifferent he had grown rapidly more so as years went on
+TensorFlow: v2.2.0-24-g1c1b2b9
+DeepSpeech: v0.8.2-0-g02e4c76
+2020-09-14 16:48:10.887128: I tensorflow/core/platform/cpu_feature_guard.cc:143] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+Loading model from file deepspeech-0.8.1-models.pbmm
+Loaded model in 0.0105s.
+Loading scorer from files deepspeech-0.8.1-models.scorer
+Loaded scorer in 0.000191s.
+Running inference.
+Inference took 3.028s for 3.700s audio file.
+burn fire burn flicker flicker flame
+TensorFlow: v2.2.0-24-g1c1b2b9
+DeepSpeech: v0.8.2-0-g02e4c76
+2020-09-14 16:48:14.105552: I tensorflow/core/platform/cpu_feature_guard.cc:143] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+Loading model from file deepspeech-0.8.1-models.pbmm
+Loaded model in 0.0103s.
+Loading scorer from files deepspeech-0.8.1-models.scorer
+Loaded scorer in 0.000188s.
+Running inference.
+Inference took 10.526s for 12.755s audio file.
+after pondering a while he said if we were farther away i should expect to find a depth of two or three hundred fathoms instead of five fathoms five fathoms
+TensorFlow: v2.2.0-24-g1c1b2b9
+DeepSpeech: v0.8.2-0-g02e4c76
+2020-09-14 16:48:24.825904: I tensorflow/core/platform/cpu_feature_guard.cc:143] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+Loading model from file deepspeech-0.8.1-models.pbmm
+Loaded model in 0.0104s.
+Loading scorer from files deepspeech-0.8.1-models.scorer
+Loaded scorer in 0.000184s.
+Running inference.
+Inference took 3.194s for 3.780s audio file.
+at last all was quiet and black in the courtyard of game well
+TensorFlow: v2.2.0-24-g1c1b2b9
+DeepSpeech: v0.8.2-0-g02e4c76
+2020-09-14 16:48:28.210616: I tensorflow/core/platform/cpu_feature_guard.cc:143] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+Loading model from file deepspeech-0.8.1-models.pbmm
+Loaded model in 0.0103s.
+Loading scorer from files deepspeech-0.8.1-models.scorer
+Loaded scorer in 0.000176s.
+Running inference.
+Inference took 4.501s for 5.405s audio file.
+they then renewed their journey and under the better light made a safe crossing of the stable roofs
+TensorFlow: v2.2.0-24-g1c1b2b9
+DeepSpeech: v0.8.2-0-g02e4c76
+2020-09-14 16:48:32.905596: I tensorflow/core/platform/cpu_feature_guard.cc:143] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+Loading model from file deepspeech-0.8.1-models.pbmm
+Loaded model in 0.0103s.
+Loading scorer from files deepspeech-0.8.1-models.scorer
+Loaded scorer in 0.000179s.
+Running inference.
+Inference took 4.933s for 5.980s audio file.
+his tones rang pleasantly on warrant and ears and forthwith the good fellowship was heralded between them
+TensorFlow: v2.2.0-24-g1c1b2b9
+DeepSpeech: v0.8.2-0-g02e4c76
+2020-09-14 16:48:38.030442: I tensorflow/core/platform/cpu_feature_guard.cc:143] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+Loading model from file deepspeech-0.8.1-models.pbmm
+Loaded model in 0.0102s.
+Loading scorer from files deepspeech-0.8.1-models.scorer
+Loaded scorer in 0.000179s.
+Running inference.
+Inference took 3.176s for 3.800s audio file.
+i attend to the household mending you know and care for the linen
+TensorFlow: v2.2.0-24-g1c1b2b9
+DeepSpeech: v0.8.2-0-g02e4c76
+2020-09-14 16:48:41.397025: I tensorflow/core/platform/cpu_feature_guard.cc:143] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+Loading model from file deepspeech-0.8.1-models.pbmm
+Loaded model in 0.0102s.
+Loading scorer from files deepspeech-0.8.1-models.scorer
+Loaded scorer in 0.000185s.
+Running inference.
+Inference took 2.737s for 3.260s audio file.
+said she pointing to the play things see
+TensorFlow: v2.2.0-24-g1c1b2b9
+DeepSpeech: v0.8.2-0-g02e4c76
+2020-09-14 16:48:44.325094: I tensorflow/core/platform/cpu_feature_guard.cc:143] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+Loading model from file deepspeech-0.8.1-models.pbmm
+Loaded model in 0.0103s.
+Loading scorer from files deepspeech-0.8.1-models.scorer
+Loaded scorer in 0.000175s.
+Running inference.
+Inference took 6.126s for 7.365s audio file.
+but these playthings all away quick and carefully and we will not let them know anything about your leaving them out
+TensorFlow: v2.2.0-24-g1c1b2b9
+DeepSpeech: v0.8.2-0-g02e4c76
+2020-09-14 16:48:50.646014: I tensorflow/core/platform/cpu_feature_guard.cc:143] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+Loading model from file deepspeech-0.8.1-models.pbmm
+Loaded model in 0.0104s.
+Loading scorer from files deepspeech-0.8.1-models.scorer
+Loaded scorer in 0.000182s.
+Running inference.
+Inference took 4.016s for 4.805s audio file.
+the parliament and the scots laid their proposals before the king
+TensorFlow: v2.2.0-24-g1c1b2b9
+DeepSpeech: v0.8.2-0-g02e4c76
+2020-09-14 16:48:54.850803: I tensorflow/core/platform/cpu_feature_guard.cc:143] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+Loading model from file deepspeech-0.8.1-models.pbmm
+Loaded model in 0.0102s.
+Loading scorer from files deepspeech-0.8.1-models.scorer
+Loaded scorer in 0.000174s.
+Running inference.
+Inference took 11.941s for 14.600s audio file.
+before the settlement of terms the administration must be possessed entirely by the parliaments of both kingdoms and how incompatible that scheme with the liberty of the king is easily imagined
+TensorFlow: v2.2.0-24-g1c1b2b9
+DeepSpeech: v0.8.2-0-g02e4c76
+2020-09-14 16:49:06.982755: I tensorflow/core/platform/cpu_feature_guard.cc:143] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+Loading model from file deepspeech-0.8.1-models.pbmm
+Loaded model in 0.0103s.
+Loading scorer from files deepspeech-0.8.1-models.scorer
+Loaded scorer in 0.000213s.
+Running inference.
+Inference took 15.305s for 18.730s audio file.
+if any still retained rancor against him in his present condition they passed in silence while his well wishers more generous than prudent accompanied his march with tears without lavations and with prayers for his safety
+TensorFlow: v2.2.0-24-g1c1b2b9
+DeepSpeech: v0.8.2-0-g02e4c76
+2020-09-14 16:49:22.478945: I tensorflow/core/platform/cpu_feature_guard.cc:143] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+Loading model from file deepspeech-0.8.1-models.pbmm
+Loaded model in 0.0101s.
+Loading scorer from files deepspeech-0.8.1-models.scorer
+Loaded scorer in 0.000173s.
+Running inference.
+Inference took 3.219s for 3.880s audio file.
+it is this that is of interest to theory of knowledge
+TensorFlow: v2.2.0-24-g1c1b2b9
+DeepSpeech: v0.8.2-0-g02e4c76
+2020-09-14 16:49:25.891221: I tensorflow/core/platform/cpu_feature_guard.cc:143] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+Loading model from file deepspeech-0.8.1-models.pbmm
+Loaded model in 0.0104s.
+Loading scorer from files deepspeech-0.8.1-models.scorer
+Loaded scorer in 0.00018s.
+Running inference.
+Inference took 18.674s for 22.490s audio file.
+we are of course in fact able to judge when we recognize an object that we have seen it before but this judgment is something over and above recognition in this first sense and may very probably be impossible to animals that nevertheless had the experience of recognition in this first sense of the word
+TensorFlow: v2.2.0-24-g1c1b2b9
+DeepSpeech: v0.8.2-0-g02e4c76
+2020-09-14 16:49:44.758293: I tensorflow/core/platform/cpu_feature_guard.cc:143] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+Loading model from file deepspeech-0.8.1-models.pbmm
+Loaded model in 0.0103s.
+Loading scorer from files deepspeech-0.8.1-models.scorer
+Loaded scorer in 0.000175s.
+Running inference.
+Inference took 17.114s for 21.050s audio file.
+even the supporting cast is shrewdly drawn professor aronnax the career scientist caught in an ethical conflict consate compulsive classifier who supplies humorous tag lines for verses facts the harpooner ned land a creature of constant appetites man as heroic animal
+TensorFlow: v2.2.0-24-g1c1b2b9
+DeepSpeech: v0.8.2-0-g02e4c76
+2020-09-14 16:50:02.063858: I tensorflow/core/platform/cpu_feature_guard.cc:143] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+Loading model from file deepspeech-0.8.1-models.pbmm
+Loaded model in 0.0102s.
+Loading scorer from files deepspeech-0.8.1-models.scorer
+Loaded scorer in 0.000179s.
+Running inference.
+Inference took 5.064s for 6.180s audio file.
+slow to world greetings quick with its oh list when the angels speak

@@ -1,0 +1,650 @@
+Enter Image Path: ./samples/28/000000002954.jpg: Predicted in 22.748868 seconds.
+bicycle: 99%
+bicycle: 80%
+bicycle: 77%
+person: 99%
+person: 96%
+Enter Image Path: ./samples/28/000000009179.jpg: Predicted in 23.906551 seconds.
+book: 91%
+book: 90%
+book: 89%
+book: 88%
+book: 86%
+book: 86%
+book: 86%
+book: 81%
+book: 80%
+book: 80%
+book: 80%
+book: 79%
+book: 78%
+book: 77%
+book: 75%
+book: 74%
+book: 73%
+book: 72%
+book: 72%
+book: 70%
+book: 69%
+book: 68%
+book: 67%
+book: 66%
+book: 66%
+book: 66%
+book: 64%
+book: 63%
+book: 62%
+book: 62%
+book: 60%
+book: 57%
+book: 56%
+book: 55%
+book: 54%
+book: 53%
+book: 53%
+book: 53%
+book: 52%
+book: 52%
+book: 52%
+book: 51%
+tie: 100%
+tie: 100%
+person: 99%
+person: 99%
+Enter Image Path: ./samples/28/000000015491.jpg: Predicted in 22.028833 seconds.
+truck: 100%
+Enter Image Path: ./samples/28/000000035231.jpg: Predicted in 23.062117 seconds.
+elephant: 84%
+Enter Image Path: ./samples/28/000000043820.jpg: Predicted in 23.461114 seconds.
+traffic light: 76%
+bus: 99%
+car: 97%
+car: 94%
+car: 90%
+car: 80%
+car: 69%
+person: 86%
+person: 64%
+Enter Image Path: ./samples/28/000000048494.jpg: Predicted in 22.037044 seconds.
+boat: 56%
+train: 100%
+train: 98%
+Enter Image Path: ./samples/28/000000049246.jpg: Predicted in 24.394518 seconds.
+person: 100%
+Enter Image Path: ./samples/28/000000053693.jpg: Predicted in 21.847476 seconds.
+fire hydrant: 100%
+bicycle: 97%
+Enter Image Path: ./samples/28/000000055058.jpg: Predicted in 22.430209 seconds.
+sandwich: 99%
+bowl: 81%
+bottle: 52%
+Enter Image Path: ./samples/28/000000068056.jpg: Predicted in 23.701993 seconds.
+bird: 61%
+person: 61%
+Enter Image Path: ./samples/28/000000069986.jpg: Predicted in 22.161173 seconds.
+person: 100%
+person: 99%
+person: 99%
+person: 98%
+person: 95%
+person: 91%
+person: 87%
+person: 75%
+person: 66%
+person: 63%
+person: 59%
+person: 54%
+person: 52%
+Enter Image Path: ./samples/28/000000073036.jpg: Predicted in 23.137168 seconds.
+tie: 98%
+handbag: 99%
+backpack: 61%
+handbag: 55%
+traffic light: 87%
+traffic light: 82%
+traffic light: 81%
+traffic light: 81%
+traffic light: 79%
+traffic light: 79%
+traffic light: 75%
+car: 98%
+car: 97%
+car: 95%
+car: 80%
+person: 99%
+person: 98%
+person: 98%
+person: 96%
+person: 86%
+person: 77%
+person: 65%
+person: 60%
+Enter Image Path: ./samples/28/000000073052.jpg: Predicted in 22.295791 seconds.
+aeroplane: 100%
+Enter Image Path: ./samples/28/000000073410.jpg: Predicted in 21.843872 seconds.
+pizza: 51%
+broccoli: 94%
+Enter Image Path: ./samples/28/000000091897.jpg: Predicted in 24.367886 seconds.
+teddy bear: 99%
+chair: 89%
+Enter Image Path: ./samples/28/000000095980.jpg: Predicted in 22.043029 seconds.
+refrigerator: 100%
+oven: 60%
+microwave: 100%
+diningtable: 71%
+chair: 100%
+chair: 100%
+chair: 97%
+bottle: 99%
+Enter Image Path: ./samples/28/000000099257.jpg: Predicted in 22.847467 seconds.
+oven: 93%
+Enter Image Path: ./samples/28/000000103824.jpg: Predicted in 23.461151 seconds.
+skateboard: 97%
+skateboard: 92%
+skateboard: 82%
+skateboard: 78%
+person: 100%
+person: 100%
+person: 99%
+person: 98%
+person: 72%
+person: 68%
+person: 54%
+Enter Image Path: ./samples/28/000000133882.jpg: Predicted in 21.645438 seconds.
+horse: 99%
+horse: 98%
+horse: 98%
+horse: 97%
+horse: 96%
+horse: 96%
+horse: 94%
+horse: 94%
+horse: 92%
+horse: 87%
+horse: 80%
+horse: 79%
+Enter Image Path: ./samples/28/000000144287.jpg: Predicted in 23.080530 seconds.
+traffic light: 85%
+bus: 98%
+car: 100%
+car: 99%
+car: 71%
+person: 99%
+person: 95%
+person: 95%
+person: 90%
+person: 71%
+person: 58%
+person: 56%
+Enter Image Path: ./samples/28/000000145968.jpg: Predicted in 21.865019 seconds.
+boat: 98%
+boat: 81%
+Enter Image Path: ./samples/28/000000148396.jpg: Predicted in 21.657572 seconds.
+bed: 90%
+Enter Image Path: ./samples/28/000000152337.jpg: Predicted in 23.938056 seconds.
+bicycle: 98%
+person: 100%
+person: 100%
+person: 97%
+Enter Image Path: ./samples/28/000000161080.jpg: Predicted in 21.775055 seconds.
+fire hydrant: 90%
+car: 89%
+car: 78%
+person: 100%
+person: 100%
+Enter Image Path: ./samples/28/000000166065.jpg: Predicted in 22.869945 seconds.
+sports ball: 98%
+person: 100%
+person: 97%
+Enter Image Path: ./samples/28/000000167433.jpg: Predicted in 23.458992 seconds.
+train: 100%
+person: 95%
+person: 87%
+person: 70%
+person: 67%
+person: 64%
+person: 54%
+Enter Image Path: ./samples/28/000000174516.jpg: Predicted in 21.692557 seconds.
+handbag: 77%
+handbag: 57%
+person: 100%
+person: 100%
+Enter Image Path: ./samples/28/000000178551.jpg: Predicted in 23.127336 seconds.
+Enter Image Path: ./samples/28/000000185102.jpg: Predicted in 21.806167 seconds.
+elephant: 99%
+elephant: 92%
+elephant: 61%
+elephant: 51%
+cow: 57%
+Enter Image Path: ./samples/28/000000186746.jpg: Predicted in 21.899887 seconds.
+tennis racket: 99%
+sports ball: 100%
+person: 100%
+Enter Image Path: ./samples/28/000000194490.jpg: Predicted in 23.831898 seconds.
+sports ball: 100%
+sports ball: 100%
+sports ball: 99%
+bench: 86%
+person: 100%
+person: 100%
+person: 95%
+person: 94%
+person: 94%
+person: 94%
+person: 93%
+person: 92%
+person: 92%
+person: 88%
+person: 87%
+person: 86%
+person: 85%
+person: 84%
+person: 84%
+person: 78%
+Enter Image Path: ./samples/28/000000203394.jpg: Predicted in 22.044685 seconds.
+handbag: 92%
+bus: 100%
+person: 99%
+person: 72%
+Enter Image Path: ./samples/28/000000211003.jpg: Predicted in 22.566117 seconds.
+vase: 76%
+diningtable: 99%
+chair: 68%
+chair: 57%
+fork: 58%
+cup: 100%
+cup: 98%
+cup: 96%
+cup: 91%
+wine glass: 67%
+bottle: 98%
+person: 100%
+person: 100%
+person: 100%
+person: 100%
+person: 100%
+person: 99%
+person: 99%
+person: 97%
+person: 95%
+Enter Image Path: ./samples/28/000000217101.jpg: Predicted in 23.724882 seconds.
+Enter Image Path: ./samples/28/000000218157.jpg: Predicted in 21.995033 seconds.
+snowboard: 58%
+person: 100%
+Enter Image Path: ./samples/28/000000234531.jpg: Predicted in 23.659036 seconds.
+stop sign: 100%
+Enter Image Path: ./samples/28/000000234712.jpg: Predicted in 22.017880 seconds.
+diningtable: 75%
+carrot: 90%
+bowl: 97%
+bowl: 75%
+cup: 55%
+bottle: 57%
+Enter Image Path: ./samples/28/000000236474.jpg: Predicted in 22.285395 seconds.
+Enter Image Path: ./samples/28/000000239756.jpg: Predicted in 23.860243 seconds.
+handbag: 74%
+umbrella: 99%
+umbrella: 97%
+umbrella: 96%
+backpack: 96%
+person: 100%
+person: 100%
+person: 100%
+person: 100%
+person: 99%
+person: 99%
+person: 99%
+person: 93%
+Enter Image Path: ./samples/28/000000241328.jpg: Predicted in 21.785918 seconds.
+orange: 80%
+orange: 79%
+orange: 79%
+orange: 74%
+orange: 67%
+orange: 66%
+orange: 63%
+orange: 52%
+orange: 52%
+orange: 50%
+Enter Image Path: ./samples/28/000000243877.jpg: Predicted in 22.556891 seconds.
+elephant: 100%
+Enter Image Path: ./samples/28/000000258312.jpg: Predicted in 23.149680 seconds.
+zebra: 100%
+Enter Image Path: ./samples/28/000000258801.jpg: Predicted in 21.880428 seconds.
+cow: 68%
+motorbike: 96%
+motorbike: 73%
+person: 98%
+person: 79%
+Enter Image Path: ./samples/28/000000265365.jpg: Predicted in 24.616389 seconds.
+chair: 51%
+handbag: 67%
+person: 99%
+person: 97%
+Enter Image Path: ./samples/28/000000265405.jpg: Predicted in 21.667873 seconds.
+backpack: 88%
+cow: 100%
+person: 99%
+Enter Image Path: ./samples/28/000000265921.jpg: Predicted in 22.162371 seconds.
+apple: 58%
+zebra: 100%
+Enter Image Path: ./samples/28/000000267364.jpg: Predicted in 24.284507 seconds.
+train: 100%
+Enter Image Path: ./samples/28/000000267413.jpg: Predicted in 22.155889 seconds.
+motorbike: 100%
+Enter Image Path: ./samples/28/000000270666.jpg: Predicted in 22.578859 seconds.
+scissors: 91%
+cup: 85%
+cup: 73%
+Enter Image Path: ./samples/28/000000274659.jpg: Predicted in 22.622351 seconds.
+dog: 87%
+cat: 54%
+Enter Image Path: ./samples/28/000000276438.jpg: Predicted in 21.858257 seconds.
+banana: 99%
+banana: 92%
+person: 100%
+Enter Image Path: ./samples/28/000000276695.jpg: Predicted in 25.779499 seconds.
+person: 99%
+Enter Image Path: ./samples/28/000000280362.jpg: Predicted in 22.184822 seconds.
+teddy bear: 95%
+Enter Image Path: ./samples/28/000000281256.jpg: Predicted in 22.871988 seconds.
+laptop: 100%
+backpack: 86%
+person: 100%
+Enter Image Path: ./samples/28/000000286079.jpg: Predicted in 23.550933 seconds.
+horse: 99%
+horse: 58%
+person: 100%
+person: 99%
+person: 98%
+person: 64%
+Enter Image Path: ./samples/28/000000291040.jpg: Predicted in 21.903040 seconds.
+oven: 99%
+Enter Image Path: ./samples/28/000000293399.jpg: Predicted in 23.504010 seconds.
+book: 74%
+book: 61%
+book: 61%
+keyboard: 57%
+mouse: 98%
+mouse: 94%
+laptop: 100%
+tvmonitor: 100%
+chair: 83%
+cup: 99%
+person: 100%
+Enter Image Path: ./samples/28/000000298775.jpg: Predicted in 22.177114 seconds.
+sports ball: 96%
+person: 100%
+person: 100%
+person: 94%
+Enter Image Path: ./samples/28/000000306006.jpg: Predicted in 22.321455 seconds.
+remote: 58%
+tvmonitor: 91%
+sofa: 61%
+chair: 51%
+dog: 98%
+person: 100%
+person: 100%
+person: 98%
+Enter Image Path: ./samples/28/000000306130.jpg: Predicted in 25.116966 seconds.
+person: 100%
+person: 100%
+person: 97%
+person: 96%
+person: 81%
+person: 54%
+person: 53%
+Enter Image Path: ./samples/28/000000308346.jpg: Predicted in 21.988292 seconds.
+parking meter: 100%
+parking meter: 100%
+car: 100%
+car: 96%
+Enter Image Path: ./samples/28/000000314770.jpg: Predicted in 22.495657 seconds.
+oven: 100%
+bottle: 89%
+dog: 88%
+Enter Image Path: ./samples/28/000000315327.jpg: Predicted in 22.651000 seconds.
+chair: 95%
+chair: 90%
+cup: 55%
+Enter Image Path: ./samples/28/000000324162.jpg: Predicted in 21.790627 seconds.
+snowboard: 69%
+person: 100%
+person: 96%
+person: 95%
+person: 94%
+person: 92%
+person: 92%
+person: 89%
+person: 84%
+person: 80%
+person: 66%
+person: 61%
+person: 59%
+person: 57%
+Enter Image Path: ./samples/28/000000327414.jpg: Predicted in 24.468133 seconds.
+book: 66%
+stop sign: 100%
+Enter Image Path: ./samples/28/000000330167.jpg: Predicted in 21.841218 seconds.
+skateboard: 94%
+skateboard: 92%
+person: 100%
+person: 100%
+person: 99%
+Enter Image Path: ./samples/28/000000332422.jpg: Predicted in 22.457136 seconds.
+apple: 100%
+apple: 100%
+apple: 98%
+apple: 98%
+apple: 98%
+apple: 95%
+apple: 95%
+apple: 95%
+apple: 94%
+apple: 92%
+apple: 91%
+apple: 89%
+apple: 75%
+apple: 69%
+apple: 54%
+Enter Image Path: ./samples/28/000000335806.jpg: Predicted in 24.513389 seconds.
+pottedplant: 93%
+pottedplant: 71%
+person: 100%
+person: 99%
+person: 98%
+person: 98%
+person: 96%
+person: 91%
+person: 55%
+Enter Image Path: ./samples/28/000000339739.jpg: Predicted in 21.721197 seconds.
+toilet: 93%
+bottle: 57%
+Enter Image Path: ./samples/28/000000340728.jpg: Predicted in 22.373081 seconds.
+chair: 73%
+wine glass: 53%
+bottle: 99%
+bottle: 99%
+bottle: 99%
+bottle: 99%
+bottle: 99%
+bottle: 98%
+bottle: 97%
+bottle: 97%
+bottle: 96%
+bottle: 94%
+bottle: 94%
+bottle: 94%
+bottle: 91%
+bottle: 90%
+bottle: 82%
+bottle: 81%
+bottle: 79%
+bottle: 79%
+bottle: 65%
+Enter Image Path: ./samples/28/000000341291.jpg: Predicted in 22.127899 seconds.
+microwave: 85%
+chair: 79%
+chair: 76%
+bowl: 67%
+person: 100%
+person: 100%
+person: 100%
+person: 100%
+person: 99%
+Enter Image Path: ./samples/28/000000341631.jpg: Predicted in 21.753497 seconds.
+bus: 69%
+Enter Image Path: ./samples/28/000000366166.jpg: Predicted in 23.969678 seconds.
+diningtable: 100%
+pizza: 98%
+pizza: 91%
+knife: 65%
+knife: 52%
+fork: 92%
+cup: 90%
+bottle: 95%
+bottle: 60%
+bottle: 52%
+bottle: 51%
+Enter Image Path: ./samples/28/000000374566.jpg: Predicted in 21.597168 seconds.
+train: 100%
+person: 64%
+Enter Image Path: ./samples/28/000000379269.jpg: Predicted in 22.490373 seconds.
+surfboard: 99%
+person: 100%
+Enter Image Path: ./samples/28/000000387896.jpg: Predicted in 24.364509 seconds.
+book: 67%
+diningtable: 100%
+chair: 100%
+chair: 100%
+chair: 100%
+carrot: 76%
+bowl: 80%
+fork: 100%
+cup: 99%
+Enter Image Path: ./samples/28/000000402286.jpg: Predicted in 22.034767 seconds.
+clock: 99%
+traffic light: 83%
+traffic light: 69%
+Enter Image Path: ./samples/28/000000406465.jpg: Predicted in 22.384979 seconds.
+giraffe: 99%
+giraffe: 98%
+zebra: 100%
+zebra: 100%
+zebra: 98%
+person: 95%
+person: 95%
+person: 89%
+person: 87%
+person: 83%
+person: 75%
+person: 73%
+person: 72%
+person: 64%
+person: 63%
+person: 61%
+person: 58%
+person: 53%
+Enter Image Path: ./samples/28/000000411394.jpg: Predicted in 21.908442 seconds.
+bicycle: 100%
+bicycle: 100%
+Enter Image Path: ./samples/28/000000422671.jpg: Predicted in 21.716136 seconds.
+giraffe: 100%
+giraffe: 100%
+giraffe: 94%
+Enter Image Path: ./samples/28/000000434802.jpg: Predicted in 23.815664 seconds.
+toilet: 97%
+Enter Image Path: ./samples/28/000000441209.jpg: Predicted in 21.759736 seconds.
+diningtable: 99%
+chair: 96%
+donut: 63%
+pizza: 62%
+pizza: 59%
+person: 100%
+Enter Image Path: ./samples/28/000000451939.jpg: Predicted in 22.902440 seconds.
+giraffe: 100%
+bird: 97%
+bird: 84%
+Enter Image Path: ./samples/28/000000465120.jpg: Predicted in 24.002566 seconds.
+cell phone: 74%
+person: 100%
+Enter Image Path: ./samples/28/000000465680.jpg: Predicted in 21.947850 seconds.
+laptop: 94%
+motorbike: 75%
+Enter Image Path: ./samples/28/000000475515.jpg: Predicted in 22.722596 seconds.
+motorbike: 93%
+car: 57%
+car: 51%
+person: 100%
+person: 96%
+Enter Image Path: ./samples/28/000000482604.jpg: Predicted in 22.242699 seconds.
+train: 99%
+Enter Image Path: ./samples/28/000000494040.jpg: Predicted in 22.090297 seconds.
+train: 100%
+person: 89%
+person: 86%
+person: 82%
+person: 57%
+Enter Image Path: ./samples/28/000000501471.jpg: Predicted in 23.504391 seconds.
+diningtable: 83%
+hot dog: 97%
+person: 100%
+person: 97%
+person: 93%
+person: 90%
+person: 90%
+person: 88%
+person: 70%
+person: 70%
+person: 53%
+Enter Image Path: ./samples/28/000000518193.jpg: Predicted in 21.754529 seconds.
+toilet: 98%
+Enter Image Path: ./samples/28/000000527393.jpg: Predicted in 22.962855 seconds.
+motorbike: 98%
+motorbike: 98%
+motorbike: 98%
+motorbike: 70%
+person: 89%
+person: 88%
+person: 88%
+person: 83%
+Enter Image Path: ./samples/28/000000527481.jpg: Predicted in 23.881775 seconds.
+horse: 100%
+person: 100%
+person: 95%
+Enter Image Path: ./samples/28/000000528025.jpg: Predicted in 21.914581 seconds.
+sheep: 93%
+Enter Image Path: ./samples/28/000000533579.jpg: Predicted in 23.340620 seconds.
+book: 95%
+book: 89%
+book: 83%
+book: 81%
+book: 76%
+horse: 52%
+cat: 100%
+Enter Image Path: ./samples/28/000000535985.jpg: Predicted in 21.795958 seconds.
+sandwich: 90%
+hot dog: 56%
+bottle: 71%
+person: 98%
+person: 98%
+person: 91%
+Enter Image Path: ./samples/28/000000544270.jpg: Predicted in 22.125916 seconds.
+sheep: 96%
+sheep: 88%
+sheep: 68%
+Enter Image Path: ./samples/28/000000550859.jpg: Predicted in 23.528523 seconds.
+motorbike: 94%
+person: 99%
+person: 84%
+Enter Image Path: ./samples/28/000000561762.jpg: Predicted in 21.790372 seconds.
+Enter Image Path: ./samples/28/000000564182.jpg: Predicted in 22.767560 seconds.
+sandwich: 56%
+hot dog: 52%
+Enter Image Path: ./samples/28/000000576103.jpg: Predicted in 22.877107 seconds.
+bus: 100%
+car: 90%
+person: 100%
+person: 99%
+person: 92%
+Enter Image Path: 

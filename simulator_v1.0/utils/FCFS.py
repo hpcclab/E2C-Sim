@@ -23,11 +23,9 @@ class FCFS(BaseScheduler):
             task = self.batch_queue[index]
             self.batch_queue = self.batch_queue[:index] + self.batch_queue[index + 1:] + [None]
             self.feed()
-            self.unmapped_task = task
             return task
         else:
             print("No more task for scheduling ... \n")
-            self.unmapped_task = None
             return None
 
     def offload(self, task):
@@ -44,7 +42,7 @@ class FCFS(BaseScheduler):
         task.status = TaskStatus.DEFERRED
 
     def drop(self, task):
-        task.status = TaskStatus.DROPPED
+        task.status = task.status_list['dropped']
         task.drop_time = Config.current_time
 
     def map(self, task, machine):

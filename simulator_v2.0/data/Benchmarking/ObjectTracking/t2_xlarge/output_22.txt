@@ -1,0 +1,1020 @@
+Processing frame 00022
+Processing frame 00023
+Processing frame 00024
+Processing frame 00025
+Processing frame 00026
+Processing frame 00027
+Processing frame 00028
+Processing frame 00029
+Processing frame 00030
+Processing frame 00031
+Processing frame 00032
+Processing frame 00033
+Processing frame 00034
+Processing frame 00035
+Processing frame 00036
+Processing frame 00037
+Processing frame 00038
+Processing frame 00039
+Processing frame 00040
+Processing frame 00041
+Processing frame 00042
+Processing frame 00043
+Processing frame 00044
+Processing frame 00045
+Processing frame 00046
+Processing frame 00047
+Processing frame 00048
+Processing frame 00049
+Processing frame 00050
+Processing frame 00051
+
+real	0m0.576s
+user	0m0.720s
+sys	0m0.192s
+Processing frame 00022
+Processing frame 00023
+Processing frame 00024
+Processing frame 00025
+Processing frame 00026
+Processing frame 00027
+Processing frame 00028
+Processing frame 00029
+Processing frame 00030
+Processing frame 00031
+Processing frame 00032
+Processing frame 00033
+Processing frame 00034
+Processing frame 00035
+Processing frame 00036
+Processing frame 00037
+Processing frame 00038
+Processing frame 00039
+Processing frame 00040
+Processing frame 00041
+Processing frame 00042
+Processing frame 00043
+Processing frame 00044
+Processing frame 00045
+Processing frame 00046
+Processing frame 00047
+Processing frame 00048
+Processing frame 00049
+Processing frame 00050
+Processing frame 00051
+
+real	0m0.569s
+user	0m0.692s
+sys	0m0.210s
+Processing frame 00022
+Processing frame 00023
+Processing frame 00024
+Processing frame 00025
+Processing frame 00026
+Processing frame 00027
+Processing frame 00028
+Processing frame 00029
+Processing frame 00030
+Processing frame 00031
+Processing frame 00032
+Processing frame 00033
+Processing frame 00034
+Processing frame 00035
+Processing frame 00036
+Processing frame 00037
+Processing frame 00038
+Processing frame 00039
+Processing frame 00040
+Processing frame 00041
+Processing frame 00042
+Processing frame 00043
+Processing frame 00044
+Processing frame 00045
+Processing frame 00046
+Processing frame 00047
+Processing frame 00048
+Processing frame 00049
+Processing frame 00050
+Processing frame 00051
+
+real	0m0.584s
+user	0m0.700s
+sys	0m0.220s
+Processing frame 00022
+Processing frame 00023
+Processing frame 00024
+Processing frame 00025
+Processing frame 00026
+Processing frame 00027
+Processing frame 00028
+Processing frame 00029
+Processing frame 00030
+Processing frame 00031
+Processing frame 00032
+Processing frame 00033
+Processing frame 00034
+Processing frame 00035
+Processing frame 00036
+Processing frame 00037
+Processing frame 00038
+Processing frame 00039
+Processing frame 00040
+Processing frame 00041
+Processing frame 00042
+Processing frame 00043
+Processing frame 00044
+Processing frame 00045
+Processing frame 00046
+Processing frame 00047
+Processing frame 00048
+Processing frame 00049
+Processing frame 00050
+Processing frame 00051
+
+real	0m0.573s
+user	0m0.672s
+sys	0m0.236s
+Processing frame 00022
+Processing frame 00023
+Processing frame 00024
+Processing frame 00025
+Processing frame 00026
+Processing frame 00027
+Processing frame 00028
+Processing frame 00029
+Processing frame 00030
+Processing frame 00031
+Processing frame 00032
+Processing frame 00033
+Processing frame 00034
+Processing frame 00035
+Processing frame 00036
+Processing frame 00037
+Processing frame 00038
+Processing frame 00039
+Processing frame 00040
+Processing frame 00041
+Processing frame 00042
+Processing frame 00043
+Processing frame 00044
+Processing frame 00045
+Processing frame 00046
+Processing frame 00047
+Processing frame 00048
+Processing frame 00049
+Processing frame 00050
+Processing frame 00051
+
+real	0m0.578s
+user	0m0.714s
+sys	0m0.197s
+Processing frame 00022
+Processing frame 00023
+Processing frame 00024
+Processing frame 00025
+Processing frame 00026
+Processing frame 00027
+Processing frame 00028
+Processing frame 00029
+Processing frame 00030
+Processing frame 00031
+Processing frame 00032
+Processing frame 00033
+Processing frame 00034
+Processing frame 00035
+Processing frame 00036
+Processing frame 00037
+Processing frame 00038
+Processing frame 00039
+Processing frame 00040
+Processing frame 00041
+Processing frame 00042
+Processing frame 00043
+Processing frame 00044
+Processing frame 00045
+Processing frame 00046
+Processing frame 00047
+Processing frame 00048
+Processing frame 00049
+Processing frame 00050
+Processing frame 00051
+
+real	0m0.574s
+user	0m0.667s
+sys	0m0.241s
+Processing frame 00022
+Processing frame 00023
+Processing frame 00024
+Processing frame 00025
+Processing frame 00026
+Processing frame 00027
+Processing frame 00028
+Processing frame 00029
+Processing frame 00030
+Processing frame 00031
+Processing frame 00032
+Processing frame 00033
+Processing frame 00034
+Processing frame 00035
+Processing frame 00036
+Processing frame 00037
+Processing frame 00038
+Processing frame 00039
+Processing frame 00040
+Processing frame 00041
+Processing frame 00042
+Processing frame 00043
+Processing frame 00044
+Processing frame 00045
+Processing frame 00046
+Processing frame 00047
+Processing frame 00048
+Processing frame 00049
+Processing frame 00050
+Processing frame 00051
+
+real	0m0.575s
+user	0m0.739s
+sys	0m0.169s
+Processing frame 00022
+Processing frame 00023
+Processing frame 00024
+Processing frame 00025
+Processing frame 00026
+Processing frame 00027
+Processing frame 00028
+Processing frame 00029
+Processing frame 00030
+Processing frame 00031
+Processing frame 00032
+Processing frame 00033
+Processing frame 00034
+Processing frame 00035
+Processing frame 00036
+Processing frame 00037
+Processing frame 00038
+Processing frame 00039
+Processing frame 00040
+Processing frame 00041
+Processing frame 00042
+Processing frame 00043
+Processing frame 00044
+Processing frame 00045
+Processing frame 00046
+Processing frame 00047
+Processing frame 00048
+Processing frame 00049
+Processing frame 00050
+Processing frame 00051
+
+real	0m0.586s
+user	0m0.716s
+sys	0m0.205s
+Processing frame 00022
+Processing frame 00023
+Processing frame 00024
+Processing frame 00025
+Processing frame 00026
+Processing frame 00027
+Processing frame 00028
+Processing frame 00029
+Processing frame 00030
+Processing frame 00031
+Processing frame 00032
+Processing frame 00033
+Processing frame 00034
+Processing frame 00035
+Processing frame 00036
+Processing frame 00037
+Processing frame 00038
+Processing frame 00039
+Processing frame 00040
+Processing frame 00041
+Processing frame 00042
+Processing frame 00043
+Processing frame 00044
+Processing frame 00045
+Processing frame 00046
+Processing frame 00047
+Processing frame 00048
+Processing frame 00049
+Processing frame 00050
+Processing frame 00051
+
+real	0m0.576s
+user	0m0.714s
+sys	0m0.196s
+Processing frame 00022
+Processing frame 00023
+Processing frame 00024
+Processing frame 00025
+Processing frame 00026
+Processing frame 00027
+Processing frame 00028
+Processing frame 00029
+Processing frame 00030
+Processing frame 00031
+Processing frame 00032
+Processing frame 00033
+Processing frame 00034
+Processing frame 00035
+Processing frame 00036
+Processing frame 00037
+Processing frame 00038
+Processing frame 00039
+Processing frame 00040
+Processing frame 00041
+Processing frame 00042
+Processing frame 00043
+Processing frame 00044
+Processing frame 00045
+Processing frame 00046
+Processing frame 00047
+Processing frame 00048
+Processing frame 00049
+Processing frame 00050
+Processing frame 00051
+
+real	0m0.569s
+user	0m0.713s
+sys	0m0.192s
+Processing frame 00022
+Processing frame 00023
+Processing frame 00024
+Processing frame 00025
+Processing frame 00026
+Processing frame 00027
+Processing frame 00028
+Processing frame 00029
+Processing frame 00030
+Processing frame 00031
+Processing frame 00032
+Processing frame 00033
+Processing frame 00034
+Processing frame 00035
+Processing frame 00036
+Processing frame 00037
+Processing frame 00038
+Processing frame 00039
+Processing frame 00040
+Processing frame 00041
+Processing frame 00042
+Processing frame 00043
+Processing frame 00044
+Processing frame 00045
+Processing frame 00046
+Processing frame 00047
+Processing frame 00048
+Processing frame 00049
+Processing frame 00050
+Processing frame 00051
+
+real	0m0.572s
+user	0m0.710s
+sys	0m0.196s
+Processing frame 00022
+Processing frame 00023
+Processing frame 00024
+Processing frame 00025
+Processing frame 00026
+Processing frame 00027
+Processing frame 00028
+Processing frame 00029
+Processing frame 00030
+Processing frame 00031
+Processing frame 00032
+Processing frame 00033
+Processing frame 00034
+Processing frame 00035
+Processing frame 00036
+Processing frame 00037
+Processing frame 00038
+Processing frame 00039
+Processing frame 00040
+Processing frame 00041
+Processing frame 00042
+Processing frame 00043
+Processing frame 00044
+Processing frame 00045
+Processing frame 00046
+Processing frame 00047
+Processing frame 00048
+Processing frame 00049
+Processing frame 00050
+Processing frame 00051
+
+real	0m0.576s
+user	0m0.740s
+sys	0m0.169s
+Processing frame 00022
+Processing frame 00023
+Processing frame 00024
+Processing frame 00025
+Processing frame 00026
+Processing frame 00027
+Processing frame 00028
+Processing frame 00029
+Processing frame 00030
+Processing frame 00031
+Processing frame 00032
+Processing frame 00033
+Processing frame 00034
+Processing frame 00035
+Processing frame 00036
+Processing frame 00037
+Processing frame 00038
+Processing frame 00039
+Processing frame 00040
+Processing frame 00041
+Processing frame 00042
+Processing frame 00043
+Processing frame 00044
+Processing frame 00045
+Processing frame 00046
+Processing frame 00047
+Processing frame 00048
+Processing frame 00049
+Processing frame 00050
+Processing frame 00051
+
+real	0m0.573s
+user	0m0.713s
+sys	0m0.196s
+Processing frame 00022
+Processing frame 00023
+Processing frame 00024
+Processing frame 00025
+Processing frame 00026
+Processing frame 00027
+Processing frame 00028
+Processing frame 00029
+Processing frame 00030
+Processing frame 00031
+Processing frame 00032
+Processing frame 00033
+Processing frame 00034
+Processing frame 00035
+Processing frame 00036
+Processing frame 00037
+Processing frame 00038
+Processing frame 00039
+Processing frame 00040
+Processing frame 00041
+Processing frame 00042
+Processing frame 00043
+Processing frame 00044
+Processing frame 00045
+Processing frame 00046
+Processing frame 00047
+Processing frame 00048
+Processing frame 00049
+Processing frame 00050
+Processing frame 00051
+
+real	0m0.586s
+user	0m0.724s
+sys	0m0.196s
+Processing frame 00022
+Processing frame 00023
+Processing frame 00024
+Processing frame 00025
+Processing frame 00026
+Processing frame 00027
+Processing frame 00028
+Processing frame 00029
+Processing frame 00030
+Processing frame 00031
+Processing frame 00032
+Processing frame 00033
+Processing frame 00034
+Processing frame 00035
+Processing frame 00036
+Processing frame 00037
+Processing frame 00038
+Processing frame 00039
+Processing frame 00040
+Processing frame 00041
+Processing frame 00042
+Processing frame 00043
+Processing frame 00044
+Processing frame 00045
+Processing frame 00046
+Processing frame 00047
+Processing frame 00048
+Processing frame 00049
+Processing frame 00050
+Processing frame 00051
+
+real	0m0.569s
+user	0m0.699s
+sys	0m0.205s
+Processing frame 00022
+Processing frame 00023
+Processing frame 00024
+Processing frame 00025
+Processing frame 00026
+Processing frame 00027
+Processing frame 00028
+Processing frame 00029
+Processing frame 00030
+Processing frame 00031
+Processing frame 00032
+Processing frame 00033
+Processing frame 00034
+Processing frame 00035
+Processing frame 00036
+Processing frame 00037
+Processing frame 00038
+Processing frame 00039
+Processing frame 00040
+Processing frame 00041
+Processing frame 00042
+Processing frame 00043
+Processing frame 00044
+Processing frame 00045
+Processing frame 00046
+Processing frame 00047
+Processing frame 00048
+Processing frame 00049
+Processing frame 00050
+Processing frame 00051
+
+real	0m0.576s
+user	0m0.707s
+sys	0m0.201s
+Processing frame 00022
+Processing frame 00023
+Processing frame 00024
+Processing frame 00025
+Processing frame 00026
+Processing frame 00027
+Processing frame 00028
+Processing frame 00029
+Processing frame 00030
+Processing frame 00031
+Processing frame 00032
+Processing frame 00033
+Processing frame 00034
+Processing frame 00035
+Processing frame 00036
+Processing frame 00037
+Processing frame 00038
+Processing frame 00039
+Processing frame 00040
+Processing frame 00041
+Processing frame 00042
+Processing frame 00043
+Processing frame 00044
+Processing frame 00045
+Processing frame 00046
+Processing frame 00047
+Processing frame 00048
+Processing frame 00049
+Processing frame 00050
+Processing frame 00051
+
+real	0m0.581s
+user	0m0.735s
+sys	0m0.181s
+Processing frame 00022
+Processing frame 00023
+Processing frame 00024
+Processing frame 00025
+Processing frame 00026
+Processing frame 00027
+Processing frame 00028
+Processing frame 00029
+Processing frame 00030
+Processing frame 00031
+Processing frame 00032
+Processing frame 00033
+Processing frame 00034
+Processing frame 00035
+Processing frame 00036
+Processing frame 00037
+Processing frame 00038
+Processing frame 00039
+Processing frame 00040
+Processing frame 00041
+Processing frame 00042
+Processing frame 00043
+Processing frame 00044
+Processing frame 00045
+Processing frame 00046
+Processing frame 00047
+Processing frame 00048
+Processing frame 00049
+Processing frame 00050
+Processing frame 00051
+
+real	0m0.575s
+user	0m0.700s
+sys	0m0.209s
+Processing frame 00022
+Processing frame 00023
+Processing frame 00024
+Processing frame 00025
+Processing frame 00026
+Processing frame 00027
+Processing frame 00028
+Processing frame 00029
+Processing frame 00030
+Processing frame 00031
+Processing frame 00032
+Processing frame 00033
+Processing frame 00034
+Processing frame 00035
+Processing frame 00036
+Processing frame 00037
+Processing frame 00038
+Processing frame 00039
+Processing frame 00040
+Processing frame 00041
+Processing frame 00042
+Processing frame 00043
+Processing frame 00044
+Processing frame 00045
+Processing frame 00046
+Processing frame 00047
+Processing frame 00048
+Processing frame 00049
+Processing frame 00050
+Processing frame 00051
+
+real	0m0.571s
+user	0m0.726s
+sys	0m0.177s
+Processing frame 00022
+Processing frame 00023
+Processing frame 00024
+Processing frame 00025
+Processing frame 00026
+Processing frame 00027
+Processing frame 00028
+Processing frame 00029
+Processing frame 00030
+Processing frame 00031
+Processing frame 00032
+Processing frame 00033
+Processing frame 00034
+Processing frame 00035
+Processing frame 00036
+Processing frame 00037
+Processing frame 00038
+Processing frame 00039
+Processing frame 00040
+Processing frame 00041
+Processing frame 00042
+Processing frame 00043
+Processing frame 00044
+Processing frame 00045
+Processing frame 00046
+Processing frame 00047
+Processing frame 00048
+Processing frame 00049
+Processing frame 00050
+Processing frame 00051
+
+real	0m0.577s
+user	0m0.704s
+sys	0m0.205s
+Processing frame 00022
+Processing frame 00023
+Processing frame 00024
+Processing frame 00025
+Processing frame 00026
+Processing frame 00027
+Processing frame 00028
+Processing frame 00029
+Processing frame 00030
+Processing frame 00031
+Processing frame 00032
+Processing frame 00033
+Processing frame 00034
+Processing frame 00035
+Processing frame 00036
+Processing frame 00037
+Processing frame 00038
+Processing frame 00039
+Processing frame 00040
+Processing frame 00041
+Processing frame 00042
+Processing frame 00043
+Processing frame 00044
+Processing frame 00045
+Processing frame 00046
+Processing frame 00047
+Processing frame 00048
+Processing frame 00049
+Processing frame 00050
+Processing frame 00051
+
+real	0m0.583s
+user	0m0.698s
+sys	0m0.220s
+Processing frame 00022
+Processing frame 00023
+Processing frame 00024
+Processing frame 00025
+Processing frame 00026
+Processing frame 00027
+Processing frame 00028
+Processing frame 00029
+Processing frame 00030
+Processing frame 00031
+Processing frame 00032
+Processing frame 00033
+Processing frame 00034
+Processing frame 00035
+Processing frame 00036
+Processing frame 00037
+Processing frame 00038
+Processing frame 00039
+Processing frame 00040
+Processing frame 00041
+Processing frame 00042
+Processing frame 00043
+Processing frame 00044
+Processing frame 00045
+Processing frame 00046
+Processing frame 00047
+Processing frame 00048
+Processing frame 00049
+Processing frame 00050
+Processing frame 00051
+
+real	0m0.581s
+user	0m0.691s
+sys	0m0.224s
+Processing frame 00022
+Processing frame 00023
+Processing frame 00024
+Processing frame 00025
+Processing frame 00026
+Processing frame 00027
+Processing frame 00028
+Processing frame 00029
+Processing frame 00030
+Processing frame 00031
+Processing frame 00032
+Processing frame 00033
+Processing frame 00034
+Processing frame 00035
+Processing frame 00036
+Processing frame 00037
+Processing frame 00038
+Processing frame 00039
+Processing frame 00040
+Processing frame 00041
+Processing frame 00042
+Processing frame 00043
+Processing frame 00044
+Processing frame 00045
+Processing frame 00046
+Processing frame 00047
+Processing frame 00048
+Processing frame 00049
+Processing frame 00050
+Processing frame 00051
+
+real	0m0.581s
+user	0m0.694s
+sys	0m0.220s
+Processing frame 00022
+Processing frame 00023
+Processing frame 00024
+Processing frame 00025
+Processing frame 00026
+Processing frame 00027
+Processing frame 00028
+Processing frame 00029
+Processing frame 00030
+Processing frame 00031
+Processing frame 00032
+Processing frame 00033
+Processing frame 00034
+Processing frame 00035
+Processing frame 00036
+Processing frame 00037
+Processing frame 00038
+Processing frame 00039
+Processing frame 00040
+Processing frame 00041
+Processing frame 00042
+Processing frame 00043
+Processing frame 00044
+Processing frame 00045
+Processing frame 00046
+Processing frame 00047
+Processing frame 00048
+Processing frame 00049
+Processing frame 00050
+Processing frame 00051
+
+real	0m0.574s
+user	0m0.710s
+sys	0m0.200s
+Processing frame 00022
+Processing frame 00023
+Processing frame 00024
+Processing frame 00025
+Processing frame 00026
+Processing frame 00027
+Processing frame 00028
+Processing frame 00029
+Processing frame 00030
+Processing frame 00031
+Processing frame 00032
+Processing frame 00033
+Processing frame 00034
+Processing frame 00035
+Processing frame 00036
+Processing frame 00037
+Processing frame 00038
+Processing frame 00039
+Processing frame 00040
+Processing frame 00041
+Processing frame 00042
+Processing frame 00043
+Processing frame 00044
+Processing frame 00045
+Processing frame 00046
+Processing frame 00047
+Processing frame 00048
+Processing frame 00049
+Processing frame 00050
+Processing frame 00051
+
+real	0m0.565s
+user	0m0.702s
+sys	0m0.196s
+Processing frame 00022
+Processing frame 00023
+Processing frame 00024
+Processing frame 00025
+Processing frame 00026
+Processing frame 00027
+Processing frame 00028
+Processing frame 00029
+Processing frame 00030
+Processing frame 00031
+Processing frame 00032
+Processing frame 00033
+Processing frame 00034
+Processing frame 00035
+Processing frame 00036
+Processing frame 00037
+Processing frame 00038
+Processing frame 00039
+Processing frame 00040
+Processing frame 00041
+Processing frame 00042
+Processing frame 00043
+Processing frame 00044
+Processing frame 00045
+Processing frame 00046
+Processing frame 00047
+Processing frame 00048
+Processing frame 00049
+Processing frame 00050
+Processing frame 00051
+
+real	0m0.574s
+user	0m0.734s
+sys	0m0.172s
+Processing frame 00022
+Processing frame 00023
+Processing frame 00024
+Processing frame 00025
+Processing frame 00026
+Processing frame 00027
+Processing frame 00028
+Processing frame 00029
+Processing frame 00030
+Processing frame 00031
+Processing frame 00032
+Processing frame 00033
+Processing frame 00034
+Processing frame 00035
+Processing frame 00036
+Processing frame 00037
+Processing frame 00038
+Processing frame 00039
+Processing frame 00040
+Processing frame 00041
+Processing frame 00042
+Processing frame 00043
+Processing frame 00044
+Processing frame 00045
+Processing frame 00046
+Processing frame 00047
+Processing frame 00048
+Processing frame 00049
+Processing frame 00050
+Processing frame 00051
+
+real	0m0.576s
+user	0m0.684s
+sys	0m0.228s
+Processing frame 00022
+Processing frame 00023
+Processing frame 00024
+Processing frame 00025
+Processing frame 00026
+Processing frame 00027
+Processing frame 00028
+Processing frame 00029
+Processing frame 00030
+Processing frame 00031
+Processing frame 00032
+Processing frame 00033
+Processing frame 00034
+Processing frame 00035
+Processing frame 00036
+Processing frame 00037
+Processing frame 00038
+Processing frame 00039
+Processing frame 00040
+Processing frame 00041
+Processing frame 00042
+Processing frame 00043
+Processing frame 00044
+Processing frame 00045
+Processing frame 00046
+Processing frame 00047
+Processing frame 00048
+Processing frame 00049
+Processing frame 00050
+Processing frame 00051
+
+real	0m0.586s
+user	0m0.677s
+sys	0m0.244s
+Processing frame 00022
+Processing frame 00023
+Processing frame 00024
+Processing frame 00025
+Processing frame 00026
+Processing frame 00027
+Processing frame 00028
+Processing frame 00029
+Processing frame 00030
+Processing frame 00031
+Processing frame 00032
+Processing frame 00033
+Processing frame 00034
+Processing frame 00035
+Processing frame 00036
+Processing frame 00037
+Processing frame 00038
+Processing frame 00039
+Processing frame 00040
+Processing frame 00041
+Processing frame 00042
+Processing frame 00043
+Processing frame 00044
+Processing frame 00045
+Processing frame 00046
+Processing frame 00047
+Processing frame 00048
+Processing frame 00049
+Processing frame 00050
+Processing frame 00051
+
+real	0m0.573s
+user	0m0.724s
+sys	0m0.181s
+Processing frame 00022
+Processing frame 00023
+Processing frame 00024
+Processing frame 00025
+Processing frame 00026
+Processing frame 00027
+Processing frame 00028
+Processing frame 00029
+Processing frame 00030
+Processing frame 00031
+Processing frame 00032
+Processing frame 00033
+Processing frame 00034
+Processing frame 00035
+Processing frame 00036
+Processing frame 00037
+Processing frame 00038
+Processing frame 00039
+Processing frame 00040
+Processing frame 00041
+Processing frame 00042
+Processing frame 00043
+Processing frame 00044
+Processing frame 00045
+Processing frame 00046
+Processing frame 00047
+Processing frame 00048
+Processing frame 00049
+Processing frame 00050
+Processing frame 00051
+
+real	0m0.570s
+user	0m0.688s
+sys	0m0.217s

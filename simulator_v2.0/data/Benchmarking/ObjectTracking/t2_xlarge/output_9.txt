@@ -1,0 +1,1020 @@
+Processing frame 00297
+Processing frame 00298
+Processing frame 00299
+Processing frame 00300
+Processing frame 00301
+Processing frame 00302
+Processing frame 00303
+Processing frame 00304
+Processing frame 00305
+Processing frame 00306
+Processing frame 00307
+Processing frame 00308
+Processing frame 00309
+Processing frame 00310
+Processing frame 00311
+Processing frame 00312
+Processing frame 00313
+Processing frame 00314
+Processing frame 00315
+Processing frame 00316
+Processing frame 00317
+Processing frame 00318
+Processing frame 00319
+Processing frame 00320
+Processing frame 00321
+Processing frame 00322
+Processing frame 00323
+Processing frame 00324
+Processing frame 00325
+Processing frame 00326
+
+real	0m1.164s
+user	0m1.602s
+sys	0m0.275s
+Processing frame 00297
+Processing frame 00298
+Processing frame 00299
+Processing frame 00300
+Processing frame 00301
+Processing frame 00302
+Processing frame 00303
+Processing frame 00304
+Processing frame 00305
+Processing frame 00306
+Processing frame 00307
+Processing frame 00308
+Processing frame 00309
+Processing frame 00310
+Processing frame 00311
+Processing frame 00312
+Processing frame 00313
+Processing frame 00314
+Processing frame 00315
+Processing frame 00316
+Processing frame 00317
+Processing frame 00318
+Processing frame 00319
+Processing frame 00320
+Processing frame 00321
+Processing frame 00322
+Processing frame 00323
+Processing frame 00324
+Processing frame 00325
+Processing frame 00326
+
+real	0m1.194s
+user	0m1.652s
+sys	0m0.275s
+Processing frame 00297
+Processing frame 00298
+Processing frame 00299
+Processing frame 00300
+Processing frame 00301
+Processing frame 00302
+Processing frame 00303
+Processing frame 00304
+Processing frame 00305
+Processing frame 00306
+Processing frame 00307
+Processing frame 00308
+Processing frame 00309
+Processing frame 00310
+Processing frame 00311
+Processing frame 00312
+Processing frame 00313
+Processing frame 00314
+Processing frame 00315
+Processing frame 00316
+Processing frame 00317
+Processing frame 00318
+Processing frame 00319
+Processing frame 00320
+Processing frame 00321
+Processing frame 00322
+Processing frame 00323
+Processing frame 00324
+Processing frame 00325
+Processing frame 00326
+
+real	0m1.144s
+user	0m1.602s
+sys	0m0.254s
+Processing frame 00297
+Processing frame 00298
+Processing frame 00299
+Processing frame 00300
+Processing frame 00301
+Processing frame 00302
+Processing frame 00303
+Processing frame 00304
+Processing frame 00305
+Processing frame 00306
+Processing frame 00307
+Processing frame 00308
+Processing frame 00309
+Processing frame 00310
+Processing frame 00311
+Processing frame 00312
+Processing frame 00313
+Processing frame 00314
+Processing frame 00315
+Processing frame 00316
+Processing frame 00317
+Processing frame 00318
+Processing frame 00319
+Processing frame 00320
+Processing frame 00321
+Processing frame 00322
+Processing frame 00323
+Processing frame 00324
+Processing frame 00325
+Processing frame 00326
+
+real	0m1.181s
+user	0m1.613s
+sys	0m0.299s
+Processing frame 00297
+Processing frame 00298
+Processing frame 00299
+Processing frame 00300
+Processing frame 00301
+Processing frame 00302
+Processing frame 00303
+Processing frame 00304
+Processing frame 00305
+Processing frame 00306
+Processing frame 00307
+Processing frame 00308
+Processing frame 00309
+Processing frame 00310
+Processing frame 00311
+Processing frame 00312
+Processing frame 00313
+Processing frame 00314
+Processing frame 00315
+Processing frame 00316
+Processing frame 00317
+Processing frame 00318
+Processing frame 00319
+Processing frame 00320
+Processing frame 00321
+Processing frame 00322
+Processing frame 00323
+Processing frame 00324
+Processing frame 00325
+Processing frame 00326
+
+real	0m1.181s
+user	0m1.639s
+sys	0m0.249s
+Processing frame 00297
+Processing frame 00298
+Processing frame 00299
+Processing frame 00300
+Processing frame 00301
+Processing frame 00302
+Processing frame 00303
+Processing frame 00304
+Processing frame 00305
+Processing frame 00306
+Processing frame 00307
+Processing frame 00308
+Processing frame 00309
+Processing frame 00310
+Processing frame 00311
+Processing frame 00312
+Processing frame 00313
+Processing frame 00314
+Processing frame 00315
+Processing frame 00316
+Processing frame 00317
+Processing frame 00318
+Processing frame 00319
+Processing frame 00320
+Processing frame 00321
+Processing frame 00322
+Processing frame 00323
+Processing frame 00324
+Processing frame 00325
+Processing frame 00326
+
+real	0m1.182s
+user	0m1.662s
+sys	0m0.251s
+Processing frame 00297
+Processing frame 00298
+Processing frame 00299
+Processing frame 00300
+Processing frame 00301
+Processing frame 00302
+Processing frame 00303
+Processing frame 00304
+Processing frame 00305
+Processing frame 00306
+Processing frame 00307
+Processing frame 00308
+Processing frame 00309
+Processing frame 00310
+Processing frame 00311
+Processing frame 00312
+Processing frame 00313
+Processing frame 00314
+Processing frame 00315
+Processing frame 00316
+Processing frame 00317
+Processing frame 00318
+Processing frame 00319
+Processing frame 00320
+Processing frame 00321
+Processing frame 00322
+Processing frame 00323
+Processing frame 00324
+Processing frame 00325
+Processing frame 00326
+
+real	0m1.186s
+user	0m1.667s
+sys	0m0.250s
+Processing frame 00297
+Processing frame 00298
+Processing frame 00299
+Processing frame 00300
+Processing frame 00301
+Processing frame 00302
+Processing frame 00303
+Processing frame 00304
+Processing frame 00305
+Processing frame 00306
+Processing frame 00307
+Processing frame 00308
+Processing frame 00309
+Processing frame 00310
+Processing frame 00311
+Processing frame 00312
+Processing frame 00313
+Processing frame 00314
+Processing frame 00315
+Processing frame 00316
+Processing frame 00317
+Processing frame 00318
+Processing frame 00319
+Processing frame 00320
+Processing frame 00321
+Processing frame 00322
+Processing frame 00323
+Processing frame 00324
+Processing frame 00325
+Processing frame 00326
+
+real	0m1.178s
+user	0m1.635s
+sys	0m0.261s
+Processing frame 00297
+Processing frame 00298
+Processing frame 00299
+Processing frame 00300
+Processing frame 00301
+Processing frame 00302
+Processing frame 00303
+Processing frame 00304
+Processing frame 00305
+Processing frame 00306
+Processing frame 00307
+Processing frame 00308
+Processing frame 00309
+Processing frame 00310
+Processing frame 00311
+Processing frame 00312
+Processing frame 00313
+Processing frame 00314
+Processing frame 00315
+Processing frame 00316
+Processing frame 00317
+Processing frame 00318
+Processing frame 00319
+Processing frame 00320
+Processing frame 00321
+Processing frame 00322
+Processing frame 00323
+Processing frame 00324
+Processing frame 00325
+Processing frame 00326
+
+real	0m1.166s
+user	0m1.618s
+sys	0m0.263s
+Processing frame 00297
+Processing frame 00298
+Processing frame 00299
+Processing frame 00300
+Processing frame 00301
+Processing frame 00302
+Processing frame 00303
+Processing frame 00304
+Processing frame 00305
+Processing frame 00306
+Processing frame 00307
+Processing frame 00308
+Processing frame 00309
+Processing frame 00310
+Processing frame 00311
+Processing frame 00312
+Processing frame 00313
+Processing frame 00314
+Processing frame 00315
+Processing frame 00316
+Processing frame 00317
+Processing frame 00318
+Processing frame 00319
+Processing frame 00320
+Processing frame 00321
+Processing frame 00322
+Processing frame 00323
+Processing frame 00324
+Processing frame 00325
+Processing frame 00326
+
+real	0m1.195s
+user	0m1.614s
+sys	0m0.308s
+Processing frame 00297
+Processing frame 00298
+Processing frame 00299
+Processing frame 00300
+Processing frame 00301
+Processing frame 00302
+Processing frame 00303
+Processing frame 00304
+Processing frame 00305
+Processing frame 00306
+Processing frame 00307
+Processing frame 00308
+Processing frame 00309
+Processing frame 00310
+Processing frame 00311
+Processing frame 00312
+Processing frame 00313
+Processing frame 00314
+Processing frame 00315
+Processing frame 00316
+Processing frame 00317
+Processing frame 00318
+Processing frame 00319
+Processing frame 00320
+Processing frame 00321
+Processing frame 00322
+Processing frame 00323
+Processing frame 00324
+Processing frame 00325
+Processing frame 00326
+
+real	0m1.169s
+user	0m1.616s
+sys	0m0.272s
+Processing frame 00297
+Processing frame 00298
+Processing frame 00299
+Processing frame 00300
+Processing frame 00301
+Processing frame 00302
+Processing frame 00303
+Processing frame 00304
+Processing frame 00305
+Processing frame 00306
+Processing frame 00307
+Processing frame 00308
+Processing frame 00309
+Processing frame 00310
+Processing frame 00311
+Processing frame 00312
+Processing frame 00313
+Processing frame 00314
+Processing frame 00315
+Processing frame 00316
+Processing frame 00317
+Processing frame 00318
+Processing frame 00319
+Processing frame 00320
+Processing frame 00321
+Processing frame 00322
+Processing frame 00323
+Processing frame 00324
+Processing frame 00325
+Processing frame 00326
+
+real	0m1.181s
+user	0m1.651s
+sys	0m0.253s
+Processing frame 00297
+Processing frame 00298
+Processing frame 00299
+Processing frame 00300
+Processing frame 00301
+Processing frame 00302
+Processing frame 00303
+Processing frame 00304
+Processing frame 00305
+Processing frame 00306
+Processing frame 00307
+Processing frame 00308
+Processing frame 00309
+Processing frame 00310
+Processing frame 00311
+Processing frame 00312
+Processing frame 00313
+Processing frame 00314
+Processing frame 00315
+Processing frame 00316
+Processing frame 00317
+Processing frame 00318
+Processing frame 00319
+Processing frame 00320
+Processing frame 00321
+Processing frame 00322
+Processing frame 00323
+Processing frame 00324
+Processing frame 00325
+Processing frame 00326
+
+real	0m1.189s
+user	0m1.623s
+sys	0m0.281s
+Processing frame 00297
+Processing frame 00298
+Processing frame 00299
+Processing frame 00300
+Processing frame 00301
+Processing frame 00302
+Processing frame 00303
+Processing frame 00304
+Processing frame 00305
+Processing frame 00306
+Processing frame 00307
+Processing frame 00308
+Processing frame 00309
+Processing frame 00310
+Processing frame 00311
+Processing frame 00312
+Processing frame 00313
+Processing frame 00314
+Processing frame 00315
+Processing frame 00316
+Processing frame 00317
+Processing frame 00318
+Processing frame 00319
+Processing frame 00320
+Processing frame 00321
+Processing frame 00322
+Processing frame 00323
+Processing frame 00324
+Processing frame 00325
+Processing frame 00326
+
+real	0m1.170s
+user	0m1.591s
+sys	0m0.292s
+Processing frame 00297
+Processing frame 00298
+Processing frame 00299
+Processing frame 00300
+Processing frame 00301
+Processing frame 00302
+Processing frame 00303
+Processing frame 00304
+Processing frame 00305
+Processing frame 00306
+Processing frame 00307
+Processing frame 00308
+Processing frame 00309
+Processing frame 00310
+Processing frame 00311
+Processing frame 00312
+Processing frame 00313
+Processing frame 00314
+Processing frame 00315
+Processing frame 00316
+Processing frame 00317
+Processing frame 00318
+Processing frame 00319
+Processing frame 00320
+Processing frame 00321
+Processing frame 00322
+Processing frame 00323
+Processing frame 00324
+Processing frame 00325
+Processing frame 00326
+
+real	0m1.177s
+user	0m1.662s
+sys	0m0.231s
+Processing frame 00297
+Processing frame 00298
+Processing frame 00299
+Processing frame 00300
+Processing frame 00301
+Processing frame 00302
+Processing frame 00303
+Processing frame 00304
+Processing frame 00305
+Processing frame 00306
+Processing frame 00307
+Processing frame 00308
+Processing frame 00309
+Processing frame 00310
+Processing frame 00311
+Processing frame 00312
+Processing frame 00313
+Processing frame 00314
+Processing frame 00315
+Processing frame 00316
+Processing frame 00317
+Processing frame 00318
+Processing frame 00319
+Processing frame 00320
+Processing frame 00321
+Processing frame 00322
+Processing frame 00323
+Processing frame 00324
+Processing frame 00325
+Processing frame 00326
+
+real	0m1.158s
+user	0m1.611s
+sys	0m0.256s
+Processing frame 00297
+Processing frame 00298
+Processing frame 00299
+Processing frame 00300
+Processing frame 00301
+Processing frame 00302
+Processing frame 00303
+Processing frame 00304
+Processing frame 00305
+Processing frame 00306
+Processing frame 00307
+Processing frame 00308
+Processing frame 00309
+Processing frame 00310
+Processing frame 00311
+Processing frame 00312
+Processing frame 00313
+Processing frame 00314
+Processing frame 00315
+Processing frame 00316
+Processing frame 00317
+Processing frame 00318
+Processing frame 00319
+Processing frame 00320
+Processing frame 00321
+Processing frame 00322
+Processing frame 00323
+Processing frame 00324
+Processing frame 00325
+Processing frame 00326
+
+real	0m1.144s
+user	0m1.556s
+sys	0m0.297s
+Processing frame 00297
+Processing frame 00298
+Processing frame 00299
+Processing frame 00300
+Processing frame 00301
+Processing frame 00302
+Processing frame 00303
+Processing frame 00304
+Processing frame 00305
+Processing frame 00306
+Processing frame 00307
+Processing frame 00308
+Processing frame 00309
+Processing frame 00310
+Processing frame 00311
+Processing frame 00312
+Processing frame 00313
+Processing frame 00314
+Processing frame 00315
+Processing frame 00316
+Processing frame 00317
+Processing frame 00318
+Processing frame 00319
+Processing frame 00320
+Processing frame 00321
+Processing frame 00322
+Processing frame 00323
+Processing frame 00324
+Processing frame 00325
+Processing frame 00326
+
+real	0m1.153s
+user	0m1.539s
+sys	0m0.318s
+Processing frame 00297
+Processing frame 00298
+Processing frame 00299
+Processing frame 00300
+Processing frame 00301
+Processing frame 00302
+Processing frame 00303
+Processing frame 00304
+Processing frame 00305
+Processing frame 00306
+Processing frame 00307
+Processing frame 00308
+Processing frame 00309
+Processing frame 00310
+Processing frame 00311
+Processing frame 00312
+Processing frame 00313
+Processing frame 00314
+Processing frame 00315
+Processing frame 00316
+Processing frame 00317
+Processing frame 00318
+Processing frame 00319
+Processing frame 00320
+Processing frame 00321
+Processing frame 00322
+Processing frame 00323
+Processing frame 00324
+Processing frame 00325
+Processing frame 00326
+
+real	0m1.227s
+user	0m1.725s
+sys	0m0.239s
+Processing frame 00297
+Processing frame 00298
+Processing frame 00299
+Processing frame 00300
+Processing frame 00301
+Processing frame 00302
+Processing frame 00303
+Processing frame 00304
+Processing frame 00305
+Processing frame 00306
+Processing frame 00307
+Processing frame 00308
+Processing frame 00309
+Processing frame 00310
+Processing frame 00311
+Processing frame 00312
+Processing frame 00313
+Processing frame 00314
+Processing frame 00315
+Processing frame 00316
+Processing frame 00317
+Processing frame 00318
+Processing frame 00319
+Processing frame 00320
+Processing frame 00321
+Processing frame 00322
+Processing frame 00323
+Processing frame 00324
+Processing frame 00325
+Processing frame 00326
+
+real	0m1.211s
+user	0m1.685s
+sys	0m0.267s
+Processing frame 00297
+Processing frame 00298
+Processing frame 00299
+Processing frame 00300
+Processing frame 00301
+Processing frame 00302
+Processing frame 00303
+Processing frame 00304
+Processing frame 00305
+Processing frame 00306
+Processing frame 00307
+Processing frame 00308
+Processing frame 00309
+Processing frame 00310
+Processing frame 00311
+Processing frame 00312
+Processing frame 00313
+Processing frame 00314
+Processing frame 00315
+Processing frame 00316
+Processing frame 00317
+Processing frame 00318
+Processing frame 00319
+Processing frame 00320
+Processing frame 00321
+Processing frame 00322
+Processing frame 00323
+Processing frame 00324
+Processing frame 00325
+Processing frame 00326
+
+real	0m1.181s
+user	0m1.660s
+sys	0m0.232s
+Processing frame 00297
+Processing frame 00298
+Processing frame 00299
+Processing frame 00300
+Processing frame 00301
+Processing frame 00302
+Processing frame 00303
+Processing frame 00304
+Processing frame 00305
+Processing frame 00306
+Processing frame 00307
+Processing frame 00308
+Processing frame 00309
+Processing frame 00310
+Processing frame 00311
+Processing frame 00312
+Processing frame 00313
+Processing frame 00314
+Processing frame 00315
+Processing frame 00316
+Processing frame 00317
+Processing frame 00318
+Processing frame 00319
+Processing frame 00320
+Processing frame 00321
+Processing frame 00322
+Processing frame 00323
+Processing frame 00324
+Processing frame 00325
+Processing frame 00326
+
+real	0m1.214s
+user	0m1.648s
+sys	0m0.290s
+Processing frame 00297
+Processing frame 00298
+Processing frame 00299
+Processing frame 00300
+Processing frame 00301
+Processing frame 00302
+Processing frame 00303
+Processing frame 00304
+Processing frame 00305
+Processing frame 00306
+Processing frame 00307
+Processing frame 00308
+Processing frame 00309
+Processing frame 00310
+Processing frame 00311
+Processing frame 00312
+Processing frame 00313
+Processing frame 00314
+Processing frame 00315
+Processing frame 00316
+Processing frame 00317
+Processing frame 00318
+Processing frame 00319
+Processing frame 00320
+Processing frame 00321
+Processing frame 00322
+Processing frame 00323
+Processing frame 00324
+Processing frame 00325
+Processing frame 00326
+
+real	0m1.169s
+user	0m1.614s
+sys	0m0.276s
+Processing frame 00297
+Processing frame 00298
+Processing frame 00299
+Processing frame 00300
+Processing frame 00301
+Processing frame 00302
+Processing frame 00303
+Processing frame 00304
+Processing frame 00305
+Processing frame 00306
+Processing frame 00307
+Processing frame 00308
+Processing frame 00309
+Processing frame 00310
+Processing frame 00311
+Processing frame 00312
+Processing frame 00313
+Processing frame 00314
+Processing frame 00315
+Processing frame 00316
+Processing frame 00317
+Processing frame 00318
+Processing frame 00319
+Processing frame 00320
+Processing frame 00321
+Processing frame 00322
+Processing frame 00323
+Processing frame 00324
+Processing frame 00325
+Processing frame 00326
+
+real	0m1.188s
+user	0m1.657s
+sys	0m0.243s
+Processing frame 00297
+Processing frame 00298
+Processing frame 00299
+Processing frame 00300
+Processing frame 00301
+Processing frame 00302
+Processing frame 00303
+Processing frame 00304
+Processing frame 00305
+Processing frame 00306
+Processing frame 00307
+Processing frame 00308
+Processing frame 00309
+Processing frame 00310
+Processing frame 00311
+Processing frame 00312
+Processing frame 00313
+Processing frame 00314
+Processing frame 00315
+Processing frame 00316
+Processing frame 00317
+Processing frame 00318
+Processing frame 00319
+Processing frame 00320
+Processing frame 00321
+Processing frame 00322
+Processing frame 00323
+Processing frame 00324
+Processing frame 00325
+Processing frame 00326
+
+real	0m1.202s
+user	0m1.702s
+sys	0m0.244s
+Processing frame 00297
+Processing frame 00298
+Processing frame 00299
+Processing frame 00300
+Processing frame 00301
+Processing frame 00302
+Processing frame 00303
+Processing frame 00304
+Processing frame 00305
+Processing frame 00306
+Processing frame 00307
+Processing frame 00308
+Processing frame 00309
+Processing frame 00310
+Processing frame 00311
+Processing frame 00312
+Processing frame 00313
+Processing frame 00314
+Processing frame 00315
+Processing frame 00316
+Processing frame 00317
+Processing frame 00318
+Processing frame 00319
+Processing frame 00320
+Processing frame 00321
+Processing frame 00322
+Processing frame 00323
+Processing frame 00324
+Processing frame 00325
+Processing frame 00326
+
+real	0m1.173s
+user	0m1.658s
+sys	0m0.233s
+Processing frame 00297
+Processing frame 00298
+Processing frame 00299
+Processing frame 00300
+Processing frame 00301
+Processing frame 00302
+Processing frame 00303
+Processing frame 00304
+Processing frame 00305
+Processing frame 00306
+Processing frame 00307
+Processing frame 00308
+Processing frame 00309
+Processing frame 00310
+Processing frame 00311
+Processing frame 00312
+Processing frame 00313
+Processing frame 00314
+Processing frame 00315
+Processing frame 00316
+Processing frame 00317
+Processing frame 00318
+Processing frame 00319
+Processing frame 00320
+Processing frame 00321
+Processing frame 00322
+Processing frame 00323
+Processing frame 00324
+Processing frame 00325
+Processing frame 00326
+
+real	0m1.185s
+user	0m1.639s
+sys	0m0.274s
+Processing frame 00297
+Processing frame 00298
+Processing frame 00299
+Processing frame 00300
+Processing frame 00301
+Processing frame 00302
+Processing frame 00303
+Processing frame 00304
+Processing frame 00305
+Processing frame 00306
+Processing frame 00307
+Processing frame 00308
+Processing frame 00309
+Processing frame 00310
+Processing frame 00311
+Processing frame 00312
+Processing frame 00313
+Processing frame 00314
+Processing frame 00315
+Processing frame 00316
+Processing frame 00317
+Processing frame 00318
+Processing frame 00319
+Processing frame 00320
+Processing frame 00321
+Processing frame 00322
+Processing frame 00323
+Processing frame 00324
+Processing frame 00325
+Processing frame 00326
+
+real	0m1.212s
+user	0m1.699s
+sys	0m0.244s
+Processing frame 00297
+Processing frame 00298
+Processing frame 00299
+Processing frame 00300
+Processing frame 00301
+Processing frame 00302
+Processing frame 00303
+Processing frame 00304
+Processing frame 00305
+Processing frame 00306
+Processing frame 00307
+Processing frame 00308
+Processing frame 00309
+Processing frame 00310
+Processing frame 00311
+Processing frame 00312
+Processing frame 00313
+Processing frame 00314
+Processing frame 00315
+Processing frame 00316
+Processing frame 00317
+Processing frame 00318
+Processing frame 00319
+Processing frame 00320
+Processing frame 00321
+Processing frame 00322
+Processing frame 00323
+Processing frame 00324
+Processing frame 00325
+Processing frame 00326
+
+real	0m1.183s
+user	0m1.623s
+sys	0m0.284s
+Processing frame 00297
+Processing frame 00298
+Processing frame 00299
+Processing frame 00300
+Processing frame 00301
+Processing frame 00302
+Processing frame 00303
+Processing frame 00304
+Processing frame 00305
+Processing frame 00306
+Processing frame 00307
+Processing frame 00308
+Processing frame 00309
+Processing frame 00310
+Processing frame 00311
+Processing frame 00312
+Processing frame 00313
+Processing frame 00314
+Processing frame 00315
+Processing frame 00316
+Processing frame 00317
+Processing frame 00318
+Processing frame 00319
+Processing frame 00320
+Processing frame 00321
+Processing frame 00322
+Processing frame 00323
+Processing frame 00324
+Processing frame 00325
+Processing frame 00326
+
+real	0m1.211s
+user	0m1.711s
+sys	0m0.240s

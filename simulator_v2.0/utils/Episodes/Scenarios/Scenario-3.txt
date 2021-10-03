@@ -1,0 +1,23 @@
+# Here, you can define an arrival scenario, then, add tasks to the scenario.
+# Fields:
+#
+# "<scenario_name>",<start_time>,<end_time>,
+# __tasks
+# <task_type_ID>,"<pattern>",<no_of_tasks>
+#
+# <scenario_name> is surrounded with quotation marks.
+# The time unit in <start_time> and <end_time> is seconds.
+# "<pattern>" can be "uniform", "normal", "exponential", or "spiky". 
+# <no_of_tasks> is the number of tasks of task_type_ID that arrive to
+# the system in the given time interval with given pattern.
+# The fields are comma separated.
+# Example:
+# Shopping, 0, 1800
+# __,1, uniform, 600
+# __,2, normal, 800
+# __,3, spiky, 400
+#############################################################################
+Home, 0, 500
+__,1, uniform, 1000
+__,2, normal, 300
+__,3, spiky, 200
