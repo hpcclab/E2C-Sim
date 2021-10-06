@@ -6,17 +6,13 @@ from MM import MM
 from MSD import MSD
 from MMU import MMU
 from RLS import RLS
-#from MIN import Min1
-#from PhaseMIN1 import PhaseMIN1
-#from PhaseMIN2 import PhaseMIN2
-
 from tqdm import tqdm 
 import csv
 
-out = open('./results/RLS/results-summary.csv','w')
-header = ['Episode', 'total_no_of_tasks','mapped', 'offloaded','cancelled','Completion%','xCompletion%','URG_missed','BE_missed','available_energy']
-writer = csv.writer(out)
-writer.writerow(header)
+# out = open('./results/RLS/results-summary.csv','w')
+# header = ['Episode', 'total_no_of_tasks','mapped', 'offloaded','cancelled','Completion%','xCompletion%','URG_missed','BE_missed','available_energy']
+# writer = csv.writer(out)
+# writer.writerow(header)
 for i in range(100,130):
     
     Tasks = []
@@ -60,9 +56,9 @@ for i in range(100,130):
         Config.event_queue.add_event(event)
     total_no_of_tasks = len(Tasks)
     pbar = tqdm(total=total_no_of_tasks)
-    scheduler = RLS(total_no_of_tasks)
+    #scheduler = RLS(total_no_of_tasks)
     #scheduler = FCFS(total_no_of_tasks)
-    #scheduler = MM(total_no_of_tasks)
+    scheduler = MM(total_no_of_tasks)
     #scheduler = MSD(total_no_of_tasks)
     #scheduler = MMU(total_no_of_tasks)
     arrival_count = 0
@@ -127,9 +123,15 @@ for i in range(100,130):
             machine.drop()
             scheduler.feed()      
             assigned_machine = scheduler.schedule()
-    scheduler.done = True
-    scheduler.save('model.h5')
+    #scheduler.done = True
+    #scheduler.save('model.h5')
     pbar.close()
+    
+    out = open('./results/RLS/results-summary.csv','w')
+    header = ['Episode', 'total_no_of_tasks','mapped', 'offloaded','cancelled','Completion%','xCompletion%','URG_missed','BE_missed','available_energy']
+    writer = csv.writer(out)
+    writer.writerow(header)
+    
     header = ['id', 'type', 'size', 'urgency','status', 'assigned_machine',
     'arrival_time','execution_time','start_time', 'completion_time', 'deadline',
     'extended_deadline']

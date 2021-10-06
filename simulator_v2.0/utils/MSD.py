@@ -8,6 +8,7 @@ class MSD(BaseScheduler):
 
     def __init__(self, total_no_of_tasks):
         super().__init__()
+        self.name = "MSD"
         self.total_no_of_tasks = total_no_of_tasks
 
     def feed(self):

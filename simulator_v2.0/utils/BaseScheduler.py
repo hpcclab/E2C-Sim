@@ -6,6 +6,7 @@ class BaseScheduler:
     __metaclass__ = ABCMeta
 
     def __init__(self):
+        self.name = None
         self.batch_queue_size = Config.batch_queue_size
         self.batch_queue = [-1] * Config.batch_queue_size
         self.unlimited_queue = []

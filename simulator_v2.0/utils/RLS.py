@@ -31,7 +31,7 @@ class RLS(BaseScheduler):
 
     def __init__(self, total_no_of_tasks):
         super().__init__()
-
+        self.name = 'RLS'
         self.total_no_of_tasks = total_no_of_tasks
         #self.EPISODES = 30
         self.memory = deque(maxlen=1800)

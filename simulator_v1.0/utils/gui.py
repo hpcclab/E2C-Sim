@@ -66,6 +66,8 @@ class Gui:
 
     def set_speed(self):
         self.speed_increment = self.speed.get()
+        print('###################SPEED:')
+        print(self.speed_increment, self.speed.get())
 
     def stop(self):
         self.pause = 1
@@ -108,8 +110,8 @@ class Gui:
             Config.event_queue.add_event(event)
 
     def start(self):
-        speed = 0
-        speed += self.speed_increment
+        #speed = 0
+        #speed += self.speed_increment
         self.startHelper()
         # self.window.after(speed, self.startHelper)
 

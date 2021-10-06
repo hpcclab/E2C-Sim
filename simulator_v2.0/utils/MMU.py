@@ -8,6 +8,7 @@ class MMU(BaseScheduler):
 
     def __init__(self, total_no_of_tasks):
         super().__init__()
+        self.name = 'MMU'
         self.total_no_of_tasks = total_no_of_tasks
 
     def feed(self):

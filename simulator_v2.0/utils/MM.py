@@ -9,6 +9,7 @@ class MM(BaseScheduler):
     def __init__(self, total_no_of_tasks):
         super().__init__()
         self.total_no_of_tasks = total_no_of_tasks
+        self.name = 'MM'
 
     def feed(self):
 
