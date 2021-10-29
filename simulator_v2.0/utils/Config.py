@@ -34,6 +34,7 @@ config = json.loads(data)
 global_parameters = config['global_parameters']
 queue_size = global_parameters[0]['queue_size']
 batch_queue_size = global_parameters[0]['batch_queue_size']
+gui = global_parameters[0]['gui']
 bandwidth = config['cloud'][0]['bandwidth']
 latency = config['cloud'][0]['latency']
 cloud = Cloud(bandwidth, latency)

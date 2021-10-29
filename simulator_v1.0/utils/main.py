@@ -15,5 +15,6 @@ gui1.task_setup()
 gui1.create_task_stats()
 gui1.create_legend()
 gui1.create_controls()
+gui1.menubar()
 
 gui1.begin()

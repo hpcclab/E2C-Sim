@@ -2,7 +2,7 @@
 
     "global_parameters":[
         {
-            "queue_size":1,
+            "queue_size":2,
             "batch_queue_size":3
         }        
     ],

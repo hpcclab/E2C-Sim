@@ -3,7 +3,8 @@
     "global_parameters":[
         {
             "queue_size":1,
-            "batch_queue_size":3
+            "batch_queue_size":3,
+            "gui": 1
         }        
     ],
     "task_types": [

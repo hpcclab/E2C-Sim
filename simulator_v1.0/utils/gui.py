@@ -5,6 +5,7 @@ import tkinter as tk
 import tkinter.ttk as tk1
 from PhaseMIN1 import PhaseMIN1
 from PhaseMIN2 import PhaseMIN2
+from PIL import ImageTk, Image
 
 
 class Gui:
@@ -28,8 +29,6 @@ class Gui:
         self.canvas = tk.Canvas(self.window, bg="#fff")
         self.canvas.place(relx=0.05, rely=0.05, relwidth=.9, relheight=.9)
         self.x2 = 0
-        b = tk.Button(self.window, text="Exit", command=self.window.destroy)
-        b.pack(side='bottom')
         self.speed_increment = 0
         self.speed = tk.IntVar()
         self.speed.set(500)
@@ -37,48 +36,75 @@ class Gui:
         self.Tasks = []
         self.pause = 0
         self.sched = "MinMin"
+        self.menu_font = ("Times New Roman", 12)
+        self.menu = tk.Menu(self.window, font=self.menu_font)
 
     def create_controls(self):
-        start_b = tk.Button(self.canvas, text="Start", command=self.start, width=10)
-        start_b.place(x=100, y=450)
-        stop_b = tk.Button(self.canvas, text="Pause", command=self.stop, width=10)
+        start_b = tk.Button(self.canvas, text="Start", command=self.start, width=5, relief="solid", font=self.menu_font, bd=1)
+        stop_b = tk.Button(self.canvas, text="Pause", command=self.stop, width=5, font=self.menu_font)
         # stop_b.place(x=175, y=450)
-        reset_b = tk.Button(self.canvas, text="Reset", command=self.reset, width=10)
-        reset_b.place(x=250, y=450)
-        slow = tk.Radiobutton(self.canvas, text='.0025x Speed', variable=self.speed, command=self.set_speed,
-                              indicator=0, value=400, width=10)
-        slow.place(x=25, y=400)
-        slow = tk.Radiobutton(self.canvas, text='.025x Speed', variable=self.speed, command=self.set_speed, indicator=0,
-                              value=200, width=10)
-        slow.place(x=100, y=400)
-        default = tk.Radiobutton(self.canvas, text='.25x speed', variable=self.speed, command=self.set_speed,
-                                 indicator=0, value=100, width=10)
-        default.place(x=175, y=400)
-        slow = tk.Radiobutton(self.canvas, text='.5x Speed', variable=self.speed, command=self.set_speed, indicator=0,
-                              value=50, width=10)
-        slow.place(x=250, y=400)
-        slow = tk.Radiobutton(self.canvas, text='Default', variable=self.speed, command=self.set_speed, indicator=0,
-                              value=0, width=10)
-        slow.place(x=325, y=400)
-        slow.select()
+        reset_b = tk.Button(self.canvas, text="Reset", command=self.reset, width=5, relief="solid", font=self.menu_font, bd=1)
+        spdcntrl = tk.Menubutton(self.canvas, text="Speed", font=self.menu_font, relief="solid", width=6, bd=1, padx=1)
+        spdcntrl.menu = tk.Menu(spdcntrl)
+        spdcntrl["menu"] = spdcntrl.menu
+        spdcntrl.menu.add_command(label="Default Speed", command=lambda: self.set_speed(0))
+        spdcntrl.menu.add_command(label=".5x Speed", command=lambda: self.set_speed(50))
+        spdcntrl.menu.add_command(label=".25x Speed", command=lambda: self.set_speed(100))
+        spdcntrl.menu.add_command(label=".025x Speed", command=lambda: self.set_speed(200))
+        spdcntrl.menu.add_command(label=".0025x Speed", command=lambda: self.set_speed(400))
+        spdcntrl.place(x=100, y=450)
+        start_b.place(x=160, y=450)
+        reset_b.place(x=220, y=450)
+
         self.pb = tk1.Progressbar(self.canvas, orient='horizontal', length=800, mode='determinate')
         self.pb.place(x=50, y=675)
 
-    def set_speed(self):
-        self.speed_increment = self.speed.get()
-        print('###################SPEED:')
-        print(self.speed_increment, self.speed.get())
+    def menubar(self):
+        system = tk.Menu(self.window, tearoff=0, font=self.menu_font)
+        workload = tk.Menu(self.window, tearoff=0, font=self.menu_font)
+        report = tk.Menu(self.window, tearoff=0, font=self.menu_font)
+        help_ = tk.Menu(self.window, tearoff=0, font=self.menu_font)
+
+        self.menu.add_cascade(label='System', menu=system)
+        system.add_command(label='Machines', command=None)
+        system.add_command(label='Cloud', command=None)
+        system.add_command(label='Energy Resource', command=None)
+        system.add_separator()
+        system.add_command(label='Exit', command=self.window.destroy)
+
+        self.menu.add_cascade(label='Workload', menu=workload)
+        workload.add_command(label='Task Types', command=None)
+        workload.add_command(label='Upload', command=None)
+        workload.add_command(label='Generate', command=None)
+
+        self.menu.add_cascade(label='Report', menu=report)
+        report.add_command(label='Tasks', command=None)
+        report.add_command(label='Machines', command=None)
+        report.add_command(label='Cloud', command=None)
+        report.add_separator()
+        report.add_command(label='Summary', command=None)
+
+        self.menu.add_cascade(label='Help', menu=help_)
+        help_.add_command(label='Tutorial', command=None)
+        help_.add_separator()
+        help_.add_command(label='About', command=None)
+
+        self.window.config(menu=self.menu)
+
+    def set_speed(self, speed):
+
+        self.speed_increment = speed
 
     def stop(self):
         self.pause = 1
 
     def reset(self):
+        self.Tasks = []
         self.task_setup()
         self.arrived_total(0)
         self.missed_total(0)
         self.task_completed(None, 0)
         self.pb['value'] = 0
-        self.Tasks = []
         self.pause = 0
 
     def task_setup(self):
@@ -110,8 +136,8 @@ class Gui:
             Config.event_queue.add_event(event)
 
     def start(self):
-        #speed = 0
-        #speed += self.speed_increment
+        # speed = 0
+        # speed += self.speed_increment
         self.startHelper()
         # self.window.after(speed, self.startHelper)
 
@@ -123,6 +149,7 @@ class Gui:
         machine_counts = []
         for _ in Config.machines:
             machine_counts.append(0)
+        # work on breaking here
         while Config.event_queue.event_list:
             print(80 * '=' + '\n\n Reading events from event queue ===>>>')
             event = Config.event_queue.get_first_event()
@@ -192,47 +219,78 @@ class Gui:
             x1 += 40
             self.x2 += 40
         self.coords.reverse()
-        self.canvas.create_oval(x1, self.height / 2 + 20, self.x2+10, self.height / 2 - 20, outline="black")
+        self.canvas.create_oval(x1, self.height / 2 + 20, self.x2 + 10, self.height / 2 - 20, outline="black")
         self.scheduler_set()
 
     def scheduler_set(self):
         self.canvas.delete("scheduler")
-        self.canvas.create_text((self.x2*2-40)/2+5, self.height/2, text=self.sched, tags="scheduler")
+        self.canvas.create_text((self.x2 * 2 - 40) / 2 + 5, self.height / 2, text=self.sched, tags="scheduler")
 
     # Tasks and object legend
     def create_legend(self):
         k1, k2, y = 50, 100, 10
         for name in Config.task_types:
-            self.canvas.create_text(k1, self.height / 32 + y, fill="black", font="Times 10 italic bold", text=name.name)
+            self.canvas.create_text(k1, self.height / 32 + y, fill="black", font=self.menu_font, text=name.name)
             self.canvas.create_oval(k2, self.height / 32 + y - 10, k2 + 20, self.height / 32 + y + 10, outline="black",
                                     fill=self.colors[name.id])
             y += 25
 
     # List of machine names
     def create_machine_names(self):
-        total = len(Config.machines)
+        img = Image.open("cloud.png")
+        img = img.resize((100, 50), Image.ANTIALIAS)
+        readyimg = ImageTk.PhotoImage(img)
+        label = tk.Label(self.canvas, image=readyimg)
+        label.image = readyimg
+        total = len(Config.machines)+1
         w1, z1, w2, z2 = 650, self.height / total - self.height / (
                 total + 1), 720, self.height / total + 40 - self.height / (total + 1)
-        self.canvas.create_line(self.x2+10, self.height/2, self.x2+100, self.height/2)
-        self.canvas.create_line(self.x2 + 100, z1 + 20, self.x2 + 100, self.height - self.height/(total+1) + 20)
+        label.place(x=620, y=z1)
+        self.canvas.create_line(self.x2 + 100, z2 - 20, 620, (z1 + z2) / 2)
+        self.canvas.create_line(self.x2 + 10, self.height / 2, self.x2 + 100, self.height / 2)
+        self.canvas.create_line(self.x2 + 100, z1 + 20, self.x2 + 100, self.height - self.height / (total + 1) + 20)
+        z1 += self.height / total
+        z2 += self.height / total
         for name in Config.machines:
             shrink = 0
             # creates the individual machine queues
-            for k in range(name.queue_size):
-                self.canvas.create_rectangle(620 - shrink, z1, 650 - shrink, z2)
+            start = 620
+            if name.queue_size <= 3:
+                for k in range(name.queue_size):
+                    self.canvas.create_rectangle(start - shrink, z1, 650 - shrink, z2)
+                    self.m_coords.append(
+                        [(start - shrink + 650 - shrink) / 2 - 10, (z1 + z2) / 2 + 10, (start - shrink + 650 - shrink) / 2 + 10,
+                         (z1 + z2) / 2 + 10, (start - shrink + 650 - shrink) / 2 - 10, (z1 + z2) / 2 - 5])
+                    shrink += 30
+            else:
+                for k in range(3):
+                    self.canvas.create_rectangle(start - shrink, z1, 650 - shrink, z2)
+                    self.m_coords.append(
+                        [(start - shrink + 650 - shrink) / 2 - 10, (z1 + z2) / 2 + 10,
+                         (start - shrink + 650 - shrink) / 2 + 10,
+                         (z1 + z2) / 2 + 10, (start - shrink + 650 - shrink) / 2 - 10, (z1 + z2) / 2 - 5])
+                    shrink += 30
+                self.canvas.create_line(start-shrink,z1, 650-shrink, z1)
+                self.canvas.create_line(start-shrink,z2, 650-shrink, z2)
                 self.m_coords.append(
-                    [(620 - shrink + 650 - shrink) / 2 - 10, (z1 + z2) / 2 + 10, (620 - shrink + 650 - shrink) / 2 + 10,
-                     (z1 + z2) / 2 + 10, (620 - shrink + 650 - shrink) / 2 - 10, (z1 + z2) / 2 - 5])
+                    [(start - shrink + 650 - shrink) / 2 - 10, (z1 + z2) / 2 + 10,
+                     (start - shrink + 650 - shrink) / 2 + 10,
+                     (z1 + z2) / 2 + 10, (start - shrink + 650 - shrink) / 2 - 10, (z1 + z2) / 2 - 5])
                 shrink += 30
+
             # displays the machine names
             self.canvas.create_rectangle(w1, z1, w2, z2)
-            self.canvas.create_text((w1 + w2) / 2, (z1 + z2) / 2, fill="black", font="Times 10 italic bold",
+            self.canvas.create_text((w1 + w2) / 2, (z1 + z2) / 2, fill="black", font="Times 12 bold",
                                     text=name.getType())
+            img = Image.open(name.getType()+".png")
+            img = img.resize((40, 40), Image.ANTIALIAS)
+            readyimg = ImageTk.PhotoImage(img)
+            label = tk.Label(self.canvas, image=readyimg)
+            label.image = readyimg
+            label.place(x=(w1 + w2) / 2+40, y=z1)
             shrink -= 30
             if self.main:
-                """self.canvas.create_line(self.x2, self.height / 2, (self.x2 + 620 - shrink) / 2, (z1 + z2) / 2,
-                                        620 - shrink, (z1 + z2) / 2)"""
-                self.canvas.create_line(self.x2+100, z2-20, 620, (z1+z2)/2)
+                self.canvas.create_line(self.x2 + 100, z2 - 20, start-shrink, (z1 + z2) / 2)
             z1 += self.height / total
             z2 += self.height / total
 
@@ -280,8 +338,8 @@ class Gui:
                 k = spot[0]
                 marker = self.canvas.create_oval(self.coords[k][2], self.coords[k][3], self.coords[k][4],
                                                  self.coords[k][5] - 5, outline="black", fill=self.colors[task.type.id])
-                text = self.canvas.create_text((self.coords[k][2]+self.coords[k][4])/2,
-                                               (self.coords[k][4]+self.coords[k][5])/2+6, text=task.id)
+                text = self.canvas.create_text((self.coords[k][2] + self.coords[k][4]) / 2,
+                                               (self.coords[k][4] + self.coords[k][5]) / 2 + 6, text=task.id)
                 spot[1] = True
                 spot[2] = marker
                 spot[3] = text
@@ -294,7 +352,8 @@ class Gui:
     def task_assigned(self, task):
         m_id = task.assigned_machine.id - 1
         self.canvas.moveto(self.nextIn, self.m_coords[m_id][0], self.m_coords[m_id][5] - 5)
-        self.canvas.moveto(self.nextText, (self.m_coords[m_id][0]+self.m_coords[m_id][2])/2-5, self.m_coords[m_id][5])
+        self.canvas.moveto(self.nextText, (self.m_coords[m_id][0] + self.m_coords[m_id][2]) / 2 - 5,
+                           self.m_coords[m_id][5])
         self.main_queue[0][1] = False
         self.assigned_queue.append([task, self.nextIn, self.nextText])
         self.main_queue[0][2] = None
