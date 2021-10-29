@@ -3,7 +3,10 @@
     "global_parameters":[
         {
             "queue_size":1,
-            "batch_queue_size":3
+            "batch_queue_size":3,
+            "scheduling_method":"TabRLS",
+            "gui": 1
+
         }        
     ],
     "task_types": [
@@ -11,19 +14,13 @@
             "id":1,
             "name":"TT1",
             "urgency":"best_effort",
-            "deadline": 3.0
+            "deadline": 4.0
         },
         {
             "id":2,
             "name":"TT2",
-            "urgency":"urgent",
-            "deadline": 2.5
-        },
-        {
-            "id":3,
-            "name":"TT3",
             "urgency":"best_effort",
-            "deadline": 9.0
+            "deadline": 3.5
         }
         
     ],

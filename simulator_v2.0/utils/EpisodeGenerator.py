@@ -47,7 +47,7 @@ def test_episode_generator():
     count_scenarios = Epsiode(path_to_scenarios = './Episodes/Scenarios/',
      path_to_output = './Episodes/ArrivalTimes/',
      # Scenarios: Shopping, Working, Driving, Home, Walking
-     scenarios_probs = [0.2,0.2,0.2, 0.2,0.2]).generate_episodes(130)
+     scenarios_probs = [1.0]).generate_episodes(530)
 
     return count_scenarios
 

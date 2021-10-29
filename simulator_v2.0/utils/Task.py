@@ -20,6 +20,7 @@ class Task(BaseTask):
         self.drop_time = float('inf')
         self.status = TaskStatus.ARRIVING
         self.assigned_machine = None
+        self.no_of_deferring = 0
 
     def info(self):
         d = {

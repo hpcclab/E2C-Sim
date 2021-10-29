@@ -4,9 +4,11 @@ import matplotlib.pyplot as plt
 
 
 
-def generate(miu, sigma, size):
+#def generate(miu, sigma, size):
+def generate(low, high, size):
         
-        distribution = np.random.normal(miu, sigma, size)        
+        #distribution = np.random.normal(miu, sigma, size)        
+        distribution = np.random.uniform(low, high, size)        
         distribution = [round(x, 3) for x in distribution]
 
         return distribution
@@ -19,8 +21,8 @@ def write(distribution, task_type, machine_type, path):
     
 
 
-dis = generate(0.9, 0.005, 1000)
-write(dis, 3, 'CLOUD', './synthetic_execution_time/')
+dis = generate(0.1, 0.2, 1000)
+write(dis, 2, 'CLOUD', './synthetic_execution_time/')
 
 
 

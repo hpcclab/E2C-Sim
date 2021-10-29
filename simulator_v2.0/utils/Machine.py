@@ -145,17 +145,17 @@ class Machine(BaseMachine):
             
             
             if completion_time < delta:
-                g = 0.1
+                g = 5
             elif completion_time >= delta and completion_time < delta + w:
-                g = (0.1/w) * (delta  + w - completion_time)
+                g = (1.0/w) * (delta  + w - completion_time)
             else:
-                g = -0.5
+                g = -5
             
         if task.urgency == UrgencyLevel.URGENT:
             if completion_time < delta:
-                g = 0.5
+                g = 100.0
             else:
-                g = -0.5
+                g = -100.0
         
         return g
 
@@ -264,10 +264,9 @@ class Machine(BaseMachine):
                     running_time, self.available_time = self.get_available_time(empty_slot)
                 g = self.gain(task, self.available_time)
                 l = self.loss(task, running_time)
-                #print(self.completion_times)
-                #print('machine {} AT: {} '.format(self.id, self.available_time))
-                #print ('machine {} g-l: {}'.format(self.type.name, g-l))
-                return g-l
+                
+                #return g-l  # excluded when energy is not important
+                return g
             
             else:                
                 return 'notEmpty'
@@ -279,7 +278,8 @@ class Machine(BaseMachine):
                 g = self.gain(task, self.available_time)
                 l = self.loss(task, running_time)
                 #print ('machine {} task:{} g-l: {}'.format(self.type.name, task.id, g-l))
-                return g-l
+                #return g-l # excluded when energy is not important
+                return g
             else:                
                 return 'notEmpty'
     

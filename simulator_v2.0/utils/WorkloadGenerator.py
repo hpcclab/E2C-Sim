@@ -184,15 +184,15 @@ class Workload:
                 outputfile.writelines(str(count_task + 1) + ',\t' + str(min_id) +
                                       ',\t' + str(task_size)+',\t' + str(min_arrival_times))
                 
-                for machine_type in Config.machine_types:
+                # for machine_type in Config.machine_types:
                     
-                    estimated_time = self.read_data.sampled_execution_times(
-                        min_id, machine_type.name)[0]
-                    outputfile.writelines(',\t\t\t' + str(estimated_time))
+                #     estimated_time = self.read_data.sampled_execution_times(
+                #         min_id, machine_type.name)[0]
+                #     outputfile.writelines(',\t\t\t' + str(estimated_time))
                 
-                execution_time = self.read_data.sampled_execution_times(
-                    min_id, 'CLOUD')[0]
-                outputfile.writelines(',\t\t\t' + str(estimated_time))
+                # execution_time = self.read_data.sampled_execution_times(
+                #     min_id, 'CLOUD')[0]
+                # outputfile.writelines(',\t\t\t' + str(estimated_time))
                 
                 for machine_type in Config.machine_types:
                     execution_time = self.read_data.sampled_execution_times(

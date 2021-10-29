@@ -76,20 +76,17 @@ class MM(BaseScheduler):
     def phase1(self):
         provisional_map = []
         index = 0 
-        for task in self.batch_queue:
-            
-            if task != -1:
-                #print('\nPhase I: Task {}:'.format(task.id))
+        for task in self.batch_queue:            
+            if task != -1:                
                 min_ct = float('inf')
                 min_ct_machine = -1
                 for machine in Config.machines:
                     pct = machine.provisional_map(task)
                     if pct < min_ct:
                         min_ct = pct
-                        min_ct_machine = machine
-                #print('Min-CT: {}  Machine:{}'.format(min_ct, min_ct_machine.id))
+                        min_ct_machine = machine                
                 provisional_map.append([task, min_ct, min_ct_machine, index])
-            index += 1 
+            index += 1         
         
         return provisional_map
     
