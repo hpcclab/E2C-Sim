@@ -6,7 +6,6 @@
             "batch_queue_size":3,
             "scheduling_method":"TabRLS",
             "gui": 1
-
         }        
     ],
     "task_types": [

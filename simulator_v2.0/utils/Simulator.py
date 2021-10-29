@@ -6,6 +6,7 @@ from MM import MM
 from MSD import MSD
 from MMU import MMU
 from RLS import RLS
+
 from TabRLS import TabRLS
 from tqdm import tqdm 
 
@@ -15,11 +16,14 @@ import csv
 import GUI
 
 
+
 class Simulator:
+
 
     def __init__(self,scheduling_method, path_to_arrival, id = 0, verbosity = 0):
         self.scheduling_method = scheduling_method        
         self.gui1 = GUI.Gui("Scheduler GUI", '1000x800', 700, 800)
+
         self.path_to_arrival = path_to_arrival
         self.verbosity = verbosity
         self.id = id
@@ -61,15 +65,18 @@ class Simulator:
             self.scheduler = FCFS(self.total_no_of_tasks)
         elif self.scheduling_method == 'RLS':
 
+
             self.scheduler = RLS(self.total_no_of_tasks) 
         elif self.scheduling_method == 'TabRLS':
             self.scheduler = TabRLS(self.total_no_of_tasks)        
+
         else:
             print('ERROR: Scheduler ' + self.scheduling_method + ' does not exist')
             self.scheduler = None
         self.gui1.create_main_queue(8, self.scheduling_method)
 
     def idle_energy_consumption(self):
+
 
         for machine in Config.machines:                
                 idle_time_interval = Config.current_time - machine.idle_time
@@ -94,6 +101,7 @@ class Simulator:
         #while Config.event_queue.event_list and Config.available_energy >0:
         while Config.event_queue.event_list :
 
+
             self.idle_energy_consumption()
             event = Config.event_queue.get_first_event()
             task = event.event_details
@@ -102,11 +110,13 @@ class Simulator:
                 task.id, event.event_type.name, event.time)
             Config.log.write(s)
 
+
             if self.verbosity == 2 :
                 print(s)          
 
 
             if event.event_type == EventTypes.ARRIVING:              
+
 
                 self.scheduler.unlimited_queue.append(task)
                 self.scheduler.feed()
@@ -121,12 +131,14 @@ class Simulator:
                     break
 
 
+
             elif event.event_type == EventTypes.COMPLETION:        
                 # if self.verbosity <= 1:  
                 #     pbar.update(1)
                 machine = task.assigned_machine                 
                 machine.terminate(task)                
                 self.scheduler.feed() 
+
 
                 assigned_machine = self.scheduler.schedule()
 

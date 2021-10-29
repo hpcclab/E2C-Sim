@@ -59,7 +59,7 @@ for i in range(low,high):
         path_to_arrival = './Episodes/ArrivalTimes/ArrivalTimes-'+str(i)+'.txt'
         simulation = Simulator(scheduling_method = scheduling_method, path_to_arrival = path_to_arrival, id=i)
 
-        
+        if event.event_type == EventTypes.ARRIVING:  # 1
 
         simulation.create_event_queue()
         simulation.set_scheduling_method()
