@@ -8,17 +8,7 @@ from MMU import MMU
 from RLS import RLS
 from tqdm import tqdm
 import csv
-import GUI
 
-gui1 = GUI.Gui("Scheduler GUI", '1000x800', 700, 800)
-gui1.create_main_queue(8)
-gui1.create_machine_names()
-# gui1.task_setup() # needs work (probably not necessary)
-# gui1.create_task_stats() # needs work with total tasks
-gui1.create_legend()
-
-gui1.create_controls()  # needs work to work
-gui1.menubar()
 
 # out = open('./results/RLS/results-summary.csv','w')
 # header = ['Episode', 'total_no_of_tasks','mapped', 'offloaded','cancelled','Completion%','xCompletion%','URG_missed','BE_missed','available_energy']
@@ -101,20 +91,17 @@ for i in range(100, 130):
             Config.log.write(s)
             # print(s)
 
-        num = 0
         if event.event_type == EventTypes.ARRIVING:  # 1
 
             pbar.update(1)
             scheduler.unlimited_queue.append(task)
             scheduler.feed()
             assigned_machine = scheduler.schedule()
-            num = 1
 
         elif event.event_type == EventTypes.DEFERRED:  # 2
 
             scheduler.feed()
             assigned_machine = scheduler.schedule()
-            num = 2
             if assigned_machine == -1:
                 break
 
@@ -124,14 +111,12 @@ for i in range(100, 130):
             machine.terminate(task)
             scheduler.feed()
             assigned_machine = scheduler.schedule()
-            num = 3
 
         elif event.event_type == EventTypes.OFFLOADED:  # 4
 
             Config.cloud.terminate(task)
             scheduler.feed()
             assigned_machine = scheduler.schedule()
-            num = 4
 
         elif event.event_type == EventTypes.DROPPED_RUNNING_TASK:  # 5
 
@@ -139,8 +124,7 @@ for i in range(100, 130):
             machine.drop()
             scheduler.feed()
             assigned_machine = scheduler.schedule()
-            num = 5
-        gui1.add_task(num, task)
+
     # scheduler.done = True
     # scheduler.save('model.h5')
     pbar.close()
@@ -256,6 +240,3 @@ for i in range(100, 130):
 out.close()
 Config.log.close()
 Config.history.close()
-gui1.create_task_stats(total_no_of_tasks)
-if Config.gui == 1:
-    gui1.begin()

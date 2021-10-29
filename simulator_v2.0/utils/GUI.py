@@ -31,7 +31,6 @@ class Gui:
         self.pb = None
         self.Tasks = []
         self.pause = 0
-        self.sched = "MinMin"
         self.menu_font = ("Times New Roman", 12)
         self.menu = tk.Menu(self.window, font=self.menu_font)
 
@@ -134,11 +133,9 @@ class Gui:
             Config.event_queue.add_event(event)
 
     def add_task(self, num, task):
-        if len(self.Tasks) < 2000:
-            self.Tasks.append([num, task])
+        self.Tasks.append([num, task])
 
     def start(self):
-        print(len(self.Tasks))
         speed = 0
         completed_count = 0
         arrived_count = 0
@@ -146,7 +143,6 @@ class Gui:
         dropped_count = 0
         offloaded_count = 0
         for task in self.Tasks:
-            print("Task type: " + str(task[0]))
             if task[0] == 1:
                 arrived_count += 1
                 speed += self.speed_increment
@@ -156,6 +152,7 @@ class Gui:
                 speed += self.speed_increment
                 self.window.after(speed, self.task_assigned, task[1])
             elif task[0] == 2:
+                self.assigned_queue.append(task[1])
                 completed_count += 1
                 speed += self.speed_increment
                 self.window.after(speed, self.task_completed, task[1], completed_count)
@@ -233,7 +230,7 @@ class Gui:
                           "\t status = " + task.status.name)"""
 
     # main queue
-    def create_main_queue(self, length):
+    def create_main_queue(self, length, sched):
         self.main = True
         self.main_queue = []
         x1, self.x2 = 50, 90
@@ -246,11 +243,11 @@ class Gui:
             self.x2 += 40
         self.coords.reverse()
         self.canvas.create_oval(x1, self.height / 2 + 20, self.x2 + 10, self.height / 2 - 20, outline="black")
-        self.scheduler_set()
+        self.scheduler_set(sched)
 
-    def scheduler_set(self):
+    def scheduler_set(self, sched):
         self.canvas.delete("scheduler")
-        self.canvas.create_text((self.x2 * 2 - 40) / 2 + 5, self.height / 2, text=self.sched, tags="scheduler")
+        self.canvas.create_text((self.x2 * 2 - 40) / 2 + 5, self.height / 2, text=sched, tags="scheduler")
 
     # Tasks and object legend
     def create_legend(self):

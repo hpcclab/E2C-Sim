@@ -8,11 +8,15 @@ from MMU import MMU
 from RLS import RLS
 from tqdm import tqdm
 import csv
+import GUI
+
+
 
 
 class Run:
 
     def __init__(self, scheduling_method, path_to_arrival, id=0, verbosity=1):
+        self.gui1 = GUI.Gui("Scheduler GUI", '1000x800', 700, 800)
         self.scheduling_method = scheduling_method
         self.path_to_arrival = path_to_arrival
         self.verbosity = verbosity
@@ -58,6 +62,7 @@ class Run:
         else:
             print('ERROR: Scheduler ' + self.scheduling_method + ' does not exist')
             self.scheduler = None
+        self.gui1.create_main_queue(8, self.scheduling_method)
 
     def idle_energy_consumption(self):
         for machine in Config.machines:
@@ -76,6 +81,15 @@ class Run:
                 print(s)
 
     def run(self):
+        self.gui1.create_main_queue(8, self.scheduling_method)
+        self.gui1.create_machine_names()
+        # gui1.task_setup() # needs work (probably not necessary)
+        # gui1.create_task_stats() # needs work with total tasks
+        self.gui1.create_legend()
+
+        self.gui1.create_controls()  # needs work to work
+        self.gui1.menubar()
+        num = 0
         if self.verbosity == 0:
             pbar = tqdm(total=self.total_no_of_tasks)
 
@@ -88,7 +102,7 @@ class Run:
             s = '\nTask:{} \t\t {}  @time:{}'.format(
                 task.id, event.event_type.name, event.time)
             Config.log.write(s)
-            if self.verbosity > 0 and self.verbosity < 3:
+            if 0 < self.verbosity < 3:
                 print(s)
 
             if event.event_type == EventTypes.ARRIVING:
@@ -97,9 +111,11 @@ class Run:
                 self.scheduler.unlimited_queue.append(task)
                 self.scheduler.feed()
                 assigned_machine = self.scheduler.schedule()
+                num = 1
 
             elif event.event_type == EventTypes.DEFERRED:
                 self.scheduler.feed()
+                num = 2
                 assigned_machine = self.scheduler.schedule()
                 if assigned_machine == -1:
                     break
@@ -108,18 +124,25 @@ class Run:
                 machine = task.assigned_machine
                 machine.terminate(task)
                 self.scheduler.feed()
+                num = 3
                 assigned_machine = self.scheduler.schedule()
 
             elif event.event_type == EventTypes.OFFLOADED:
                 Config.cloud.terminate(task)
                 self.scheduler.feed()
+                num = 4
                 assigned_machine = self.scheduler.schedule()
 
             elif event.event_type == EventTypes.DROPPED_RUNNING_TASK:
                 machine = task.assigned_machine
                 machine.drop()
                 self.scheduler.feed()
+                num = 5
                 assigned_machine = self.scheduler.schedule()
+            self.gui1.add_task(num, task)
+        self.gui1.create_task_stats(self.total_no_of_tasks)
+        if Config.gui == 1:
+            self.gui1.begin()
         if self.verbosity == 0:
             pbar.close()
 
