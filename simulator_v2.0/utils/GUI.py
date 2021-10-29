@@ -30,9 +30,11 @@ class Gui:
         self.speed.set(500)
         self.pb = None
         self.Tasks = []
+        self.Task_pointer = []
         self.pause = 0
         self.menu_font = ("Times New Roman", 12)
         self.menu = tk.Menu(self.window, font=self.menu_font)
+        self.total_tasks = 0
 
     def create_controls(self):
         start_b = tk.Button(self.canvas, text="Start", command=self.start, width=5, relief="solid", font=self.menu_font, bd=1)
@@ -152,14 +154,14 @@ class Gui:
                 speed += self.speed_increment
                 self.window.after(speed, self.task_assigned, task[1])
             elif task[0] == 2:
-                self.assigned_queue.append(task[1])
-                completed_count += 1
-                speed += self.speed_increment
-                self.window.after(speed, self.task_completed, task[1], completed_count)
-            elif task[0] == 3:
                 missed_count += 1
                 speed += self.speed_increment
                 self.window.after(speed, self.missed_total, missed_count)
+            elif task[0] == 3:
+                # self.assigned_queue.append(task[1])
+                completed_count += 1
+                speed += self.speed_increment
+                self.window.after(speed, self.task_completed, task[1], completed_count)
             elif task[0] == 4:
                 offloaded_count += 1
                 speed += self.speed_increment
@@ -323,6 +325,7 @@ class Gui:
         self.canvas.create_rectangle(300, self.height / 32, 350, self.height / 32 + 30)
         self.canvas.create_text(250, self.height / 32 + 15, text="Total Tasks")
         self.canvas.create_text(325, self.height / 32 + 15, text=str(total_tasks), tags="total")
+        self.total_tasks = total_tasks
         self.canvas.create_rectangle(200, self.height / 32 + 30, 300, self.height / 32 + 60)
         self.canvas.create_rectangle(300, self.height / 32 + 30, 350, self.height / 32 + 60)
         self.canvas.create_text(250, self.height / 32 + 45, text="Arrived Tasks")
@@ -339,11 +342,11 @@ class Gui:
         self.canvas.create_rectangle(300, self.height / 32 + 120, 350, self.height / 32 + 150)
         self.canvas.create_text(250, self.height / 32 + 135, text="Dropped Tasks")
         self.canvas.create_text(325, self.height / 32 + 135, text=0, tags="dropped")
-
         self.canvas.create_rectangle(200, self.height / 32 + 150, 300, self.height / 32 + 180)
         self.canvas.create_rectangle(300, self.height / 32 + 150, 350, self.height / 32 + 180)
         self.canvas.create_text(250, self.height / 32 + 165, text="Offloaded Tasks")
         self.canvas.create_text(325, self.height / 32 + 165, text=0, tags="offloaded")
+        self.Task_pointer = [total_tasks]
 
     def arrived_total(self, arrived_count):
         self.canvas.delete("arrived")
@@ -364,12 +367,14 @@ class Gui:
     def task_completed(self, task, completed_count):
         for atask in self.assigned_queue:
             if atask[0] == task:
+                self.canvas.delete(self.Task_pointer[task.id][0])
+                self.canvas.delete(self.Task_pointer[task.id][1])
                 self.canvas.delete(atask[1])
                 self.canvas.delete(atask[2])
         self.canvas.delete("completed")
         self.canvas.create_text(325, self.height / 32 + 75, text=completed_count, tags="completed")
         if len(self.Tasks) != 0:
-            self.pb['value'] += 100 / len(self.Tasks)
+            self.pb['value'] += 100 / self.total_tasks
 
     def task_queueing(self, task):
         count = 0
@@ -380,6 +385,7 @@ class Gui:
                                                  self.coords[k][5] - 5, outline="black", fill=self.colors[task.type.id])
                 text = self.canvas.create_text((self.coords[k][2] + self.coords[k][4]) / 2,
                                                (self.coords[k][4] + self.coords[k][5]) / 2 + 6, text=task.id)
+                self.Task_pointer.insert(task.id, [marker, text])
                 spot[1] = True
                 spot[2] = marker
                 spot[3] = text

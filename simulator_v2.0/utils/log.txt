@@ -29998,4 +29998,27 @@ machine 2 @502.64899999999994
 	idle_time_interval:1.2789999999998827
 	idle power consumption: 0.01776388888888726 
 Task:1497 		 DROPPED_RUNNING_TASK  @time:503.15
-[ Task(1497), Machine(1) ]: MISSED         @time(503.150)
+[ Task(1497), Machine(1) ]: MISSED         @time(503.150)Scheduler Summary:
+	Total# of Tasks: 1500
+	#Mapped: 1500
+	#Cancelled: 0
+	#Offloaded: 0
+	Deferred: 0
+Machine: cpu (id#1)  
+	%Completion: 9.4 #: 64
+	%XCompletion:15.9 #: 109
+	#Missed URG:138.00
+	Missed BE:373
+	%Energy: 7.8 
+Machine: gpu (id#2)  
+	%Completion: 44.6 #: 364
+	%XCompletion:18.5 #: 151
+	#Missed URG:53.00
+	Missed BE:248
+	%Energy: 82.8 
+ Cloud:   
+	#offloaded:0
+	%Completion: 0.0
+	%XComplettion:0.0
+	#Missed-URG:0,
+	#Missed-BE:0
