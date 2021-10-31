@@ -22,7 +22,7 @@ class Simulator:
 
     def __init__(self,scheduling_method, path_to_arrival, id = 0, verbosity = 0):
         self.scheduling_method = scheduling_method        
-        self.gui1 = GUI.Gui("Scheduler GUI", '1000x800', 700, 800)
+        # self.gui1 = GUI.Gui("Scheduler GUI", '1000x800', 700, 800)
 
         self.path_to_arrival = path_to_arrival
         self.verbosity = verbosity
