@@ -1,6 +1,4 @@
 import Config
-from Task import Task
-from Event import Event, EventTypes
 import tkinter as tk
 import tkinter.ttk as tk1
 from PIL import ImageTk, Image
@@ -26,8 +24,7 @@ class Gui:
         self.canvas.place(relx=0.05, rely=0.05, relwidth=.9, relheight=.9)
         self.x2 = 0
         self.speed_increment = 0
-        self.speed = tk.IntVar()
-        self.speed.set(500)
+        self.speed = 500
         self.pb = None
         self.Tasks = []
         self.Task_pointer = []
@@ -89,15 +86,12 @@ class Gui:
         self.window.config(menu=self.menu)
 
     def set_speed(self, speed):
-
         self.speed_increment = speed
 
     def stop(self):
         self.pause = 1
 
     def reset(self):
-        # self.Tasks = []
-        # self.task_setup()
         self.arrived_total(0)
         self.missed_total(0)
         self.dropped_total(0)
@@ -105,34 +99,6 @@ class Gui:
         self.task_completed(None, 0)
         self.pb['value'] = 0
         self.pause = 0
-
-    def task_setup(self):
-        with open('ArrivalTimes.txt', 'r') as data_file:
-            for task in data_file:
-                task = task.strip()
-                task_details = [x.strip() for x in task.split(',')]
-
-                if task[0] == '#':
-                    machine_types = [x.split('_')[-1] for x in task.split(',')[3:6]]
-                else:
-                    task_id = int(task_details[0])
-                    task_type_id = int(task_details[1])
-                    arrival_time = float(task_details[2])
-                    estimated_time = {machine_types[0]: float(task_details[3]),
-                                      machine_types[1]: float(task_details[4]),
-                                      machine_types[2]: float(task_details[5]),
-                                      'CLOUD': float(task_details[6])}
-                    execution_time = {machine_types[0]: float(task_details[7]),
-                                      machine_types[1]: float(task_details[8]),
-                                      machine_types[2]: float(task_details[9]),
-                                      'CLOUD': float(task_details[10])}
-
-                    type1 = Config.find_task_types(task_type_id)
-                    self.Tasks.append(Task(task_id, type1, estimated_time,
-                                           execution_time, arrival_time))
-        for task in self.Tasks:
-            event = Event(task.arrival_time, EventTypes.ARRIVING, task)
-            Config.event_queue.add_event(event)
 
     def add_task(self, num, task):
         self.Tasks.append([num, task])
@@ -171,65 +137,6 @@ class Gui:
                 dropped_count += 1
                 self.window.after(speed, self.dropped_total, dropped_count)
 
-        """machine_counts = []
-        for _ in Config.machines:
-            machine_counts.append(0)
-        # work on breaking here
-        while Config.event_queue.event_list:
-            print(80 * '=' + '\n\n Reading events from event queue ===>>>')
-            event = Config.event_queue.get_first_event()
-            Config.current_time = event.time
-            if event.event_type == EventTypes.ARRIVING:
-                task = event.event_details
-                # function to add arrived task total
-                arrived_count += 1
-                speed += self.speed_increment
-                self.window.after(speed, self.arrived_total, arrived_count)
-                self.scheduler1.unlimited_queue.append(task)
-                print('Task ' + str(task.id) + ' arrived at ' + str(Config.current_time) + ' sec\n')
-                self.scheduler1.feed()
-
-                self.window.after(speed, self.task_queueing, task)
-                minList = self.scheduler1.schedule()
-                assigned_machines = self.scheduler2.schedule(minList)
-                count = 0
-                while len(assigned_machines) > count:
-                    execute = assigned_machines.pop(count)
-                    speed += self.speed_increment
-                    self.window.after(speed, self.task_assigned, execute.queue[0])
-                    execute.execute()
-                    count += 1
-            elif event.event_type == EventTypes.COMPLETION:
-                task = event.event_details
-                machine = task.assigned_machine
-                time = Config.current_time
-                print(' Task ' + str(task.id) + ' completed at ' + str(
-                    Config.current_time) + ' sec on machine type ' + machine.type.name + ' machine id : ' + str(
-                    machine.id))
-                # function to update the completed total
-                completed_count += 1
-                speed += self.speed_increment
-                self.window.after(speed, self.task_completed, task, completed_count)
-                # the next several lines update the individual machines' number of completed tasks
-                machine_counts[int(machine.id) - 1] = machine_counts[int(machine.id) - 1] + 1
-                stats = "Total Completed tasks on " + str(machine.type.name) + " (ID " + str(machine.id) + "): " + \
-                        str(machine_counts[machine.id - 1]) + "\n"
-                machine.terminate()
-                self.scheduler1.feed()
-                assigned_machine = self.scheduler1.schedule()
-                if assigned_machine:
-                    assigned_machine.execute()
-            else:
-                missed_count += 1
-                speed += self.speed_increment
-                self.window.after(speed, self.missed_total, missed_count)
-            print('\n' + 50 * '.')
-            for task in self.Tasks:
-                if task.assigned_machine is not None:
-                    print("  Task id = " + str(task.id) +
-                          '\t assigned to ' + str(task.assigned_machine.type.name) +
-                          " " + str(task.assigned_machine.id) +
-                          "\t status = " + task.status.name)"""
 
     # main queue
     def create_main_queue(self, length, sched):
