@@ -51,7 +51,7 @@ class TabRLS(BaseScheduler):
         else:
             self.q_table = np.zeros((self.no_of_states,self.action_size))
 
-        self.q_table_old = self.q_table    
+        self.q_table_old = np.zeros((self.no_of_states,self.action_size))    
         
     
     def feed(self):
