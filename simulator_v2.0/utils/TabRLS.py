@@ -24,14 +24,14 @@ class TabRLS(BaseScheduler):
         self.total_no_of_tasks = total_no_of_tasks
         #self.memory = deque(maxlen=1800)
         self.memory = []
-        self.gamma = 0.9  # discount rate
+        self.gamma = 0.6  # discount rate
         if self.train:
             self.epsilon = 0.99  # exploration rate
         else:
             self.epsilon = 0.0  # exploration rate
         self.epsilon_min = 0.001
-        self.epsilon_decay = 1.0
-        self.step_size = 0.01
+        self.epsilon_decay = 0.99
+        self.step_size = 0.001
         
         self.steps = 0
         
@@ -43,6 +43,7 @@ class TabRLS(BaseScheduler):
         # self.q_table = np.zeros((self.no_of_states,self.action_size))
         self.total_reward = 0
         self.done = False
+        self.res_val = 0 
         
 
         if isfile('./q_table.csv'):
@@ -51,7 +52,7 @@ class TabRLS(BaseScheduler):
         else:
             self.q_table = np.zeros((self.no_of_states,self.action_size))
 
-        self.q_table_old = np.zeros((self.no_of_states,self.action_size))    
+        self.q_table_old = None   
         
     
     def feed(self):
@@ -210,10 +211,22 @@ class TabRLS(BaseScheduler):
                     state.append(task.type.id)
                 else:
                     state.append(-1)
-            
-            if machine.running_task[0] != -1:
-                state.append(machine.running_task[0].type.id)
+                    
+            running_task = machine.running_task[0]    
+            if running_task != -1:
+                state.append(running_task.type.id)
+                execution_time = running_task.execution_time[machine.type.name]
+                progress = (Config.current_time - running_task.start_time) / execution_time
+                if progress <= 0.25:
+                    state.append(0)
+                elif progress >0.25 and progress <=0.5:
+                    state.append(1)
+                elif progress > 0.5 and progress <= 0.75:
+                    state.append(2)
+                else:
+                    state.append(3)
             else:
+                state.append(-1)
                 state.append(-1)
         
         state_id = self.states_table.index(state)
@@ -268,8 +281,10 @@ class TabRLS(BaseScheduler):
                 nxt_state = state
                 reward = -5
     
-        if self.train:            
+        if self.train:                     
             self.q_table[state][action] += self.step_size * ( reward + self.gamma * np.argmax(self.q_table[nxt_state]) - self.q_table[state][action])
+            
+            
         self.total_reward += reward
        
         # if action == 0 :
@@ -332,14 +347,14 @@ class TabRLS(BaseScheduler):
             return      
         action = self.act()
         state = self.encode_state()               
-        nxt_state, reward, done = self.step(action)        
+        nxt_state, reward, done = self.step(action)          
         self.remember(state, action, reward, nxt_state, done)
        
 
-    def residual(self):
+    def residual(self, q_old, q_new):
 
         n = self.no_of_states * self.action_size
-        res = np.power(self.q_table - self.q_table_old , 2)        
+        res = np.power(q_new- q_old , 2)        
         res = np.sqrt(np.sum(res)/n)
     
         return res

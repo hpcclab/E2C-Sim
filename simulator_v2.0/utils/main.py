@@ -4,23 +4,21 @@ import pandas as pd
 import numpy as np
 
 scheduling_method = Config.scheduling_method
-train = 0
+train = 1
 
 
 if scheduling_method == 'TabRLS':
     memory=[]
     if train:
         low = 0
-        high = 500
-        no_of_iterations = 5
+        high = 100
+        no_of_iterations = 1000
 
         average_reward = []
         average_reward_per_step = []
-        reward_per_step = []    
-
-        plt.figure()
-        plt.xlabel('Episode#')
-        plt.ylabel('Average Reward per Step')
+        reward_per_step = [] 
+        residuals = []  
+        
     else:
         low = 500
         high = 530
@@ -36,6 +34,7 @@ report_summary = open('./results/'+scheduling_method+'/results-summary.csv','w')
 summary_header = ['Episode', 'total_no_of_tasks','mapped', 'offloaded','cancelled','Completion%','xCompletion%','URG_missed','BE_missed','available_energy']
 writer = csv.writer(report_summary)
 writer.writerow(summary_header)
+count = 0 
 
 for i in range(low,high):
     
@@ -46,8 +45,11 @@ for i in range(low,high):
     total_reward = []
     pbar = tqdm(total=no_of_iterations)
 
-    for k in range(no_of_iterations):
-        pbar.update(1)
+    
+    
+    for k in range(no_of_iterations):        
+        pbar.update(1)   
+        count += 1      
         Tasks = []
         Config.event_queue.reset()
         Config.current_time = 0.0
@@ -57,32 +59,39 @@ for i in range(low,high):
             machine.reset()
 
         path_to_arrival = './Episodes/ArrivalTimes/ArrivalTimes-'+str(i)+'.txt'
-        simulation = Simulator(scheduling_method = scheduling_method, path_to_arrival = path_to_arrival, id=i)
-
-       
-
+        simulation = Simulator(scheduling_method = scheduling_method, path_to_arrival = path_to_arrival, id=i)  
         simulation.create_event_queue()
         simulation.set_scheduling_method()
-        
 
         if scheduling_method == 'TabRLS':
             simulation.scheduler.train = train
+            if k==0 and train:                
+               q_old = simulation.scheduler.q_table.copy()                
+                
+                
             if k == no_of_iterations -1:
                 simulation.scheduler.epsilon = 0.0
 
         simulation.run()
-
-        if scheduling_method == 'TabRLS' and train:
+        
+        if scheduling_method == 'TabRLS' and train:            
             df = pd.DataFrame(simulation.scheduler.q_table)
             df.to_csv('./q_table.csv', index= False)
+            # res = simulation.scheduler.residual()
+            # residuals.append(res)
             
             if k == no_of_iterations -1:
                 reward_per_step.append(simulation.scheduler.total_reward / simulation.scheduler.steps)
                 total_reward.append(simulation.scheduler.total_reward)
+                 
             
     if scheduling_method == 'TabRLS' and train:
         average_reward.append(np.mean(total_reward))
         average_reward_per_step.append(np.mean(reward_per_step))
+
+        q_new = simulation.scheduler.q_table.copy()       
+        res = simulation.scheduler.residual(q_old,q_new)
+        residuals.append(res)
 
 
     pbar.close() 
@@ -94,11 +103,22 @@ for i in range(low,high):
         df_mem = pd.DataFrame(mem)
         df_mem.to_csv('./results/TabRLS/memories/df_mem_'+str(i)+'.csv', index = False)
 
+        # if i%10 == 0 and i != low and train:
+        #     iterations = list(range(low,i+1))
+        #     plt.plot(iterations, average_reward_per_step)        
+        #     plt.pause(0.1)  
+        #     plt.savefig('./figures/average_reward_per_step_per_iter.jpg')
         if i%10 == 0 and i != low and train:
+            #iterations = list(range(1,count+1))
             iterations = list(range(low,i+1))
-            plt.plot(iterations, average_reward_per_step)        
-            plt.pause(0.1)  
-            plt.savefig('./figures/average_reward_per_step_per_iter.jpg')
+            plt.plot(iterations, residuals)
+            plt.xlabel('Iteration')
+            plt.ylabel('Residuals')
+            plt.grid()
+            plt.savefig('./figures/residuals.jpg')
+            plt.show()
+            
+
 
     
         

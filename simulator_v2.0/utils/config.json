@@ -3,7 +3,7 @@
     "global_parameters":[
         {
             "queue_size":1,
-            "batch_queue_size":3,
+            "batch_queue_size":2,
             "scheduling_method":"TabRLS",
             "gui": 0
         }        

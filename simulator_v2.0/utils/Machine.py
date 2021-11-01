@@ -145,9 +145,9 @@ class Machine(BaseMachine):
             
             
             if completion_time < delta:
-                g = 5
+                g = 5                
             elif completion_time >= delta and completion_time < delta + w:
-                g = (1.0/w) * (delta  + w - completion_time)
+                g = (1.0/w) * (delta  + w - completion_time)                
             else:
                 g = -5
             
