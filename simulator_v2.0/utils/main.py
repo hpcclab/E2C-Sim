@@ -11,8 +11,8 @@ if scheduling_method == 'TabRLS':
     memory=[]
     if train:
         low = 0
-        high = 100
-        no_of_iterations = 1000
+        high = 2
+        no_of_iterations = 10
 
         average_reward = []
         average_reward_per_step = []
@@ -42,7 +42,7 @@ for i in range(low,high):
     Config.log.write(s)
     print(s)
 
-    total_reward = []
+    rewards = []
     pbar = tqdm(total=no_of_iterations)
 
     
@@ -79,16 +79,12 @@ for i in range(low,high):
             df.to_csv('./q_table.csv', index= False)
             # res = simulation.scheduler.residual()
             # residuals.append(res)
+            rewards.append(np.sum(simulation.scheduler.rewards))            
             
-            if k == no_of_iterations -1:
-                reward_per_step.append(simulation.scheduler.total_reward / simulation.scheduler.steps)
-                total_reward.append(simulation.scheduler.total_reward)
                  
             
     if scheduling_method == 'TabRLS' and train:
-        average_reward.append(np.mean(total_reward))
-        average_reward_per_step.append(np.mean(reward_per_step))
-
+        average_reward.append(np.mean(rewards))        
         q_new = simulation.scheduler.q_table.copy()       
         res = simulation.scheduler.residual(q_old,q_new)
         residuals.append(res)
@@ -111,9 +107,11 @@ for i in range(low,high):
         if i%10 == 0 and i != low and train:
             #iterations = list(range(1,count+1))
             iterations = list(range(low,i+1))
-            plt.plot(iterations, residuals)
-            plt.xlabel('Iteration')
-            plt.ylabel('Residuals')
+            #plt.plot(iterations, residuals)
+            plt.figure(figsize=(24,4))
+            plt.plot(iterations, average_reward)
+            plt.xlabel('Episode')
+            plt.ylabel('Average of Total Reward')
             plt.grid()
             plt.savefig('./figures/residuals.jpg')
             plt.show()

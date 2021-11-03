@@ -24,14 +24,14 @@ class TabRLS(BaseScheduler):
         self.total_no_of_tasks = total_no_of_tasks
         #self.memory = deque(maxlen=1800)
         self.memory = []
-        self.gamma = 0.6  # discount rate
+        self.gamma = 0.1  # discount rate
         if self.train:
-            self.epsilon = 0.99  # exploration rate
+            self.epsilon = 0.9  # exploration rate
         else:
             self.epsilon = 0.0  # exploration rate
         self.epsilon_min = 0.001
-        self.epsilon_decay = 0.99
-        self.step_size = 0.001
+        self.epsilon_decay = 0.97
+        self.step_size = 0.99
         
         self.steps = 0
         
@@ -41,7 +41,7 @@ class TabRLS(BaseScheduler):
         self.states_table = self.read_state_table()
         self.no_of_states = len(self.states_table)
         # self.q_table = np.zeros((self.no_of_states,self.action_size))
-        self.total_reward = 0
+        self.rewards = []
         self.done = False
         self.res_val = 0 
         
@@ -129,7 +129,7 @@ class TabRLS(BaseScheduler):
         self.stats['deferred'].append(task)
         self.unmapped_task = -1
         task.no_of_deferring += 1 
-        reward = -0.5 * pow(2, task.no_of_deferring)
+        reward = -0.1 * pow(2, task.no_of_deferring)
         nxt_state = self.encode_state()
         
         s = '\n[ Task({:}),  _________ ]: Deferred       @time({:3.3f})'.format(
@@ -180,7 +180,7 @@ class TabRLS(BaseScheduler):
             self.insert(selected_task_index, self.unmapped_task)
             self.unmapped_task = -1
             nxt_state = self.encode_state()
-            reward = -5
+            reward = -1
             
         else:            
             self.unmapped_task.assigned_machine = machine            
@@ -271,7 +271,7 @@ class TabRLS(BaseScheduler):
                 nxt_state, reward = self.map(selected_task_index, Config.machines[assigned_machine])
             else:
                 nxt_state = state
-                reward = -5
+                reward = 0
         else:
             selected_task_index = action - ( Config.no_of_machines * self.batch_queue_size)
             selected_task = self.choose(selected_task_index)
@@ -279,13 +279,13 @@ class TabRLS(BaseScheduler):
                 nxt_state, reward = self.defer(self.unmapped_task)
             else:
                 nxt_state = state
-                reward = -5
+                reward = 0
     
         if self.train:                     
             self.q_table[state][action] += self.step_size * ( reward + self.gamma * np.argmax(self.q_table[nxt_state]) - self.q_table[state][action])
             
             
-        self.total_reward += reward
+        self.rewards.append(reward)
        
         # if action == 0 :
         #     print('defer -->>')

@@ -6,6 +6,7 @@ from TaskType import TaskType
 from Machine import Machine
 from Cloud import Cloud
 import csv
+import numpy as np
 
 
 event_queue = EventQueue()

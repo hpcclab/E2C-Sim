@@ -11,9 +11,10 @@ from TabRLS import TabRLS
 from tqdm import tqdm 
 
 from tqdm import tqdm
-
+import numpy as np
 import csv
 import GUI
+
 
 
 
@@ -204,6 +205,9 @@ class Simulator:
             len(self.scheduler.stats['dropped']), len(self.scheduler.stats['offloaded']),
             len(self.scheduler.stats['deferred'])
         )
+
+        
+
         if self.verbosity == 1:
             print(s)
         Config.log.write(s)
@@ -214,7 +218,9 @@ class Simulator:
             total_xcompletion += machine.stats['xcompleted_tasks']
             missed_urg += machine.stats['missed_URG_tasks']
             missed_be += machine.stats['missed_BE_tasks']
-
+            completed_percent = 0
+            xcompleted_percent = 0 
+            energy_percent = 0 
             if machine.stats['assigned_tasks'] != 0:
                 completed_percent = machine.stats['completed_tasks'] / machine.stats['assigned_tasks']
                 xcompleted_percent = machine.stats['xcompleted_tasks'] / machine.stats['assigned_tasks']
@@ -261,6 +267,11 @@ class Simulator:
         s += '\n%deferred: {:2.1f}'.format(len(self.scheduler.stats['deferred']))
         s += '\n%dropped: {:2.1f}'.format(len(self.scheduler.stats['dropped']))
         s += '\n%offloaded: {:2.1f}'.format(len(self.scheduler.stats['offloaded']))
+
+        if self.scheduling_method == 'TabRLS':
+            s += '\n\tTotal Reward:{}\n\tAverage Reward:{}'.format(np.sum(self.scheduler.rewards), 
+            np.mean(self.scheduler.rewards))
+            
         if self.verbosity <= 3:
             print(s)
         Config.log.write(s)
