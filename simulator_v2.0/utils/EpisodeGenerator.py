@@ -26,7 +26,7 @@ class Epsiode():
         count_scenarios = np.zeros(len(self.scenarios_files))
         for episode in range(number_of_episodes):
             print('\n ========================= EPISODE# '+str(episode)+' ============================')
-            path_to_output = self.path_to_output + 'ArrivalTimes-'+str(episode)+'.txt'  
+            path_to_output = self.path_to_output + 'ArrivalTimes-'+str(episode)+'.csv'  
             
             cumalative_prob = [sum(self.scenarios_probs[:x]) for x in range(1,len(self.scenarios_probs)+1)]
             p = random.random()
@@ -45,9 +45,9 @@ class Epsiode():
     
 def test_episode_generator():
     count_scenarios = Epsiode(path_to_scenarios = './Episodes/Scenarios/',
-     path_to_output = './Episodes/ArrivalTimes/',
+     path_to_output = './Episodes/Oversubscription_2/MediumVariance/',
      # Scenarios: Shopping, Working, Driving, Home, Walking
-     scenarios_probs = [1.0]).generate_episodes(530)
+     scenarios_probs = [1.0]).generate_episodes(30)
 
     return count_scenarios
 

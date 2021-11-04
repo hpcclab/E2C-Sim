@@ -3,14 +3,14 @@ from BaseTask import BaseTask, TaskStatus, UrgencyLevel
 
 class Task(BaseTask):
 
-    def __init__(self, id, type, task_size,
+    def __init__(self, id, type, task_size,est_exec_time,
                  execution_time, arrival_time):
         self.id = id
         self.type = type
         self.urgency = type.urgency
         self.deadline = arrival_time + type.deadline
         self.devaluation_window = 0.5 * type.deadline
-        #self.est_exec_time = est_exec_time
+        self.estimated_time = est_exec_time
         self.execution_time = execution_time
         self.arrival_time = arrival_time
         self.task_size = task_size
@@ -30,6 +30,7 @@ class Task(BaseTask):
             'urgency': self.urgency,
             'deadline':self.deadline,
             'extended_deadline':self.deadline + self.devaluation_window,
+            'estimated_time':self.est_exec_time,
             'execution_time': self.execution_time,
             'arrival_time':self.arrival_time,
             'start_time': self.start_time,

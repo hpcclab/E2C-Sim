@@ -119,7 +119,8 @@ class Machine(BaseMachine):
                 task = self.queue[i]
                 #starting_time = self.completion_times[slot_num]
                 starting_time = self.completion_times[i]
-                ct = starting_time + task.execution_time[self.type.name]
+                #ct = starting_time + task.execution_time[self.type.name]
+                ct = starting_time + task.estimated_time[self.type.name]
                 delta = task.deadline
 
                 if task.urgency == UrgencyLevel.BESTEFFORT:
@@ -286,7 +287,8 @@ class Machine(BaseMachine):
     
     def provisional_map(self,task):
         if -1 in self.running_task:
-            ct = Config.current_time + task.execution_time[self.type.name]
+            #ct = Config.current_time + task.execution_time[self.type.name]
+            ct = Config.current_time + task.estimated_time[self.type.name]
             #print('AT: {} Machine {} '.format(ct, self.id))
             return ct
         

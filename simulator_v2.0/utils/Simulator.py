@@ -43,11 +43,14 @@ class Simulator:
                     task_type_id = int(task_details[1])
                     task_size = float(task_details[2])
                     arrival_time = float(task_details[3])
-                    execution_time = {machine_types[0]: float(task_details[4]),
+                    estimated_time = {machine_types[0]: float(task_details[4]),
                                       machine_types[1]: float(task_details[5]),
                                       'CLOUD': float(task_details[6])}
+                    execution_time = {machine_types[0]: float(task_details[7]),
+                                      machine_types[1]: float(task_details[8]),
+                                      'CLOUD': float(task_details[9])}
                     type = Config.find_task_types(task_type_id)
-                    self.tasks.append(Task(task_id, type, task_size,
+                    self.tasks.append(Task(task_id, type, task_size,estimated_time,
                                            execution_time, arrival_time))
         self.total_no_of_tasks = len(self.tasks)
         for task in self.tasks:

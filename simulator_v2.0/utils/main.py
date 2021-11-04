@@ -4,15 +4,17 @@ import pandas as pd
 import numpy as np
 
 scheduling_method = Config.scheduling_method
-train = 1
+variance_level = 'high'
+oversubscription_level = '2'
+train = 0
 
 
 if scheduling_method == 'TabRLS':
     memory=[]
     if train:
         low = 0
-        high = 2
-        no_of_iterations = 10
+        high = 500
+        no_of_iterations = 100
 
         average_reward = []
         average_reward_per_step = []
@@ -20,17 +22,18 @@ if scheduling_method == 'TabRLS':
         residuals = []  
         
     else:
-        low = 500
-        high = 530
+        low = 0
+        high =30
         no_of_iterations = 1
 
 if scheduling_method != 'TabRLS':
-    low = 500
-    high = 530
+    low = 0
+    high =30
     no_of_iterations = 1
 
-
-report_summary = open('./results/'+scheduling_method+'/results-summary.csv','w')
+path_to_result = './results/oversubscription-{}/{}-variance/{}/'.format(
+    oversubscription_level, variance_level,scheduling_method)
+report_summary = open(path_to_result+'results-summary.csv','w')
 summary_header = ['Episode', 'total_no_of_tasks','mapped', 'offloaded','cancelled','Completion%','xCompletion%','URG_missed','BE_missed','available_energy']
 writer = csv.writer(report_summary)
 writer.writerow(summary_header)
@@ -58,7 +61,8 @@ for i in range(low,high):
         for machine in Config.machines:
             machine.reset()
 
-        path_to_arrival = './Episodes/ArrivalTimes/ArrivalTimes-'+str(i)+'.txt'
+        path_to_arrival = './Episodes/oversubscription-{}/{}-variance/ArrivalTimes-{}.csv'.format(
+            oversubscription_level, variance_level,i)
         simulation = Simulator(scheduling_method = scheduling_method, path_to_arrival = path_to_arrival, id=i)  
         simulation.create_event_queue()
         simulation.set_scheduling_method()
@@ -97,7 +101,7 @@ for i in range(low,high):
         memory.append(simulation.scheduler.memory)
         mem = np.array(memory[0][:])
         df_mem = pd.DataFrame(mem)
-        df_mem.to_csv('./results/TabRLS/memories/df_mem_'+str(i)+'.csv', index = False)
+        df_mem.to_csv(path_to_result+'memories/df_mem_'+str(i)+'.csv', index = False)
 
         # if i%10 == 0 and i != low and train:
         #     iterations = list(range(low,i+1))
@@ -120,7 +124,7 @@ for i in range(low,high):
 
     
         
-    row = simulation.report('./results/'+scheduling_method+'/')   
+    row = simulation.report(path_to_result+'/')   
     writer.writerows(row)
 report_summary.close()
     

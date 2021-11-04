@@ -160,13 +160,13 @@ class Workload:
             
             outputfile.writelines('#, task_type_id, size, arrival_time')
             
-            # for machine_type in Config.machine_types:
-            #     outputfile.writelines(',\testimated_time_' + machine_type.name)
-            # outputfile.writelines(',\testimated_time_CLOUD')
             for machine_type in Config.machine_types:
-                outputfile.writelines(',\texecution_time_' + machine_type.name)
+                outputfile.writelines(',expected_time_' + machine_type.name)
+            outputfile.writelines(',expected_time_CLOUD')
+            for machine_type in Config.machine_types:
+                outputfile.writelines(',execution_time_' + machine_type.name)
             
-            outputfile.writelines(',\texecution_time_CLOUD')
+            outputfile.writelines(',execution_time_CLOUD')
 
             outputfile.writelines('\n')
             
@@ -181,27 +181,27 @@ class Workload:
                 all_tasks_arrival_times.append(min_arrival_times)
                 all_tasks_id.append(min_id)
                 task_size = self.read_data.sampled_task_size(min_id)[0]
-                outputfile.writelines(str(count_task + 1) + ',\t' + str(min_id) +
-                                      ',\t' + str(task_size)+',\t' + str(min_arrival_times))
+                outputfile.writelines(str(count_task + 1) + ',' + str(min_id) +
+                                      ',' + str(task_size)+',' + str(min_arrival_times))
                 
-                # for machine_type in Config.machine_types:
+                for machine_type in Config.machine_types:
                     
-                #     estimated_time = self.read_data.sampled_execution_times(
-                #         min_id, machine_type.name)[0]
-                #     outputfile.writelines(',\t\t\t' + str(estimated_time))
+                    estimated_time = self.read_data.sampled_execution_times(
+                        min_id, machine_type.name)[0]
+                    outputfile.writelines(',' + str(estimated_time))
                 
-                # execution_time = self.read_data.sampled_execution_times(
-                #     min_id, 'CLOUD')[0]
-                # outputfile.writelines(',\t\t\t' + str(estimated_time))
+                execution_time = self.read_data.sampled_execution_times(
+                    min_id, 'CLOUD')[0]
+                outputfile.writelines(',' + str(estimated_time))
                 
                 for machine_type in Config.machine_types:
                     execution_time = self.read_data.sampled_execution_times(
                         min_id, machine_type.name)[0]
-                    outputfile.writelines(',\t\t\t' + str(execution_time))
+                    outputfile.writelines(',' + str(execution_time))
 
                 execution_time = self.read_data.sampled_execution_times(
                     min_id, 'CLOUD')[0]
-                outputfile.writelines(',\t\t\t' + str(execution_time))
+                outputfile.writelines(',' + str(execution_time))
 
                 outputfile.writelines('\n')
                 
