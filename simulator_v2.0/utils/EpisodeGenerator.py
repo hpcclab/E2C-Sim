@@ -45,9 +45,9 @@ class Epsiode():
     
 def test_episode_generator():
     count_scenarios = Epsiode(path_to_scenarios = './Episodes/Scenarios/',
-     path_to_output = './Episodes/Oversubscription_2/MediumVariance/',
+     path_to_output = './Episodes/oversubscription-2/medium-variance/',
      # Scenarios: Shopping, Working, Driving, Home, Walking
-     scenarios_probs = [1.0]).generate_episodes(30)
+     scenarios_probs = [1.0]).generate_episodes(530)
 
     return count_scenarios
 

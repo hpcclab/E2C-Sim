@@ -13,7 +13,7 @@ if scheduling_method == 'TabRLS':
     memory=[]
     if train:
         low = 0
-        high = 500
+        high = 300
         no_of_iterations = 100
 
         average_reward = []
@@ -23,12 +23,12 @@ if scheduling_method == 'TabRLS':
         
     else:
         low = 0
-        high =30
+        high = 30
         no_of_iterations = 1
 
 if scheduling_method != 'TabRLS':
-    low = 0
-    high =30
+    low = 500
+    high = 530
     no_of_iterations = 1
 
 path_to_result = './results/oversubscription-{}/{}-variance/{}/'.format(

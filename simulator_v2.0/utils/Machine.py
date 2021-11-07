@@ -151,7 +151,7 @@ class Machine(BaseMachine):
                 g = (1.0/w) * (delta  + w - completion_time)                
                 #g = 1
             else:
-                g = 0
+                g = 0.0
             
         if task.urgency == UrgencyLevel.URGENT:
             if completion_time < delta:
