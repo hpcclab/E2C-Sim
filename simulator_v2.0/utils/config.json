@@ -23,6 +23,11 @@
         }
         
     ],
+    "battery":[
+        {
+            "capacity": 50.0
+        }
+    ],
 
     "machine_types":[
         {

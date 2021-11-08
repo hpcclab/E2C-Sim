@@ -151,7 +151,7 @@ class Machine(BaseMachine):
                 g = (1.0/w) * (delta  + w - completion_time)                
                 #g = 1
             else:
-                g = 0.0
+                g = -10.0
             
         if task.urgency == UrgencyLevel.URGENT:
             if completion_time < delta:
@@ -163,11 +163,11 @@ class Machine(BaseMachine):
 
     
     def loss(self, task, running_time):
-        energy_consumption = running_time * self.specs['power'] / 3600 # watt.hour
+        energy_consumption = running_time * self.specs['power']  # joule
 
         if task.urgency == UrgencyLevel.BESTEFFORT:
-            alpha = Config.total_energy / Config.available_energy            
-            l = alpha * energy_consumption / Config.available_energy
+            alpha = 360* Config.total_energy / Config.available_energy            
+            l =  alpha * energy_consumption / Config.available_energy
                 
         if task.urgency == UrgencyLevel.URGENT:
             beta = pow(2, -1* (Config.available_energy / Config.total_energy) )
@@ -183,7 +183,7 @@ class Machine(BaseMachine):
         self.completion_times[0] = -1
         task.status = TaskStatus.MISSED
         
-        energy_consumption = (task.missed_time - task.start_time) * self.specs['power'] / 3600 # watt.hour
+        energy_consumption = (task.missed_time - task.start_time) * self.specs['power'] 
         if task.urgency == UrgencyLevel.BESTEFFORT:            
             self.stats['missed_BE_tasks'] += 1
         
@@ -212,7 +212,7 @@ class Machine(BaseMachine):
         self.running_task[0] = -1
         self.completion_times[0] = -1
         self.status = MachineStatus.IDLE        
-        energy_consumption = task.execution_time[self.type.name] * self.specs['power'] / 3600 # watt.hour
+        energy_consumption = task.execution_time[self.type.name] * self.specs['power'] 
         Config.available_energy -= energy_consumption
         self.stats['energy_usage'] += energy_consumption
 
@@ -266,12 +266,13 @@ class Machine(BaseMachine):
                     running_time, self.available_time = self.get_available_time(empty_slot)
                 g = self.gain(task, self.available_time)
                 l = self.loss(task, running_time)
-                
+                #print('Gain: {} Loss: {} '.format(g,l))
                 #return g-l  # excluded when energy is not important
-                return g
+                return g, l
+                #return g
             
             else:                
-                return 'notEmpty'
+                return 'notEmpty', 0
             
         else:
             if -1 in self.running_task:
@@ -279,11 +280,13 @@ class Machine(BaseMachine):
                 self.available_time = self.running_task[0].completion_time
                 g = self.gain(task, self.available_time)
                 l = self.loss(task, running_time)
+                #print('Gain: {} Loss: {} '.format(g,l))
                 #print ('machine {} task:{} g-l: {}'.format(self.type.name, task.id, g-l))
                 #return g-l # excluded when energy is not important
-                return g
+                return g, l
+                #return g
             else:                
-                return 'notEmpty'
+                return 'notEmpty', 0
     
     def provisional_map(self,task):
         if -1 in self.running_task:

@@ -19,7 +19,7 @@ class TabRLS(BaseScheduler):
 
     def __init__(self, total_no_of_tasks):
         super().__init__()
-        self.name = 'TabRL'
+        self.name = 'TabRLS'
         self.train = 1
         self.total_no_of_tasks = total_no_of_tasks
         #self.memory = deque(maxlen=1800)
@@ -170,9 +170,12 @@ class TabRLS(BaseScheduler):
     def map(self, selected_task_index, machine):
         
            
-        reward = machine.admit(self.unmapped_task)
+        #reward = machine.admit(self.unmapped_task)
+        gain, loss = machine.admit(self.unmapped_task)
+
        
-        if  reward == 'notEmpty' :
+        #if  reward == 'notEmpty' :
+        if  gain == 'notEmpty' :
             #print("WARNING: machine "+ str(machine.id) +
             #" cannot admit Task "+ str(self.unmapped_task.id))
             # nxt_state, _ = self.defer(self.unmapped_task)            
@@ -180,15 +183,16 @@ class TabRLS(BaseScheduler):
             self.insert(selected_task_index, self.unmapped_task)
             self.unmapped_task = -1
             nxt_state = self.encode_state()
-            reward = -1
+            reward = -10
             
-        else:            
+        else:
+            reward = gain - loss            
             self.unmapped_task.assigned_machine = machine            
             self.stats['mapped'].append(self.unmapped_task)
             self.unmapped_task = -1           
             nxt_state = self.encode_state()            
 
-        return nxt_state, reward
+        return nxt_state, reward, gain, loss
 
 
     def encode_state(self):
@@ -262,16 +266,18 @@ class TabRLS(BaseScheduler):
     def step(self, action):
 
         state = self.encode_state()
+        gain = None
+        loss = None
 
         if action < self.action_size-self.batch_queue_size:
             assigned_machine = action % Config.no_of_machines # starts with zero
             selected_task_index = action // Config.no_of_machines 
             selected_task = self.choose(selected_task_index)
             if selected_task != -1:
-                nxt_state, reward = self.map(selected_task_index, Config.machines[assigned_machine])
+                nxt_state, reward, gain, loss = self.map(selected_task_index, Config.machines[assigned_machine])
             else:
                 nxt_state = state
-                reward = 0.0
+                reward = -10.0
         else:
             selected_task_index = action - ( Config.no_of_machines * self.batch_queue_size)
             selected_task = self.choose(selected_task_index)
@@ -279,7 +285,7 @@ class TabRLS(BaseScheduler):
                 nxt_state, reward = self.defer(self.unmapped_task)
             else:
                 nxt_state = state
-                reward = 0.0
+                reward = -10.0
     
         if self.train:                     
             self.q_table[state][action] += self.step_size * ( reward + self.gamma * np.argmax(self.q_table[nxt_state]) - self.q_table[state][action])
@@ -307,9 +313,9 @@ class TabRLS(BaseScheduler):
             done = True
         self.steps += 1 
         # done = False
-        s = '\nAction: {}  Reward: {} '. format(action, reward)
+        #s = '\nAction: {}  Reward: {} '. format(action, reward)
         #print(s)
-        Config.history_writer.writerow([action, reward])
+        Config.history_writer.writerow([action, reward, gain, loss])
         
        
         return nxt_state, reward, done

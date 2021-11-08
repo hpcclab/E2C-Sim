@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np
 
 scheduling_method = Config.scheduling_method
-variance_level = 'high'
+variance_level = 'medium'
 oversubscription_level = '2'
 train = 0
 
@@ -14,7 +14,7 @@ if scheduling_method == 'TabRLS':
     if train:
         low = 0
         high = 300
-        no_of_iterations = 100
+        no_of_iterations = 200
 
         average_reward = []
         average_reward_per_step = []
@@ -22,8 +22,8 @@ if scheduling_method == 'TabRLS':
         residuals = []  
         
     else:
-        low = 0
-        high = 30
+        low = 500
+        high = 530
         no_of_iterations = 1
 
 if scheduling_method != 'TabRLS':
@@ -34,7 +34,7 @@ if scheduling_method != 'TabRLS':
 path_to_result = './results/oversubscription-{}/{}-variance/{}/'.format(
     oversubscription_level, variance_level,scheduling_method)
 report_summary = open(path_to_result+'results-summary.csv','w')
-summary_header = ['Episode', 'total_no_of_tasks','mapped', 'offloaded','cancelled','Completion%','xCompletion%','URG_missed','BE_missed','available_energy']
+summary_header = ['Episode', 'total_no_of_tasks','mapped', 'offloaded','cancelled','Completion%','xCompletion%','totalCompletion%','URG_missed','BE_missed','consumed_energy%']
 writer = csv.writer(report_summary)
 writer.writerow(summary_header)
 count = 0 
@@ -127,5 +127,11 @@ for i in range(low,high):
     row = simulation.report(path_to_result+'/')   
     writer.writerows(row)
 report_summary.close()
+df_summary = pd.read_csv(path_to_result+'results-summary.csv', 
+usecols=['Completion%', 'xCompletion%', 'totalCompletion%',
+'consumed_energy%'])
+print('\n\n'+ 10*'*'+'  Average Results of Executing Episodes  '+10*'*')
+print(df_summary.mean())
+
     
 

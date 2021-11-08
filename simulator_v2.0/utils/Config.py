@@ -17,14 +17,12 @@ tasks = []
 
 
 current_time = 0.0
-total_energy = 50.0 #watt.hour
-available_energy = total_energy
 
 no_of_machines = None
 
 log = open('log.txt','w')
 history = open('history-train.csv','w')
-header = ['Action', 'Rewards']
+header = ['Action', 'Rewards', 'Gain', 'Loss']
 history_writer = csv.writer(history)
 history_writer.writerow(header)
 with open(file='./config.json') as f:
@@ -37,6 +35,11 @@ queue_size = global_parameters[0]['queue_size']
 batch_queue_size = global_parameters[0]['batch_queue_size']
 scheduling_method = global_parameters[0]['scheduling_method']
 gui = global_parameters[0]['gui']
+
+battery = config['battery']
+capacity = battery[0]['capacity']
+total_energy = capacity * 3600   # capacity is in watt.hour while total energy is in joule
+available_energy = total_energy
 
 bandwidth = config['cloud'][0]['bandwidth']
 latency = config['cloud'][0]['latency']

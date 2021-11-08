@@ -82,7 +82,7 @@ class Simulator:
         for machine in Config.machines:                
                 idle_time_interval = Config.current_time - machine.idle_time
                 if idle_time_interval >0:
-                    idle_energy_consumption = machine.specs['idle_power'] * (idle_time_interval/3600.0)
+                    idle_energy_consumption = machine.specs['idle_power'] * idle_time_interval
                     machine.idle_time = Config.current_time
                 else:
                     idle_energy_consumption = 0.0 
@@ -279,8 +279,15 @@ class Simulator:
             print(s)
         Config.log.write(s)
         row = []
-        row.append([self.id,self.total_no_of_tasks ,total_assigned_tasks, Config.cloud.stats['offloaded_tasks'],len(self.scheduler.stats['dropped']),
-        total_completion_percent, total_xcompletion_percent,missed_urg, missed_be, Config.available_energy])
+        row.append(
+            [self.id,self.total_no_of_tasks ,
+            total_assigned_tasks, Config.cloud.stats['offloaded_tasks'],
+            len(self.scheduler.stats['dropped']),
+            total_completion_percent, total_xcompletion_percent,
+            total_completion_percent+total_xcompletion_percent,
+            missed_urg,
+            missed_be,
+            100* (1 - (Config.available_energy / Config.total_energy)) ])
         # with open(path_to_report+'summary.csv','w') as report_summary:            
         #     writer = csv.writer(report_summary)
         #     writer.writerow(summary_header)
