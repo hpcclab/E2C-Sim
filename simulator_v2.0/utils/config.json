@@ -19,7 +19,7 @@
             "id":2,
             "name":"TT2",
             "urgency":"best_effort",
-            "deadline": 3.5
+            "deadline": 15.0
         }
         
     ],

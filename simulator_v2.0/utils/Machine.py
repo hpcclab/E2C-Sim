@@ -151,7 +151,7 @@ class Machine(BaseMachine):
                 g = (1.0/w) * (delta  + w - completion_time)                
                 #g = 1
             else:
-                g = -10.0
+                g = -1.0
             
         if task.urgency == UrgencyLevel.URGENT:
             if completion_time < delta:
@@ -166,7 +166,7 @@ class Machine(BaseMachine):
         energy_consumption = running_time * self.specs['power']  # joule
 
         if task.urgency == UrgencyLevel.BESTEFFORT:
-            alpha = 360* Config.total_energy / Config.available_energy            
+            alpha = 36.0* Config.total_energy / Config.available_energy            
             l =  alpha * energy_consumption / Config.available_energy
                 
         if task.urgency == UrgencyLevel.URGENT:

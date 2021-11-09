@@ -278,6 +278,50 @@ class Simulator:
         if self.verbosity <= 3:
             print(s)
         Config.log.write(s)
+
+        task_report = {}
+        for task_type in Config.task_types:
+            d = {}
+            for machine_type in Config.machine_types:
+                d ['assigned_to_'+machine_type.name] = 0
+                d['completed_'+machine_type.name]=0
+                d['xcompleted_'+machine_type.name] = 0
+                d['missed_'+machine_type.name]=0
+            task_report[task_type.name] = d
+                            
+
+        for task in self.tasks:
+
+            if task.assigned_machine != None:
+                task_report[task.type.name]['assigned_to_'+task.assigned_machine.type.name] +=1
+
+                if task.status.name == 'COMPLETED':
+                    task_report[task.type.name]['completed_'+task.assigned_machine.type.name] +=1
+                elif task.status.name == 'XCOMPLETED':
+                    task_report[task.type.name]['xcompleted_'+task.assigned_machine.type.name] +=1
+                elif task.status.name == 'MISSED':
+                    task_report[task.type.name]['missed_'+task.assigned_machine.type.name] +=1
+
+        s = "\n**************** Task-Type-Based Report ********************"
+
+        for task_type,report in task_report.items():
+
+            s += "\n\n{} :".format(task_type)
+            count = 0
+            for title, result in report.items():
+                
+                if count % 4 == 0 and count != 0:
+                    s += '\n'
+                s += "\n\t{}: {}".format(title, result)
+                count+=1
+       
+        if self.verbosity <= 3:
+            print(s)
+
+        Config.log.write(s)
+
+
+
         row = []
         row.append(
             [self.id,self.total_no_of_tasks ,

@@ -5,7 +5,7 @@ import numpy as np
 
 scheduling_method = Config.scheduling_method
 variance_level = 'medium'
-oversubscription_level = '2'
+oversubscription_level = '1'
 train = 0
 
 
@@ -14,7 +14,7 @@ if scheduling_method == 'TabRLS':
     if train:
         low = 0
         high = 300
-        no_of_iterations = 200
+        no_of_iterations = 150
 
         average_reward = []
         average_reward_per_step = []
@@ -22,13 +22,13 @@ if scheduling_method == 'TabRLS':
         residuals = []  
         
     else:
-        low = 500
-        high = 530
+        low = 0
+        high = 30
         no_of_iterations = 1
 
 if scheduling_method != 'TabRLS':
-    low = 500
-    high = 530
+    low = 0
+    high = 30
     no_of_iterations = 1
 
 path_to_result = './results/oversubscription-{}/{}-variance/{}/'.format(
@@ -133,5 +133,37 @@ usecols=['Completion%', 'xCompletion%', 'totalCompletion%',
 print('\n\n'+ 10*'*'+'  Average Results of Executing Episodes  '+10*'*')
 print(df_summary.mean())
 
+# task_report = {}
+# for task_type in Config.task_types:
+#     d = {}
+#     for machine_type in Config.machine_types:
+#         d ['assigned_to_'+machine_type.name] = 0
+#         d['completed_'+machine_type.name]=0
+#         d['xcompleted_'+machine_type.name] = 0
+#         d['missed_'+machine_type.name]=0
+#     task_report[task_type.name] = d
+                    
+
+# for task in simulation.tasks:
+
+#     if task.assigned_machine != None:
+#         task_report[task.type.name]['assigned_to_'+task.assigned_machine.type.name] +=1
+
+#         if task.status.name == 'COMPLETED':
+#             task_report[task.type.name]['completed_'+task.assigned_machine.type.name] +=1
+#         elif task.status.name == 'XCOMPLETED':
+#             task_report[task.type.name]['xcompleted_'+task.assigned_machine.type.name] +=1
+#         elif task.status.name == 'MISSED':
+#             task_report[task.type.name]['missed_'+task.assigned_machine.type.name] +=1
+
+# s = "**************** Task-Type-Based Report ********************"
+
+# for task_type,report in task_report.items():
+
+#     s += "\n\n{} :".format(task_type)
+
+#     for title, result in report.items():
+#         s += "\n\t{}: {}".format(title, result)
     
+# print(s)
 
