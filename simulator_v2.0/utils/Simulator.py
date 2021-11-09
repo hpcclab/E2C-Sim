@@ -99,8 +99,8 @@ class Simulator:
 
         # if self.verbosity <= 1:
         #     pbar = tqdm(total=self.total_no_of_tasks)
-        #while Config.event_queue.event_list and Config.available_energy >0:
-        while Config.event_queue.event_list :
+        while Config.event_queue.event_list and Config.available_energy > Config.min_energy:
+        #while Config.event_queue.event_list :
 
 
             self.idle_energy_consumption()

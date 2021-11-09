@@ -22,13 +22,13 @@ if scheduling_method == 'TabRLS':
         residuals = []  
         
     else:
-        low = 0
-        high = 30
+        low = 500
+        high = 530
         no_of_iterations = 1
 
 if scheduling_method != 'TabRLS':
-    low = 0
-    high = 30
+    low = 500
+    high = 530
     no_of_iterations = 1
 
 path_to_result = './results/oversubscription-{}/{}-variance/{}/'.format(
