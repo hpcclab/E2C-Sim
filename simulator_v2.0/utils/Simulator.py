@@ -1,16 +1,16 @@
 import Config
 from Task import Task
 from Event import Event, EventTypes
-from FCFS import FCFS
+#from FCFS import FCFS
 from MM import MM
-from MSD import MSD
-from MMU import MMU
-from RLS import RLS
+#from MSD import MSD
+#from MMU import MMU
+#from RLS import RLS
 
 from TabRLS import TabRLS
 from tqdm import tqdm 
 
-from tqdm import tqdm
+#from tqdm import tqdm
 import numpy as np
 import csv
 import GUI

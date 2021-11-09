@@ -6,7 +6,7 @@ import numpy as np
 scheduling_method = Config.scheduling_method
 variance_level = 'medium'
 oversubscription_level = '2'
-train = 0
+train = 1
 
 
 if scheduling_method == 'TabRLS':
