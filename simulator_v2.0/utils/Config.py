@@ -40,6 +40,7 @@ battery = config['battery']
 capacity = battery[0]['capacity']
 total_energy = capacity * 3600   # capacity is in watt.hour while total energy is in joule
 available_energy = total_energy
+min_energy = 0.005 * total_energy
 
 bandwidth = config['cloud'][0]['bandwidth']
 latency = config['cloud'][0]['latency']

@@ -5,8 +5,8 @@ import numpy as np
 
 scheduling_method = Config.scheduling_method
 variance_level = 'medium'
-oversubscription_level = '1'
-train = 0
+oversubscription_level = '2'
+train = 1
 
 
 if scheduling_method == 'TabRLS':
@@ -22,13 +22,13 @@ if scheduling_method == 'TabRLS':
         residuals = []  
         
     else:
-        low = 0
-        high = 30
+        low = 500
+        high = 530
         no_of_iterations = 1
 
 if scheduling_method != 'TabRLS':
-    low = 0
-    high = 30
+    low = 500
+    high = 530
     no_of_iterations = 1
 
 path_to_result = './results/oversubscription-{}/{}-variance/{}/'.format(

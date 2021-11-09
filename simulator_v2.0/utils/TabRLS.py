@@ -26,11 +26,11 @@ class TabRLS(BaseScheduler):
         self.memory = []
         self.gamma = 0.1  # discount rate
         if self.train:
-            self.epsilon = 0.9  # exploration rate
+            self.epsilon = 0.99  # exploration rate
         else:
             self.epsilon = 0.0  # exploration rate
         self.epsilon_min = 0.001
-        self.epsilon_decay = 0.97
+        self.epsilon_decay = 0.98
         self.step_size = 0.99
         
         self.steps = 0
