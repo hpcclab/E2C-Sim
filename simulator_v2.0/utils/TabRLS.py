@@ -183,7 +183,7 @@ class TabRLS(BaseScheduler):
             self.insert(selected_task_index, self.unmapped_task)
             self.unmapped_task = -1
             nxt_state = self.encode_state()
-            reward = -10
+            reward = -1.0
             
         else:
             reward = gain - loss            
@@ -277,7 +277,7 @@ class TabRLS(BaseScheduler):
                 nxt_state, reward, gain, loss = self.map(selected_task_index, Config.machines[assigned_machine])
             else:
                 nxt_state = state
-                reward = -10.0
+                reward = -1.0
         else:
             selected_task_index = action - ( Config.no_of_machines * self.batch_queue_size)
             selected_task = self.choose(selected_task_index)
@@ -285,7 +285,7 @@ class TabRLS(BaseScheduler):
                 nxt_state, reward = self.defer(self.unmapped_task)
             else:
                 nxt_state = state
-                reward = -10.0
+                reward = -1.0
     
         if self.train:                     
             self.q_table[state][action] += self.step_size * ( reward + self.gamma * np.argmax(self.q_table[nxt_state]) - self.q_table[state][action])
