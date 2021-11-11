@@ -23,7 +23,7 @@ class Simulator:
 
     def __init__(self,scheduling_method, path_to_arrival, id = 0, verbosity = 0):
         self.scheduling_method = scheduling_method
-        # self.gui1 = GUI.Gui("Scheduler GUI", '1000x800', 700, 800)
+        self.gui1 = GUI.Gui("Scheduler GUI", '1000x800', 700, 800)
         self.path_to_arrival = path_to_arrival
         self.verbosity = verbosity
         self.id = id
@@ -72,7 +72,7 @@ class Simulator:
         else:
             print('ERROR: Scheduler ' + self.scheduling_method + ' does not exist')
             self.scheduler = None
-        #self.gui1.create_main_queue(8, self.scheduling_method)
+        self.gui1.create_main_queue(8, self.scheduling_method)
 
     def idle_energy_consumption(self):
 
@@ -100,9 +100,6 @@ class Simulator:
         num = 0
         if self.verbosity == 0:
             pbar = tqdm(total=self.total_no_of_tasks)
-    def run(self):
-
-
 
         # if self.verbosity <= 1:
         #     pbar = tqdm(total=self.total_no_of_tasks)
@@ -168,12 +165,15 @@ class Simulator:
                 self.scheduler.feed()
                 num = 5
                 assigned_machine = self.scheduler.schedule()
+            self.gui1.add_task(num, task)
 
         # if self.verbosity <= 1:
         #     pbar.close()
 
         if self.scheduling_method == 'TabRLS':
             self.scheduler.done = True
+        if Config.gui == 1:
+            self.gui1.begin()
 
 
 

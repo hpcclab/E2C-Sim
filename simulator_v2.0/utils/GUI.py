@@ -23,6 +23,7 @@ class Gui:
     nextText = 0
 
     def __init__(self, title, geometry, height, width):
+        self.spdcntrl = tk.Menubutton(self.canvas, text="Speed", font=self.menu_font, relief="solid", width=6, bd=1, padx=1)
         self.window = tk.Tk()
         self.window.title(title)
         self.window.geometry(geometry)
@@ -191,23 +192,23 @@ class Gui:
         start_b = tk.Button(self.canvas, text="Start", command=self.start, width=5, relief="solid", font=self.menu_font, bd=1)
         stop_b = tk.Button(self.canvas, text="Pause", command=self.stop, width=5, font=self.menu_font)
         reset_b = tk.Button(self.canvas, text="Reset", command=self.reset, width=5, relief="solid", font=self.menu_font, bd=1)
-        spdcntrl = tk.Menubutton(self.canvas, text="Speed", font=self.menu_font, relief="solid", width=6, bd=1, padx=1)
-        spdcntrl.menu = tk.Menu(spdcntrl) # creates the dropdown box menu
-        spdcntrl["menu"] = spdcntrl.menu
-        spdcntrl.menu.add_command(label="Default Speed", command=lambda: self.set_speed(0)) # creates the options in the dropdown menu
-        spdcntrl.menu.add_command(label=".5x Speed", command=lambda: self.set_speed(50))
-        spdcntrl.menu.add_command(label=".25x Speed", command=lambda: self.set_speed(100))
-        spdcntrl.menu.add_command(label=".025x Speed", command=lambda: self.set_speed(200))
-        spdcntrl.menu.add_command(label=".0025x Speed", command=lambda: self.set_speed(400))
+        self.spdcntrl.menu = tk.Menu(spdcntrl) # creates the dropdown box menu
+        self.spdcntrl["menu"] = spdcntrl.menu
+        self.spdcntrl.menu.add_command(label="Default Speed", command=lambda: self.set_speed(0, "Default Speed")) # creates the options in the dropdown menu
+        self.spdcntrl.menu.add_command(label=".5x Speed", command=lambda: self.set_speed(50, ".5x Speed"))
+        self.spdcntrl.menu.add_command(label=".25x Speed", command=lambda: self.set_speed(100, ".25x Speed"))
+        self.spdcntrl.menu.add_command(label=".025x Speed", command=lambda: self.set_speed(200, ".025x Speed"))
+        self.spdcntrl.menu.add_command(label=".0025x Speed", command=lambda: self.set_speed(400, ".0025x Speed"))
         # Following lines place the buttons inside of the GUI
-        spdcntrl.place(x=100, y=450)
+        self.spdcntrl.place(x=100, y=450)
         start_b.place(x=160, y=450)
         reset_b.place(x=220, y=450)
         # Following lines create and places the progress bar at the bottom.
         self.pb = tk1.Progressbar(self.canvas, orient='horizontal', length=800, mode='determinate')
         self.pb.place(x=50, y=675)
 
-    def set_speed(self, speed): # sets the amount of time between actions in the gui (displays)
+    def set_speed(self, speed, text): # sets the amount of time between actions in the gui (displays)
+        self.spdcntrl["text"] = text
         self.speed_increment = speed
 
     def stop(self): # work in progress. Function to stop the displaying of tasks
