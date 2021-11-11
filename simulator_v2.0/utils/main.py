@@ -14,7 +14,7 @@ if scheduling_method == 'TabRLS':
     if train:
         low = 0
         high = 300
-        no_of_iterations = 150
+        no_of_iterations = 200
 
         average_reward = []
         average_reward_per_step = []
@@ -22,8 +22,8 @@ if scheduling_method == 'TabRLS':
         residuals = []  
         
     else:
-        low = 500
-        high = 530
+        low = 0
+        high = 30
         no_of_iterations = 1
 
 if scheduling_method != 'TabRLS':

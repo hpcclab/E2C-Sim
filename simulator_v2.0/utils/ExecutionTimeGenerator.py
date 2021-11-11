@@ -22,7 +22,7 @@ def write(distribution, task_type, machine_type, path):
     
 
 
-dis = generate(1.0, 1.2, 1000)
+dis = generate(0.8,1.2, 1000)
 write(dis, 2, 'CLOUD', './synthetic_execution_time/medium-variance/')
 
 

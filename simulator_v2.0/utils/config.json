@@ -4,7 +4,7 @@
         {
             "queue_size":1,
             "batch_queue_size":2,
-            "scheduling_method":"TabRLS",
+            "scheduling_method":"MM",
             "gui": 0
         }        
     ],
@@ -13,19 +13,19 @@
             "id":1,
             "name":"TT1",
             "urgency":"best_effort",
-            "deadline": 4.0
+            "deadline": 2.2
         },
         {
             "id":2,
             "name":"TT2",
             "urgency":"best_effort",
-            "deadline": 15.0
+            "deadline": 8.0
         }
         
     ],
     "battery":[
         {
-            "capacity": 12.0
+            "capacity": 100.0
         }
     ],
 
@@ -33,15 +33,15 @@
         {
             "id":1,
             "name":"cpu",
-            "power": 28.0,
+            "power": 25.0,
             "idle_power": 12.0,
             "replicas" : 1
         },
         {
             "id":2,
             "name":"gpu",
-            "power": 300.0,
-            "idle_power": 50.0,
+            "power": 150.0,
+            "idle_power": 30.0,
             "replicas" : 1
         }
     ],
