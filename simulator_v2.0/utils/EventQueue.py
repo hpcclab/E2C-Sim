@@ -7,9 +7,9 @@ task) are queued in EventQueue.In this way, the processing of a task
 in real-world can be imitated.
 The EventQueue is firstly empty. By arriving the first task, an event
 which is "arriving a new task" is added to the head of queue. In the
-same way, other events are added to the queue. Moreover, the queue is
-always sorted based on the event's time. Heap sort technique is used
-to sort the queue.
+same way, other events are added to the queue. 
+Moreover, the queue is always sorted based on the event's time.
+Heap sort technique is used to sort the queue.
 
 """
 import heapq

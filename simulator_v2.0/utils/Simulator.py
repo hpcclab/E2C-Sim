@@ -1,17 +1,25 @@
+"""
+Author: Ali Mokhtari (ali.mokhtaary@gmail.com)
+Created on Nov., 15, 2021
+
+
+"""
+
 import Config
 from Task import Task
 from Event import Event, EventTypes
-#from FCFS import FCFS
+from FCFS import FCFS
 from MM import MM
-#from MSD import MSD
-#from MMU import MMU
-#from RLS import RLS
+from MSD import MSD
+from MMU import MMU
+from RLS import RLS
 
 from TabRLS import TabRLS
 from tqdm import tqdm 
 
 #from tqdm import tqdm
 import numpy as np
+import pandas as pd
 import csv
 import GUI
 
@@ -279,49 +287,46 @@ class Simulator:
             print(s)
         Config.log.write(s)
 
-        task_report = {}
+        
+        d = {}
         for task_type in Config.task_types:
-            d = {}
+            #d = {}
             for machine_type in Config.machine_types:
-                d ['assigned_to_'+machine_type.name] = 0
-                d['completed_'+machine_type.name]=0
-                d['xcompleted_'+machine_type.name] = 0
-                d['missed_'+machine_type.name]=0
-            task_report[task_type.name] = d
+                d [task_type.name+'_assigned_to_'+machine_type.name] = 0
+                d[task_type.name+'_completed_'+machine_type.name]=0
+                d[task_type.name+'_xcompleted_'+machine_type.name] = 0
+                d[task_type.name+'_missed_'+machine_type.name]=0
+            #task_report[task_type.name] = d
+        
                             
 
         for task in self.tasks:
 
             if task.assigned_machine != None:
-                task_report[task.type.name]['assigned_to_'+task.assigned_machine.type.name] +=1
+                d[task.type.name+'_assigned_to_'+task.assigned_machine.type.name] +=1
 
                 if task.status.name == 'COMPLETED':
-                    task_report[task.type.name]['completed_'+task.assigned_machine.type.name] +=1
+                    d[task.type.name+'_completed_'+task.assigned_machine.type.name] +=1
                 elif task.status.name == 'XCOMPLETED':
-                    task_report[task.type.name]['xcompleted_'+task.assigned_machine.type.name] +=1
+                    d[task.type.name+'_xcompleted_'+task.assigned_machine.type.name] +=1
                 elif task.status.name == 'MISSED':
-                    task_report[task.type.name]['missed_'+task.assigned_machine.type.name] +=1
+                    d[task.type.name+'_missed_'+task.assigned_machine.type.name] +=1
 
-        s = "\n**************** Task-Type-Based Report ********************"
+        task_report = pd.DataFrame(d, index= [self.id])
 
-        for task_type,report in task_report.items():
+        # for task_type in Config.task_types:
+        #     for machine_type in Config.machine_types:
+        #         total_assigned = task_report[task_type.name+'_assigned_to_'+machine_type.name].values[0]
+        #         task_report[task_type.name+'_assigned_to_'+machine_type.name] /= (0.01*self.total_no_of_tasks)
+        #         if total_assigned != 0 :
+        #             task_report[task_type.name+'_completed_'+machine_type.name] /= (0.01*total_assigned)
+        #             task_report[task_type.name+'_xcompleted_'+machine_type.name] /= (0.01*total_assigned)
+        #             task_report[task_type.name+'_missed_'+machine_type.name] /= (0.01*total_assigned)
+        task_report /= (0.01*self.total_no_of_tasks)
+        task_report = task_report.round(2)
 
-            s += "\n\n{} :".format(task_type)
-            count = 0
-            for title, result in report.items():
-                
-                if count % 4 == 0 and count != 0:
-                    s += '\n'
-                s += "\n\t{}: {}".format(title, result)
-                count+=1
-       
-        if self.verbosity <= 3:
-            print(s)
-
-        Config.log.write(s)
-
-
-
+        
+        
         row = []
         row.append(
             [self.id,self.total_no_of_tasks ,
@@ -332,9 +337,5 @@ class Simulator:
             missed_urg,
             missed_be,
             100* (1 - (Config.available_energy / Config.total_energy)) ])
-        # with open(path_to_report+'summary.csv','w') as report_summary:            
-        #     writer = csv.writer(report_summary)
-        #     writer.writerow(summary_header)
-        #     writer.writerows(row)
-
-        return row
+        
+        return row, task_report

@@ -2,10 +2,12 @@
 Authors: Ali Mokhtari
 Created on Jan. 01, 2021.
 
-Here, The details of scenarios are read from "Scenarios.txt" , then, the
-arrival times of tasks along with their task types  are written to
-"ArrivalTimes.txt" file. Tasks in "ArrivalTimes.txt" are sorted based on
-the values of the arrival times.
+Here, The pre-defined scenarios are first read from a text file. Then, the
+arrival times of tasks are written to the output file. 
+Also, the output file  includes the expected and real execution time of each
+task on all machine types. These values is generated using ReadData class.
+
+** The generated output file is sorted based on the values of the arrival times.
 
 """
 
@@ -140,7 +142,7 @@ class Workload:
 
     def write_to_file(self, aggregated_arrival_times):
         # It firstly sort the arrival times of each task type, then
-        # the sorted arrival time alpath_to_scenariosng with its task type is written
+        # the sorted arrival time path_to_scenariosng with its task type is written
         # to the ArrivalTimes.txt file.
 
         sorted_dict_times = {}
@@ -155,7 +157,7 @@ class Workload:
         min_id = None
        
         with open(self.path_to_output, 'w') as outputfile:
-            print('Saving arrival times cto: '+self.path_to_output)
+            print('Saving arrival times to: '+self.path_to_output)
             print('Total number of tasks: '+ str(total_no_of_tasks) )
             
             outputfile.writelines('#, task_type_id, size, arrival_time')

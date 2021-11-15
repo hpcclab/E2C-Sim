@@ -6,15 +6,15 @@ import numpy as np
 scheduling_method = Config.scheduling_method
 variance_level = 'medium'
 oversubscription_level = '2'
-train = 1
+train = 0
 
 
 if scheduling_method == 'TabRLS':
     memory=[]
     if train:
         low = 0
-        high = 300
-        no_of_iterations = 200
+        high = 500
+        no_of_iterations = 100
 
         average_reward = []
         average_reward_per_step = []
@@ -22,8 +22,8 @@ if scheduling_method == 'TabRLS':
         residuals = []  
         
     else:
-        low = 0
-        high = 30
+        low = 500
+        high = 530
         no_of_iterations = 1
 
 if scheduling_method != 'TabRLS':
@@ -37,6 +37,9 @@ report_summary = open(path_to_result+'results-summary.csv','w')
 summary_header = ['Episode', 'total_no_of_tasks','mapped', 'offloaded','cancelled','Completion%','xCompletion%','totalCompletion%','URG_missed','BE_missed','consumed_energy%']
 writer = csv.writer(report_summary)
 writer.writerow(summary_header)
+
+df_task_based_report = pd.DataFrame()
+
 count = 0 
 
 for i in range(low,high):
@@ -124,46 +127,19 @@ for i in range(low,high):
 
     
         
-    row = simulation.report(path_to_result+'/')   
+    row, task_report = simulation.report(path_to_result+'/')   
     writer.writerows(row)
+    df_task_based_report = df_task_based_report.append(task_report, ignore_index=True)    
 report_summary.close()
+df_task_based_report.to_csv(path_to_result+'task_based_report.csv', index = False)
 df_summary = pd.read_csv(path_to_result+'results-summary.csv', 
 usecols=['Completion%', 'xCompletion%', 'totalCompletion%',
 'consumed_energy%'])
+
+print('\n\n'+ 10*'*'+'  Task_based Average Results '+10*'*')
+print(df_task_based_report.mean())
+
 print('\n\n'+ 10*'*'+'  Average Results of Executing Episodes  '+10*'*')
 print(df_summary.mean())
 
-# task_report = {}
-# for task_type in Config.task_types:
-#     d = {}
-#     for machine_type in Config.machine_types:
-#         d ['assigned_to_'+machine_type.name] = 0
-#         d['completed_'+machine_type.name]=0
-#         d['xcompleted_'+machine_type.name] = 0
-#         d['missed_'+machine_type.name]=0
-#     task_report[task_type.name] = d
-                    
-
-# for task in simulation.tasks:
-
-#     if task.assigned_machine != None:
-#         task_report[task.type.name]['assigned_to_'+task.assigned_machine.type.name] +=1
-
-#         if task.status.name == 'COMPLETED':
-#             task_report[task.type.name]['completed_'+task.assigned_machine.type.name] +=1
-#         elif task.status.name == 'XCOMPLETED':
-#             task_report[task.type.name]['xcompleted_'+task.assigned_machine.type.name] +=1
-#         elif task.status.name == 'MISSED':
-#             task_report[task.type.name]['missed_'+task.assigned_machine.type.name] +=1
-
-# s = "**************** Task-Type-Based Report ********************"
-
-# for task_type,report in task_report.items():
-
-#     s += "\n\n{} :".format(task_type)
-
-#     for title, result in report.items():
-#         s += "\n\t{}: {}".format(title, result)
-    
-# print(s)
 

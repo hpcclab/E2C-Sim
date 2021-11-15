@@ -2,11 +2,10 @@
 Authors: Ali Mokhtari
 Created on Dec. 24, 2020.
 
-Here, an arrival scenario for task types in given time interval is
-defined. This class is used to generate arrival times distribution
-for task types that are arriving to the system considering different
-scenarios. For example, in "shopping" scenario, we may have different
-tasks arrival from a scenario considering "staying in office".
+In a certain period of time, tasks of different types can arrive to
+the system. Each task type can also follow a different arrival pattern.
+So, a scenario is defined to deremine the specifications of the task types
+taht arrive to the system in a certain time interval.
 
 """
 
@@ -24,7 +23,7 @@ class ArrivalScenario:
         self.arrival_times = {}
 
     def add_task_arrival(self, task_type_ID, pattern, no_of_tasks):
-        # This method adds the arrival times of a task to the arrival_times
+        # This method adds the arrival times of a task type to the arrival_times
         # of the ArrivalScenario.
         # The arrival times of the task_type_ID, arrival_times[task_type_ID],
         # has the length of no_of_tasks and pattern of "pattern".

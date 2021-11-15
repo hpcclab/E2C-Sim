@@ -13,7 +13,7 @@
             "id":1,
             "name":"TT1",
             "urgency":"best_effort",
-            "deadline": 2.2
+            "deadline": 6.0
         },
         {
             "id":2,
@@ -25,7 +25,7 @@
     ],
     "battery":[
         {
-            "capacity": 100.0
+            "capacity": 20.0
         }
     ],
 

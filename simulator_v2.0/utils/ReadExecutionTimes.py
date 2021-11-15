@@ -6,17 +6,11 @@ The real and estimated execution times of each task is generated using
 this module. To that end, a dataset which contains the execution times
 of each task type is used to uniformly sample a time as real or estimated
 execution time. 
-The dataset should contain execution times in the format of 
-<task_type_id>-<machine_type>.txt
+The name of the execution time dataset should be in the format of 
+<task_type_id>-<machine_type>.csv
 
 """
-import csv
-import os
-import numpy as np
 import random
-
-# path to the data set directory
-base = '../data/execution_times/'
 
 
 class ReadData:
@@ -34,7 +28,7 @@ class ReadData:
         # is read from the dataset. This function returns a list that 
         # contains the execution times.
         # the file name of the dataset must be in the format of 
-        # <task_type_id>-<machine_type>.txt (e.g. 1-CPU.txt)
+        # <task_type_id>-<machine_type>.csv (e.g. 1-CPU.csv)
 
         execution_times = []
         file_name = str(task_type_id) + '-' + machine_type + '.csv'
@@ -69,7 +63,7 @@ class ReadData:
         # is read from the dataset. This function returns a list that 
         # contains the execution times.
         # the file name of the dataset must be in the format of 
-        # <task_type_id>-<machine_type>.txt (e.g. 1-CPU.txt)
+        # <task_type_id>-<machine_type>.csv (e.g. 1-CPU.csv)
 
         tasks_size = []
         file_name = str(task_type_id) + '-size' + '.csv'

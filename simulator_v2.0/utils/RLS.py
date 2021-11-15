@@ -1,3 +1,10 @@
+"""
+Author: Ali Mokhtari (ali.mokhtaary@gmail.com)
+Created on Nov., 15, 2021
+
+
+"""
+
 import heapq
 from Event import Event, EventTypes
 from BaseTask import TaskStatus, UrgencyLevel

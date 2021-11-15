@@ -1,3 +1,11 @@
+"""
+Author: Ali Mokhtari (ali.mokhtaary@gmail.com)
+Created on Nov., 15, 2021
+
+
+"""
+
+
 from random import gammavariate
 from BaseMachine import BaseMachine, MachineStatus
 from BaseTask import TaskStatus, UrgencyLevel
@@ -146,12 +154,12 @@ class Machine(BaseMachine):
             
             
             if completion_time < delta:
-                g = 1              
+                g = 2              
             elif completion_time >= delta and completion_time < delta + w:
                 g = (1.0/w) * (delta  + w - completion_time)                
                 #g = 1
             else:
-                g = -1.0
+                g = 0
             
         if task.urgency == UrgencyLevel.URGENT:
             if completion_time < delta:
@@ -166,7 +174,7 @@ class Machine(BaseMachine):
         energy_consumption = running_time * self.specs['power']  # joule
 
         if task.urgency == UrgencyLevel.BESTEFFORT:
-            alpha = 36.0* Config.total_energy / Config.available_energy            
+            alpha = 36* Config.total_energy / Config.available_energy            
             l =  alpha * energy_consumption / Config.available_energy
                 
         if task.urgency == UrgencyLevel.URGENT:
