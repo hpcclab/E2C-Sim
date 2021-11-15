@@ -31,7 +31,8 @@ class Simulator:
 
     def __init__(self,scheduling_method, path_to_arrival, id = 0, verbosity = 0):
         self.scheduling_method = scheduling_method
-        self.gui1 = GUI.Gui("Scheduler GUI", '1000x800', 700, 800)
+        if Config.gui:
+            self.gui1 = GUI.Gui("Scheduler GUI", '1000x800', 700, 800)
         self.path_to_arrival = path_to_arrival
         self.verbosity = verbosity
         self.id = id
@@ -52,11 +53,14 @@ class Simulator:
                     task_type_id = int(task_details[1])
                     task_size = float(task_details[2])
                     arrival_time = float(task_details[3])
-                    execution_time = {machine_types[0]: float(task_details[4]),
+                    estimated_time = {machine_types[0]: float(task_details[4]),
                                       machine_types[1]: float(task_details[5]),
                                       'CLOUD': float(task_details[6])}
+                    execution_time = {machine_types[0]: float(task_details[7]),
+                                      machine_types[1]: float(task_details[8]),
+                                      'CLOUD': float(task_details[9])}
                     type = Config.find_task_types(task_type_id)
-                    self.tasks.append(Task(task_id, type, task_size,
+                    self.tasks.append(Task(task_id, type, task_size,estimated_time,
                                            execution_time, arrival_time))
         self.total_no_of_tasks = len(self.tasks)
         for task in self.tasks:
@@ -100,11 +104,14 @@ class Simulator:
 
 
     def run(self):
-        self.gui1.create_main_queue(8, self.scheduling_method)
-        self.gui1.create_machine_names()
-        self.gui1.create_legend()
-        self.gui1.create_controls()
-        self.gui1.create_menubar()
+
+        if Config.gui == 1:
+            self.gui1.create_main_queue(8, self.scheduling_method)
+            self.gui1.create_machine_names()
+            self.gui1.create_legend()
+            self.gui1.create_controls()
+            self.gui1.create_task_stats(self.total_no_of_tasks)
+            self.gui1.create_menubar()
         num = 0
         if self.verbosity == 0:
             pbar = tqdm(total=self.total_no_of_tasks)
@@ -173,7 +180,9 @@ class Simulator:
                 self.scheduler.feed()
                 num = 5
                 assigned_machine = self.scheduler.schedule()
-            self.gui1.add_task(num, task)
+            
+            if Config.gui:
+                self.gui1.add_task(num, task)
 
         # if self.verbosity <= 1:
         #     pbar.close()

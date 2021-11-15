@@ -23,14 +23,13 @@ class Gui:
     nextText = 0
 
     def __init__(self, title, geometry, height, width):
-        self.spdcntrl = tk.Menubutton(self.canvas, text="Speed", font=self.menu_font, relief="solid", width=6, bd=1, padx=1)
-        self.window = tk.Tk()
+        self.window = tk.Tk()          
         self.window.title(title)
         self.window.geometry(geometry)
         self.height = height
         self.width = width
-        self.canvas = tk.Canvas(self.window, bg="#fff")
-        self.canvas.place(relx=0.05, rely=0.05, relwidth=.9, relheight=.9)
+        self.canvas = tk.Canvas(self.window, bg="#fff")       
+        self.canvas.place(relx=0.05, rely=0.05, relwidth=.9, relheight=.9)        
         self.x2 = 0
         self.speed_increment = 0
         self.pb = None
@@ -38,8 +37,9 @@ class Gui:
         self.Task_pointer = []
         self.completeds = []
         self.pause = 0
-        self.menu_font = ("Times New Roman", 12)
+        self.menu_font = ("Times New Roman", 10)
         self.menu = tk.Menu(self.window, font=self.menu_font)
+        self.spdcntrl = tk.Menubutton(self.canvas, text="Speed", font=self.menu_font, relief="solid", width=6, bd=1, padx=1)
         self.total_tasks = 0
 
     def create_main_queue(self, length, sched): # creates the ready queue displayed in the middle of the gui
@@ -143,6 +143,10 @@ class Gui:
         self.canvas.create_rectangle(300, self.height / 32 + 150, 350, self.height / 32 + 180)
         self.canvas.create_text(250, self.height / 32 + 165, text="Offloaded Tasks")
         self.canvas.create_text(325, self.height / 32 + 165, text=0, tags="offloaded")
+
+        #self.canvas.create_text(325, self.height / 32 + 165, text=self.pb['values'], tags="pb")
+
+
         self.Task_pointer = [total_tasks]
 
     def create_menubar(self): # Creates the menu bar located at the top of the gui
@@ -192,8 +196,8 @@ class Gui:
         start_b = tk.Button(self.canvas, text="Start", command=self.start, width=5, relief="solid", font=self.menu_font, bd=1)
         stop_b = tk.Button(self.canvas, text="Pause", command=self.stop, width=5, font=self.menu_font)
         reset_b = tk.Button(self.canvas, text="Reset", command=self.reset, width=5, relief="solid", font=self.menu_font, bd=1)
-        self.spdcntrl.menu = tk.Menu(spdcntrl) # creates the dropdown box menu
-        self.spdcntrl["menu"] = spdcntrl.menu
+        self.spdcntrl.menu = tk.Menu(self.spdcntrl) # creates the dropdown box menu
+        self.spdcntrl["menu"] = self.spdcntrl.menu
         self.spdcntrl.menu.add_command(label="Default Speed", command=lambda: self.set_speed(0, "Default Speed")) # creates the options in the dropdown menu
         self.spdcntrl.menu.add_command(label=".5x Speed", command=lambda: self.set_speed(50, ".5x Speed"))
         self.spdcntrl.menu.add_command(label=".25x Speed", command=lambda: self.set_speed(100, ".25x Speed"))
@@ -236,6 +240,7 @@ class Gui:
         missed_count = 0
         dropped_count = 0
         offloaded_count = 0
+        
         for task in self.Tasks: # runs through the whole list of events
             if task[0] == 1: # If the event is an arrival, add task to the end of the queue and increment the arrived
                 # total and moves task to corresponding machine queue if its been assigned.
@@ -245,7 +250,9 @@ class Gui:
                 speed += self.speed_increment
                 self.window.after(speed, self.task_queueing, task[1])
                 speed += self.speed_increment
-                self.window.after(speed, self.task_assigned, task[1])
+                self.window.after(speed, self.task_assigned, task[1])                
+
+
             elif task[0] == 2: # If the event is missed, increment the missed total
                 missed_count += 1
                 speed += self.speed_increment
@@ -300,7 +307,11 @@ class Gui:
         self.canvas.delete("completed")
         self.canvas.create_text(325, self.height / 32 + 75, text=completed_count, tags="completed")
         if len(self.Tasks) != 0: # increments the progress bar at the bottom and ensures the total tasks aren't 0
-            self.pb['value'] += 100 / self.total_tasks
+            
+            temp = 0.01 * self.pb['value'] * self.total_tasks + 1
+            self.pb['value'] =  100 * temp
+        
+        
 
     def task_queueing(self, task): # adds the task to the next available spot in the queue and logs its location
         count = 0
