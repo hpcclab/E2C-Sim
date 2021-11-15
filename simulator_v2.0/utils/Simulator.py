@@ -41,27 +41,27 @@ class Simulator:
 
     def create_event_queue(self):
 
-        with open(self.path_to_arrival, 'r') as data_file:
-            for task in data_file:
-                task = task.strip()
-                task_details = [x.strip() for x in task.split(',')]
+        df = pd.read_csv(self.path_to_arrival)
 
-                if task[0] == '#':
-                    machine_types = [x.split('_')[-1] for x in task.split(',')[4:6]]
-                else:
-                    task_id = int(task_details[0])
-                    task_type_id = int(task_details[1])
-                    task_size = float(task_details[2])
-                    arrival_time = float(task_details[3])
-                    estimated_time = {machine_types[0]: float(task_details[4]),
-                                      machine_types[1]: float(task_details[5]),
-                                      'CLOUD': float(task_details[6])}
-                    execution_time = {machine_types[0]: float(task_details[7]),
-                                      machine_types[1]: float(task_details[8]),
-                                      'CLOUD': float(task_details[9])}
-                    type = Config.find_task_types(task_type_id)
-                    self.tasks.append(Task(task_id, type, task_size,estimated_time,
-                                           execution_time, arrival_time))
+        for _ , row in df.iterrows():
+            task_id = int(row[0])
+            task_type_id = int(row[1])
+            task_size = row[2]
+            arrival_time = row[3]
+            d_est = {}
+            d_real = {}
+            i = 4
+            for machine_type in Config.machine_types:
+                d_est[machine_type.name] = row[i]
+                d_real[machine_type.name] = row[Config.no_of_machines+1+i]
+                i += 1
+            d_est['CLOUD'] = row[i]
+            d_real['CLOUD'] = row[-1]
+            estimated_time = d_est
+            execution_time = d_real
+            type = Config.find_task_types(task_type_id)
+            self.tasks.append(Task(task_id, type, task_size,estimated_time,
+                                     execution_time, arrival_time))    
         self.total_no_of_tasks = len(self.tasks)
         for task in self.tasks:
             event = Event(task.arrival_time, EventTypes.ARRIVING, task)
@@ -84,7 +84,8 @@ class Simulator:
         else:
             print('ERROR: Scheduler ' + self.scheduling_method + ' does not exist')
             self.scheduler = None
-        self.gui1.create_main_queue(8, self.scheduling_method)
+        if Config.gui:
+            self.gui1.create_main_queue(8, self.scheduling_method)
 
     def idle_energy_consumption(self):
 

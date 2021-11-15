@@ -59,7 +59,7 @@ class Gui:
 
     def create_machine_names(self): # creates the list of machines available for scheduling and their queues on the right.
         # next few lines set up the image for the machines
-        img = Image.open("cloud.png")
+        img = Image.open("./figures/cloud.png")
         img = img.resize((100, 50), Image.ANTIALIAS)
         readyimg = ImageTk.PhotoImage(img)
         label = tk.Label(self.canvas, image=readyimg)
@@ -105,7 +105,7 @@ class Gui:
             # displays the machine names and their corresponding images
             self.canvas.create_text((w1 + w2) / 2 -10 , (z1 + z2) / 2 + 30, fill="black", font="Times 12 bold",
                                     text=name.getType())
-            img = Image.open(name.getType()+".png")
+            img = Image.open("./figures/"+name.getType()+".png")
             img = img.resize((50, 40), Image.ANTIALIAS)
             readyimg = ImageTk.PhotoImage(img)
             label = tk.Label(self.canvas, image=readyimg)
