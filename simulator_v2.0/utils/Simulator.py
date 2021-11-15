@@ -15,7 +15,7 @@ from MMU import MMU
 from RLS import RLS
 
 from TabRLS import TabRLS
-from tqdm import tqdm 
+from tqdm import tqdm
 
 #from tqdm import tqdm
 import numpy as np
@@ -30,12 +30,13 @@ class Simulator:
 
 
     def __init__(self,scheduling_method, path_to_arrival, id = 0, verbosity = 0):
-        self.scheduling_method = scheduling_method        
-        # self.gui1 = GUI.Gui("Scheduler GUI", '1000x800', 700, 800)
+        self.scheduling_method = scheduling_method
+        self.gui1 = GUI.Gui("Scheduler GUI", '1000x800', 700, 800)
         self.path_to_arrival = path_to_arrival
         self.verbosity = verbosity
         self.id = id
         self.tasks = []
+        self.total_no_of_tasks = []
 
     def create_event_queue(self):
 
@@ -51,14 +52,11 @@ class Simulator:
                     task_type_id = int(task_details[1])
                     task_size = float(task_details[2])
                     arrival_time = float(task_details[3])
-                    estimated_time = {machine_types[0]: float(task_details[4]),
+                    execution_time = {machine_types[0]: float(task_details[4]),
                                       machine_types[1]: float(task_details[5]),
                                       'CLOUD': float(task_details[6])}
-                    execution_time = {machine_types[0]: float(task_details[7]),
-                                      machine_types[1]: float(task_details[8]),
-                                      'CLOUD': float(task_details[9])}
                     type = Config.find_task_types(task_type_id)
-                    self.tasks.append(Task(task_id, type, task_size,estimated_time,
+                    self.tasks.append(Task(task_id, type, task_size,
                                            execution_time, arrival_time))
         self.total_no_of_tasks = len(self.tasks)
         for task in self.tasks:
@@ -75,35 +73,41 @@ class Simulator:
         elif self.scheduling_method == 'FCFS':
             self.scheduler = FCFS(self.total_no_of_tasks)
         elif self.scheduling_method == 'RLS':
-            self.scheduler = RLS(self.total_no_of_tasks) 
+            self.scheduler = RLS(self.total_no_of_tasks)
         elif self.scheduling_method == 'TabRLS':
-            self.scheduler = TabRLS(self.total_no_of_tasks)        
+            self.scheduler = TabRLS(self.total_no_of_tasks)
 
         else:
             print('ERROR: Scheduler ' + self.scheduling_method + ' does not exist')
             self.scheduler = None
-        #self.gui1.create_main_queue(8, self.scheduling_method)
+        self.gui1.create_main_queue(8, self.scheduling_method)
 
     def idle_energy_consumption(self):
 
 
-        for machine in Config.machines:                
+        for machine in Config.machines:
                 idle_time_interval = Config.current_time - machine.idle_time
                 if idle_time_interval >0:
                     idle_energy_consumption = machine.specs['idle_power'] * idle_time_interval
                     machine.idle_time = Config.current_time
                 else:
-                    idle_energy_consumption = 0.0 
+                    idle_energy_consumption = 0.0
                 machine.stats['energy_usage'] += idle_energy_consumption
                 Config.available_energy -= idle_energy_consumption
                 s = '\nmachine {} @{}\n\tidle_time:{}\n\tidle_time_interval:{}\n\tidle power consumption: {} '.format(
                     machine.id, Config.current_time, machine.idle_time, idle_time_interval, idle_energy_consumption)
                 Config.log.write(s)
-                           
 
-    def run(self):  
 
-        
+    def run(self):
+        self.gui1.create_main_queue(8, self.scheduling_method)
+        self.gui1.create_machine_names()
+        self.gui1.create_legend()
+        self.gui1.create_controls()
+        self.gui1.create_menubar()
+        num = 0
+        if self.verbosity == 0:
+            pbar = tqdm(total=self.total_no_of_tasks)
 
         # if self.verbosity <= 1:
         #     pbar = tqdm(total=self.total_no_of_tasks)
@@ -121,10 +125,10 @@ class Simulator:
 
 
             if self.verbosity == 2 :
-                print(s)          
+                print(s)
 
 
-            if event.event_type == EventTypes.ARRIVING:              
+            if event.event_type == EventTypes.ARRIVING:
 
 
                 self.scheduler.unlimited_queue.append(task)
@@ -141,18 +145,18 @@ class Simulator:
 
 
 
-            elif event.event_type == EventTypes.COMPLETION:        
-                # if self.verbosity <= 1:  
+            elif event.event_type == EventTypes.COMPLETION:
+                # if self.verbosity <= 1:
                 #     pbar.update(1)
-                machine = task.assigned_machine                 
-                machine.terminate(task)                
-                self.scheduler.feed() 
+                machine = task.assigned_machine
+                machine.terminate(task)
+                self.scheduler.feed()
 
 
                 assigned_machine = self.scheduler.schedule()
 
             elif event.event_type == EventTypes.OFFLOADED:
-                # if self.verbosity <= 1:  
+                # if self.verbosity <= 1:
                 #     pbar.update(1)
                 Config.cloud.terminate(task)
                 self.scheduler.feed()
@@ -161,21 +165,24 @@ class Simulator:
 
             elif event.event_type == EventTypes.DROPPED_RUNNING_TASK:
 
-                # if self.verbosity <= 1:  
+                # if self.verbosity <= 1:
                 #     pbar.update(1)
-                machine = task.assigned_machine        
+                machine = task.assigned_machine
 
                 machine.drop()
                 self.scheduler.feed()
                 num = 5
                 assigned_machine = self.scheduler.schedule()
-        
+            self.gui1.add_task(num, task)
+
         # if self.verbosity <= 1:
         #     pbar.close()
 
         if self.scheduling_method == 'TabRLS':
             self.scheduler.done = True
-    
+        if Config.gui == 1:
+            self.gui1.begin()
+
 
 
     def report(self, path_to_report):
@@ -184,8 +191,8 @@ class Simulator:
 
             'id', 'type', 'size', 'urgency','status','assigned_machine',
             'arrival_time','execution_time','start_time', 'completion_time',
-            'deadline','extended_deadline']       
-        
+            'deadline','extended_deadline']
+
 
         with open(path_to_report+'detailed-'+str(self.id)+'.csv','w') as results:
 
@@ -217,7 +224,7 @@ class Simulator:
             len(self.scheduler.stats['deferred'])
         )
 
-        
+
 
         if self.verbosity == 1:
             print(s)
@@ -230,8 +237,8 @@ class Simulator:
             missed_urg += machine.stats['missed_URG_tasks']
             missed_be += machine.stats['missed_BE_tasks']
             completed_percent = 0
-            xcompleted_percent = 0 
-            energy_percent = 0 
+            xcompleted_percent = 0
+            energy_percent = 0
             if machine.stats['assigned_tasks'] != 0:
                 completed_percent = machine.stats['completed_tasks'] / machine.stats['assigned_tasks']
                 xcompleted_percent = machine.stats['xcompleted_tasks'] / machine.stats['assigned_tasks']
@@ -280,9 +287,9 @@ class Simulator:
         s += '\n%offloaded: {:2.1f}'.format(len(self.scheduler.stats['offloaded']))
 
         if self.scheduling_method == 'TabRLS':
-            s += '\n\tTotal Reward:{}\n\tAverage Reward:{}'.format(np.sum(self.scheduler.rewards), 
+            s += '\n\tTotal Reward:{}\n\tAverage Reward:{}'.format(np.sum(self.scheduler.rewards),
             np.mean(self.scheduler.rewards))
-            
+
         if self.verbosity <= 3:
             print(s)
         Config.log.write(s)
