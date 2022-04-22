@@ -1,2 +1,0 @@
-TT1_assigned_to_cpu,TT1_completed_cpu,TT1_xcompleted_cpu,TT1_missed_cpu,TT1_assigned_to_gpu,TT1_completed_gpu,TT1_xcompleted_gpu,TT1_missed_gpu,TT2_assigned_to_cpu,TT2_completed_cpu,TT2_xcompleted_cpu,TT2_missed_cpu,TT2_assigned_to_gpu,TT2_completed_gpu,TT2_xcompleted_gpu,TT2_missed_gpu
-11.4,7.5,3.4,0.5,68.2,68.2,0.0,0.0,3.6,1.6,0.8,1.2,15.8,15.7,0.1,0.0

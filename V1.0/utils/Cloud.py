@@ -5,17 +5,17 @@ Created on Nov., 15, 2021
 
 """
 
-from BaseTask import TaskStatus, UrgencyLevel
-from Event import Event, EventTypes
-import Config
+from utils.base_task import TaskStatus, UrgencyLevel
+from utils.event import Event, EventTypes
+import utils.config as config
 from math import ceil
 
 
 class Cloud:
     
     def __init__(self, bandwidth, latency):
-        self.bandwidth = Config.bandwidth
-        self.latency = Config.latency
+        self.bandwidth = config.bandwidth
+        self.latency = config.network_latency
         self.completed_tasks = []
         self.xcompleted_tasks = []
         self.missed_tasks = []
@@ -41,9 +41,9 @@ class Cloud:
     def admit(self, task):
         task.status = TaskStatus.OFFLOADED
         self.stats['offloaded_tasks'] += 1
-        task.start_time = Config.current_time
-        no_of_packets = ceil(task.task_size / Config.bandwidth)       
-        task.completion_time = task.start_time + no_of_packets * Config.latency + task.execution_time['CLOUD']        
+        task.start_time = config.time.gct()
+        no_of_packets = ceil(task.task_size / config.bandwidth)       
+        task.completion_time = task.start_time + no_of_packets * config.latency + task.execution_time['CLOUD']        
         
         if task.urgency == UrgencyLevel.BESTEFFORT:
             if task.completion_time <= task.deadline + task.devaluation_window:
@@ -62,11 +62,11 @@ class Cloud:
         event_time = task.completion_time
         event_type = EventTypes.OFFLOADED     
         event = Event(event_time, event_type, task)
-        Config.event_queue.add_event(event)
+        config.event_queue.add_event(event)
 
         s = '\n[ Task({}), ____ ]: OFFLOADED        @time({:3.3f}) exec+net:{:3.3f}'.format(
-            task.id, task.start_time, no_of_packets * Config.latency + task.execution_time['CLOUD'])
-        Config.log.write(s)
+            task.id, task.start_time, no_of_packets * config.latency + task.execution_time['CLOUD'])
+        
         #print(s)
 
         return reward
@@ -100,7 +100,6 @@ class Cloud:
                 self.stats['missed_URG_tasks'] += 1
         
         s = '\n[ Task({}), ____ ]: {}        @time({:3.3f}) on CLOUD'.format(
-            task.id, task.status, task.completion_time)
-        Config.log.write(s)
+            task.id, task.status, task.completion_time)        
         #print(s)
         

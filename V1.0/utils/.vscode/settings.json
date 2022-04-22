@@ -1,3 +1,4 @@
 {
-    "python.pythonPath": "/home/C00424072/anaconda3/envs/simulator/bin/python"
+    "python.pythonPath": "/home/C00424072/anaconda3/envs/simulator/bin/python",
+    "git.ignoreLimitWarning": true
 }
