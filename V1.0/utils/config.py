@@ -89,7 +89,7 @@ def init():
     global bandwidth, network_latency
     
     global log
-    
+    global gui
     
     data = load_config()
     
@@ -112,6 +112,8 @@ def init():
     network_latency = data['cloud'][0]['network_latency']
 
     settings = data['settings'][0]
+    gui = settings['gui']
+
     try:
         log = open(f"{settings['path_to_output']}/log.txt",'w')
     except OSError as err:

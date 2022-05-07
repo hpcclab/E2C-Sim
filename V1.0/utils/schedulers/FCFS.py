@@ -17,7 +17,7 @@ class FCFS(BaseScheduler):
         self.name = 'FCFS'
         self.total_no_of_tasks = total_no_of_tasks
         self.prev_assignment_idx = -1
-        
+        self.gui_machine_log = []
 
     def choose(self, index=0):
         
@@ -41,6 +41,7 @@ class FCFS(BaseScheduler):
            task.id, config.time.gct())
         config.log.write(s)
         print(s)
+        self.gui_machine_log.append({"Task id":task.id,"Event Type":"DEFERRED","Time":config.time.gct(), "Type":'task'})
 
     def drop(self, task):
         self.unmapped_task.pop()
@@ -51,6 +52,7 @@ class FCFS(BaseScheduler):
             task.id, config.time.gct()       )
         config.log.write(s)
         print(s)
+        self.gui_machine_log.append({"Task id":task.id,"Event Type":"DEFERRED","Time":config.time.gct(), "Type":'task'})
 
     def map(self, machine):
         task = self.unmapped_task.pop()
@@ -65,6 +67,7 @@ class FCFS(BaseScheduler):
 
 
     def schedule(self):
+        self.gui_machine_log = []
         if self.batch_queue.empty():
             return 0
         self.choose()        

@@ -10,7 +10,6 @@ from utils.base_task import TaskStatus
 from utils.base_scheduler import BaseScheduler
 import utils.config as config
 
-
 class FEE(BaseScheduler):
     
     def __init__(self, total_no_of_tasks):
@@ -18,8 +17,7 @@ class FEE(BaseScheduler):
         self.name = 'FEE'
         self.total_no_of_tasks = total_no_of_tasks
         self.priority_queue = []
-        
-        
+        self.gui_machine_log = []
             
     def choose(self, index=0):
         task = self.batch_queue.get(index)     
@@ -47,6 +45,8 @@ class FEE(BaseScheduler):
             s = '\n[ Task({:}),  _________ ]: Deferred       @time({:3.3f})'.format(
             task.id, config.time.gct())
             config.log.write(s)
+        self.gui_machine_log.append({"Task id":task.id,"Event Type":"DEFERRED","Time":config.time.gct(), "Type":'task'})
+        
 
     def drop(self, task):
         self.unmapped_task.pop()
@@ -55,8 +55,9 @@ class FEE(BaseScheduler):
         self.stats['dropped'].append(task) 
         if config.settings['verbosity']:       
             s = '\n[ Task({:}),  _________ ]: Cancelled      @time({:3.3f})'.format(
-                task.id, config.time.gct()       )
+                task.id, config.time.gct())
             config.log.write(s)
+        self.gui_machine_log.append({"Task id":task.id,"Event Type":"CANCELLED","Time":config.time.gct(), "Type":'task'})
 
     def map(self, machine):
         task = self.unmapped_task.pop()
@@ -194,7 +195,7 @@ class FEE(BaseScheduler):
 
     def schedule(self):        
         provisional_map = self.phase1()
-        
+        self.gui_machine_log = []
         for item in provisional_map:
             #print(item[0].id, item[2].type.name)
             task = item[0]

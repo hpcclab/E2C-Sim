@@ -4,7 +4,7 @@
         {
             "machine_queue_size":3,
             "batch_queue_size":8,
-            "scheduling_method":"FEE",
+            "scheduling_method":"FCFS",
             "fairness_factor": 1.0
             
         }        
@@ -13,7 +13,8 @@
         {
             "path_to_output":"./output",
             "path_to_workload":"./workload",
-            "verbosity": 2
+            "verbosity": 3,
+            "gui":1
         }        
     ],
 
