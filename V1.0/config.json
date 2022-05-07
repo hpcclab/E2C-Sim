@@ -4,7 +4,7 @@
         {
             "machine_queue_size":3,
             "batch_queue_size":8,
-            "scheduling_method":"FCFS",
+            "scheduling_method":"FEE",
             "fairness_factor": 1.0
             
         }        

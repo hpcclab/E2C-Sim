@@ -164,8 +164,8 @@ class Simulator(QObject):
                 self.gui_machine_queue = []
                 if config.gui == 1 and assigned_machine != None:
                     self.gui_machine_queue.append(assigned_machine.id)
-                    time.sleep(self.timer)
-                    self.progress.emit({"Task id": task.id, "Event Type": "ARRIVING_MACHINE_QUEUE","Machine":assigned_machine.id,"Type":'task'})
+                    # time.sleep(self.timer)
+                    # self.progress.emit({"Task id": task.id, "Event Type": "ARRIVING_MACHINE_QUEUE","Machine":assigned_machine.id,"Type":'task'})
                     time.sleep(self.timer)
                     for i in assigned_machine.queue.list:
                         self.gui_machine_queue.append(i.id)
@@ -180,11 +180,6 @@ class Simulator(QObject):
                
                     
                 assigned_machine = self.scheduler.schedule()
-                # if (self.scheduler.gui_machine_log != self.check_sim2):
-                #     self.progress.emit(self.scheduler.gui_machine_log)
-                    
-                #     print(self.scheduler.gui_machine_log)
-                #     self.check_sim2 = self.scheduler.gui_machine_log
                 
                 if assigned_machine == None:
                     break
@@ -387,7 +382,7 @@ class Simulator(QObject):
         #return row, task_report
         return row
     # For GUI
-    def setTimer(self,time=1):
+    def setTimer(self,time=0.5):
         self.timer = time
     # For GUI 
     def simPause(self,value):

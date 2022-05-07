@@ -75,7 +75,7 @@ class FCFS(BaseScheduler):
         machine = config.machines[machine_index]
         self.prev_assignment_idx = machine_index
         self.map(machine)
-        return 1
+        return machine
 
 
 
