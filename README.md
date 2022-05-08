@@ -13,6 +13,7 @@ Below, you can find the steps to execute the program:
 4. To change the Config of the machines and task types, open ``` config.json ``` and add new task types in the same format present and increase or decrease the amount of each machine present as well as add new machine types etc also in the format present.
 5. Once the desired changes have been made, save the files changed and run ``` main.py ``` to see the results in the window
 ## How to Run the GUI
+![alt text](V1.0\E2C-Sim_snapshot.png "E2C Simulator")
 1. Go to ``` config.json ```, under Settings, set ```"gui":1```
 2. Run ``` python main.py```
 3. In the GUI, press **Start** to begin the simulation.

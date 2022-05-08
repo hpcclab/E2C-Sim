@@ -52,8 +52,15 @@ class Statistic(QFrame):
         self.layout = QVBoxLayout()
         self.setLayout(self.layout)
         self.width = 400
+        self.TotalTasks = QLabel(self)
+        self.TotalTasks.setText("Total Tasks: {}".format(0))
+        self.TotalTasks.setTextInteractionFlags(Qt.TextSelectableByMouse)
+        self.TotalTasks.setMaximumWidth(self.width)
+        self.TotalTasks.setStyleSheet("border:1px solid;")
+        self.layout.addWidget(self.TotalTasks)
+        
         self.TotalCompletion = QLabel(self)
-        self.TotalCompletion.setText("Total Completion %: {}".format(0))
+        self.TotalCompletion.setText("Total Completion: {}%".format(0))
         self.TotalCompletion.setTextInteractionFlags(Qt.TextSelectableByMouse)
         self.TotalCompletion.setMaximumWidth(self.width)
         self.TotalCompletion.setStyleSheet("border:1px solid;")
@@ -61,34 +68,34 @@ class Statistic(QFrame):
 
         self.TotalxCompletion = QLabel(self)
         self.TotalxCompletion.setTextInteractionFlags(Qt.TextSelectableByMouse)
-        self.TotalxCompletion.setText("Total Extended Completion %: {}".format(0))
+        self.TotalxCompletion.setText("Total Extended Completion: {}%".format(0))
         self.TotalxCompletion.setMaximumWidth(self.width)
         self.TotalxCompletion.setStyleSheet("border:1px solid;")
         self.layout.addWidget(self.TotalxCompletion)
 
         self.deffered = QLabel(self)
-        self.deffered.setText("Deffered %: {}".format(0))
+        self.deffered.setText("Deferred: {}%".format(0))
         self.deffered.setTextInteractionFlags(Qt.TextSelectableByMouse)
         self.deffered.setMaximumWidth(self.width)
         self.deffered.setStyleSheet("border:1px solid;")
         self.layout.addWidget(self.deffered)
 
         self.dropped = QLabel(self)
-        self.dropped.setText("Dropped %: {}".format(0))
+        self.dropped.setText("Dropped: {}%".format(0))
         self.dropped.setTextInteractionFlags(Qt.TextSelectableByMouse)
         self.dropped.setMaximumWidth(self.width)
         self.dropped.setStyleSheet("border:1px solid;")
         self.layout.addWidget(self.dropped)
 
         self.totalCompletion = QLabel(self)
-        self.totalCompletion.setText("Total Completion %: {}".format(0))
+        self.totalCompletion.setText("Total Completion: {}%".format(0))
         self.totalCompletion.setTextInteractionFlags(Qt.TextSelectableByMouse)
         self.totalCompletion.setMaximumWidth(self.width)
         self.totalCompletion.setStyleSheet("border:1px solid;")
         self.layout.addWidget(self.totalCompletion)
 
         self.consumedEnergy = QLabel(self)
-        self.consumedEnergy.setText("Consumed Energy%: {}".format(0))
+        self.consumedEnergy.setText("Consumed Energy: {}%".format(0))
         self.consumedEnergy.setTextInteractionFlags(Qt.TextSelectableByMouse)
         self.consumedEnergy.setMaximumWidth(self.width)
         self.consumedEnergy.setStyleSheet("border:1px solid;")
@@ -241,15 +248,15 @@ class MachinesSummaryBox(QMessageBox):
             if i == '%Completion':
                 lay.addWidget(QLabel("{} : {:.3f}".format("Completion %", j), self))
             elif i == '# of %Completion':
-                lay.addWidget(QLabel("{} : {:.3f}".format("Number of Completed Tasks", j), self))
+                lay.addWidget(QLabel("{} : {:.3f}".format("# of Completed Tasks", j), self))
             elif i == '%XCompletion':
                 lay.addWidget(QLabel("{} : {:.3f}".format("Extended Completion %", j), self))
             elif i == '# of %XCompletion':
-                lay.addWidget(QLabel("{} : {:.3f}".format("Number Extended Completed Tasks", j), self))
+                lay.addWidget(QLabel("{} : {:.3f}".format("# of Extended Completed Tasks", j), self))
             elif i == '#Missed URG':
-                lay.addWidget(QLabel("{} : {:.3f}".format("Number of Missed URGENT tasks", j), self))
+                lay.addWidget(QLabel("{} : {:.3f}".format("# Urgent tasks missed deadline", j), self))
             elif i == 'Missed URG':
-                lay.addWidget(QLabel("{} : {:.3f}".format("Number of Missed BEST EFFORT tasks", j), self))
+                lay.addWidget(QLabel("{} : {:.3f}".format("# Best Effort tasks missed deadline", j), self))
             elif i == '%Energy':
                 lay.addWidget(QLabel("{} : {:.3f}".format("Energy %", j), self))
             elif i == '%Wasted Energy':
@@ -283,7 +290,7 @@ class GUI(QMainWindow):
         super(GUI, self).__init__()
         self.color = ["background-color:lightgreen", "background-color:lightblue",
                       "background-color:lightsalmon", "background-color:lightpink", "background-color:lightgoldenrodyellow"]
-        self.no_of_task = 2000  # maximum number of tasks that the GUI will run
+        self.no_of_task = 3000  # maximum number of tasks that the GUI will run
         self.tasks = []
         self.machine_stats = []
         self.machine_stats_btn = []
@@ -327,7 +334,7 @@ class GUI(QMainWindow):
             b.setGeometry(self.m_coords[i][0]*1.6,
                           self.m_coords[i][1],self.width/10,self.height/30)
             b.setFont(QFont("Arial",self.fontSize))
-            b.setText("Machine Statistic")
+            b.setText("Machine Report")
             b.setEnabled(False)
             self.machine_stats_btn.append(b)
             self.machine_stats_btn[i].clicked.connect(
@@ -407,7 +414,7 @@ class GUI(QMainWindow):
 
             self.slider = QDial(self)
             self.slider.setGeometry(30, self.width/50*10+self.height/20*6, 100, 100)
-            self.slider.setMinimum(0)
+            self.slider.setMinimum(50)
             self.slider.setMaximum(600)
             self.slider.setInvertedAppearance(True) # invert the slider to move left to decrease speed, vice versa
             self.slider.setSliderPosition(self.timer)
@@ -424,14 +431,14 @@ class GUI(QMainWindow):
             self.restartBtn.setEnabled(False)
             self.restartBtn.clicked.connect(lambda: self.restart())
 
-            self.mDetails = QPushButton("Machine Summary", self)
+            self.mDetails = QPushButton("Machines Report", self)
             self.mDetails.setGeometry(30, self.width/50*10+self.height/20*4, self.width/20,  self.height/20)
             self.mDetails.setFont(QFont("Arial",self.fontSize))
             self.mDetails.setEnabled(False)
             self.mDetails.adjustSize()
             self.mDetails.clicked.connect(lambda: self.createTable())
 
-            self.getLogBtn = QPushButton("Full log", self)
+            self.getLogBtn = QPushButton("Tasks Report", self)
             self.getLogBtn.setGeometry(30, self.width/50*10+self.height/20*5, self.width/20,  self.height/20)
             self.getLogBtn.setFont(QFont("Arial",self.fontSize))
             self.getLogBtn.setEnabled(False)
@@ -469,7 +476,7 @@ class GUI(QMainWindow):
         It opens a new window with a scrollable text box that contains the contents of the finishedLog
         variable
         """
-        result = FullLogBox(self.finishedLog, self.machine_stats,"Full Logs", None)
+        result = FullLogBox(self.finishedLog, self.machine_stats,"Tasks Report", None)
         result.exec_()
 
     # Enable buttons
@@ -611,7 +618,7 @@ class GUI(QMainWindow):
             no_XCompletion = QTableWidgetItem(
                 str(round(v['# of %XCompletion'], 2)))
             missed_URG = QTableWidgetItem(str(round(v['#Missed URG'], 2)))
-            missed_BE = QTableWidgetItem(str(round(v['Missed BE'], 2)))
+            missed_BE = QTableWidgetItem(str(round(v['# Best Effort tasks missed deadline'], 2)))
             energy = QTableWidgetItem(str(round(v['%Energy'], 2)))
             wasted_energy = QTableWidgetItem(
                 str(round(v['%Wasted Energy'], 2)))
@@ -650,19 +657,21 @@ class GUI(QMainWindow):
         """
         It sets the text of a bunch of QLabels to the values of a bunch of keys in a dictionary
         """
-        self.statistic.TotalCompletion.setText("Total Completion %: {:.3f}".format(
+        self.statistic.TotalTasks.setText("Total Tasks: {}".format(self.simulation.total_no_of_tasks
+            ))
+        self.statistic.TotalCompletion.setText("Total Completion : {:2.1f}%".format(
             self.data['statistics']['%Total Completion']))
-        self.statistic.TotalxCompletion.setText("Total Extended Completion %: {:.3f}".format(
+        self.statistic.TotalxCompletion.setText("Total Extended Completion : {:2.1f}%".format(
             self.data['statistics']['%Total xCompletion']))
         self.statistic.deffered.setText(
-            "Deferred %: {:.3f}".format(self.data['statistics']['%Deferred']))
+            "Deferred : {:2.1f}%".format(self.data['statistics']['%Deferred']/100))
         self.statistic.dropped.setText(
-            "Dropped %: {:.3f}".format(self.data['statistics']['%Dropped']))
+            "Dropped  : {:2.1f}%".format(self.data['statistics']['%Dropped']/100))
         self.statistic.totalCompletion.setText(
-            "Total Completion %: {:.3f}".format(self.data['statistics']['totalCompletion%']))
-        self.statistic.consumedEnergy.setText("Consumed Energy %: {:.3f}".format(
+            "Total Completion : {:2.1f}%".format(self.data['statistics']['totalCompletion%']))
+        self.statistic.consumedEnergy.setText("Consumed Energy: {:2.1f}%".format(
             self.data['statistics']['consumed_energy%']))
-        self.statistic.energyPerCompletion.setText("Energy per completion: {:.3f}".format(
+        self.statistic.energyPerCompletion.setText("Energy per completion: {:2.1f}".format(
             self.data['statistics']['energy_per_completion']))
     
     def batchQueueAnimation(self,d):
@@ -781,6 +790,8 @@ class GUI(QMainWindow):
             box.setGeometry(x, y, self.width/50, self.width/50)
             box.setFrameShape(QFrame.Box)
             x -= self.width/50
+        bq_label = QLabel("Batch Queue",self)
+        bq_label.setGeometry(self.bq_coords[len(self.bq_coords)-1][0],self.bq_coords[len(self.bq_coords)-1][1]+50,200,50)
         if (overload):
             overload_dot = QLabel(self)
             overload_dot.setGeometry(x+self.width/50, y, self.width/50, self.width/50)
@@ -860,7 +871,10 @@ class GUI(QMainWindow):
                 x_axis -= self.width/50
                 self.draw_machine_queue(x_axis, y_axis)
                 mq_c.append([x_axis, y_axis])
+
             self.mq_coords[i] = mq_c
+            mq_label = QLabel("Machine Queue",self)
+            mq_label.setGeometry(self.mq_coords[i][len(self.mq_coords[i])-1][0],self.mq_coords[i][len(self.mq_coords[i])-1][1]+50,200,50)
             if (machine_queue_overload):
                 overload_dot = QLabel(self)
                 overload_dot.setGeometry(self.mq_coords[i][3][0], self.mq_coords[i][3][1], self.width/50, self.width/50)
@@ -876,6 +890,20 @@ class GUI(QMainWindow):
             self.finishedTasksLabel.append(t)
             self.finishedTasks.append([])
 
+    
+    # Draw machine queue
+    def draw_machine_queue(self, x, y):
+        """
+        It creates a QLabel object, sets its frame shape to a box, and sets its geometry to a specific x
+        and y coordinate
+        
+        :param x: x-coordinate of the top left corner of the box
+        :param y: y-coordinate of the top left corner of the box
+        """
+        mq = QLabel(self)
+        mq.setFrameShape(QFrame.Box)
+        mq.setGeometry(x, y, self.width/50, self.width/50)
+
     def getMachineDetail(self, i):
         """
         It creates a IndividualMachineSummary object, which is a subclass of QDialog, and then calls the exec_()
@@ -890,19 +918,6 @@ class GUI(QMainWindow):
         machineDetail = [machineId, machineType, machineSpecs, machineQSize]
         msgBox = IndividualMachineSummary(machineDetail, "Machine detail", None)
         msgBox.exec_()
-
-    # Draw machine queue
-    def draw_machine_queue(self, x, y):
-        """
-        It creates a QLabel object, sets its frame shape to a box, and sets its geometry to a specific x
-        and y coordinate
-        
-        :param x: x-coordinate of the top left corner of the box
-        :param y: y-coordinate of the top left corner of the box
-        """
-        mq = QLabel(self)
-        mq.setFrameShape(QFrame.Box)
-        mq.setGeometry(x, y, self.width/50, self.width/50)
 
     # Initialize QPainter for drawing line
     def paintEvent(self, e):
