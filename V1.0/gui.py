@@ -246,21 +246,22 @@ class MachinesSummaryBox(QMessageBox):
         lay = QVBoxLayout(self.content)
         for i,j in l.items():
             if i == '%Completion':
-                lay.addWidget(QLabel("{} : {:.3f}".format("Completion %", j), self))
+                lay.addWidget(QLabel("{} : {:2.1f}%".format("Completion", j), self))
             elif i == '# of %Completion':
-                lay.addWidget(QLabel("{} : {:.3f}".format("# of Completed Tasks", j), self))
+                lay.addWidget(QLabel("{} : {:2.1f}".format("# of Completed Tasks", j), self))
             elif i == '%XCompletion':
-                lay.addWidget(QLabel("{} : {:.3f}".format("Extended Completion %", j), self))
+                lay.addWidget(QLabel("{} : {:2.1f}%".format("Extended Completion", j), self))
             elif i == '# of %XCompletion':
-                lay.addWidget(QLabel("{} : {:.3f}".format("# of Extended Completed Tasks", j), self))
+                lay.addWidget(QLabel("{} : {:2.1f}".format("# of Extended Completed Tasks", j), self))
             elif i == '#Missed URG':
-                lay.addWidget(QLabel("{} : {:.3f}".format("# Urgent tasks missed deadline", j), self))
-            elif i == 'Missed URG':
-                lay.addWidget(QLabel("{} : {:.3f}".format("# Best Effort tasks missed deadline", j), self))
+                lay.addWidget(QLabel("{} : {:2.1f}".format("# Urgent tasks missed deadline", j), self))
+            elif i == 'Missed BE':
+                lay.addWidget(QLabel("{} : {:2.1f}".format("# Best Effort tasks missed deadline", j), self))
+
             elif i == '%Energy':
-                lay.addWidget(QLabel("{} : {:.3f}".format("Energy %", j), self))
+                lay.addWidget(QLabel("{} : {:2.1f}%".format("Energy", j), self))
             elif i == '%Wasted Energy':
-                lay.addWidget(QLabel("{} : {:.3f}".format("Wasted Energy %", j), self))
+                lay.addWidget(QLabel("{} : {:2.1f}%".format("Wasted Energy", j), self))
             else:
                 lay.addWidget(QLabel("{} : {}".format(i, j), self))
         lay.addWidget(QLabel("Finished tasks: {}".format(finishTasks), self))
@@ -618,7 +619,7 @@ class GUI(QMainWindow):
             no_XCompletion = QTableWidgetItem(
                 str(round(v['# of %XCompletion'], 2)))
             missed_URG = QTableWidgetItem(str(round(v['#Missed URG'], 2)))
-            missed_BE = QTableWidgetItem(str(round(v['# Best Effort tasks missed deadline'], 2)))
+            missed_BE = QTableWidgetItem(str(round(v['Missed BE'], 2)))
             energy = QTableWidgetItem(str(round(v['%Energy'], 2)))
             wasted_energy = QTableWidgetItem(
                 str(round(v['%Wasted Energy'], 2)))
@@ -657,8 +658,7 @@ class GUI(QMainWindow):
         """
         It sets the text of a bunch of QLabels to the values of a bunch of keys in a dictionary
         """
-        self.statistic.TotalTasks.setText("Total Tasks: {}".format(self.simulation.total_no_of_tasks
-            ))
+        self.statistic.TotalTasks.setText("Total Tasks: {}".format(self.simulation.total_no_of_tasks ))
         self.statistic.TotalCompletion.setText("Total Completion : {:2.1f}%".format(
             self.data['statistics']['%Total Completion']))
         self.statistic.TotalxCompletion.setText("Total Extended Completion : {:2.1f}%".format(
@@ -699,7 +699,6 @@ class GUI(QMainWindow):
                 self.tasks[v].setAlignment(Qt.AlignCenter)
                 if i+1 >= maxIndex:
                     self.tasks[v].move(self.mq_coords[mq_machine_no][3][0]+3, self.mq_coords[mq_machine_no][3][1]+3)
-                    
                 else:
                     self.tasks[v].move(self.mq_coords[mq_machine_no][i-1][0]+3, self.mq_coords[mq_machine_no][i-1][1]+3)
             
@@ -1019,13 +1018,11 @@ class GUI(QMainWindow):
         data = json.loads(data)
         self.data = data
 
-
 def window():
     app = QApplication(sys.argv)
     win = GUI()
     win.show()
     app.exec_()
-
 
 if __name__ == '__main__':
     window()
