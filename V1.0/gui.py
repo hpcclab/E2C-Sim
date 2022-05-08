@@ -665,7 +665,6 @@ class GUI(QMainWindow):
                 print(self.machine_stats)
 
     def handle_BQ(self, d):
-        print(d)
         self.batchQueueAnimation(d)
 
     def handle_MQ(self, d):
