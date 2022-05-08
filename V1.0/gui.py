@@ -19,8 +19,9 @@ from PyQt5.QtWidgets import (
     QScrollArea,
     QComboBox,
     QLineEdit,
+    QDial
 )
-from PyQt5.QtGui import QPainter, QPen
+from PyQt5.QtGui import QPainter, QPen, QFont
 from PyQt5.QtCore import (
     QPropertyAnimation,
     Qt,
@@ -30,7 +31,8 @@ from PyQt5.QtCore import (
     QCoreApplication,
     QProcess,
     QObject,
-    pyqtSignal
+    pyqtSignal,
+
 )
 
 import csv
@@ -302,9 +304,10 @@ class GUI(QMainWindow):
     def initUI(self):
         screen = QApplication.primaryScreen()
         size = screen.size()
-        self.move(0,0)
-        self.width = size.width()
-        self.height = size.height()
+        self.move(100,100)
+        self.width = size.width()/1.25
+        self.height = size.height()/1.25
+        self.fontSize =11
         self.setMinimumSize(self.width, self.height)
         self.setWindowTitle("E2C Simulator")
         self.group = QSequentialAnimationGroup(self)
@@ -321,8 +324,9 @@ class GUI(QMainWindow):
         self.draw_machine()
         for i in range(len(self.m_coords)):
             b = QPushButton(self)
-            b.setGeometry(self.m_coords[i][0]+600,
-                          self.m_coords[i][1]+20, 170, 40)
+            b.setGeometry(self.m_coords[i][0]*1.6,
+                          self.m_coords[i][1],self.width/10,self.height/30)
+            b.setFont(QFont("Arial",self.fontSize))
             b.setText("Machine Statistic")
             b.setEnabled(False)
             self.machine_stats_btn.append(b)
@@ -384,22 +388,25 @@ class GUI(QMainWindow):
             self.timer = 300
 
             self.startBtn = QPushButton("Start", self)
-            self.startBtn.setGeometry(30, self.width/50*10, self.width/20, self.height/20)
+            self.startBtn.setGeometry(30, self.width/50*10, self.width/20,self.height/20)
+            self.startBtn.setFont(QFont("Arial",self.fontSize))
             self.startBtn.clicked.connect(lambda: self.thread.start())
             self.pauseBtn = QPushButton(self)
             self.pauseBtn.setGeometry(30, self.width/50*10+self.height/20, self.width/20,  self.height/20)
+            self.pauseBtn.setFont(QFont("Arial",self.fontSize))
             self.pauseBtn.setText("Pause")
             self.pause = True
             self.pauseBtn.clicked.connect(lambda: self.pauseResumeBtn())
 
             self.endBtn = QPushButton("End", self)
             self.endBtn.setGeometry(30, self.width/50*10+self.height/20*2, self.width/20,  self.height/20)
+            self.endBtn.setFont(QFont("Arial",self.fontSize))
             self.endBtn.clicked.connect(
                 lambda: self.simulation.setTimer(0))
             self.endBtn.clicked.connect(lambda: self.endThread())
 
-            self.slider = QSlider(Qt.Horizontal,self)
-            self.slider.setGeometry(30, self.width/50*10+self.height/20*6, self.width/10, 40)
+            self.slider = QDial(self)
+            self.slider.setGeometry(30, self.width/50*10+self.height/20*6, 100, 100)
             self.slider.setMinimum(0)
             self.slider.setMaximum(600)
             self.slider.setInvertedAppearance(True) # invert the slider to move left to decrease speed, vice versa
@@ -409,21 +416,24 @@ class GUI(QMainWindow):
 
             self.sliderLabel = QLabel(self)
             self.sliderLabel.setGeometry(self.width/10*1.25, self.width/50*10+self.height/20*6, 200, 40)
-            self.sliderLabel.setText("{:.1f}x".format(self.timer/300))
+            # self.sliderLabel.setText("{:.1f}x".format(self.timer/300))
 
             self.restartBtn = QPushButton("Restart", self)
             self.restartBtn.setGeometry(30, self.width/50*10+self.height/20*3, self.width/20,  self.height/20)
+            self.restartBtn.setFont(QFont("Arial",self.fontSize))
             self.restartBtn.setEnabled(False)
             self.restartBtn.clicked.connect(lambda: self.restart())
 
             self.mDetails = QPushButton("Machine Summary", self)
             self.mDetails.setGeometry(30, self.width/50*10+self.height/20*4, self.width/20,  self.height/20)
+            self.mDetails.setFont(QFont("Arial",self.fontSize))
             self.mDetails.setEnabled(False)
             self.mDetails.adjustSize()
             self.mDetails.clicked.connect(lambda: self.createTable())
 
             self.getLogBtn = QPushButton("Full log", self)
             self.getLogBtn.setGeometry(30, self.width/50*10+self.height/20*5, self.width/20,  self.height/20)
+            self.getLogBtn.setFont(QFont("Arial",self.fontSize))
             self.getLogBtn.setEnabled(False)
             self.getLogBtn.adjustSize()
             self.getLogBtn.clicked.connect(lambda: self.getLog())
@@ -506,7 +516,7 @@ class GUI(QMainWindow):
         :param value: The value of the slider
         """
         if value != 0:
-            self.sliderLabel.setText("{:.1f}x".format(1000/value, "2f"))
+            self.sliderLabel.setText("{:.1f}x".format(300/value, "2f"))
 
     # Puase the simulation
     def pauseResumeBtn(self):
@@ -550,12 +560,23 @@ class GUI(QMainWindow):
                 print(self.machine_stats)
                 
     def handle_BQ(self,d):
-        if len(d) > 3:
-            self.batchQueueAnimation(d[0:3])
+        if config.batch_queue_size >= 4:
+            self.batchQueueAnimation(d[0:4])
         else:
-            self.batchQueueAnimation(d)
+            if len(d) >= config.batch_queue_size:
+                self.batchQueueAnimation(d[0:config.batch_queue_size])
+            else:
+                self.batchQueueAnimation(d)
+                
         
     def handle_MQ(self,d):
+        # if self.machine_queue_size >= 4:
+        #     self.machineQueueAnimation(d[0:5])
+        # else:
+        #     if len(d)-1 >= self.machine_queue_size:
+        #         self.machineQueueAnimation(d[0:self.machine_queue_size+1])
+        #     else:
+        #         self.machineQueueAnimation(d)
         self.machineQueueAnimation(d)
                 
     # Pop up message box to show statistics of each machine
@@ -577,8 +598,8 @@ class GUI(QMainWindow):
         self.tableWidget.setWindowTitle("Machine statistics")
         self.tableWidget.setRowCount(len(self.machine_stats)+1)
         self.tableWidget.setColumnCount(len(self.machine_stats[0]))
-        self.tableWidget.setHorizontalHeaderLabels(['Machine name', '%Completion', 'Number of %Completion',
-                                                   '%XCompletion', '# of %XCompletion', '#Missed URG', 'Missed BE', '%Energy', '%Wasted Energy'])
+        self.tableWidget.setHorizontalHeaderLabels(['Machine name', 'Completion %', 'Number of Completed tasks',
+                                                   'Extended Completion %', 'Number of Extended Completed tasks', 'Number of Missed URGENT Tasks', 'Number of Missed BEST EFFORT Tasks', 'Energy %', 'Wasted Energy %'])
         self.tableWidget.resizeColumnsToContents()
         self.tableWidget.resizeRowsToContents()
         for i, v in enumerate(self.machine_stats):
@@ -645,6 +666,7 @@ class GUI(QMainWindow):
             self.data['statistics']['energy_per_completion']))
     
     def batchQueueAnimation(self,d):
+        print(d)
         for i,v in enumerate(d):
             self.tasks[v].resize(self.width/60, self.width/60)
             self.tasks[v].setStyleSheet(
@@ -652,9 +674,13 @@ class GUI(QMainWindow):
             self.tasks[v].setText("{}".format(v))
             self.tasks[v].setAlignment(Qt.AlignCenter)
             self.tasks[v].move(self.bq_coords[i][0]+3, self.bq_coords[i][1]+3)
+            
 
     def machineQueueAnimation(self,d):
+        maxIndex = float('inf')
         mq_machine_no = d[0]
+        if self.machine_queue_size >= 4 :
+            maxIndex = 5
         for i,v in enumerate(d):
             if i != 0:
                 self.tasks[v].resize(self.width/60, self.width/60)
@@ -662,8 +688,12 @@ class GUI(QMainWindow):
                     self.color[v % 5])
                 self.tasks[v].setText("{}".format(v))
                 self.tasks[v].setAlignment(Qt.AlignCenter)
-                self.tasks[v].move(self.mq_coords[mq_machine_no][i-1][0]+3, self.mq_coords[mq_machine_no][i-1][1]+3)
-    
+                if i+1 >= maxIndex:
+                    self.tasks[v].move(self.mq_coords[mq_machine_no][3][0]+3, self.mq_coords[mq_machine_no][3][1]+3)
+                    
+                else:
+                    self.tasks[v].move(self.mq_coords[mq_machine_no][i-1][0]+3, self.mq_coords[mq_machine_no][i-1][1]+3)
+            
     # Controls the animation of the tasks
     def taskAnimation(self, x, y, d):
         """
@@ -715,11 +745,11 @@ class GUI(QMainWindow):
             self.anim.stop()
             self.tasks[d["Task id"]].deleteLater()
             self.deletedTasks.append(d["Task id"])
-        elif d['Event Type'] == "DEFERRED":
-            self.anim.setStartValue(QPoint(self.scheduler_xcoords, self.scheduler_ycoords))
-            self.anim.setEndValue(QPoint(self.bq_coords[0][0]+3, self.bq_coords[0][1]+3))
-            self.anim.setDuration(self.timer)
-            self.deferredTasks.append(d['Task id'])
+        # elif d['Event Type'] == "DEFERRED":
+        #     self.anim.setStartValue(QPoint(self.scheduler_xcoords, self.scheduler_ycoords))
+        #     self.anim.setEndValue(QPoint(self.bq_coords[0][0]+3, self.bq_coords[0][1]+3))
+        #     self.anim.setDuration(self.timer)
+        #     self.deferredTasks.append(d['Task id'])
             
         elif d['Event Type'] == "CANCELLED":
             self.tasks[d["Task id"]].deleteLater()
@@ -797,7 +827,7 @@ class GUI(QMainWindow):
         y_axis_size = self.height
         y_axis_diff = int(y_axis_size/(len(machine_name)+1))
         machine_queue_overload = None
-        if (config.machine_queue_size <= 4):
+        if (config.machine_queue_size < 4):
             machine_queue_size = config.machine_queue_size
         else:
             machine_queue_size = 4
@@ -810,8 +840,9 @@ class GUI(QMainWindow):
             m.move(x_axis+20, y_axis-20)
             m.resize(self.width/25, self.width/25)
             mname = QLabel(self)
-            mname.move(x_axis*1.1, y_axis)
+            mname.move(x_axis*1.125, y_axis-self.width/100)
             mname.resize(80, 40)
+            mname.setFont(QFont("Arial",self.fontSize))
             mname.setText("{}".format(machine_name[i]))
             self.m_coords[i] = [x_axis+20, y_axis-self.width/50/2]
             m.setStyleSheet("""
@@ -838,8 +869,9 @@ class GUI(QMainWindow):
 
         for i in range(len(self.m_coords)):
             t = QLabel(self)
-            t.move(self.m_coords[i][0]+200, self.m_coords[i][1])
-            t.resize(400, 80)
+            t.move(self.m_coords[i][0]*1.18, self.m_coords[i][1]-self.width/25/3)
+            t.resize(500, 80)
+            t.setFont(QFont("Arial",self.fontSize))
             t.setText("Finished tasks: ")
             self.finishedTasksLabel.append(t)
             self.finishedTasks.append([])

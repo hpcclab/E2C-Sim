@@ -4,7 +4,6 @@ Created on Nov., 15, 2021
 
 
 """
-from typing import Any
 import pandas as pd
 import csv
 import json
@@ -225,7 +224,6 @@ class Simulator(QObject):
                 for i in self.scheduler.batch_queue.list:
                     self.gui_batch_queue.append(i.id)
                 self.progressBQ.emit(self.gui_batch_queue)
-                # self.progressBQ.emit(self.scheduler.gui_batch_queue)
             
     def report(self, path_to_report):        
         
