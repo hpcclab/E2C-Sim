@@ -117,6 +117,8 @@ class Statistic(QFrame):
         self.layout.setSpacing(0)
 
 # This class sets the proportion of the statistic class and the main class
+
+
 class GUI_SIM(QFrame):
     def __init__(self):
         super().__init__()
@@ -127,10 +129,8 @@ class GUI_SIM(QFrame):
 # A message box that contains the full logs, can be sort by event type and task id.
 class FullLogBox(QMessageBox):
     finished = pyqtSignal()
-
     def __init__(self, l, ms, title, *args, **kwargs):
         QMessageBox.__init__(self, *args, **kwargs)
-        self.setStandardButtons(QMessageBox.Close)
         self.task = l
         self.machine_stats = ms
         self.arriving = []
@@ -139,7 +139,6 @@ class FullLogBox(QMessageBox):
         self.cancelled = []
         self.dropped = []
         self.completed = []
-
         self.comboBoxWidget()
         self.searchBarWidget()
 
@@ -208,7 +207,7 @@ class FullLogBox(QMessageBox):
         """
         The function takes in an index, and depending on the index, it will display the corresponding
         information in the QListWidget
-        
+
         :param index: the index of the activated item in the combobox
         """
         self.clearLayout()
@@ -380,19 +379,20 @@ class GUI(QMainWindow):
             self.machine_stats_btn[i].clicked.connect(
                 lambda checked, a=i: self.create_machine_stat(a))
         for _ in range(self.no_of_task):
-                a = QLabel(self)
-                self.tasks.append(a)
+            a = QLabel(self)
+            self.tasks.append(a)
         self.main()
+        self.mainWidgets()
 
     def main(self):
         config.init()
-        scheduling_method = config.scheduling_method
-        workload = '9-0'
+        self.scheduling_method = config.scheduling_method
+        self.workload = '9-0'
         low = 0
         high = 30
         no_of_iterations = 1
         train = 0
-        self.path_to_result = f'{config.settings["path_to_output"]}/data/{workload}/{scheduling_method}'
+        self.path_to_result = f'{config.settings["path_to_output"]}/data/{self.workload}/{self.scheduling_method}'
         makedirs(self.path_to_result, exist_ok=True)
         self.report_summary = open(
             f'{self.path_to_result}/results-summary.csv', 'w')
@@ -419,22 +419,22 @@ class GUI(QMainWindow):
                     id += 1
 
             self.simulation = Simulator(
-                workload_id=workload, epsiode_no=i, id=i)
+                workload_id=self.workload, epsiode_no=i, id=i)
             self.thread = QThread(parent=self)
             self.simulation.progress.connect(self.handle_signal)
             self.simulation.progressBQ.connect(self.handle_BQ)
             self.simulation.progressMQ.connect(self.handle_MQ)
 
             self.simulation.moveToThread(self.thread)
+
+            self.thread.started.connect(self.disableSchedulerCombo)
             self.thread.started.connect(self.simulation.create_event_queue)
-            
             self.thread.started.connect(self.simulation.set_scheduling_method)
             self.thread.started.connect(self.simulation.setTimer)
             self.thread.started.connect(self.simulation.run)
 
             self.timer = 300
 
-            self.mainWidgets()
 
             self.thread.finished.connect(
                 lambda: self.simulation.report(self.path_to_result))
@@ -443,7 +443,6 @@ class GUI(QMainWindow):
             self.thread.finished.connect(self.setEnabledEnd)
             self.thread.finished.connect(self.deleteTask)
             self.thread.finished.connect(self.getReport)
-
 
     def mainWidgets(self):
         """
@@ -470,22 +469,7 @@ class GUI(QMainWindow):
             lambda: self.simulation.setTimer(0))
         self.endBtn.clicked.connect(lambda: self.endThread())
 
-        self.slider = QSlider(Qt.Horizontal, self)
-        self.slider.setGeometry(
-            30, self.width/50*10+self.height/20*6, 300, 50)
-        self.slider.setMinimum(50)
-        self.slider.setMaximum(600)
-        # invert the slider to move left to decrease speed, vice versa
-        self.slider.setInvertedAppearance(True)
-        self.slider.setSliderPosition(self.timer)
-        self.slider.valueChanged.connect(self.updateSlider)
-        self.slider.valueChanged.connect(self.speed)
-
-        self.sliderLabel = QLabel(self)
-        self.sliderLabel.setGeometry(
-            30, self.width/50*10+self.height/20*7, 300, 40)
-        self.sliderLabel.setText(
-            "Simulation speed: {:.1f}x".format(self.timer/300))
+        
 
         self.restartBtn = QPushButton("Restart", self)
         self.restartBtn.setGeometry(
@@ -496,19 +480,74 @@ class GUI(QMainWindow):
 
         self.mDetails = QPushButton("Machines Report", self)
         self.mDetails.setGeometry(
-            30, self.width/50*10+self.height/20*4, self.width/20,  self.height/20)
+            30, self.width/50*10+self.height/20*4, self.width/20+140,  self.height/20)
         self.mDetails.setFont(QFont("Arial", self.fontSize))
         self.mDetails.setEnabled(False)
-        self.mDetails.adjustSize()
+        # self.mDetails.adjustSize()
         self.mDetails.clicked.connect(lambda: self.createTable())
 
         self.getLogBtn = QPushButton("Tasks Report", self)
         self.getLogBtn.setGeometry(
-            30, self.width/50*10+self.height/20*5, self.width/20,  self.height/20)
+            30, self.width/50*10+self.height/20*5, self.width/20+140,  self.height/20)
         self.getLogBtn.setFont(QFont("Arial", self.fontSize))
         self.getLogBtn.setEnabled(False)
-        self.getLogBtn.adjustSize()
+        # self.getLogBtn.adjustSize()
         self.getLogBtn.clicked.connect(lambda: self.getLog())
+        
+        self.slider = QSlider(Qt.Horizontal, self)
+        self.slider.setGeometry(
+            30, self.width/50*10+self.height/20*7, 300, 50)
+        self.slider.setMinimum(50)
+        self.slider.setMaximum(600)
+        # invert the slider to move left to decrease speed, vice versa
+        self.slider.setInvertedAppearance(True)
+        self.slider.setSliderPosition(self.timer)
+        self.slider.valueChanged.connect(self.updateSlider)
+        self.slider.valueChanged.connect(self.speed)
+
+        self.sliderLabel = QLabel(self)
+        self.sliderLabel.setGeometry(
+            30, self.width/50*10+self.height/20*8, 300, 40)
+        self.sliderLabel.setText(
+            "Simulation speed: {:.1f}x".format(self.timer/300))
+        
+        self.schedulerCombo = QComboBox(self)
+        self.schedulerList = ["FCFS", "MM", "FEE", "EE"]
+        self.schedulerCombo.addItem(self.schedulerList[0])
+        self.schedulerCombo.addItem(self.schedulerList[1])
+        self.schedulerCombo.addItem(self.schedulerList[2])
+        self.schedulerCombo.addItem(self.schedulerList[3])
+        self.schedulerCombo.setGeometry(
+            30, self.width/50*10+self.height/20*9, self.width/20,  self.height/20)
+        self.schedulerCombo.activated.connect(self.schedulerComboBoxActivate)
+        for i, v in enumerate(self.schedulerList):
+            if v == config.scheduling_method:
+                curr = i
+        self.schedulerCombo.setCurrentIndex(curr)
+
+    def schedulerComboBoxActivate(self, index):
+        """
+        It opens a json file, reads the data, changes the value of a key, writes the data back to the
+        file, and closes the file
+
+        :param index: the index of the item in the combobox that was selected
+        """
+        with open('config.json', 'r+') as f:
+            data = json.load(f)
+            # <--- add `id` value.
+            data['parameters'][0]["scheduling_method"] = self.schedulerList[index]
+            # <--- should reset file position to the beginning.
+            f.seek(0)
+            json.dump(data, f, indent=4)
+            f.truncate()     # remove remaining part
+        self.round_scheduler.setText("{}".format(self.schedulerList[index]))
+        self.main()
+    def disableSchedulerCombo(self):
+        """
+        It disables the schedulerCombo
+        """
+        self.schedulerCombo.setEnabled(False)
+
     def getReport(self):
         """
         It takes the results of the simulation and writes them to a csv file
@@ -607,9 +646,8 @@ class GUI(QMainWindow):
                 self.deletedTasks.append(i)
                 self.tasks[i].deleteLater()
 
-        
-    
     # Handling
+
     def handle_signal(self, d):
         """
         It takes a dictionary as an argument, and if the dictionary contains the key 'Type', it calls
@@ -627,7 +665,7 @@ class GUI(QMainWindow):
                 print(self.machine_stats)
 
     def handle_BQ(self, d):
-        
+        print(d)
         self.batchQueueAnimation(d)
 
     def handle_MQ(self, d):
@@ -727,7 +765,7 @@ class GUI(QMainWindow):
     def batchQueueAnimation(self, d):
         """
         It takes a list of integers, and creates a QLabel for each integer, and places it in a queue
-        
+
         :param d: list of integers
         """
         for i, v in enumerate(d):
@@ -736,12 +774,15 @@ class GUI(QMainWindow):
                 self.color[v % 5])
             self.tasks[v].setText("{}".format(v))
             self.tasks[v].setAlignment(Qt.AlignCenter)
-            self.tasks[v].move(self.bq_coords[i][0]+3, self.bq_coords[i][1]+3)
+            if i > 3:
+                self.tasks[v].move(self.bq_coords[3][0]+3, self.bq_coords[3][1]+3)
+            else: 
+                self.tasks[v].move(self.bq_coords[i][0]+3, self.bq_coords[i][1]+3)
 
     def machineQueueAnimation(self, d):
         """
         It takes a list of tasks and moves them to the correct position in the machine queue
-        
+
         :param d: list of tasks in the machine queue
         """
         maxIndex = float('inf')
@@ -868,19 +909,19 @@ class GUI(QMainWindow):
         self.scheduler_xcoords = self.width/20*7
         self.scheduler_ycoords = self.height/2
 
-        round_scheduler = QLabel(self)
-        round_scheduler.move(self.scheduler_xcoords,
-                             self.scheduler_ycoords-self.width/50/2)
-        round_scheduler.resize(self.width/25, self.width/25)
-        round_scheduler.setStyleSheet(
+        self.round_scheduler = QLabel(self)
+        self.round_scheduler.move(self.scheduler_xcoords,
+                                  self.scheduler_ycoords-self.width/50/2)
+        self.round_scheduler.resize(self.width/25, self.width/25)
+        self.round_scheduler.setStyleSheet(
             """
         QLabel {
             border: 2px solid blue;
             }
         """
         )
-        round_scheduler.setText("{}".format(scheduling_method))
-        round_scheduler.setAlignment(Qt.AlignCenter)
+        self.round_scheduler.setText("{}".format(scheduling_method))
+        self.round_scheduler.setAlignment(Qt.AlignCenter)
 
     # Draw the machines on the right side
 
