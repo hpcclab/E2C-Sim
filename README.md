@@ -4,7 +4,7 @@ This project includes the energy-efficient scheduler on the edge-tier of the Sma
 ## How to Install and Execute the Project
 Below, you can find the steps to execute the program:
 1. Clone the repository:
-```git clone https://github.com/hpcclab/smartsight.git ```
+```git clone https://github.com/hpcclab/E2C.git ```
 2. Run this command in ```V1.0``` directory to install required packages
    ```
     pip install -r requirements.txt
