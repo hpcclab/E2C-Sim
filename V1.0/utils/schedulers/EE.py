@@ -42,9 +42,11 @@ class EE(BaseScheduler):
         self.unmapped_task.pop()
         task.status =  TaskStatus.DEFERRED
         task.no_of_deferring += 1
-        self.batch_queue.put(task)
-
-        event_time = config.event_queue.event_list[0].time
+        self.batch_queue.put(task)        
+        if config.event_queue.event_list:
+            event_time = config.event_queue.event_list[0].time
+        else:
+            event_time = config.time.gct()
         event_type = EventTypes.DEFERRED
         event = Event(event_time, event_type, task)
         config.event_queue.add_event(event)

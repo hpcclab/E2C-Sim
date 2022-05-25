@@ -3,9 +3,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
+het_id = 'het-3'
+
 # mu_task = 1.0
 
-v_task = 0.3
+v_task = 0.01
 mu_machine = 4.0
 v_machine = 0.9
 
@@ -70,6 +72,9 @@ def gamma(mu_machine,v_machine, v_task, no_of_machines, no_of_tasks):
     return etc
 
 etc  = gamma(mu_machine, v_machine, v_task, no_of_machines, no_of_tasks)
+print(etc)
+etc.to_csv(f'../workload/execution_times/etc-{het_id}.csv')
+
 
 
 

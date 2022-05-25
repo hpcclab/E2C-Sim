@@ -1,0 +1,1 @@
+{"no_of_machine": 2, "scheduler": "FEE", "batch_queue_size": 5, "machine_queue_size": 3, "statistics": {"%Total Completion": 79.0, "%Total xCompletion": 0.0, "%Deferred": 86, "%Dropped": 18, "totalCompletion%": 79.0, "consumed_energy%": 88.42212222222228, "energy_per_completion": 0.11192673699015479}}

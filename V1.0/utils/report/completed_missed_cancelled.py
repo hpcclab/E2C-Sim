@@ -43,7 +43,7 @@ objective = ['BE_missed', 'cancelled']
 
 for scheduler in schedulers:
         
-    for rate in [0,2,3,4,5,6,7,8]:
+    for rate in [2,3,4,5,6,7,8]:
     
         workload = f'{rate}-{task_hete}'
         path = f'../../output/data/{workload}/{scheduler}/results-summary.csv'
@@ -76,9 +76,9 @@ r0 = 0
 
 #rate_label = [x for x in [1,1000/800,1.5, 1000/500, 1000/400,3 ]]
 #rate_label = [round(2000/x,1) for x in [1000, 800, 667, 500, 400, 333, 250, 200, 100,20]]
-rate_label = [round(2000/x) for x in [1000,  667, 500, 400, 333, 250, 200, 100]]
+rate_label = [round(2000/x) for x in [667, 500, 400, 333, 250, 200, 100]]
 
-r = [(r0-0.5*width+i*(2*width+dist)) for i in range(8)]
+r = [(r0-0.5*width+i*(2*width+dist)) for i in range(7)]
 
 i = 0
 plt.figure()
@@ -134,6 +134,6 @@ plt.ylim([0,105])
 plt.legend(loc=[0.01,0.82],ncol=2)
 #plt.grid(axis='y')
 plt.tight_layout()
-plt.savefig(f'../../output/figures/revised_with_more_arrivals/missed_cancelled_revised.pdf',dpi=300)
+plt.savefig(f'../../output/figures/revised_with_more_arrivals/missed_cancelled_revised-2.pdf',dpi=300)
     
 

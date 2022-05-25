@@ -19,10 +19,10 @@ from utils.schedulers.FCFS import FCFS
 
 
 class Simulator:
-    def __init__(self, workload_id, epsiode_no, id = 0):               
-    #def __init__(self, het_level, consistency_degree, workload_id, epsiode_no, id = 0):               
-        # self.path_to_arrival = f"{config.settings['path_to_workload']}/workloads/H-{het_level}-a-{consistency_degree}/workload-{workload_id}/workload-{epsiode_no}.csv"
-        self.path_to_arrival = f"{config.settings['path_to_workload']}/workloads/workload-{workload_id}/workload-{epsiode_no}.csv"
+    #def __init__(self, workload_id, epsiode_no, id = 0):               
+    def __init__(self, het_level, workload_id, epsiode_no, id = 0):               
+        self.path_to_arrival = f"{config.settings['path_to_workload']}/workloads/H-{het_level}/workload-{workload_id}/workload-{epsiode_no}.csv"
+        #self.path_to_arrival = f"{config.settings['path_to_workload']}/workloads/workload-{workload_id}/workload-{epsiode_no}.csv"
         self.verbosity = config.settings['verbosity']
         self.id = id
         self.tasks = []

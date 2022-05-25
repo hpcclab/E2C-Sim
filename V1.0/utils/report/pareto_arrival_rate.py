@@ -44,15 +44,15 @@ for scheduler in schedulers:
         d['rate-id'] = int(rate)        
         d['scheduler'] = scheduler
         
-        yerr_compl = mean_confidence_interval(df['totalCompletion%'].values)
-        yerr_energy = mean_confidence_interval(df['consumed_energy%'].values)
+        #yerr_compl = mean_confidence_interval(df['totalCompletion%'].values)
+        #yerr_energy = mean_confidence_interval(df['consumed_energy%'].values)
         
-        d_err = {'totalCompletion%':yerr_compl,
-                 'consumed_energy%':yerr_energy,
-                'rate-id':rate,
-                'scheduler':scheduler
-                        }
-        yerr_summary = yerr_summary.append(d_err, ignore_index=True)
+        # d_err = {'totalCompletion%':yerr_compl,
+        #          'consumed_energy%':yerr_energy,
+        #         'rate-id':rate,
+        #         'scheduler':scheduler
+        #                 }
+        # yerr_summary = yerr_summary.append(d_err, ignore_index=True)
         df_summary = df_summary.append(d, ignore_index=True)
         df_summary['rate-id'] = df_summary['rate-id'].astype('int')
     
@@ -130,10 +130,10 @@ for scheduler in schedulers:
                             bbox = bbox, arrowprops = arrowprops, rotation = 0,
                             horizontalalignment='center',fontsize=12) 
             
-            # plt.annotate('arrival rate < %.1f'%(rate_label[rate]),
-            #             xy = (30,30), xytext =(35,30),
+            # plt.annotate('%1.0f'%(rate_label[rate]),
+            #             xy = (loc[0]+1,loc[1]-10), #xytext =(35,30),
             #             #textcoords ='offset points',
-            #             bbox = bbox, rotation = -30) 
+            #            ) 
             
             # plt.annotate('arrival rate > %.1f'%(rate_label[rate]),
             #             xy = (30,30), xytext =(5,65),
@@ -151,7 +151,7 @@ plt.xlim(0,100)
 plt.ylim(0,100)
 plt.legend(loc=(0.78,0.1))
 plt.tight_layout()
-plt.savefig(f'../../output/figures/revised_with_more_arrivals/pareto_arrivalrates_more_heuristics.pdf',dpi=300)
+#plt.savefig(f'../../output/figures/revised_with_more_arrivals/pareto_arrivalrates_more_heuristics.pdf',dpi=300)
    
 
 

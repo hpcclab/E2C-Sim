@@ -26,9 +26,11 @@ class Workload:
     # Then, the arrival times of tasks and their task types are written to
     # "ArrivalTimes.txt" located in path_to_output.     
 
-    def __init__(self, het_level,consistency_level,workload_id):
-        self.h = het_level
-        self.a = consistency_level
+    #def __init__(self, het_level,consistency_level,workload_id):
+    def __init__(self, het_id,workload_id):
+        #self.h = het_level
+        #self.a = consistency_level
+        self.h = het_id
         self.workload_id = workload_id
         columns = ['task_type_id', 'arrival_time']
         for machine_type in config.machine_types:            
@@ -65,11 +67,11 @@ class Workload:
             
             for machine_type in config.machine_types:
 
-                est = ExecutionTime().sample(task_type_id,machine_type,no_of_tasks)
+                est = ExecutionTime(self.h).sample(task_type_id,machine_type,no_of_tasks)
                 #print(len(est), self.workload.shape)
                 self.workload.loc[last_index+1:, f'est_{machine_type.name}'] = est
                 for r in range(1,machine_type.replicas+1):
-                    ext = ExecutionTime().sample(task_type_id,machine_type,no_of_tasks)                    
+                    ext = ExecutionTime(self.h).sample(task_type_id,machine_type,no_of_tasks)                    
                     self.workload.loc[last_index+1:,f'ext_{machine_type.name}-{r}'] = ext   
             count += 1                     
                     
@@ -78,7 +80,8 @@ class Workload:
 
         self.workload = self.workload.sort_values(by=['arrival_time'])
         # folder = f"{config.settings['path_to_workload']}/workloads/H-{self.h}-a-{self.a}/workload-{self.workload_id}"
-        folder = f"{config.settings['path_to_workload']}/workloads/workload-{self.workload_id}"
+        folder = f"{config.settings['path_to_workload']}/workloads/H-{self.h}/workload-{self.workload_id}"
+        # folder = f"{config.settings['path_to_workload']}/workloads/workload-{self.workload_id}"
         os.makedirs(folder, exist_ok = True)
         path_to_output = f"{folder}/workload-{workload_no}.csv"
         self.workload.to_csv(path_to_output, index = False)

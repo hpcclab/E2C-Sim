@@ -1,3 +1,0 @@
-task_type_id,start_time,end_time,distribution,number
-1,0,667,exponential,250
-2,0,667,exponential,750
