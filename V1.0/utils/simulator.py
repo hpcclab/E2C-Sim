@@ -6,7 +6,8 @@ Created on Nov., 15, 2021
 """
 import pandas as pd
 import csv
-
+import json
+import time
 import utils.config as config
 from utils.event import Event, EventTypes
 from utils.task import Task
@@ -16,20 +17,41 @@ from utils.schedulers.MSD import MSD
 from utils.schedulers.MMU import MMU
 from utils.schedulers.FEE import FEE
 from utils.schedulers.FCFS import FCFS
+from PyQt5.QtCore import pyqtSignal,QObject
 
 
+<<<<<<< HEAD
 class Simulator:
     #def __init__(self, workload_id, epsiode_no, id = 0):               
     def __init__(self, het_level, workload_id, epsiode_no, id = 0):               
         self.path_to_arrival = f"{config.settings['path_to_workload']}/workloads/H-{het_level}/workload-{workload_id}/workload-{epsiode_no}.csv"
         #self.path_to_arrival = f"{config.settings['path_to_workload']}/workloads/workload-{workload_id}/workload-{epsiode_no}.csv"
+=======
+class Simulator(QObject):
+    progress = pyqtSignal(dict)
+    progressBQ = pyqtSignal(list)
+    progressMQ = pyqtSignal(list)
+    
+    def __init__(self, workload_id, epsiode_no, id = 0):  
+        super(Simulator,self).__init__()                   
+    #def __init__(self, het_level, consistency_degree, workload_id, epsiode_no, id = 0):               
+        # self.path_to_arrival = f"{config.settings['path_to_workload']}/workloads/H-{het_level}-a-{consistency_degree}/workload-{workload_id}/workload-{epsiode_no}.csv"
+        self.path_to_arrival = f"{config.settings['path_to_workload']}/workloads/workload-{workload_id}/workload-{epsiode_no}.csv"
+>>>>>>> ec3427708e8efffb02f917a4068a08b0d10e6159
         self.verbosity = config.settings['verbosity']
         self.id = id
         self.tasks = []
-        self.total_no_of_tasks = []
+        self.total_no_of_tasks = None
         self.energy_statistics = []
-        
-
+    
+    #for gui
+        self.timer = 0 
+        self.gui_statistic = {}    
+        self.threadController = 1
+        self.check_sim = []
+        self.check_sim2 = None
+        self.gui_batch_queue = []
+        self.gui_machine_queue = []
     def create_event_queue(self):        
         df = pd.read_csv(self.path_to_arrival)
         est_clmns =[]
@@ -119,7 +141,9 @@ class Simulator:
     def run(self):       
          
         while config.event_queue.event_list and config.available_energy > 0.0:
-        
+            # Used to pause the simulator for GUI
+            while self.threadController == 0:
+                time.sleep(1)
             self.idle_energy_consumption()
             event = config.event_queue.get_first_event()
             task = event.event_details
@@ -128,6 +152,9 @@ class Simulator:
                 s = '\n\n*****Task:{} \t\t {}  @time:{}'.format(
                     task.id, event.event_type.name, event.time)
                 config.log.write(s)
+            if config.gui == 1:
+                time.sleep(self.timer)               
+                self.progress.emit({"Task id": task.id, "Event Type": event.event_type.name,"Type":'task'})
                 #print(s)
 
             row =[config.time.gct(),config.available_energy]
@@ -136,21 +163,47 @@ class Simulator:
                 row.append(machine.stats['energy_usage'])
             self.energy_statistics.append(row)
 
-
+              
             if event.event_type == EventTypes.ARRIVING:                
                 self.scheduler.batch_queue.put(task)
                 self.scheduler.stats[f'{task.type.name}-arrived'] += 1
-                assigned_machine = self.scheduler.schedule()                
-
+                assigned_machine = self.scheduler.schedule()
+                self.gui_machine_queue = []
+                if config.gui == 1 and assigned_machine != None:
+                    self.gui_machine_queue.append(assigned_machine.id)
+                    # time.sleep(self.timer)
+                    # self.progress.emit({"Task id": task.id, "Event Type": "ARRIVING_MACHINE_QUEUE","Machine":assigned_machine.id,"Type":'task'})
+                    time.sleep(self.timer)
+                    for i in assigned_machine.queue.list:
+                        self.gui_machine_queue.append(i.id)
+                    self.progressMQ.emit(self.gui_machine_queue)
+                    time.sleep(self.timer)
+                    if (assigned_machine.machine_log not in self.check_sim):
+                        self.progress.emit(assigned_machine.machine_log)
+                    self.check_sim.append(assigned_machine.machine_log)
+                    
             elif event.event_type == EventTypes.DEFERRED:
                 # self.scheduler.batch_queue.put(task)                
+               
+                    
                 assigned_machine = self.scheduler.schedule()
                 
-
-            elif event.event_type == EventTypes.COMPLETION:                
+                if assigned_machine == None:
+                    break
+                
+            elif event.event_type == EventTypes.COMPLETION:               
                 machine = task.assigned_machine
-                machine.terminate(task)                
+                if config.gui == 1 and machine != None:
+                    time.sleep(self.timer)
+                    self.progress.emit({"Task id": task.id, "Event Type": "COMPLETED","Machine":machine.id,"Type":'task'})
+
+                machine.terminate(task)   
+                if (machine.machine_log not in self.check_sim):
+                    self.progress.emit(machine.machine_log)
+                    self.check_sim.append(machine.machine_log)
+                             
                 self.scheduler.schedule()
+                
 
             # elif event.event_type == EventTypes.OFFLOADED:
             #     if self.verbosity >= 1:
@@ -161,10 +214,25 @@ class Simulator:
             #     assigned_machine = self.scheduler.schedule()
             elif event.event_type == EventTypes.DROPPED_RUNNING_TASK:
                 machine = task.assigned_machine
+                if config.gui == 1 and machine != None:
+                    time.sleep(self.timer)
+                    if (machine.machine_log not in self.check_sim):
+                        self.progress.emit(machine.machine_log)
+                    self.check_sim.append(machine.machine_log)
                 machine.drop()
-                self.scheduler.schedule()            
-         
-        
+                self.scheduler.schedule() 
+            if config.gui == 1:
+                for i in self.scheduler.gui_machine_log:
+                    if (i != self.check_sim2):
+                        time.sleep(self.timer)
+                        self.progress.emit(i)
+                        self.check_sim2 = i   
+                self.gui_batch_queue = []     
+                time.sleep(self.timer)
+                for i in self.scheduler.batch_queue.list:
+                    self.gui_batch_queue.append(i.id)
+                self.progressBQ.emit(self.gui_batch_queue)
+            
     def report(self, path_to_report):        
         
         detailed_header = ['id','type','urgency','status','assigned_machine', 
@@ -232,6 +300,14 @@ class Simulator:
                 machine.stats['missed_BE_tasks'],
                 100*energy_percent,
                 100 * wasted_energy)
+            if config.gui == 1:
+                d = {"Machine":machine.type.name, "Machine id": machine.id,
+                    "%Completion": 100*completed_percent, "# of %Completion":machine.stats['completed_tasks'],
+                    "%XCompletion":100*xcompleted_percent,"# of %XCompletion":machine.stats['xcompleted_tasks'],
+                    "#Missed URG": machine.stats['missed_URG_tasks'],
+                    "Missed BE":machine.stats['missed_BE_tasks'],
+                    "%Energy":100*energy_percent,"%Wasted Energy":100 * wasted_energy}
+                self.progress.emit(d)
             # if self.verbosity <= 3 :
             #     print(s)
             config.log.write(s)
@@ -243,7 +319,7 @@ class Simulator:
         s += '\n%Total xCompletion: {:2.1f}'.format(total_xcompletion_percent)
         s += '\n%deferred: {:2.1f}'.format(len(self.scheduler.stats['deferred']))
         s += '\n%dropped: {:2.1f}'.format(len(self.scheduler.stats['dropped']))
-       
+        
         # if self.verbosity <= 3:
         #     print(s)
         config.log.write(s)
@@ -301,5 +377,35 @@ class Simulator:
             100*(consumed_energy/config.total_energy),            
             energy_per_completion ])
         
+        self.gui_statistic["%Total Completion"] = total_completion_percent
+        self.gui_statistic["%Total xCompletion"] = total_xcompletion_percent
+        self.gui_statistic["%Deferred"] = len(self.scheduler.stats['deferred'])
+        self.gui_statistic["%Dropped"] = len(self.scheduler.stats['dropped'])
+        self.gui_statistic["totalCompletion%"] = total_completion_percent+total_xcompletion_percent
+        self.gui_statistic["consumed_energy%"] = 100*(consumed_energy/config.total_energy)
+        self.gui_statistic["energy_per_completion"] = energy_per_completion
+        self.monitor()
         #return row, task_report
         return row
+    # For GUI
+    def setTimer(self,time=0.5):
+        self.timer = time
+    # For GUI 
+    def simPause(self,value):
+        self.threadController = value
+        
+    # For GUI   
+     # This function is used to pass necessary information for GUI. 
+    # Create a json file to store the data and pass it to GUI like API
+    def monitor(self):
+        """
+        It writes the current state of the system to a json file
+        """
+        data = {}
+        data['no_of_machine'] = config.no_of_machines
+        data['scheduler'] = config.scheduling_method
+        data['batch_queue_size'] = config.batch_queue_size
+        data['machine_queue_size'] = config.machine_queue_size
+        data['statistics'] = self.gui_statistic
+        with open('machineStats.json','w') as outfile:
+            json.dump(data, outfile)
