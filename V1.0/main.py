@@ -10,6 +10,7 @@ import utils.config as config
 from gui import window
 config.init()
 
+
 if config.gui == 1:
     window()
 else:
