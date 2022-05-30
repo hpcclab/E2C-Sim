@@ -14,14 +14,16 @@ import matplotlib.pyplot as plt
 
 class RandomSample:    
 
-    def __init__(self, start_time, end_time, no_of_tasks):        
+    def __init__(self, start_time, end_time, no_of_tasks, seed = 100):        
         self.start_time = start_time
         self.end_time = end_time
         self.no_of_tasks = no_of_tasks
+        self.seed = seed
 
     def generate(self, pattern):
 
-        self.pattern = pattern        
+        self.pattern = pattern  
+        np.random.seed(self.seed)      
         if self.pattern == 'uniform':
             distribution = self.uniform()
 

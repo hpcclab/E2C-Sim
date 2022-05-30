@@ -6,7 +6,8 @@ import matplotlib.pyplot as plt
 
 schedulers = ['FEE','EE','MM','MMU','MSD']
 task_types = ['TT1','TT2','TT3','TT4']
-workload = '4-0'
+#task_types = ['TT1','TT2']
+workload = '3-0'
 
 
 def read_results(workload,scheduler,sample):
@@ -81,6 +82,7 @@ results = results.rename(index={'EE':'ELARE', 'FEE':'FELARE'})
 
 
 hatch = ['\\\\\\','///','...','xxx']
+#hatch = ['..','xx']
 colors = ['navy','darkred','green', 'orange']
 
 fig, ax1 = plt.subplots()
@@ -94,7 +96,7 @@ r = [(r0-1.5*width+i*(4*width+dist)) for i in range(len(schedulers))]
 print(r)
 i = 0
  
-task_types = ['TT1','TT2','TT3','TT4']
+
 for i in range(len(task_types)):
     
     tt = task_types[i]
@@ -112,7 +114,7 @@ for i in range(len(task_types)):
 
 
 r = [r[k] - 1.5*width for k in range(len(r))]    
-ax2.plot(r, results['total'], '--',marker = 's',color = 'red', label = 'total')       
+ax2.plot(r, results['total'], '--',marker = 's',color = 'red', label = 'collective')       
        
 
 
@@ -121,7 +123,7 @@ plt.xticks(r,schedulers_label )
 
 
 #ax2.set_ylabel(r'$\frac{\mathrm{\# completed\ tasks}}{\mathrm{\# total\ tasks} }$', fontsize = 14)
-ax2.set_ylabel('total completion rate', fontsize = 14)
+ax2.set_ylabel('collective completion rate', fontsize = 14)
 ax2.tick_params(axis='y', which='major', labelsize=14)
 ax2.set_ylim([0,60])
 
@@ -146,7 +148,7 @@ ax1.legend(lines, labels, loc=0)
 plt.tight_layout()
 
 #plt.grid(linestyle='dotted')
-plt.savefig(f'../../output/figures/revised_with_more_arrivals/fairness-phases-{workload}-more-heuristics.pdf',dpi=300)
+#plt.savefig(f'../../output/figures/fairness-phases-{workload}-more-heuristics-real.pdf',dpi=300)
 plt.show()      
     
     

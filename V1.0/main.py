@@ -12,7 +12,7 @@ schedulers = ['MM', 'FEE']
 
 for scheduler in schedulers:
     
-    for i in range(100):
+    for i in range(1):
         print(f'{scheduler}: het-{i}')    
         config.init()
         config.scheduling_method = scheduler
@@ -23,7 +23,7 @@ for scheduler in schedulers:
         het_level = 'het-'+str(i)
         # consistency_degree = 0
         low = 0
-        high = 30
+        high = 2
         
         no_of_iterations = 1
         train = 0
@@ -60,7 +60,7 @@ for scheduler in schedulers:
                     id += 1
            
             #simulation = Simulator( het_level = het_level, consistency_degree= consistency_degree,workload_id = workload, epsiode_no = i , id=i) 
-            simulation = Simulator( het_level = het_level,workload_id = workload, epsiode_no = i , id=i) 
+            simulation = Simulator( het_level,workload_id = workload, epsiode_no = i , id=i) 
             #simulation = Simulator( workload_id = workload, epsiode_no = i , id=i) 
             
             simulation.create_event_queue()

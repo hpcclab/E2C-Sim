@@ -216,10 +216,12 @@ class Machine(BaseMachine):
         event = Event(event_time, event_type, task)
         config.event_queue.add_event(event)
         
-        s = '\n[ Task({}), Machine({}) ]: RUNNING        @time({:3.3f}) exec:{:3.3f}'.format(
+        s = '\n[ Task({}), Machine({}) ]: RUNNING        @time({:3.3f}) exec:{:3.3f} '.format(
             task.id, self.type.name,task.start_time, task.execution_time[f'{self.type.name}-{self.replica_id}'])
+        self.machine_log = {"Task id":task.id,"Event Type":"RUNNING", "Time":event.time, "Execution time":task.execution_time[f'{self.type.name}-{self.replica_id}'],"Machine": self.id,"Type":'task'}
         config.log.write(s)
-        #print(s)
+        
+        # print(s)
         return running_time
     
     
@@ -284,8 +286,10 @@ class Machine(BaseMachine):
 
         s = '\n[ Task({:}), Machine({:}) ]: MISSED         @time({:3.3f})'.format(
             task.id, self.type.name, task.missed_time  ) 
+        self.machine_log = {"Task id":task.id,"Event Type":"MISSED", "Time":task.missed_time, "Machine": self.id,"Type":'task'}
+
         config.log.write(s)       
-        #print(s)
+        # print(s)
         return energy_consumption
 
     def cancel(self, task):
@@ -318,7 +322,9 @@ class Machine(BaseMachine):
         
         s = '\n[ Task({:}), Machine({:}) ]: CANCELLED       @time({:3.3f})'.format(
             task.id, self.type.name, task.missed_time  )  
-        #print(s)
+        self.machine_log = {"Task id":task.id,"Event Type":"CANCELLED", "Missed time":task.missed_time, "Machine": self.id,"Type":'task'}
+        
+        # print(s)
         config.log.write(s)    
         
 
@@ -355,7 +361,7 @@ class Machine(BaseMachine):
         s = '\n[ Task({:}), Machine({:}) ]: {:}      @time({:3.3f})'.format(
            task.id, self.type.name, task.status.name, task.completion_time )
         config.log.write(s)
-        #print(s)
+        # print(s)
 
         if not self.queue.empty():
             task = self.select()            

@@ -18,7 +18,8 @@ class MM(BaseScheduler):
         super().__init__()
         self.name = 'MM'
         self.total_no_of_tasks = total_no_of_tasks
-        
+        self.gui_machine_log = []
+
 
     def choose(self, index=0):
         task = self.batch_queue.get(index)     
@@ -54,6 +55,7 @@ class MM(BaseScheduler):
             s = '\n[ Task({:}),  _________ ]: Deferred       @time({:3.3f})'.format(
             task.id, config.time.gct())
             config.log.write(s)
+        self.gui_machine_log.append({"Task id":task.id,"Event Type":"DEFERRED","Time":config.time.gct(), "Type":'task'})
 
     def drop(self, task):
         self.unmapped_task.pop()
@@ -64,6 +66,7 @@ class MM(BaseScheduler):
             s = '\n[ Task({:}),  _________ ]: Cancelled      @time({:3.3f})'.format(
                 task.id, config.time.gct()       )
             config.log.write(s)
+        self.gui_machine_log.append({"Task id":task.id,"Event Type":"CANCELLED","Time":config.time.gct(), "Type":'task'})
 
     def map(self, machine):
         task = self.unmapped_task.pop()
@@ -129,6 +132,8 @@ class MM(BaseScheduler):
 
 
     def schedule(self):
+        self.gui_machine_log = []
+
         if config.settings['verbosity']:
             s = f'\n Current State @{config.time.gct()}'
             s = '\nBQ = '

@@ -27,7 +27,7 @@ class Workload:
     # "ArrivalTimes.txt" located in path_to_output.     
 
     #def __init__(self, het_level,consistency_level,workload_id):
-    def __init__(self, het_id,workload_id):
+    def __init__(self, het_id, workload_id):
         #self.h = het_level
         #self.a = consistency_level
         self.h = het_id
@@ -48,14 +48,17 @@ class Workload:
         scenario = pd.read_csv(path_to_sc)
 
         count = 0
+        initial_seed = 100
         for _ , row in scenario.iterrows():
-                                 
+                                
             task_type_id = row[0]
             start_time = row[1]
             end_time = row[2]
             dist = row[3]
             no_of_tasks = row[4]
-            sample = RandomSample(start_time, end_time, no_of_tasks).generate(dist)
+            seed = initial_seed + 10 * int(task_type_id) + 7 * workload_no
+
+            sample = RandomSample(start_time, end_time, no_of_tasks, seed).generate(dist)
             arrival_time = pd.DataFrame(data = sample, columns = ['arrival_time'])
             arrival_time.insert(0,'task_type_id', task_type_id)
             if count >0:

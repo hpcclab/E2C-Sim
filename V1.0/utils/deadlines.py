@@ -1,7 +1,7 @@
 import pandas as pd
 
 
-het_id = 'het-50'
+het_id = 'het-42'
 path = f'../workload/execution_times/{het_id}'
 no_of_tasks = 4
 no_of_machines = 4
@@ -28,5 +28,5 @@ for tt in range(1, 1 + no_of_tasks):
     delta = avg_tt.loc[0,f'T{tt}'] + slack_factor * avg_all
     delta = round(delta, 1)
     deadlines.loc[0,f'T{tt}'] = delta
-deadlines.to_csv(f'../workload/execution_times/deadlines-{het_id}.csv',index = False)
+#deadlines.to_csv(f'../workload/execution_times/deadlines-{het_id}.csv',index = False)
 print(deadlines)
