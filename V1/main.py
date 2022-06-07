@@ -9,18 +9,18 @@ from utils.machine import Machine
 import utils.config as config
 from workload.generator import workloads_generator
 
-workload_name = 'heterogeneous'
-scenarios = ['sc-4']
-etcs = [f'etc-{i}' for i in range(100)]
+workload_name = 'mini'
+scenarios = ['sc-2']
+etcs = [f'etc-{i}' for i in range(1)]
 workload_id_range = list(range(30))
-workloads_exist = True
+workloads_exist = False
 
 def simulate(workload_name, scenarios, etcs, workload_id_range, workloads_exist=False,is_etc_exist = True, is_et_exist = True):
     for sc in scenarios:
         if not workloads_exist:    
             config.init()
             workloads_generator(workload_name,sc , is_etc_exist, is_et_exist ,
-                        no_of_etcs = 100, et_set = [100,10,10,100,10,100,100,1,1]  ,et_variance=0.05, et_size=1000, sample_size = 30)
+                        no_of_etcs = 1, et_set = [100,10,10,100,10,100,100,1,1]  ,et_variance=0.05, et_size=1000, sample_size = 30)
         for etc in etcs:
             config.init()            
             path_to_result = f'./output/data/{workload_name}/{sc}/{etc}/{config.scheduling_method}'        
