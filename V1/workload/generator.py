@@ -42,3 +42,4 @@ def workloads_generator(workload_name,scenario_subname , is_etc_exist = True, is
                             etc_name = etc_id,
                             workload_id = i,
                             seed=seed )
+

@@ -48,7 +48,9 @@ class ETC:
         hidx = HINDEX(self.name)
         h_indices = pd.DataFrame(columns=['etc_id', 'h_index'])
         for etc_file in etc_files:
+            
             etc_id = etc_file.split('.')[0]
+            print(f'ETC#: {etc_id}')
             h = hidx.hindex(etc_id, saved=True)
             h = round(h, 2)        
             d = {'etc_id': etc_id,

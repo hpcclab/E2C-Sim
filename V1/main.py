@@ -9,18 +9,23 @@ from utils.machine import Machine
 import utils.config as config
 from workload.generator import workloads_generator
 
-workload_name = 'mini'
-scenarios = ['sc-2']
-etcs = [f'etc-{i}' for i in range(1)]
-workload_id_range = list(range(30))
-workloads_exist = False
+from workload.workload import Workload
 
-def simulate(workload_name, scenarios, etcs, workload_id_range, workloads_exist=False,is_etc_exist = True, is_et_exist = True):
+workload_name = 'heterogeneous'
+scenarios = ['sc-2']
+etcs = [f'etc-{i}' for i in [28]]
+workload_id_range = list(range(30))
+workloads_exist = True
+is_etc_exist = True
+is_et_exist = True
+
+def simulate(workload_name, scenarios, etcs, workload_id_range, workloads_exist=False,is_etc_exist = False, is_et_exist = False):
     for sc in scenarios:
         if not workloads_exist:    
             config.init()
             workloads_generator(workload_name,sc , is_etc_exist, is_et_exist ,
-                        no_of_etcs = 1, et_set = [100,10,10,100,10,100,100,1,1]  ,et_variance=0.05, et_size=1000, sample_size = 30)
+                        no_of_etcs = 1, et_set = [1,1,5,5,10,10,10,25,25,25,25,100,100,100,100,100, 150,150]  ,
+                        et_variance=0.05, et_size=1000, sample_size = 30)
         for etc in etcs:
             config.init()            
             path_to_result = f'./output/data/{workload_name}/{sc}/{etc}/{config.scheduling_method}'        
@@ -56,7 +61,13 @@ def simulate(workload_name, scenarios, etcs, workload_id_range, workloads_exist=
 
 
 
+# config.init()
+# workloads_generator(workload_name,scenarios[0] , is_etc_exist, is_et_exist ,
+#             no_of_etcs = 1, et_set = [1,1,5,5,10,10,10,25,25,25,25,100,100,100,100,100, 150,150]  ,
+#             et_variance=0.05, et_size=1000, sample_size = 30)
 
-simulate(workload_name, scenarios, etcs, workload_id_range, workloads_exist)
+
+simulate(workload_name, scenarios, etcs, workload_id_range, workloads_exist,
+          is_etc_exist,is_et_exist)
 
 

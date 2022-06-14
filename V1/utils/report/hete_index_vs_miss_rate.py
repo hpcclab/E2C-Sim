@@ -13,16 +13,18 @@ import numpy as np
 
     
 workload_name = 'heterogeneous'
-scenario = 'sc-4'
+scenario = 'sc-2'
 
-#schedulers = ['FEE','EE','MM','MMU','MSD', 'MECT', 'MEET']
 schedulers = ['MM']
+#schedulers = ['MECT']
+
+cut = 101
+objective = 'totalCompletion%'
+#objective = 'consumed_energy%'
 
 
-
-
-df_summary = pd.DataFrame(data=None, columns = ['sample','het-idx','speedup','scheduler' ,'totalCompletion%', 'consumed_energy%'])
-df = pd.DataFrame(data=None, columns = ['sample','het-idx','speedup','scheduler' ,'totalCompletion%', 'consumed_energy%'])
+df_summary = pd.DataFrame(data=None, columns = ['sample','het-idx','scheduler' ,'totalCompletion%'])
+df = pd.DataFrame(data=None, columns = ['sample','het-idx','scheduler' ,'totalCompletion%'])
 
 path_h_indices = f'../../workload/etcs/{workload_name}/hindices.csv'
 
@@ -31,24 +33,22 @@ df_h = pd.read_csv(path_h_indices)
 het_indices = df_h['h_index'].values
 df['het-idx'] = het_indices
 df['sample'] = df_h['etc_id'].values
-df['speedup'] = df_h['speedup'].values
+#df['speedup'] = df_h['speedup'].values
 
 
 
-cut = 100
-objective = 'totalCompletion%'
-#objective = 'consumed_energy%'
+
 
 for scheduler in schedulers:        
-    for etc_id in range(100):
-        if not etc_id in [190,680]:
+    for etc_id in range(cut):
+        if not etc_id in [1000]:
             path = f'../../output/data/{workload_name}/{scenario}/etc-{etc_id}/{scheduler}/results-summary.csv'
             d = pd.read_csv(path, usecols= [objective])              
             df.loc[df['sample']==etc_id, ['scheduler', objective]] = [ scheduler, d.mean().loc[[objective]].values]
             #df_summary.loc[df_summary['sample']==h, ['scheduler', objective]] = [ scheduler, df.mean().loc[[objective]].values]
     df_summary = df_summary.append(df, ignore_index = True)
         
-        
+df_summary = df_summary.dropna()
    
 #exit()
 colors = ['navy','darkred','orange', 'purple','darkgreen', 'red', 'blue']
@@ -73,7 +73,8 @@ for scheduler in schedulers:
     else:
         label = scheduler    
     
-    objective_data = results[objective].values    
+    objective_data = results[objective].values   
+    #objective_data *= 50
     het_ids = results['het-idx'].values
     if objective =='totalCompletion%':
         objective_data = 100 - objective_data
@@ -85,6 +86,7 @@ for scheduler in schedulers:
              markersize = 5,
             label = label)
     i+=1
+
 
 if objective == 'totalCompletion%':
     ylabel = '%unsuccessful tasks' 
@@ -100,7 +102,53 @@ ax1.legend()
 #ax1.tight_layout()
 #plt.savefig(f'../../output/figures/missrate_vs_h_index_1.pdf',dpi=300)
 
-plt.savefig(f'../../output/figures/{ylabel}_vs_h_index_-3-zoomed.jpg',dpi=300)
+# fig, ax3 = plt.subplots()
+    
+# for scheduler in schedulers:
+    
+#     results = df_summary[df_summary['scheduler']==scheduler]
+#     results = results.sort_values('speedup')
+#     results = results.iloc[:cut,:]
+    
+#     if scheduler == 'EE':
+#         label = 'ELARE'
+#     elif scheduler == 'FEE':
+#         label = 'FELARE'
+#     else:
+#         label = scheduler    
+    
+#     objective_data = results[objective].values   
+#     #objective_data *= 50
+#     speedup = results['speedup'].values
+#     if objective =='totalCompletion%':
+#         objective_data = 100 - objective_data
+    
+#     ax3.plot(speedup, objective_data, 
+#              marker = markers[i],
+#              color= colors[i],
+#              #linestyle='-',
+#              markersize = 5,
+#             label = label)
+#     i+=1    
+
+# if objective == 'totalCompletion%':
+#     ylabel = '%unsuccessful tasks' 
+# else:
+#     ylabel = '%consumed energy'
+# ax3.set_ylabel(ylabel, fontsize = 14)
+# ax3.set_xlabel('speedup', fontsize = 14)
+
+
+    
+
+# ax3.legend()
+#ax3.tight_layout()
+#plt.savefig(f'../../output/figures/missrate_vs_h_index_1.pdf',dpi=300)
+
+
+no_schedulers = len(schedulers)
+
+#plt.savefig(f'../../output/figures/{ylabel}_hindex_{scenario}_0-{cut}_{no_schedulers}_schedulers.jpg',dpi=300)
 
 
 

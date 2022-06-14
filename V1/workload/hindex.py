@@ -17,13 +17,25 @@ class HINDEX:
     def read_data(self, etc_id):    
         path_to_etc = f'./workload/etcs/{self.name}/{etc_id}.csv'
         df = pd.read_csv(path_to_etc, index_col = ['Unnamed: 0'])
-        #mu = df.mean().mean()
-        S_T = df.max(axis=0) / df
-        S_M = df.divide(df.max(axis=1), axis=0)
+        # etc_ref = 100
+        # path_to_etc_ref = f'./workload/etcs/{self.name}/{etc_ref}.csv'
+        # df_ref = pd.read_csv(path_to_etc_ref, index_col = ['Unnamed: 0'])
+        
+        homo_slowest_machines = 100* np.ones((df.shape[0],1))
+        homo_slowest_tasks = 100* np.ones((1,df.shape[1]))
+
+        S_T = homo_slowest_tasks / df
+        S_M = df.divide(homo_slowest_machines, axis=0)
         S_M = 1 / S_M
 
-        mean_s_m = df.max(axis=1).mean()
-        mean_s_t = df.max(axis=0).mean()
+        # S_T = df_ref.max(axis=0) / df
+        # S_M = df.divide(df_ref.max(axis=1), axis=0)
+        # S_M = 1 / S_M
+
+        # mean_s_m = df.max(axis=1).mean()
+        # mean_s_t = df.max(axis=0).mean()
+
+        
 
         
         
@@ -31,7 +43,7 @@ class HINDEX:
         st_flatten = S_T.values.flatten()
         flattened = np.array(list(zip(sm_flatten, st_flatten))).reshape(len(sm_flatten), 2)
         
-        return S_T, S_M , flattened, mean_s_m, mean_s_t
+        return S_T, S_M , sm_flatten
 
     
 
@@ -88,19 +100,19 @@ class HINDEX:
             plt.savefig(f'./output/figures/{self.name}-etcs/{etc_id}.jpg', dpi=300)
 
     def hindex(self, etc_id, saved=False):    
-        _, _,  flattened, mean_s_m, mean_s_t = self.read_data(etc_id)        
+        _, _,  flattened = self.read_data(etc_id)        
         speedup = flattened.mean(axis = 0)
         # h = np.zeros(avg.shape)
         # h[0] = mean_s_m / avg[0]
         # h[1] = mean_s_t / avg[1] 
-        h_index = np.linalg.norm([mean_s_m, mean_s_t]) / np.linalg.norm(speedup)
+        #h_index = np.linalg.norm([mean_s_m, mean_s_t]) / np.linalg.norm(speedup)
         #h_index = np.linalg.norm([mean_s_m/speedup[0], mean_s_t/speedup[1]]) 
+        #h_index = np.linalg.norm(speedup) 
+        h_index = speedup 
         #self.plot(etc_id, flattened, avg, saved)
         
 
-        return  h_index , np.linalg.norm(speedup)
-
-
+        return  h_index
 
 
 
