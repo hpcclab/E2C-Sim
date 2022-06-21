@@ -13,12 +13,12 @@ import numpy as np
 
     
 workload_name = 'heterogeneous'
-scenario = 'sc-2'
+scenario = 'sc-1'
 
-schedulers = ['MM']
+schedulers = ['MM','MECT','FCFS']
 #schedulers = ['MECT']
 
-cut = 101
+cut = 100
 objective = 'totalCompletion%'
 #objective = 'consumed_energy%'
 
@@ -52,11 +52,11 @@ df_summary = df_summary.dropna()
    
 #exit()
 colors = ['navy','darkred','orange', 'purple','darkgreen', 'red', 'blue']
-markers = ['o','x','<','s','p','*', 's']
+markers = ['o','p','<','s','p','*', 's']
 
 
-fig, ax1 = plt.subplots()
-ax2 = ax1.twinx()
+fig, ax1 = plt.subplots(figsize=(8,4))
+#ax2 = ax1.twinx()
 
 i=0
 

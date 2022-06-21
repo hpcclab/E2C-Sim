@@ -2,9 +2,9 @@
 
     "parameters":[
         {
-            "machine_queue_size":3,
-            "batch_queue_size":5,
-            "scheduling_method":"MM",
+            "machine_queue_size":3000,
+            "batch_queue_size":1,
+            "scheduling_method":"MECT",
             "fairness_factor": 1.0
             
         }        
@@ -41,7 +41,7 @@
     ],
     "battery":[
         {
-            "capacity": 30.0
+            "capacity": 50.0
         }
     ],
 

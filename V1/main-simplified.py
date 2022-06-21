@@ -10,12 +10,14 @@ import utils.config as config
 from workload.generator import workloads_generator
 
 from workload.workload import Workload
+from gui.gui_ali import Ui_MainWindow
+from PyQt5 import QtCore, QtGui, QtWidgets
 
 workload_name = 'heterogeneous'
 sc = 'sc-2'
 etc_id = 0
 etc = f'etc-{etc_id}'
-workload_id = 0
+workload_id = 1
 
         
 config.init()            

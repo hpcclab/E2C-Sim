@@ -40,7 +40,7 @@ class MM(BaseScheduler):
         if config.time.gct() > task.deadline:
             self.drop(task)
             return 1
-        self.unmapped_task.pop()
+            
         task.status =  TaskStatus.DEFERRED
         task.no_of_deferring += 1
         self.batch_queue.put(task)
@@ -55,10 +55,10 @@ class MM(BaseScheduler):
             s = '\n[ Task({:}),  _________ ]: Deferred       @time({:3.3f})'.format(
             task.id, config.time.gct())
             config.log.write(s)
+            print(s)
         self.gui_machine_log.append({"Task id":task.id,"Event Type":"DEFERRED","Time":config.time.gct(), "Type":'task'})
 
-    def drop(self, task):
-        self.unmapped_task.pop()
+    def drop(self, task):        
         task.status = TaskStatus.CANCELLED
         task.drop_time = config.time.gct()
         self.stats['dropped'].append(task) 
@@ -66,11 +66,13 @@ class MM(BaseScheduler):
             s = '\n[ Task({:}),  _________ ]: Cancelled      @time({:3.3f})'.format(
                 task.id, config.time.gct()       )
             config.log.write(s)
+        print(s)
         self.gui_machine_log.append({"Task id":task.id,"Event Type":"CANCELLED","Time":config.time.gct(), "Type":'task'})
 
     def map(self, machine):
         task = self.unmapped_task.pop()
-        assignment = machine.admit(task)
+        assignment,_ = machine.admit(task)
+        #print(assignment)
         if assignment != 'notEmpty':
             task.assigned_machine = machine
             self.stats['mapped'].append(task)
@@ -78,7 +80,6 @@ class MM(BaseScheduler):
             self.defer(task)
     
     def prune(self):
-
         for task in self.batch_queue.list:
             if config.time.gct() > task.deadline:                
                 task.status = TaskStatus.CANCELLED

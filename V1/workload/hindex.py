@@ -6,6 +6,8 @@ import matplotlib.pyplot as plt
 from matplotlib.cm import get_cmap
 from collections import Counter
 from yellowbrick.cluster import KElbowVisualizer
+from scipy import stats
+
 
 
 class HINDEX:
@@ -21,21 +23,23 @@ class HINDEX:
         # path_to_etc_ref = f'./workload/etcs/{self.name}/{etc_ref}.csv'
         # df_ref = pd.read_csv(path_to_etc_ref, index_col = ['Unnamed: 0'])
         
-        homo_slowest_machines = 100* np.ones((df.shape[0],1))
-        homo_slowest_tasks = 100* np.ones((1,df.shape[1]))
+        # homo_slowest_machines = 100* np.ones((df.shape[0],1))
+        # homo_slowest_tasks = 100* np.ones((1,df.shape[1]))
 
-        S_T = homo_slowest_tasks / df
-        S_M = df.divide(homo_slowest_machines, axis=0)
-        S_M = 1 / S_M
-
-        # S_T = df_ref.max(axis=0) / df
-        # S_M = df.divide(df_ref.max(axis=1), axis=0)
+        # S_T = homo_slowest_tasks / df
+        # S_M = df.divide(homo_slowest_machines, axis=0)
         # S_M = 1 / S_M
 
-        # mean_s_m = df.max(axis=1).mean()
-        # mean_s_t = df.max(axis=0).mean()
+        S_T = df.max(axis=0) / df
+        S_M = df.divide(df.max(axis=1), axis=0)
+        S_M = 1 / S_M
 
+        # mean_s_m = df.max(axis=1).max()
+        # mean_s_t = df.max(axis=0).max()
+        max_e = df.max().max()
         
+
+        # s_m = df.divide(homo_slowest_machines, axis=0)
 
         
         
@@ -43,7 +47,8 @@ class HINDEX:
         st_flatten = S_T.values.flatten()
         flattened = np.array(list(zip(sm_flatten, st_flatten))).reshape(len(sm_flatten), 2)
         
-        return S_T, S_M , sm_flatten
+        return S_T, S_M , max_e, flattened
+        #return df
 
     
 
@@ -100,15 +105,11 @@ class HINDEX:
             plt.savefig(f'./output/figures/{self.name}-etcs/{etc_id}.jpg', dpi=300)
 
     def hindex(self, etc_id, saved=False):    
-        _, _,  flattened = self.read_data(etc_id)        
+        _, _, max_e, flattened = self.read_data(etc_id)
         speedup = flattened.mean(axis = 0)
-        # h = np.zeros(avg.shape)
-        # h[0] = mean_s_m / avg[0]
-        # h[1] = mean_s_t / avg[1] 
-        #h_index = np.linalg.norm([mean_s_m, mean_s_t]) / np.linalg.norm(speedup)
-        #h_index = np.linalg.norm([mean_s_m/speedup[0], mean_s_t/speedup[1]]) 
-        #h_index = np.linalg.norm(speedup) 
-        h_index = speedup 
+        h_index = max_e / max(speedup)
+        
+
         #self.plot(etc_id, flattened, avg, saved)
         
 

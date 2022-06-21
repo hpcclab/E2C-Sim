@@ -24,6 +24,15 @@ class FCFS(BaseScheduler):
         task = self.batch_queue.get(index)     
         self.unmapped_task.append(task)
         
+        if config.settings['verbosity']:
+            s =f'\n{task.id} selected --> BQ = '
+            bq = [t.id for t in self.batch_queue.list]
+            s += f'{bq}'
+            s += f'\nexecutime: {task.execution_time}'
+            s += f'\testimeated_time{task.estimated_time}'
+
+            config.log.write(s)
+        
         return task
     
     
@@ -31,51 +40,91 @@ class FCFS(BaseScheduler):
         if config.time.gct() > task.deadline:
             self.drop(task)
             return 1
-        self.unmapped_task.pop()
         task.status =  TaskStatus.DEFERRED
         task.no_of_deferring += 1
         self.batch_queue.put(task)
          
         self.stats['deferred'].append(task)
-        s = '\n[ Task({:}),  _________ ]: Deferred       @time({:3.3f})'.format(
-           task.id, config.time.gct())
-        config.log.write(s)
-        print(s)
-        self.gui_machine_log.append({"Task id":task.id,"Event Type":"DEFERRED","Time":config.time.gct(), "Type":'task'})
+        if config.settings['verbosity']:
+            s = '\n[ Task({:}),  _________ ]: Deferred       @time({:3.3f})'.format(
+            task.id, config.time.gct())
+            config.log.write(s)
+        
+        
 
     def drop(self, task):
-        self.unmapped_task.pop()
         task.status = TaskStatus.CANCELLED
         task.drop_time = config.time.gct()
         self.stats['dropped'].append(task)        
-        s = '\n[ Task({:}),  _________ ]: Cancelled      @time({:3.3f})'.format(
-            task.id, config.time.gct()       )
-        config.log.write(s)
-        print(s)
-        self.gui_machine_log.append({"Task id":task.id,"Event Type":"DEFERRED","Time":config.time.gct(), "Type":'task'})
+        if config.settings['verbosity']:       
+            s = '\n[ Task({:}),  _________ ]: Cancelled      @time({:3.3f})'.format(
+                task.id, config.time.gct()       )
+            config.log.write(s)
+        
 
     def map(self, machine):
         task = self.unmapped_task.pop()
-        assignment = machine.admit(task)
+        assignment,_ = machine.admit(task)
         if assignment != 'notEmpty':
             task.assigned_machine = machine
             self.stats['mapped'].append(task)
+            s = f"\ntask:{task.id}  assigned to:{task.assigned_machine.type.name}  delta:{task.deadline}"
+            config.log.write(s)
         else:
-            self.defer(task)
+            self.unmapped_task.append(task)
+        
     
+    def first_available_machine(self):
+
+        for machine in config.machines:
+
+            if not machine.is_working():
+                return machine
+        
+        min_qlen = float('inf')
+        min_qlen_machine = None
+        for machine in config.machines:
+
+            if (not machine.queue.full()) and machine.queue.qsize() < min_qlen:
+                min_qlen = machine.queue.qsize()
+                min_qlen_machine = machine
+        
+        return min_qlen_machine
+   
     
 
 
     def schedule(self):
         self.gui_machine_log = []
+
+        if config.settings['verbosity']:
+            s = f'\n Current State @{config.time.gct()}'
+            s = '\nBQ = '
+            bq = [t.id for t in self.batch_queue.list]
+            s += f'{bq}'
+            s += '\n\nMACHINES ==>>>'
+            for m in config.machines:
+                s += f'\n\tMachine {m.type.name} :'
+                if m.running_task:
+                    r = [m.running_task[0].id]
+                else:
+                    r = []
+                mq = [t.id for t in m.queue.list]
+                r.append(mq)
+                s +=f'\t{r}'
+            config.log.write(s)
+
         if self.batch_queue.empty():
             return 0
-        self.choose()        
-        machine_index = (self.prev_assignment_idx+1) % config.no_of_machines        
-        machine = config.machines[machine_index]
-        self.prev_assignment_idx = machine_index
-        self.map(machine)
-        return machine
+                
+        # machine_index = (self.prev_assignment_idx+1) % config.no_of_machines        
+        # machine = config.machines[machine_index]
+        # self.prev_assignment_idx = machine_index
+        available_machine = self.first_available_machine()
+        if available_machine != None:
+            self.choose()
+            self.map(available_machine)
+            return available_machine
 
 
 

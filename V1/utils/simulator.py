@@ -20,6 +20,8 @@ from utils.schedulers.FCFS import FCFS
 from utils.schedulers.MECT import MECT
 from utils.schedulers.MEET import MEET
 #from PyQt5.QtCore import pyqtSignal,QObject
+# from gui.gui_ali import Ui_MainWindow
+# from PyQt5 import QtCore, QtGui, QtWidgets
 
 
 class Simulator():    
@@ -133,7 +135,7 @@ class Simulator():
             for machine in config.machines:                
                 row.append(machine.stats['energy_usage'])
             self.energy_statistics.append(row)
-
+            
               
             if event.event_type == EventTypes.ARRIVING:                
                 self.scheduler.batch_queue.put(task)
@@ -151,6 +153,9 @@ class Simulator():
                 
 
             elif event.event_type == EventTypes.DROPPED_RUNNING_TASK:
+                if task.id == 63:                    
+                    s = f'ATTENTION: task {task.id} dropped @ {config.time.gct()}'
+                    
                 machine = task.assigned_machine
                 machine.drop()
                 self.scheduler.schedule()             

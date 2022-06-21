@@ -77,6 +77,7 @@ class EE(BaseScheduler):
     def map(self, machine):
         task = self.unmapped_task.pop()
         assignment = machine.admit(task)
+        print(assignment)
         if assignment != 'notEmpty':
             task.assigned_machine = machine
             self.stats['mapped'].append(task)

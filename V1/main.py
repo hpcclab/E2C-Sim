@@ -13,7 +13,7 @@ from workload.workload import Workload
 
 workload_name = 'heterogeneous'
 scenarios = ['sc-2']
-etcs = [f'etc-{i}' for i in [28]]
+etcs = [f'etc-{i}' for i in range(100)]
 workload_id_range = list(range(30))
 workloads_exist = True
 is_etc_exist = True
@@ -49,10 +49,12 @@ def simulate(workload_name, scenarios, etcs, workload_id_range, workloads_exist=
                 simulation.create_event_queue()
                 scheduler = config.get_scheduler()
                 simulation.set_scheduling_method(scheduler)        
-                simulation.run()           
+                simulation.run()   
+                       
                 row = simulation.report()   
                 report.writerows(row)        
-            report_summary.close()            
+            report_summary.close()
+            config.log.close()         
             df_summary = pd.read_csv(f'{path_to_result}/results-summary.csv', 
             usecols=['totalCompletion%',
             'consumed_energy%','wasted_energy%'])

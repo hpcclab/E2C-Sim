@@ -1,5 +1,0 @@
-task_type,start_time,end_time,distribution,number
-T1,0,75,exponential,125
-T2,0,75,exponential,125
-T3,0,75,exponential,125
-T4,0,75,exponential,125

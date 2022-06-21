@@ -1,2 +1,0 @@
-workload_id,total_no_of_tasks,mapped,cancelled,URG_missed,BE_missed,Completion%,xCompletion%,totalCompletion%,wasted_energy%,consumed_energy%,energy_per_completion%
-0,100,89,11,0,19,70.0,0.0,70.0,58.3404351851852,92.7131990740741,1.3244742724867729
