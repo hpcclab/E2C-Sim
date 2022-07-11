@@ -1,7 +1,7 @@
 
 from abc import ABCMeta, abstractmethod
 from enum import Enum, unique
-
+from PyQt5.QtCore import QObject, pyqtSignal
 
 @unique
 class MachineStatus(Enum):
@@ -10,11 +10,12 @@ class MachineStatus(Enum):
     IDLE = 2
 
 
-class BaseMachine:
+class BaseMachine(QObject):
     __metaclass__ = ABCMeta
 
-    def __init__(self, id, type, specs):
-        pass
+    def __init__(self):
+        super(BaseMachine, self).__init__()
+        
 
     @abstractmethod
     def start(self):

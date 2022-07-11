@@ -9,6 +9,7 @@ from utils.base_task import TaskStatus
 from utils.base_scheduler import BaseScheduler
 import utils.config as config
 from utils.event import Event, EventTypes
+import time
 
 
 class MM(BaseScheduler):
@@ -19,11 +20,21 @@ class MM(BaseScheduler):
         self.name = 'MM'
         self.total_no_of_tasks = total_no_of_tasks
         self.gui_machine_log = []
+        self.sleep_time = 0.1
 
 
     def choose(self, index=0):
         task = self.batch_queue.get(index)     
         self.unmapped_task.append(task)
+        if config.gui==1:
+            self.decision.emit({'type':'choose',
+                                'time':config.time.gct(),
+                                'where':'simulator: choose',
+                                'data': {'t_id':task.id,
+                                        'bq_indx': index,
+                                        }
+                                        })
+            time.sleep(self.sleep_time)
         if config.settings['verbosity']:
             s =f'\n{task.id} selected --> BQ = '
             bq = [t.id for t in self.batch_queue.list]
@@ -40,6 +51,15 @@ class MM(BaseScheduler):
         if config.time.gct() > task.deadline:
             self.drop(task)
             return 1
+        
+        if config.gui==1:
+            self.decision.emit({'type':'defer',
+                            'time':config.time.gct(),
+                            'where':'simulator: defer',
+                            'data': {'t_id':task.id,                                    
+                                    }
+                                    })
+            time.sleep(self.sleep_time)
             
         task.status =  TaskStatus.DEFERRED
         task.no_of_deferring += 1
@@ -62,6 +82,16 @@ class MM(BaseScheduler):
         task.status = TaskStatus.CANCELLED
         task.drop_time = config.time.gct()
         self.stats['dropped'].append(task) 
+
+        if config.gui==1:
+            self.decision.emit({'type':'cacnelled',
+                                'time':config.time.gct(),
+                                'where':'simulator: drop',
+                                'data': {'t_id':task.id,                                    
+                                        }
+                                        })
+            time.sleep(self.sleep_time)
+
         if config.settings['verbosity']:       
             s = '\n[ Task({:}),  _________ ]: Cancelled      @time({:3.3f})'.format(
                 task.id, config.time.gct()       )
@@ -76,17 +106,35 @@ class MM(BaseScheduler):
         if assignment != 'notEmpty':
             task.assigned_machine = machine
             self.stats['mapped'].append(task)
+            if config.gui==1:
+                self.decision.emit({'type':'map',
+                                'time':config.time.gct(),
+                                'where':'scheduler: map',
+                                'data': {'t_id':task.id,
+                                         'm_id':machine.id,                                    
+                                        }
+                                        })
+                time.sleep(self.sleep_time)
         else:
             self.defer(task)
     
     def prune(self):
+        cancelled_tasks = []
         for task in self.batch_queue.list:
-            if config.time.gct() > task.deadline:                
+            if config.time.gct() > task.deadline:               
                 task.status = TaskStatus.CANCELLED
                 task.drop_time = config.time.gct()
                 self.stats['dropped'].append(task) 
                 self.batch_queue.remove(task)
-
+                cancelled_tasks.append(task.id)        
+                if config.gui==1:
+                        self.decision.emit({'type':'cancel',
+                                        'time':config.time.gct(),
+                                        'where':'scheduelr: prune',
+                                        'data': {'t_id':task.id,                                                                                  
+                                                }
+                                                })
+                        time.sleep(self.sleep_time)
 
     
     def phase1(self):

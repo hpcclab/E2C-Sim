@@ -1,5 +1,3 @@
-from logging.handlers import QueueListener
-import statistics
 import sys
 import json
 from PyQt5.QtWidgets import (
@@ -12,14 +10,10 @@ from PyQt5.QtWidgets import (
     QVBoxLayout,
     QHBoxLayout,
     QSlider,
-    QMessageBox,
     QTableWidget,
     QTableWidgetItem,
     QHeaderView,
-    QScrollArea,
     QComboBox,
-    QLineEdit,
-    QDial
 )
 from PyQt5.QtGui import QPainter, QPen, QFont
 from PyQt5.QtCore import (
@@ -29,95 +23,23 @@ from PyQt5.QtCore import (
     QThread,
     QSequentialAnimationGroup,
     QCoreApplication,
-    QProcess,
-    QObject,
-    pyqtSignal,
+    QProcess,   
 
 )
-
-import csv
-from os import makedirs
 import pandas as pd
 import sys
+import csv
 import utils.config as config
 from utils.simulator import Simulator
 from utils.machine import Machine
 import utils.config as config
 
-# This class holds the code for statistic box on the top. The stats are arranged vertically with QVBoxLayout
-# and each stat is made from QLabel
-
-
-# It's a QFrame with a QVBoxLayout that contains a bunch of QLabels.
-class Statistic(QFrame):
-    def __init__(self):
-        super().__init__()
-        self.layout = QVBoxLayout()
-        self.setLayout(self.layout)
-        self.width = 400
-        self.TotalTasks = QLabel(self)
-        self.TotalTasks.setText("Total Tasks: {}".format(0))
-        self.TotalTasks.setTextInteractionFlags(Qt.TextSelectableByMouse)
-        self.TotalTasks.setMaximumWidth(self.width)
-        self.TotalTasks.setStyleSheet("border:1px solid;")
-        self.layout.addWidget(self.TotalTasks)
-
-        self.TotalCompletion = QLabel(self)
-        self.TotalCompletion.setText("Total Completion: {}%".format(0))
-        self.TotalCompletion.setTextInteractionFlags(Qt.TextSelectableByMouse)
-        self.TotalCompletion.setMaximumWidth(self.width)
-        self.TotalCompletion.setStyleSheet("border:1px solid;")
-        self.layout.addWidget(self.TotalCompletion)
-
-        self.TotalxCompletion = QLabel(self)
-        self.TotalxCompletion.setTextInteractionFlags(Qt.TextSelectableByMouse)
-        self.TotalxCompletion.setText(
-            "Total Extended Completion: {}%".format(0))
-        self.TotalxCompletion.setMaximumWidth(self.width)
-        self.TotalxCompletion.setStyleSheet("border:1px solid;")
-        self.layout.addWidget(self.TotalxCompletion)
-
-        self.deffered = QLabel(self)
-        self.deffered.setText("Deferred: {}%".format(0))
-        self.deffered.setTextInteractionFlags(Qt.TextSelectableByMouse)
-        self.deffered.setMaximumWidth(self.width)
-        self.deffered.setStyleSheet("border:1px solid;")
-        self.layout.addWidget(self.deffered)
-
-        self.dropped = QLabel(self)
-        self.dropped.setText("Dropped: {}%".format(0))
-        self.dropped.setTextInteractionFlags(Qt.TextSelectableByMouse)
-        self.dropped.setMaximumWidth(self.width)
-        self.dropped.setStyleSheet("border:1px solid;")
-        self.layout.addWidget(self.dropped)
-
-        self.totalCompletion = QLabel(self)
-        self.totalCompletion.setText("Total Completion: {}%".format(0))
-        self.totalCompletion.setTextInteractionFlags(Qt.TextSelectableByMouse)
-        self.totalCompletion.setMaximumWidth(self.width)
-        self.totalCompletion.setStyleSheet("border:1px solid;")
-        self.layout.addWidget(self.totalCompletion)
-
-        self.consumedEnergy = QLabel(self)
-        self.consumedEnergy.setText("Consumed Energy: {}%".format(0))
-        self.consumedEnergy.setTextInteractionFlags(Qt.TextSelectableByMouse)
-        self.consumedEnergy.setMaximumWidth(self.width)
-        self.consumedEnergy.setStyleSheet("border:1px solid;")
-        self.layout.addWidget(self.consumedEnergy)
-
-        self.energyPerCompletion = QLabel(self)
-        self.energyPerCompletion.setText("Energy per completion: {}".format(0))
-        self.energyPerCompletion.setTextInteractionFlags(
-            Qt.TextSelectableByMouse)
-        self.energyPerCompletion.setMaximumWidth(self.width)
-        self.energyPerCompletion.setStyleSheet("border:1px solid;")
-        self.layout.addWidget(self.energyPerCompletion)
-
-        self.layout.setContentsMargins(0, 0, 0, 0)
-        self.layout.setSpacing(0)
+from gui.individualmachinesummary import IndividualMachineSummary
+from gui.machinesummarybox import MachinesSummaryBox
+from gui.fulllogbox import FullLogBox
+from gui.statistics import Statistic
 
 # This class sets the proportion of the statistic class and the main class
-
 
 class GUI_SIM(QFrame):
     def __init__(self):
@@ -126,210 +48,18 @@ class GUI_SIM(QFrame):
         self.setLayout(self.layout)
 
 
-# A message box that contains the full logs, can be sort by event type and task id.
-class FullLogBox(QMessageBox):
-    finished = pyqtSignal()
-    def __init__(self, l, ms, title, *args, **kwargs):
-        QMessageBox.__init__(self, *args, **kwargs)
-        self.task = l
-        self.machine_stats = ms
-        self.arriving = []
-        self.running = []
-        self.deferred = []
-        self.cancelled = []
-        self.dropped = []
-        self.completed = []
-        self.comboBoxWidget()
-        self.searchBarWidget()
-
-        self.scroll = QScrollArea(self)
-        self.scroll.setWidgetResizable(True)
-        self.content = QWidget()
-        self.scroll.setWidget(self.content)
-        self.lay = QVBoxLayout(self.content)
-
-        for i, item in enumerate(self.task):
-            self.lay.addWidget(QLabel("{}. {}".format(i, item), self))
-
-        self.layout().addWidget(self.scroll, 0, 0, 1, self.layout().columnCount())
-        self.layout().addWidget(self.comboBox, 1, 0, 1, 1)
-        self.layout().addWidget(self.searchbar, 1, 1, alignment=Qt.AlignCenter)
-        self.layout().addWidget(self.searchBarButton, 1, 1, alignment=Qt.AlignRight)
-
-        self.setStyleSheet("QScrollArea{min-width:900 px; min-height: 400px}")
-        self.setWindowTitle(title)
-
-    def comboBoxWidget(self):
-        """
-        The function creates a comboBox widget with the following options: All, Arriving tasks, Executed
-        tasks, Completed tasks, Deferred tasks, Cancelled tasks, Dropped tasks, Machine Statistics
-        """
-        self.comboBox = QComboBox(self)
-        self.comboBox.addItem("All")
-        self.comboBox.addItem("Arriving tasks")
-        self.comboBox.addItem("Executed tasks")
-        self.comboBox.addItem("Completed tasks")
-        self.comboBox.addItem("Deferred tasks")
-        self.comboBox.addItem("Cancelled tasks")
-        self.comboBox.addItem("Dropped tasks")
-        self.comboBox.addItem("Machine Statistics")
-        self.comboBox.setFixedWidth(300)
-        self.comboBox.activated.connect(self.activated)
-
-    def searchBarWidget(self):
-        """
-        It creates a search bar widget with a line edit and a button.
-        """
-        self.searchbar = QLineEdit()
-        self.searchbar.setStyleSheet("border: 1px solid black")
-        self.searchbar.setFixedWidth(180)
-        self.searchbar.setPlaceholderText("Search task id")
-        self.searchBarButton = QPushButton("Search")
-        self.searchBarButton.clicked.connect(self.searchTask)
-        self.searchBarButton.setDefault(True)
-        self.searchBarButton.setAutoDefault(False)
-
-    def searchTask(self):
-        """
-        It takes the text from the searchbar, and if it's not empty, it searches the task list for the
-        task id, and if it finds it, it adds it to the layout.
-        """
-        self.clearLayout()
-        if self.searchbar.text():
-            for i, item in enumerate(self.task):
-                if 'Type' in item and item['Task id'] == int(self.searchbar.text()):
-                    self.lay.addWidget(QLabel("{}. {}".format(i, item), self))
-        else:
-            for i, item in enumerate(self.task):
-                self.lay.addWidget(QLabel("{}. {}".format(i, item), self))
-
-    def activated(self, index):
-        """
-        The function takes in an index, and depending on the index, it will display the corresponding
-        information in the QListWidget
-
-        :param index: the index of the activated item in the combobox
-        """
-        self.clearLayout()
-        if index == 0:
-            for i, item in enumerate(self.task):
-                self.lay.addWidget(QLabel("{}. {}".format(i, item), self))
-        elif index == 1:
-            for i, item in enumerate(self.task):
-                if 'Type' in item and item['Event Type'] == "ARRIVING":
-                    self.lay.addWidget(QLabel("{}. {}".format(i, item), self))
-
-        elif index == 2:
-            for i, item in enumerate(self.task):
-                if 'Type' in item and item['Event Type'] == 'RUNNING':
-                    self.lay.addWidget(QLabel("{}. {}".format(i, item), self))
-
-        elif index == 3:
-            for i, item in enumerate(self.task):
-                if 'Type' in item and item['Event Type'] == 'COMPLETED':
-                    self.lay.addWidget(QLabel("{}. {}".format(i, item), self))
-
-        elif index == 4:
-            for i, item in enumerate(self.task):
-                if 'Type' in item and item['Event Type'] == 'DEFERRED':
-                    self.lay.addWidget(QLabel("{}. {}".format(i, item), self))
-
-        elif index == 5:
-            for i, item in enumerate(self.task):
-                if 'Type' in item and item['Event Type'] == 'CANCELLED':
-                    self.lay.addWidget(QLabel("{}. {}".format(i, item), self))
-
-        elif index == 6:
-            for i, item in enumerate(self.task):
-                if 'Type' in item and item['Event Type'] == 'DROPPED_RUNNING_TASK':
-                    self.lay.addWidget(QLabel("{}. {}".format(i, item), self))
-
-        elif index == 7:
-            for i, item in enumerate(self.machine_stats):
-                if 'Machine id' in item:
-                    self.lay.addWidget(QLabel("{}. {}".format(i, item), self))
-
-    def clearLayout(self):
-        """
-        It takes a layout, and recursively removes all widgets from it
-        """
-        if self.lay is not None:
-            while self.lay.count():
-                item = self.lay.takeAt(0)
-                widget = item.widget()
-                if widget is not None:
-                    widget.deleteLater()
-                else:
-                    self.clearLayout(item.layout())
-
-
-# Generate a message box that contains report of the machine
-class MachinesSummaryBox(QMessageBox):
-    def __init__(self, l, finishTasks, title, *args, **kwargs):
-        QMessageBox.__init__(self, *args, **kwargs)
-        scroll = QScrollArea(self)
-        scroll.setWidgetResizable(True)
-        self.content = QWidget()
-        scroll.setWidget(self.content)
-        lay = QVBoxLayout(self.content)
-        for i, j in l.items():
-            if i == '%Completion':
-                lay.addWidget(
-                    QLabel("{}: {:2.1f}%".format("Completion", j), self))
-            elif i == '# of %Completion':
-                lay.addWidget(QLabel("{}: {:2.1f}".format(
-                    "# of Completed Tasks", j), self))
-            elif i == '%XCompletion':
-                lay.addWidget(QLabel("{}: {:2.1f}%".format(
-                    "Extended Completion", j), self))
-            elif i == '# of %XCompletion':
-                lay.addWidget(QLabel("{}: {:2.1f}".format(
-                    "# of Extended Completed Tasks", j), self))
-            elif i == '#Missed URG':
-                lay.addWidget(QLabel("{}: {:2.1f}".format(
-                    "# Urgent tasks missed deadline", j), self))
-            elif i == 'Missed BE':
-                lay.addWidget(QLabel("{}: {:2.1f}".format(
-                    "# Best Effort tasks missed deadline", j), self))
-
-            elif i == '%Energy':
-                lay.addWidget(QLabel("{}: {:2.1f}%".format("Energy", j), self))
-            elif i == '%Wasted Energy':
-                lay.addWidget(
-                    QLabel("{}: {:2.1f}%".format("Wasted Energy", j), self))
-            else:
-                lay.addWidget(QLabel("{}: {}".format(i, j), self))
-        lay.addWidget(QLabel("Finished tasks: {}".format(finishTasks), self))
-
-        self.layout().addWidget(scroll, 0, 0, 1, self.layout().columnCount())
-        self.setStyleSheet("QScrollArea{min-width:900 px; min-height: 400px}")
-        self.setWindowTitle(title)
-
-
-# Show the specs of each machine
-class IndividualMachineSummary(QMessageBox):
-    def __init__(self, l, title, *args, **kwargs):
-        QMessageBox.__init__(self, *args, **kwargs)
-        scroll = QScrollArea(self)
-        scroll.setWidgetResizable(True)
-        self.content = QWidget()
-        scroll.setWidget(self.content)
-        lay = QVBoxLayout(self.content)
-        for k in l:
-            lay.addWidget(QLabel("{}".format(k), self))
-        self.layout().addWidget(scroll, 0, 0, 1, self.layout().columnCount())
-        self.setStyleSheet("QScrollArea{min-width:900 px; min-height: 400px}")
-        self.setWindowTitle(title)
-
 # This is the main class where all the GUI appears
-
-
+# workload_id_range = list(range(1))
 class GUI(QMainWindow):
-    def __init__(self):
+    def __init__(self, wn, sc, etc, wi):
         super(GUI, self).__init__()
-        self.color = ["background-color:lightgreen", "background-color:lightblue",
-                      "background-color:lightsalmon", "background-color:lightpink", "background-color:lightgoldenrodyellow"]
+        self.color = ["background-color:lightgreen", "background-color:lightblue", "background-color:lightsalmon", "background-color:lightpink", "background-color:lightgoldenrodyellow"]
+        #<<< WARNING >>>
         self.no_of_task = 2500  # maximum number of tasks that the GUI will run
+        self.workload_name = wn
+        self.sc = sc
+        self.etc = etc
+        self.workload_id = wi
         self.tasks = []
         self.machine_stats = []
         self.machine_stats_btn = []
@@ -350,9 +80,9 @@ class GUI(QMainWindow):
     def initUI(self):
         screen = QApplication.primaryScreen()
         size = screen.size()
-        self.move(100, 100)
-        self.width = size.width()/1.25
-        self.height = size.height()/1.25
+        self.move(0, 0)
+        self.width = size.width()/1.0
+        self.height = size.height()/1.0
         self.fontSize = 11
         self.setMinimumSize(self.width, self.height)
         self.setWindowTitle("E2C Simulator")
@@ -370,8 +100,7 @@ class GUI(QMainWindow):
         self.draw_machine()
         for i in range(len(self.m_coords)):
             b = QPushButton(self)
-            b.setGeometry(self.m_coords[i][0]*1.6,
-                          self.m_coords[i][1], self.width/10, self.height/30)
+            b.setGeometry(self.m_coords[i][0]*1.6, self.m_coords[i][1], self.width/10, self.height/30)
             b.setFont(QFont("Arial", self.fontSize))
             b.setText("Machine Report")
             b.setEnabled(False)
@@ -385,64 +114,49 @@ class GUI(QMainWindow):
         self.mainWidgets()
 
     def main(self):
+
+        print(self.workload_name)
         config.init()
-        self.scheduling_method = config.scheduling_method
-        self.workload = '9-0'
-        low = 0
-        high = 30
-        no_of_iterations = 1
-        train = 0
-        self.path_to_result = f'{config.settings["path_to_output"]}/data/{self.workload}/{self.scheduling_method}'
-        makedirs(self.path_to_result, exist_ok=True)
-        self.report_summary = open(
-            f'{self.path_to_result}/results-summary.csv', 'w')
-        self.summary_header = ['Episode', 'total_no_of_tasks', 'mapped', 'cancelled', 'URG_missed', 'BE_missed',
-                               'Completion%', 'xCompletion%', 'totalCompletion%', 'consumed_energy%', 'energy_per_completion']
-        self.writer = csv.writer(self.report_summary)
-        self.writer.writerow(self.summary_header)
-        self.df_task_based_report = pd.DataFrame()
-        count = 0
+        self.scheduling_method = config.scheduling_method 
 
-        for i in range(low, high):
-            count += 1
-            Tasks = []
-            config.init()
+        self.path_to_result = f'./output/data/{self.workload_name}/{self.sc}/{self.etc}/{config.scheduling_method}'        
+        self.report_summary = open(f'{self.path_to_result}/results-summary.csv','w')
+        self.report_header = ['workload_id', 'total_no_of_tasks','mapped','cancelled','URG_missed','BE_missed','Completion%','xCompletion%','totalCompletion%','wasted_energy%','consumed_energy%','energy_per_completion%']
+        self.report = csv.writer(self.report_summary)
+        self.report.writerow(self.report_header)  
 
-            id = 0
-            for machine_type in config.machine_types:
-                for r in range(1, machine_type.replicas+1):
-                    specs = {'power': machine_type.power,
-                             'idle_power': machine_type.idle_power}
-                    machine = Machine(id, r, machine_type, specs)
-                    config.machines.append(machine)
+        config.init() 
+        id = 0
+        for machine_type in config.machine_types:
+            for r in range(1,machine_type.replicas+1):
+                specs = {'power': machine_type.power, 'idle_power':machine_type.idle_power}
+                machine = Machine(id,r, machine_type, specs)
+                config.machines.append(machine)            
+                id += 1
 
-                    id += 1
+        self.simulation = Simulator(workload_name=self.workload_name, scenario=self.sc, etc=self.etc, workload_id=self.workload_id)
+        self.thread = QThread()
+        self.simulation.progress.connect(self.handle_signal)
+        self.simulation.progressBQ.connect(self.handle_BQ)
+        self.simulation.progressMQ.connect(self.handle_MQ)
 
-            self.simulation = Simulator(
-                workload_id=self.workload, epsiode_no=i, id=i)
-            self.thread = QThread(parent=self)
-            self.simulation.progress.connect(self.handle_signal)
-            self.simulation.progressBQ.connect(self.handle_BQ)
-            self.simulation.progressMQ.connect(self.handle_MQ)
+        self.simulation.moveToThread(self.thread)
 
-            self.simulation.moveToThread(self.thread)
+        self.thread.started.connect(self.disableSchedulerCombo)
+        self.thread.started.connect(self.simulation.create_event_queue)
+        self.thread.started.connect(self.simulation.set_scheduling_method)
+        self.thread.started.connect(self.simulation.setTimer)
+        self.thread.started.connect(self.simulation.run)
 
-            self.thread.started.connect(self.disableSchedulerCombo)
-            self.thread.started.connect(self.simulation.create_event_queue)
-            self.thread.started.connect(self.simulation.set_scheduling_method)
-            self.thread.started.connect(self.simulation.setTimer)
-            self.thread.started.connect(self.simulation.run)
+        self.timer = 300
 
-            self.timer = 300
+        self.thread.finished.connect(lambda: self.simulation.report(self.simulation.path_to_results))    
+        self.thread.finished.connect(self.load_config)
+        self.thread.finished.connect(self.statistics_info)
+        self.thread.finished.connect(self.setEnabledEnd)
+        self.thread.finished.connect(self.deleteTask)
+        self.thread.finished.connect(self.getReport)                      
 
-
-            self.thread.finished.connect(
-                lambda: self.simulation.report(self.path_to_result))
-            self.thread.finished.connect(self.load_config)
-            self.thread.finished.connect(self.statistics_info)
-            self.thread.finished.connect(self.setEnabledEnd)
-            self.thread.finished.connect(self.deleteTask)
-            self.thread.finished.connect(self.getReport)
 
     def mainWidgets(self):
         """
@@ -450,12 +164,12 @@ class GUI(QMainWindow):
         """
         self.startBtn = QPushButton("Start", self)
         self.startBtn.setGeometry(
-            30, self.width/50*10, self.width/20, self.height/20)
+            30, self.width/50*2, self.width/20, self.height/20)
         self.startBtn.setFont(QFont("Arial", self.fontSize))
         self.startBtn.clicked.connect(lambda: self.thread.start())
         self.pauseBtn = QPushButton(self)
         self.pauseBtn.setGeometry(
-            30, self.width/50*10+self.height/20, self.width/20,  self.height/20)
+            30, self.width/50*2+self.height/20, self.width/20,  self.height/20)
         self.pauseBtn.setFont(QFont("Arial", self.fontSize))
         self.pauseBtn.setText("Pause")
         self.pause = True
@@ -463,24 +177,22 @@ class GUI(QMainWindow):
 
         self.endBtn = QPushButton("End", self)
         self.endBtn.setGeometry(
-            30, self.width/50*10+self.height/20*2, self.width/20,  self.height/20)
+            30, self.width/50*2+self.height/20*2, self.width/20,  self.height/20)
         self.endBtn.setFont(QFont("Arial", self.fontSize))
         self.endBtn.clicked.connect(
             lambda: self.simulation.setTimer(0))
         self.endBtn.clicked.connect(lambda: self.endThread())
 
-        
-
         self.restartBtn = QPushButton("Restart", self)
         self.restartBtn.setGeometry(
-            30, self.width/50*10+self.height/20*3, self.width/20,  self.height/20)
+            30, self.width/50*2+self.height/20*3, self.width/20,  self.height/20)
         self.restartBtn.setFont(QFont("Arial", self.fontSize))
         self.restartBtn.setEnabled(False)
         self.restartBtn.clicked.connect(lambda: self.restart())
 
         self.mDetails = QPushButton("Machines Report", self)
         self.mDetails.setGeometry(
-            30, self.width/50*10+self.height/20*4, self.width/20+140,  self.height/20)
+            30, self.width/50*2+self.height/20*4, self.width/20+140,  self.height/20)
         self.mDetails.setFont(QFont("Arial", self.fontSize))
         self.mDetails.setEnabled(False)
         # self.mDetails.adjustSize()
@@ -488,7 +200,7 @@ class GUI(QMainWindow):
 
         self.getLogBtn = QPushButton("Tasks Report", self)
         self.getLogBtn.setGeometry(
-            30, self.width/50*10+self.height/20*5, self.width/20+140,  self.height/20)
+            30, self.width/50*2+self.height/20*5, self.width/20+140,  self.height/20)
         self.getLogBtn.setFont(QFont("Arial", self.fontSize))
         self.getLogBtn.setEnabled(False)
         # self.getLogBtn.adjustSize()
@@ -496,7 +208,7 @@ class GUI(QMainWindow):
         
         self.slider = QSlider(Qt.Horizontal, self)
         self.slider.setGeometry(
-            30, self.width/50*10+self.height/20*7, 300, 50)
+            30, self.width/50*2+self.height/20*7, 300, 50)
         self.slider.setMinimum(50)
         self.slider.setMaximum(600)
         # invert the slider to move left to decrease speed, vice versa
@@ -507,23 +219,31 @@ class GUI(QMainWindow):
 
         self.sliderLabel = QLabel(self)
         self.sliderLabel.setGeometry(
-            30, self.width/50*10+self.height/20*8, 300, 40)
+            30, self.width/50*2+self.height/20*8, 300, 40)
         self.sliderLabel.setText(
             "Simulation speed: {:.1f}x".format(self.timer/300))
         
         self.schedulerCombo = QComboBox(self)
         self.schedulerList = ["FCFS", "MM", "FEE", "EE"]
-        self.schedulerCombo.addItem(self.schedulerList[0])
-        self.schedulerCombo.addItem(self.schedulerList[1])
-        self.schedulerCombo.addItem(self.schedulerList[2])
-        self.schedulerCombo.addItem(self.schedulerList[3])
+        self.schedulerCombo.addItems(self.schedulerList)
         self.schedulerCombo.setGeometry(
-            30, self.width/50*10+self.height/20*9, self.width/20,  self.height/20)
+            30, self.width/50*2+self.height/20*9, self.width/20,  self.height/20)
         self.schedulerCombo.activated.connect(self.schedulerComboBoxActivate)
         for i, v in enumerate(self.schedulerList):
             if v == config.scheduling_method:
                 curr = i
         self.schedulerCombo.setCurrentIndex(curr)
+
+        # combobox for workload
+        self.workloadCombo = QComboBox(self)
+        self.workloadList = ["mini", "heterogeneous"]
+        self.workloadCombo.addItems(self.workloadList)
+        self.workloadCombo.setGeometry(30, self.width/50*5+self.height/20*9, self.width/20, self.height/20)
+        self.workloadCombo.activated.connect(self.set_workload)
+    
+    def set_workload(self, index):
+        self.workload_name = self.workloadList[index];
+        self.main()
 
     def schedulerComboBoxActivate(self, index):
         """
@@ -541,7 +261,8 @@ class GUI(QMainWindow):
             json.dump(data, f, indent=4)
             f.truncate()     # remove remaining part
         self.round_scheduler.setText("{}".format(self.schedulerList[index]))
-        self.main()
+        self.main()   
+
     def disableSchedulerCombo(self):
         """
         It disables the schedulerCombo
@@ -552,16 +273,16 @@ class GUI(QMainWindow):
         """
         It takes the results of the simulation and writes them to a csv file
         """
-        self.row = self.simulation.report(self.path_to_result)
-        self.writer.writerows(self.row)
+        self.row = self.simulation.report(self.simulation.path_to_results)
+        self.report.writerows(self.row)
         # self.df_task_based_report = self.df_task_based_report.append(
         #     self.task_report, ignore_index=True)
         self.report_summary.close()
-        self.df_task_based_report.to_csv(
-            f'{self.path_to_result}/task_based_report.csv', index=False)
+        # self.df_task_based_report.to_csv(
+        #     f'{self.path_to_result}/task_based_report.csv', index=False)
         df_summary = pd.read_csv(f'{self.path_to_result}/results-summary.csv',
                                  usecols=['Completion%', 'xCompletion%', 'totalCompletion%',
-                                          'consumed_energy%', 'energy_per_completion'])
+                                          'consumed_energy%', 'energy_per_completion%'])
         print('\n\n' + 10*'*'+'  Average Results of Executing Episodes  '+10*'*')
         print(df_summary.mean())
 
@@ -1132,9 +853,9 @@ class GUI(QMainWindow):
         self.data = data
 
 
-def window():
+def window(wn, sc, etc, wi):
     app = QApplication(sys.argv)
-    win = GUI()
+    win = GUI(wn, sc, etc, wi)
     win.show()
     app.exec_()
 

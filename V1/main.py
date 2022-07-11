@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import csv
 from os import makedirs
+from gui.gui import window
 
 from utils.simulator import Simulator
 from utils.machine import Machine
@@ -11,10 +12,11 @@ from workload.generator import workloads_generator
 
 from workload.workload import Workload
 
-workload_name = 'heterogeneous'
+config.init()
+workload_name = 'mini'
 scenarios = ['sc-2']
-etcs = [f'etc-{i}' for i in range(100)]
-workload_id_range = list(range(30))
+etcs = [f'etc-{i}' for i in range(1)]
+workload_id_range = list(range(1))
 workloads_exist = True
 is_etc_exist = True
 is_et_exist = True
@@ -44,11 +46,14 @@ def simulate(workload_name, scenarios, etcs, workload_id_range, workloads_exist=
                         machine = Machine(id,r, machine_type, specs)
                         config.machines.append(machine)            
                         id += 1
+
+                if config.gui == 1:
+                    window(workload_name, sc, etc, workload_id)
                     
                 simulation = Simulator(workload_name, sc, etc, workload_id) 
                 simulation.create_event_queue()
-                scheduler = config.get_scheduler()
-                simulation.set_scheduling_method(scheduler)        
+                # scheduler = config.get_scheduler()
+                simulation.set_scheduling_method()        
                 simulation.run()   
                        
                 row = simulation.report()   
@@ -60,8 +65,6 @@ def simulate(workload_name, scenarios, etcs, workload_id_range, workloads_exist=
             'consumed_energy%','wasted_energy%'])
             print('\n\n'+ 10*'*'+f'  <<{workload_name}>>||{sc} || {etc} --> {workload_id}: <<{config.scheduling_method}>> '+10*'*')
             print(df_summary.mean())
-
-
 
 # config.init()
 # workloads_generator(workload_name,scenarios[0] , is_etc_exist, is_et_exist ,

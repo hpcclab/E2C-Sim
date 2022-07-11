@@ -8,21 +8,34 @@ Created on Nov., 15, 2021
 from utils.base_task import TaskStatus
 from utils.base_scheduler import BaseScheduler
 import utils.config as config
+from utils.queue import Queue
+
+from PyQt5.QtCore import pyqtSignal,QObject
 
 class FCFS(BaseScheduler):
     
-
+    
     def __init__(self, total_no_of_tasks):
-        super().__init__()
+        super(FCFS, self).__init__()
         self.name = 'FCFS'
         self.total_no_of_tasks = total_no_of_tasks
         self.prev_assignment_idx = -1
         self.gui_machine_log = []
 
+       
+
     def choose(self, index=0):
         
         task = self.batch_queue.get(index)     
         self.unmapped_task.append(task)
+
+        if config.gui==1:
+            self.decision.emit({'type':'choose',
+                                'time':config.time.gct(),
+                                'data': {'t_id':task.id,
+                                        'bq_indx': index,
+                                        }
+                                        })
         
         if config.settings['verbosity']:
             s =f'\n{task.id} selected --> BQ = '
@@ -40,6 +53,13 @@ class FCFS(BaseScheduler):
         if config.time.gct() > task.deadline:
             self.drop(task)
             return 1
+
+        if config.gui==1:
+            self.decision.emit({'type':'defer',
+                            'time':config.time.gct(),
+                            'data': {'t_id':task.id,                                    
+                                    }
+                                    })
         task.status =  TaskStatus.DEFERRED
         task.no_of_deferring += 1
         self.batch_queue.put(task)
@@ -53,6 +73,12 @@ class FCFS(BaseScheduler):
         
 
     def drop(self, task):
+        if config.gui==1:
+            self.decision.emit({'type':'cacnel',
+                                'time':config.time.gct(),
+                                'data': {'t_id':task.id,                                    
+                                        }
+                                        })
         task.status = TaskStatus.CANCELLED
         task.drop_time = config.time.gct()
         self.stats['dropped'].append(task)        
@@ -66,12 +92,22 @@ class FCFS(BaseScheduler):
         task = self.unmapped_task.pop()
         assignment,_ = machine.admit(task)
         if assignment != 'notEmpty':
+            if config.gui==1:
+                self.decision.emit({'type':'map',
+                                'time':config.time.gct(),
+                                'data': {'t_id':task.id,
+                                         'm_id':machine.id,                                    
+                                        }
+                                        })
             task.assigned_machine = machine
             self.stats['mapped'].append(task)
             s = f"\ntask:{task.id}  assigned to:{task.assigned_machine.type.name}  delta:{task.deadline}"
             config.log.write(s)
         else:
             self.unmapped_task.append(task)
+            if config.gui==1:
+                self.full_signal.emit({'t_id':task.id,                                    
+                                       'time':config.gct()})
         
     
     def first_available_machine(self):
@@ -95,7 +131,7 @@ class FCFS(BaseScheduler):
 
 
     def schedule(self):
-        self.gui_machine_log = []
+        
 
         if config.settings['verbosity']:
             s = f'\n Current State @{config.time.gct()}'
@@ -115,7 +151,7 @@ class FCFS(BaseScheduler):
             config.log.write(s)
 
         if self.batch_queue.empty():
-            return 0
+            return None
                 
         # machine_index = (self.prev_assignment_idx+1) % config.no_of_machines        
         # machine = config.machines[machine_index]

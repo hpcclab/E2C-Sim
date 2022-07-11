@@ -2,11 +2,14 @@ from abc import ABCMeta, abstractmethod
 import utils.config as config
 from utils.queue import Queue
 
+from PyQt5.QtCore import QObject, pyqtSignal
 
-class BaseScheduler:
+class BaseScheduler(QObject):
     __metaclass__ = ABCMeta
+    decision = pyqtSignal(dict)
 
     def __init__(self):
+        super(BaseScheduler, self).__init__()
         self.name = None
         self.batch_queue = Queue(maxsize = float('inf'))
         self.unmapped_task = []

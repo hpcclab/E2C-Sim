@@ -93,6 +93,7 @@ def init():
     global machine_queue_size, batch_queue_size
     global no_of_machines
     global bandwidth, network_latency
+    global gui
     
     global log
     
@@ -118,7 +119,8 @@ def init():
 
     set_scheduler(data['parameters'][0]['scheduling_method'])
 
-    settings = data['settings'][0]  
+    settings = data['settings'][0] 
+    gui = settings['gui'] 
 
     try:
         log = open(f"{settings['path_to_output']}/log.txt",'w')

@@ -19,14 +19,17 @@ from utils.schedulers.FEE import FEE
 from utils.schedulers.FCFS import FCFS
 from utils.schedulers.MECT import MECT
 from utils.schedulers.MEET import MEET
-#from PyQt5.QtCore import pyqtSignal,QObject
-# from gui.gui_ali import Ui_MainWindow
-# from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtCore import pyqtSignal,QObject
+from PyQt5.QtCore import QTimer
 
-
-class Simulator():    
+class Simulator(QObject):    
+	# for signal slot
+    event_signal = pyqtSignal(dict)
+    simulation_done = pyqtSignal()
     
-    def __init__(self, workload_name, scenario, etc, workload_id):                                      
+    
+    def __init__(self, workload_name, scenario, etc, workload_id):     
+        super(Simulator, self).__init__()                                 
         self.path_to_arrival = f"./workload/workloads/{workload_name}/{scenario}/{etc}/workload-{workload_id}.csv" 
         self.path_to_results = f"./output/data/{workload_name}/{scenario}/{etc}" 
         self.verbosity = config.settings['verbosity']
@@ -34,7 +37,15 @@ class Simulator():
         self.tasks = []
         self.total_no_of_tasks = None
         self.energy_statistics = []
+        self.sleep_time = 0.1
+        self.set_scheduling_method()
+        self.pause = False
+        
+	
+    def simulate_pause(self, val):
+        self.pause = val
     
+
     def create_event_queue(self):        
         df = pd.read_csv(self.path_to_arrival)
         est_clmns =[]
@@ -56,8 +67,6 @@ class Simulator():
             arrival_time = row['arrival_time']
             d_est = {}
             d_real = {}
-
-            
             
             for est_clmn in est_clmns:
                 d_est[df.columns[est_clmn].split('_')[1]] = row[est_clmn]            
@@ -77,30 +86,29 @@ class Simulator():
             event = Event(task.arrival_time, EventTypes.ARRIVING, task)
             config.event_queue.add_event(event)
         
-
-    def set_scheduling_method(self, scheduler):        
-        if scheduler == 'EE':
+    def set_scheduling_method(self):        
+        if config.scheduling_method == 'EE':
             self.scheduler = EE(self.total_no_of_tasks)        
-        elif scheduler == 'MM':
+        elif config.scheduling_method == 'MM':
             self.scheduler = MM(self.total_no_of_tasks)
-        elif scheduler == 'FEE':
+        elif config.scheduling_method == 'FEE':
             self.scheduler = FEE(self.total_no_of_tasks)
-        elif scheduler == 'MSD':
+        elif config.scheduling_method == 'MSD':
             self.scheduler = MSD(self.total_no_of_tasks)
-        elif scheduler == 'MMU':
+        elif config.scheduling_method == 'MMU':
             self.scheduler = MMU(self.total_no_of_tasks)              
-        elif scheduler == 'FCFS':
+        elif config.scheduling_method == 'FCFS':
             self.scheduler = FCFS(self.total_no_of_tasks) 
-        elif scheduler == 'MECT':
+        elif config.scheduling_method == 'MECT':
             self.scheduler = MECT(self.total_no_of_tasks) 
-        elif scheduler == 'MEET':
-            self.scheduler = MEET(self.total_no_of_tasks)      
-        
+        elif config.scheduling_method == 'MEET':
+            self.scheduler = MEET(self.total_no_of_tasks)
         else:
             print('ERROR: Scheduler ' + config.scheduling_method + ' does not exist')
             self.scheduler = None
+        #self.scheduler.decision.connet(self.event_signal)
         
-        
+            
     def idle_energy_consumption(self):
         for machine in config.machines:
                 idle_time_interval = config.time.gct() - machine.idle_time
@@ -117,48 +125,67 @@ class Simulator():
                     machine.id, config.time.gct(), machine.idle_time, idle_time_interval, idle_energy_consumption)
                 #config.log.write(s)
 
-
-    def run(self):       
-         
+    def run(self):        
+        self.create_event_queue()
+        
         while config.event_queue.event_list and config.available_energy > 0.0:
-           
+            #print(self.pause)
+            while self.pause:
+                time.sleep(self.sleep_time)
             self.idle_energy_consumption()
             event = config.event_queue.get_first_event()
             task = event.event_details
             config.time.sct(event.time)
             if self.verbosity:
                 s = f'\n\n*****Task:{task.id} \t\t {event.event_type.name}  @time:{event.time}'
-                config.log.write(s)           
+                config.log.write(s)   
+
+            # animation  will start from batch queue
+            
 
             row =[config.time.gct(),config.available_energy]
 
             for machine in config.machines:                
                 row.append(machine.stats['energy_usage'])
             self.energy_statistics.append(row)
-            
-              
+  
             if event.event_type == EventTypes.ARRIVING:                
                 self.scheduler.batch_queue.put(task)
-                self.scheduler.stats[f'{task.type.name}-arrived'] += 1
-                self.scheduler.schedule()
-                
-            elif event.event_type == EventTypes.DEFERRED:
-                self.scheduler.schedule()
-                
-                
-            elif event.event_type == EventTypes.COMPLETION:               
-                machine = task.assigned_machine  
-                machine.terminate(task)  
-                self.scheduler.schedule()
+                if config.gui == 1:     
+                    self.event_signal.emit({'type':'arriving',
+                                            'time':event.time,
+                                            'where':'simulator: arriving',
+                                            'data':{'t_id':task.id,
+                                                    'time':event.time
+                                                    },
+                                            'detail': task,
+                                                    })
+                    time.sleep(self.sleep_time)
+                self.scheduler.stats[f'{task.type.name}-arrived'] += 1                
+                assigned_machine = self.scheduler.schedule()
                 
 
+                
+
+            elif event.event_type == EventTypes.DEFERRED:
+                assigned_machine = self.scheduler.schedule()
+            
+            elif event.event_type == EventTypes.COMPLETION:               
+                machine = task.assigned_machine 
+                machine.terminate(task)                             
+                self.scheduler.schedule()
+                
             elif event.event_type == EventTypes.DROPPED_RUNNING_TASK:
-                if task.id == 63:                    
-                    s = f'ATTENTION: task {task.id} dropped @ {config.time.gct()}'
-                    
                 machine = task.assigned_machine
-                machine.drop()
-                self.scheduler.schedule()             
+                machine.drop()     
+                self.scheduler.schedule() 
+
+        if config.gui == 1: 
+            print('done')
+            for task in self.tasks:
+                print(task.status)  
+            self.simulation_done.emit()
+
             
     def report(self, is_detailed = True):     
         path_to_report = f'{self.path_to_results}/{self.scheduler.name}'
@@ -218,7 +245,9 @@ class Simulator():
                 machine.stats['missed_BE_tasks'],
                 energy_percent,
                 wasted_energy_percent)
-           
+            
+            
+                      
             # if self.verbosity <= 3 :
             #     print(s)
             config.log.write(s)
@@ -234,8 +263,17 @@ class Simulator():
         # if self.verbosity <= 3:
         #     print(s)
         config.log.write(s)
-        
-        
+
+        # d = {}
+        # for task_type in config.task_types:
+        #     for machine in config.machines:
+        #         d [f'{task_type.name}_assignedto{machine.type.name}_{machine.replica_id}'] = 0
+        #         d[f'{task_type.name}completed{machine.type.name}_{machine.replica_id}']=0
+        #         d[f'{task_type.name}xcompleted{machine.type.name}_{machine.replica_id}'] = 0
+        #         d[f'{task_type.name}missed{machine.type.name}_{machine.replica_id}']=0
+        #         d[f'{task_type.name}energy{machine.type.name}_{machine.replica_id}']=0
+        #         d[f'{task_type.name}wasted-energy{machine.type.name}_{machine.replica_id}']=0
+    
         row = []
         consumed_energy = config.total_energy - config.available_energy
         no_of_completed_task = self.total_no_of_tasks*0.01*(total_completion_percent+total_xcompletion_percent)
@@ -257,7 +295,8 @@ class Simulator():
             total_wasted_energy_percent,
             100*(consumed_energy/config.total_energy),            
             energy_per_completion ])       
-       
+
         
         return row
-   
+    
+    

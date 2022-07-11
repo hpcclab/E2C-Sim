@@ -12,11 +12,17 @@ from utils.task_type import UrgencyLevel
 from utils.event import Event, EventTypes
 from utils.queue import Queue
 import utils.config as config
+import time
+
+from PyQt5.QtCore import  pyqtSignal
 
 
 class Machine(BaseMachine):
+    machine_signal = pyqtSignal(dict)
+    timer = 0.1
     
     def __init__(self, id, replica_id, type, specs):
+        super(Machine, self).__init__()
         self.id = id
         self.replica_id = replica_id
         self.type = type
@@ -47,6 +53,8 @@ class Machine(BaseMachine):
             self.stats[f'{task_type.name}-assigned']=0
             self.stats[f'{task_type.name}-wasted_energy']=0
             self.stats[f'{task_type.name}-energy_usage']=0
+        
+        self.sleep_time = 0.1
 
             
     
@@ -132,8 +140,20 @@ class Machine(BaseMachine):
 
     def admit(self, task):        
         if not self.queue.full():
-            self.queue.put(task)
+            self.queue.put(task)            
             task.status = TaskStatus.PENDING                
+            print(f'task: {task.id}')
+            if config.gui==1:
+                print(f'Signal Emitted: Task {task.id} -> Machine {self.id}')
+                self.machine_signal.emit({'type':'admitted',
+                                        'time': config.time.gct(),
+                                        'where':'machine: admit',
+                                        'data':{'t_id':task.id,
+                                        'm_id':self.id,
+                                             },
+                                        
+                                             })
+                time.sleep(self.sleep_time)
             self.stats['assigned_tasks'] += 1
             self.stats[f'{task.type.name}-assigned'] += 1
             completion_time,running_time,_ = self.get_completion_time(task)
@@ -166,6 +186,16 @@ class Machine(BaseMachine):
             print(err)
             sys.exit()        
         self.running_task.append(task)
+        if config.gui == 1:
+            self.machine_signal.emit({'type':'running',
+                                        'where':'machine:execute',
+                                       'data':{'t_id':task.id,
+                                             'm_id':self.id,
+                                             },
+                                        'time': config.time.gct()
+                                             })
+            time.sleep(self.sleep_time)
+
         self.status = MachineStatus.WORKING
         task.status = TaskStatus.RUNNING        
         task.start_time = config.time.gct()
@@ -266,6 +296,17 @@ class Machine(BaseMachine):
         task = self.running_task.pop()               
         task.status = TaskStatus.MISSED        
         self.status = MachineStatus.IDLE
+
+        if config.gui == 1:
+            self.machine_signal.emit({'type':'missed',
+                                        'where':'machine:drop',
+                                       'data':{'t_id':task.id,
+                                             'm_id':self.id,
+                                             },
+                                        'time': config.time.gct()
+                                             })
+            time.sleep(self.sleep_time)
+                                             
         energy_consumption = (config.time.gct() - task.start_time) * self.specs['power'] 
         config.available_energy -= energy_consumption
         task.energy_usage = energy_consumption
@@ -331,6 +372,16 @@ class Machine(BaseMachine):
     def terminate(self, task):
               
         self.running_task.pop()
+
+        if config.gui == 1:
+            self.machine_signal.emit({'type':'completion',
+                                        'where':'machine:terminate',
+                                       'data':{'t_id':task.id,
+                                             'm_id':self.id,
+                                             },
+                                        'time': config.time.gct()
+                                             })
+            time.sleep(self.sleep_time)
         
         self.status = MachineStatus.IDLE        
         energy_consumption = task.execution_time[f'{self.type.name}-{self.replica_id}'] * self.specs['power'] 
