@@ -18,9 +18,9 @@ class BatchQueueUI(QGraphicsView):
         self.w_outer = w_outer
         self.h_outer = h_outer
         self.size = size
-        self.tasks = []
-        self.task_details = []
-        self.task_frames = []
+        self.tasks = []  
+        self.t_frames = []      
+        
         
 
 
@@ -55,7 +55,7 @@ class BatchQueueUI(QGraphicsView):
 
         
 
-    def draw_tasks(self):
+    def draw_tasks(self, selected_task):
         task_xspace = 0.02 * self.w_inner
         task_yspace = 0.1 * self.h_inner
         w_task = (self.w_inner - (self.size+1)*task_xspace)/ self.size        
@@ -63,7 +63,7 @@ class BatchQueueUI(QGraphicsView):
         x_task = self.x_inner + self.w_inner 
         y_task = self.y_inner + task_yspace
         
-        for idx, task_id in enumerate(self.tasks): 
+        for idx, task in enumerate(self.tasks): 
                
             if idx <= (self.size-2) : 
                 x_task -= (w_task +  task_xspace)     
@@ -74,11 +74,15 @@ class BatchQueueUI(QGraphicsView):
                 bcg = QColor(150+idx*10,0,0)
                 pen = QPen(Qt.white,  2, Qt.SolidLine)
                 brush = QBrush(bcg)
+                if task == selected_task:
+                    brush= Qt.yellow
                 t_frame.setBrush(brush)
                 t_frame.setPen(pen)
-                t_frame.setData(0, task_id)
-                self.task_frames.append(t_frame)
-                text = QGraphicsTextItem(f'{task_id}')
+                t_frame.setData(0, 'task_in_bq')
+                t_frame.setData(1, task)  
+                self.t_frames.append(t_frame)   
+
+                text = QGraphicsTextItem(f'{task.id}')
                 text.setFont(QFont('Arial',16))
                 text.setFlag(text.ItemIsSelectable, False)
                 w_text = text.boundingRect().width()
@@ -98,7 +102,7 @@ class BatchQueueUI(QGraphicsView):
                 brush = QBrush(bcg)
                 t_frame.setBrush(brush)
                 t_frame.setPen(pen) 
-                self.task_frames.append(t_frame)
+                
                 text = QGraphicsTextItem('o o o')
                 text.setFont(QFont('Arial',16))
                 text.setFlag(text.ItemIsSelectable, False)
@@ -108,6 +112,15 @@ class BatchQueueUI(QGraphicsView):
             
                 self.scene.addItem(t_frame)
                 self.scene.addItem(text)
+        
+    def choose_task(self, task, bq_idx):
+        
+        print(self.t_frames[0].data(1).id)
+        self.t_frames[0].setBrush(Qt.yellow)
+        self.scene.update()
+        
+
+
     
     
     def remove_task(self, task):

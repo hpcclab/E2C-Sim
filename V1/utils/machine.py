@@ -142,14 +142,13 @@ class Machine(BaseMachine):
         if not self.queue.full():
             self.queue.put(task)            
             task.status = TaskStatus.PENDING                
-            print(f'task: {task.id}')
-            if config.gui==1:
-                print(f'Signal Emitted: Task {task.id} -> Machine {self.id}')
+            
+            if config.gui==1:                
                 self.machine_signal.emit({'type':'admitted',
                                         'time': config.time.gct(),
                                         'where':'machine: admit',
-                                        'data':{'t_id':task.id,
-                                        'm_id':self.id,
+                                        'data':{'task':task,
+                                                'assigned_machine':self,
                                              },
                                         
                                              })
@@ -187,12 +186,13 @@ class Machine(BaseMachine):
             sys.exit()        
         self.running_task.append(task)
         if config.gui == 1:
-            self.machine_signal.emit({'type':'running',
+            self.machine_signal.emit({  'type':'running',
                                         'where':'machine:execute',
-                                       'data':{'t_id':task.id,
-                                             'm_id':self.id,
+                                        'time': config.time.gct(),
+                                        'data':{'task':task,
+                                                'assigned_machine':self,
                                              },
-                                        'time': config.time.gct()
+                                        
                                              })
             time.sleep(self.sleep_time)
 
@@ -298,12 +298,12 @@ class Machine(BaseMachine):
         self.status = MachineStatus.IDLE
 
         if config.gui == 1:
-            self.machine_signal.emit({'type':'missed',
+            self.machine_signal.emit({  'type':'missed',
                                         'where':'machine:drop',
-                                       'data':{'t_id':task.id,
-                                             'm_id':self.id,
-                                             },
-                                        'time': config.time.gct()
+                                        'time': config.time.gct(),
+                                        'data':{'task':task,
+                                             'assigned_machine':self,
+                                             },                                        
                                              })
             time.sleep(self.sleep_time)
                                              
@@ -375,11 +375,11 @@ class Machine(BaseMachine):
 
         if config.gui == 1:
             self.machine_signal.emit({'type':'completion',
-                                        'where':'machine:terminate',
-                                       'data':{'t_id':task.id,
-                                             'm_id':self.id,
+                                      'where':'machine:terminate',
+                                      'time': config.time.gct(),
+                                       'data':{'task':task,
+                                             'assigned_machine':self,
                                              },
-                                        'time': config.time.gct()
                                              })
             time.sleep(self.sleep_time)
         

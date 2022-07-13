@@ -14,7 +14,7 @@ from os import makedirs
 workload_name = 'mini'
 scenario = 'sc-2'
 etc = 'etc-0'
-workload_id = 0
+workload_id = 1
 
 config.init()
 id = 0
@@ -27,7 +27,7 @@ for machine_type in config.machine_types:
 
 
 app = QApplication(sys.argv)   
-view = gui.SimUi()
+view = gui.SimUi(workload_name, scenario, etc, workload_id)
 
 view.show()
 app.exec()

@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import (QGraphicsView,QGraphicsPathItem, QGraphicsTextItem,
- QLabel, QLineEdit, QGroupBox,QFormLayout,QPushButton,QWidget)
+QGraphicsEllipseItem, QLabel, QLineEdit, QGroupBox,QFormLayout,QPushButton,QWidget)
 from PyQt5.QtGui import QBrush,  QPen, QFont, QPainterPath, QColor,QTransform
 from PyQt5.QtCore import Qt, pyqtSignal
 
@@ -19,9 +19,10 @@ class MachineUi(QGraphicsView):
         self.max_qsize = qsize
         self.machines = machines
         self.m_runnings = {}
-        self.m_queues={}
-        for m_id in self.machines:
-            self.m_queues[m_id] = []
+        self.m_queues={}        
+        for machine in self.machines:
+            m_id = machine.id
+            self.m_queues[m_id] = []            
             self.m_runnings[m_id] = []
         self.queue_frames = {}
         self.no_of_machines = len(self.machines)
@@ -29,7 +30,8 @@ class MachineUi(QGraphicsView):
     def reset(self):
         self.m_runnings = {}
         self.m_queues={}
-        for m_id in self.machines:
+        for machine in self.machines:
+            m_id = machine.id
             self.m_queues[m_id] = []
             self.m_runnings[m_id] = []
         self.queue_frames = {}
@@ -65,7 +67,8 @@ class MachineUi(QGraphicsView):
         self.w_q = self.w_outer - 4*q_xspace
         x_q = self.x_outer + 2*q_xspace
         y_q = self.y_outer  - self.h_q
-        for idx, m_id in enumerate(self.machines): 
+        for idx, machine in enumerate(self.machines): 
+            m_id = machine.id
             y_q += (self.h_q +  q_yspace)    
             self.queue_frames[m_id] = [x_q,y_q] 
             r = 0.25*self.h_q
@@ -92,7 +95,7 @@ class MachineUi(QGraphicsView):
             x_task = x + self.w_q
             y_task = y + task_yspace
             
-            for idx, task_id in enumerate(tasks): 
+            for idx, task in enumerate(tasks): 
                 
                 if idx <= (self.max_qsize-2) : 
                     x_task -= (w_task +  task_xspace)     
@@ -104,9 +107,11 @@ class MachineUi(QGraphicsView):
                     pen = QPen(Qt.white,  2, Qt.SolidLine)
                     brush = QBrush(bcg)
                     t_frame.setBrush(brush)
-                    t_frame.setPen(pen) 
+                    t_frame.setPen(pen)
+                    t_frame.setData(0, 'task_in_mq')
+                    t_frame.setData(1, task) 
                     
-                    text = QGraphicsTextItem(f'{task_id}')
+                    text = QGraphicsTextItem(f'{task.id}')
                     text.setFont(QFont('Arial',16))
                     text.setFlag(text.ItemIsSelectable, False)
                     w_text = text.boundingRect().width()
@@ -141,21 +146,28 @@ class MachineUi(QGraphicsView):
 
     def runnings(self):
        
-        for m_id in self.machines:
+        for machine in self.machines:
+            m_id = machine.id
             [x,y] = self.queue_frames[m_id]
             x += self.w_q
             y += 0.5*self.h_q
             length = 1.5*self.h_q
             r = 0.65*self.h_q
-            pen = QPen(QColor(72,72,72),  4, Qt.SolidLine)
-           
+            pen = QPen(QColor(72,72,72),  4, Qt.SolidLine)           
             connecting_line = self.scene.addLine(x,y,x+length,y,pen)
 
             pen = QPen(QColor(82,126,191),  1, Qt.SolidLine)
             brush = QBrush(QColor(82,126,191))
-            machine_circle = self.scene.addEllipse(x+length, y-r, 2*r,2*r,pen, brush)
-
+            machine_circle = QGraphicsEllipseItem (x+length, y-r, 2*r,2*r)
+            machine_circle.setPen(pen)
+            machine_circle.setBrush(brush)
+            machine_circle.setData(0, 'machine')
+            machine_circle.setData(1,machine)
+            self.scene.addItem(machine_circle)
+            
             if  self.m_runnings[m_id]:
+                machine_circle.setData(3,'busy')
+                running_task = self.m_runnings[m_id][0]                
                 w = self.w_task
                 h = self.h_task
                 rounded_radius = 0.25*h         
@@ -167,13 +179,14 @@ class MachineUi(QGraphicsView):
                 brush = QBrush(bcg)
                 t_frame.setBrush(brush)
                 t_frame.setPen(pen)                 
-                text = QGraphicsTextItem(f'{self.m_runnings[m_id][0]}')
+                text = QGraphicsTextItem(f'{running_task.id}')
                 text.setFont(QFont('Arial',16))
                 text.setFlag(text.ItemIsSelectable, False)
                 w_text = text.boundingRect().width()
                 h_text = text.boundingRect().height()                            
                 text.setPos(x+length+r-0.5*w_text, y - 0.5*h_text)
-
+                t_frame.setData(0,'task_in_machine')
+                t_frame.setData(1, running_task)
                 
                 self.scene.addItem(t_frame)
                 self.scene.addItem(text)

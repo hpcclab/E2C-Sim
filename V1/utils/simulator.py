@@ -50,7 +50,7 @@ class Simulator(QObject):
         df = pd.read_csv(self.path_to_arrival)
         est_clmns =[]
         ext_clmns = []
-
+        print(df.head(5))
         for machine_type in config.machine_types:
             column_name = f'est_{machine_type.name}'
             column_idx = df.columns.get_loc(column_name)
@@ -131,7 +131,8 @@ class Simulator(QObject):
         while config.event_queue.event_list and config.available_energy > 0.0:
             #print(self.pause)
             while self.pause:
-                time.sleep(self.sleep_time)
+                #time.sleep(self.sleep_time)
+                time.sleep(0.0)
             self.idle_energy_consumption()
             event = config.event_queue.get_first_event()
             task = event.event_details
@@ -155,10 +156,8 @@ class Simulator(QObject):
                     self.event_signal.emit({'type':'arriving',
                                             'time':event.time,
                                             'where':'simulator: arriving',
-                                            'data':{'t_id':task.id,
-                                                    'time':event.time
-                                                    },
-                                            'detail': task,
+                                            'data':{'task':task,                                                    
+                                                    },                                            
                                                     })
                     time.sleep(self.sleep_time)
                 self.scheduler.stats[f'{task.type.name}-arrived'] += 1                
@@ -181,10 +180,12 @@ class Simulator(QObject):
                 self.scheduler.schedule() 
 
         if config.gui == 1: 
-            print('done')
+            print(20*'-')
             for task in self.tasks:
-                print(task.status)  
+                print(f'{task.id} : {task.status}')  
             self.simulation_done.emit()
+        self.report()
+        #config.log.close()
 
             
     def report(self, is_detailed = True):     

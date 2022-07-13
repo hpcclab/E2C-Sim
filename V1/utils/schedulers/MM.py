@@ -30,9 +30,9 @@ class MM(BaseScheduler):
             self.decision.emit({'type':'choose',
                                 'time':config.time.gct(),
                                 'where':'simulator: choose',
-                                'data': {'t_id':task.id,
+                                'data': {'task':task,
                                         'bq_indx': index,
-                                        }
+                                        },                                
                                         })
             time.sleep(self.sleep_time)
         if config.settings['verbosity']:
@@ -56,8 +56,8 @@ class MM(BaseScheduler):
             self.decision.emit({'type':'defer',
                             'time':config.time.gct(),
                             'where':'simulator: defer',
-                            'data': {'t_id':task.id,                                    
-                                    }
+                            'data': {'task':task,                                    
+                                    },                            
                                     })
             time.sleep(self.sleep_time)
             
@@ -78,17 +78,18 @@ class MM(BaseScheduler):
             print(s)
         self.gui_machine_log.append({"Task id":task.id,"Event Type":"DEFERRED","Time":config.time.gct(), "Type":'task'})
 
-    def drop(self, task):        
+    def drop(self, task):   
+        print(f'task {task.id} cancelled')     
         task.status = TaskStatus.CANCELLED
         task.drop_time = config.time.gct()
         self.stats['dropped'].append(task) 
 
         if config.gui==1:
-            self.decision.emit({'type':'cacnelled',
+            self.decision.emit({'type':'cancelled',
                                 'time':config.time.gct(),
                                 'where':'simulator: drop',
-                                'data': {'t_id':task.id,                                    
-                                        }
+                                'data': {'task':task,                                    
+                                        },                               
                                         })
             time.sleep(self.sleep_time)
 
@@ -96,8 +97,6 @@ class MM(BaseScheduler):
             s = '\n[ Task({:}),  _________ ]: Cancelled      @time({:3.3f})'.format(
                 task.id, config.time.gct()       )
             config.log.write(s)
-        print(s)
-        self.gui_machine_log.append({"Task id":task.id,"Event Type":"CANCELLED","Time":config.time.gct(), "Type":'task'})
 
     def map(self, machine):
         task = self.unmapped_task.pop()
@@ -110,9 +109,9 @@ class MM(BaseScheduler):
                 self.decision.emit({'type':'map',
                                 'time':config.time.gct(),
                                 'where':'scheduler: map',
-                                'data': {'t_id':task.id,
-                                         'm_id':machine.id,                                    
-                                        }
+                                'data': {'task':task,
+                                         'assigned_machine':machine,                                    
+                                        },
                                         })
                 time.sleep(self.sleep_time)
         else:
@@ -128,11 +127,11 @@ class MM(BaseScheduler):
                 self.batch_queue.remove(task)
                 cancelled_tasks.append(task.id)        
                 if config.gui==1:
-                        self.decision.emit({'type':'cancel',
+                        self.decision.emit({'type':'cancelled',
                                         'time':config.time.gct(),
                                         'where':'scheduelr: prune',
-                                        'data': {'t_id':task.id,                                                                                  
-                                                }
+                                        'data': {'task':task,                                                                                  
+                                                },                                        
                                                 })
                         time.sleep(self.sleep_time)
 

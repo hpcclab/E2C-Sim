@@ -2,9 +2,9 @@
 
     "parameters":[
         {
-            "machine_queue_size":3000,
-            "batch_queue_size":1,
-            "scheduling_method":"FCFS",
+            "machine_queue_size":3,
+            "batch_queue_size":5,
+            "scheduling_method":"MM",
             "fairness_factor": 1.0
             
         }        
@@ -13,7 +13,8 @@
         {
             "path_to_output":"./output",
             "path_to_workload":"./workload",
-            "verbosity": 3
+            "verbosity": 3,
+            "gui": 1
             
         }        
     ],

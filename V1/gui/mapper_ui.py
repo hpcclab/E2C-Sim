@@ -1,55 +1,51 @@
 from PyQt5.QtWidgets import (QComboBox, QLabel,QWidget, QVBoxLayout)
 from PyQt5.QtGui import QPixmap
 
-from PyQt5.QtWidgets import QApplication
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
+from PyQt5.QtWidgets import *
+from PyQt5.QtWidgets import QGraphicsView, QGraphicsPixmapItem
 import sys
 
 
 
 
-class MapperUi(QWidget):
+class MapperUi(QGraphicsView):
     
-    def __init__(self,schedulers):
-        super().__init__()        
-        self.schedulers = schedulers
-
-        self.initUi()
-    
-
-    def initUi(self):
-
-        #self.mapper_layout = QVBoxLayout()
-        self.mapper_label = QLabel(self)         
-        self.pixmap = QPixmap('./gui/icons/mapper.png') 
-        self.pixmap.scaled(200,200)
-        self.mapper_label.setPixmap(self.pixmap)
-        self.mapper_label.setStyleSheet(f"background-color: rgb(217,217,217);")
-
-        # Optional, resize label to image size
-        # self.mapper_label.resize(100,
-        #                   100)
-        #self.mapper_label.setFixedSize(500,500)
-
-        #self.mapper_cb = QComboBox(self)
-        #self.cb_schedulers.setGeometry(200, 150, 120, 40) 
-
-        #for scheduler in self.schedulers:
-            #self.mapper_cb.addItem(scheduler)
+    def __init__(self, scene,  x_mapper, y_mapper, mapper_size, x_trash, y_trash, trash_size):
+        super().__init__() 
+        self.scene = scene       
         
-        #self.cb_schedulers.activated.connect(self.do_something)
-        # self.mapper_layout.addWidget(self.mapper_label)
-        #self.mapper_layout.addWidget(self.mapper_cb)
+        self.x_mapper = x_mapper
+        self.y_mapper = y_mapper
+        self.mapper_size = mapper_size
+        self.x_trash = x_trash
+        self.y_trash = y_trash
+        self.trash_size = trash_size
+        self.cancelled_tasks = []
+        
+        self.mapper()
+        self.trash()
 
-        #self.setLayout(self.mapper_layout)
+        
+    
 
+    def mapper(self):              
+        self.mapper_pix= QPixmap('./gui/icons/mapper.png') 
+        self.mapper_pix = self.mapper_pix.scaled(QSize(self.mapper_size,self.mapper_size), Qt.IgnoreAspectRatio)
+        self.mapper_item = QGraphicsPixmapItem(self.mapper_pix) 
+        self.mapper_item.setOffset(self.x_mapper, self.y_mapper)  
+        self.mapper_item.setData(0, 'mapper')     
+        self.scene.addItem(self.mapper_item)
+    
 
-
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    schedulers = ['MinCompletion-MinCompletion','FCFS']
-    ex = MapperUi(schedulers)
-    ex.show()
-    sys.exit(app.exec_())
+    def trash(self):
+        self.trash_pix= QPixmap('./gui/icons/trash.png') 
+        self.trash_pix = self.trash_pix.scaled(QSize(self.trash_size,self.trash_size), Qt.IgnoreAspectRatio)
+        self.trash_item = QGraphicsPixmapItem(self.trash_pix) 
+        self.trash_item.setOffset(self.x_trash, self.y_trash)         
+        self.trash_item.setData(0,'trash')
+        self.scene.addItem(self.trash_item)
 
 
 

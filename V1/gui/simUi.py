@@ -23,23 +23,28 @@ from PyQt5.QtWidgets import (
 from PyQt5.QtCore import Qt, QThread
 from utils.simulator import Simulator
 from gui.graphic_view import GraphicView
+from gui.item_dock_detail import ItemDockDetail
 import utils.config as config
 from utils.task import Task
 
 
 class SimUi(QMainWindow):
     
-    def __init__(self):
+    def __init__(self,workload_name, scenario, etc, workload_id):
         super().__init__()
+        self.workload_name = workload_name
+        self.scenario = scenario
+        self.etc = etc
+        self.workload_id = workload_id
         self.title = "E2C Simulator"
-        self.top= 100
-        self.left= 100      
-        self.width = 1500   
-        self.height = 800        
+        self.top= 0
+        self.left= 0      
+        self.width = 1200 
+        self.height = 600        
         self.setWindowTitle(self.title)        
         self.setStyleSheet(f"background-color: rgb(217,217,217);")
         self.setGeometry(self.top, self.left, self.width, self.height)
-        self.setFixedSize(self.width, self.height)
+        #self.setFixedSize(self.width, self.height)
 
         self.initUI()
     
@@ -50,100 +55,101 @@ class SimUi(QMainWindow):
         self._centralWidget.setLayout(self.general_layout)
         self.label = QLabel('simulator')
         self.general_layout.addWidget(self.label)
-        self.gv = GraphicView()        
-        self.general_layout.addWidget(self.gv)
+        self.gv = GraphicView(self.width, self.height)   
+        
+        #self.dock_left = ItemDockDetail()
+        self.dock_right = ItemDockDetail()
+        self.gv.itemClicked.connect(self.dock_update)     
+        hlayout = QHBoxLayout()
+        #hlayout.addWidget(self.dock_left)
+
+        hlayout.addWidget(self.gv)
+        #hlayout.addWidget(self.dock_right)
+        #self.general_layout.addWidget(self.gv)
+        self.addDockWidget(Qt.RightDockWidgetArea,self.dock_right.dock)
+        self.general_layout.addLayout(hlayout)
         self.create_ctrl_buttons()
         self.connect_signals()
        
-        
+
+    def dock_update(self,item):
+         
+        if item.data(0) == 'task_in_bq' or item.data(0) == 'task_in_mq' or item.data(0)=='task_in_machine' :      
+            brush = QBrush(Qt.yellow)
+            item.setBrush(brush) 
+            self.dock_right.task_in_bq(item.data(1)) 
+        elif item.data(0) == 'machine':
+            brush = QBrush(Qt.yellow)
+            item.setBrush(brush) 
+            self.dock_right.machine_data(item.data(1))
+        elif item.data(0) == 'trash':
+            self.dock_right.trash_data(self.gv.mapper_ui.cancelled_tasks)
+        self.gv.scene.update()
                
     def create_ctrl_buttons(self):
         self.buttons = {'reset':None,
                         'simulate':None,
                         'skip':None}
-        bcg_style = "{color: #333; \
-                    border: 1 px \
-                    solid #555; \
-                    border-radius: 12px; \
-                    border-style: outset; \
+        bcg_style = "{color: #333; border: 1 px solid #555; \
+                    border-radius: 12px; border-style: outset; \
                     background: qradialgradient( cx: 0.3, cy: -0.4, fx: 0.3, fy: -0.4, radius: 1.35, stop: 0 #fff, stop: 1 #888 ); \
-                    padding: 5px;}"
-         
+                    padding: 5px;}"         
         self.btn_layout =  QHBoxLayout()
         hlayout_btns = QHBoxLayout()
         vlayout_pbar = QVBoxLayout()
         dummy = QLabel('         ')
         dummy.setMinimumWidth(70)
         hlayout_btns.addWidget(dummy)
-
         for btn_text, _ in self.buttons.items():           
             self.buttons[btn_text] = QPushButton('',self)
             self.buttons[btn_text].setIcon(QIcon(f'./gui/icons/{btn_text}.png'))
             self.buttons[btn_text].setIconSize(QSize(128,24))
             self.buttons[btn_text].setGeometry(0,0,128,24)
             self.buttons[btn_text].setStyleSheet(f"QPushButton {bcg_style}")
-            self.buttons[btn_text].setToolTip(btn_text)  
-            
-            hlayout_btns.addWidget(self.buttons[btn_text],Qt.AlignTop)
-        
+            self.buttons[btn_text].setToolTip(btn_text)              
+            hlayout_btns.addWidget(self.buttons[btn_text],Qt.AlignTop)        
         dummy = QLabel('         ')
         dummy.setMinimumWidth(20)
-        hlayout_btns.addWidget(dummy)
-        
+        hlayout_btns.addWidget(dummy)        
         self.progress_bar()
         vlayout_pbar.addLayout(self.pbar_layout)
         vlayout_pbar.addLayout(hlayout_btns)
-        self.btn_layout.addLayout(vlayout_pbar)
-
-            
+        self.btn_layout.addLayout(vlayout_pbar)            
         self.buttons['speed'] = QDial(self)                  
         self.buttons['speed'].setNotchesVisible(True)
         self.buttons['speed'].setEnabled(False)
         self.buttons['speed'].setValue(95)
         self.speed_label = QLabel('speed')
         self.speed_label.setFont( QFont('Arial',12))
-        self.speed_label.setAlignment(Qt.AlignHCenter )
-              
+        self.speed_label.setAlignment(Qt.AlignHCenter )              
         self.min_label = QLabel('Min')
         self.min_label.setFont( QFont('Arial',12))
         self.min_label.setAlignment(Qt.AlignRight | Qt.AlignBottom )
-
         self.max_label = QLabel('Max')
         self.max_label.setFont( QFont('Arial',12))
         self.max_label.setAlignment(Qt.AlignLeft | Qt.AlignBottom )
-
         hlayout = QHBoxLayout()
         hlayout.addWidget(self.min_label)
         hlayout.addWidget(self.buttons['speed'])
         hlayout.addWidget(self.max_label)
-
         vlayout = QVBoxLayout()
         vlayout.addWidget(self.speed_label)
         vlayout.addLayout(hlayout)
-
         self.btn_layout.addLayout(vlayout)
-
-
-        self.general_layout.addLayout(self.btn_layout)
-    
-    
-    
-    
+        self.general_layout.addLayout(self.btn_layout)    
     
             
     def simulate_start(self):
         self.thread = QThread() 
-        self.simulator =  Simulator('mini', 'sc-2', 'etc-0', 0) 
+        self.simulator =  Simulator(self.workload_name, self.scenario, self.etc, self.workload_id) 
         self.simulator.moveToThread(self.thread)
         self.thread.started.connect(self.simulator.run)         
         self.thread.finished.connect(self.thread.deleteLater)  
-        
-
         self.simulator.simulation_done.connect(self.report)         
         self.simulator.simulation_done.connect(self.simulator.deleteLater) 
         self.simulator.event_signal.connect(self.msg_handler)
         self.simulator.scheduler.decision.connect(self.msg_handler)
-        self.simulator.scheduler.decision.connect(self.msg_handler)
+        #self.simulator.scheduler.decision.connect(self.msg_handler)
         self.simulator.simulation_done.connect(self.thread.quit)
         self.simulator.simulation_done.connect(lambda: self.buttons['reset'].setEnabled(True))
         self.simulator.simulation_done.connect(lambda: self.buttons['simulate'].setEnabled(False))
@@ -156,7 +162,6 @@ class SimUi(QMainWindow):
         self.buttons['simulate'].setIcon(QIcon(f'./gui/icons/pause.png')) 
         self.simulator.pause = False
         self.buttons['reset'].setEnabled(False)
-
         self.thread.start() 
         
 
@@ -164,8 +169,7 @@ class SimUi(QMainWindow):
         print('pause clicked!')
         if self.simulator.pause:
             self.buttons['simulate'].setIcon(QIcon(f'./gui/icons/pause.png'))             
-            self.simulator.pause = False
-            
+            self.simulator.pause = False            
         else:            
             self.buttons['simulate'].setIcon(QIcon(f'./gui/icons/simulate.png'))             
             self.simulator.pause = True
@@ -195,68 +199,72 @@ class SimUi(QMainWindow):
         location = d['where']
         self.gv.scene.clear()
         self.gv.display_time(time)
+        selected_task = None
         
-        if signal_type =='arriving':
-            t_id = signal_data['t_id'] 
-            print(f'{location} @{time} Task {t_id} arrived')          
-            self.gv.batch_queue.tasks.append(t_id)
-            self.gv.batch_queue.task_details.append(d['detail'])
+        if signal_type =='arriving':            
+            task = signal_data['task']
+            #print(f'{location} @{time} Task {task.id} arrived')                     
+            self.gv.batch_queue.tasks.append(task)
+
+        
+        elif signal_type == 'choose':
+            task = signal_data['task']            
+            selected_task = task
             
         elif signal_type == 'admitted':
-            t_id = signal_data['t_id']
-            m_id = signal_data['m_id']
-            print(f'@{location} {time} Task {t_id} map to Machine {m_id}')
-            self.gv.batch_queue.tasks.remove(t_id)            
+            task = signal_data['task']
+            machine = signal_data['assigned_machine']
+            m_id = machine.id            
+            #print(f'@{location} {time} Task {task.id} map to Machine {m_id}')
+            self.gv.batch_queue.tasks.remove(task)               
             self.gv.connect_mapper_machine(m_id, QPen(Qt.red, 4), Qt.red)
-            self.gv.machine_queues.m_queues[m_id].append(t_id)
+            self.gv.machine_queues.m_queues[m_id].append(task)            
         
         elif signal_type == 'cancelled':
             self.progress +=100*(1/self.simulator.total_no_of_tasks)
             self.pbar.setValue(self.progress)
-            t_id = signal_data['t_id']            
-            print(f'{location} @{time} Task {t_id} cacncelled')
-            self.gv.batch_queue.tasks.remove(t_id)
-            
-            
-        
+            task = signal_data['task']             
+            self.gv.connect_to_trash(QPen(Qt.red, 4), Qt.red)
+            print(f'{location} @{time} Task {task.id} cacncelled')
+            self.gv.batch_queue.tasks.remove(task)
+            self.gv.mapper_ui.cancelled_tasks.append(task)
+                    
         elif signal_type == 'running':
-            t_id = signal_data['t_id']
-            m_id = signal_data['m_id']  
-            print(f'{location} @{time} Task {t_id} start running at Machine {m_id}')
-            
-            self.gv.machine_queues.m_queues[m_id].remove(t_id)
-            self.gv.machine_queues.m_runnings[m_id].append(t_id)
+            task = signal_data['task']
+            machine = signal_data['assigned_machine']             
+            m_id = machine.id
+            #print(f'{location} @{time} Task {task.id} start running at Machine {m_id}')            
+            self.gv.machine_queues.m_queues[m_id].remove(task)            
+            self.gv.machine_queues.m_runnings[m_id].append(task)
         
         elif signal_type == 'completion':
             self.progress +=100*(1/self.simulator.total_no_of_tasks)
             self.pbar.setValue(self.progress)
-            t_id = signal_data['t_id']
-            m_id = signal_data['m_id']   
-            print(f'{location} @{time} Task {t_id} completed at Machine {m_id}')                     
-            self.gv.machine_queues.m_runnings[m_id].remove(t_id)
+            task = signal_data['task']
+            machine= signal_data['assigned_machine']   
+            m_id = machine.id
+            #print(f'{location} @{time} Task {task.id} completed at Machine {m_id}')                     
+            self.gv.machine_queues.m_runnings[m_id].remove(task)
 
         elif signal_type == 'missed':
             self.progress +=100*(1/self.simulator.total_no_of_tasks)
             self.pbar.setValue(self.progress)
-            t_id = signal_data['t_id']
-            m_id = signal_data['m_id']    
-            print(f'{location} @{time} Task {t_id} dropped from Machine {m_id}')                      
-            self.gv.machine_queues.m_runnings[m_id].remove(t_id)
+            task = signal_data['task']
+            machine= signal_data['assigned_machine']   
+            m_id = machine.id   
+            #print(f'{location} @{time} Task {task.id} dropped from Machine {m_id}')                      
+            self.gv.machine_queues.m_runnings[m_id].remove(task)
 
-        
-
-        
         self.gv.batch_queue.outer_frame()
         self.gv.batch_queue.inner_frame()
-        self.gv.mapper()
+        self.gv.mapper_ui.mapper()
+        self.gv.mapper_ui.trash()
         self.gv.connecting_lines()
         
-        self.gv.batch_queue.draw_tasks()
+        self.gv.batch_queue.draw_tasks(selected_task)
         self.gv.machine_queues.draw_queues()
         self.gv.machine_queues.fill_queues()
-        self.gv.machine_queues.runnings()
-        self.label.setText(F"Type: {d['type']} Task: {d['data']['t_id']} time: {d['time']}")     
-        
+        self.gv.machine_queues.runnings()        
         self.update()
     
     def report(self):
