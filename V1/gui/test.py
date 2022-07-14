@@ -1,53 +1,53 @@
 import sys
-from PyQt5.QtWidgets import QMainWindow, QApplication, QPushButton, QWidget, QAction, QTabWidget, QVBoxLayout, QLabel
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
+from PyQt5.QtWidgets import *
 
-# Creating the main window
-class App(QMainWindow):
-	def __init__(self):
-		super().__init__()
-		self.title = 'PyQt5 - QTabWidget'
-		self.left = 0
-		self.top = 0
-		self.width = 300
-		self.height = 200
-		self.setWindowTitle(self.title)
-		self.setGeometry(self.left, self.top, self.width, self.height)
-
-		self.tab_widget = MyTabWidget(self)
-		self.setCentralWidget(self.tab_widget)
-
-		self.show()
-
-# Creating tab widgets
-class MyTabWidget(QWidget):
-	def __init__(self, parent):
-		super(QWidget, self).__init__(parent)
-		self.layout = QVBoxLayout(self)
-
-		# Initialize tab screen
-		self.tabs = QTabWidget()
-		self.tab1 = QWidget()
-		self.tab2 = QWidget()
-		self.tab3 = QWidget()
-		self.tabs.resize(300, 200)
-
-		# Add tabs
-		self.tabs.addTab(self.tab1, "Geeks")
-		self.tabs.addTab(self.tab2, "For")
-		self.tabs.addTab(self.tab3, "Geeks")
-
-		# Create first tab
-		self.tab1.layout = QVBoxLayout(self)
-		self.l = QLabel()
-		self.l.setText("This is the first tab")
-		self.tab1.layout.addWidget(self.l)
-		self.tab1.setLayout(self.tab1.layout)
-
-		# Add tabs to widget
-		self.layout.addWidget(self.tabs)
-		self.setLayout(self.layout)
-
+class filedialogdemo(QWidget):
+   def __init__(self, parent = None):
+      super(filedialogdemo, self).__init__(parent)
+		
+      layout = QVBoxLayout()
+      self.btn = QPushButton("QFileDialog static method demo")
+      self.btn.clicked.connect(self.getfile)
+		
+      layout.addWidget(self.btn)
+      self.le = QLabel("Hello")
+		
+      layout.addWidget(self.le)
+      self.btn1 = QPushButton("QFileDialog object")
+      self.btn1.clicked.connect(self.getfiles)
+      layout.addWidget(self.btn1)
+		
+      self.contents = QTextEdit()
+      layout.addWidget(self.contents)
+      self.setLayout(layout)
+      self.setWindowTitle("File Dialog demo")
+		
+   def getfile(self):
+      fname = QFileDialog.getOpenFileName(self, 'Open file', 
+         'c:\\',"Image files (*.jpg *.gif)")
+      self.le.setPixmap(QPixmap(fname))
+		
+   def getfiles(self):
+      dlg = QFileDialog()
+      dlg.setFileMode(QFileDialog.AnyFile)
+      dlg.setFilter("Text files (*.txt)")
+      filenames = QStringList()
+		
+      if dlg.exec_():
+         filenames = dlg.selectedFiles()
+         f = open(filenames[0], 'r')
+			
+         with f:
+            data = f.read()
+            self.contents.setText(data)
+				
+def main():
+   app = QApplication(sys.argv)
+   ex = filedialogdemo()
+   ex.show()
+   sys.exit(app.exec_())
+	
 if __name__ == '__main__':
-	app = QApplication(sys.argv)
-	ex = App()
-	sys.exit(app.exec_())
+   main()
