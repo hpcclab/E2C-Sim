@@ -26,6 +26,12 @@ class BatchQueueUI(QGraphicsView):
                         QColor(191,82,89),
                         QColor(82,126,191),
                         QColor(86,208,128) ]
+    
+    def reset(self):
+        self.tasks = []  
+        self.t_frames = []
+        self.others = []  
+
         
         
 

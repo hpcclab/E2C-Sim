@@ -158,6 +158,7 @@ class SimUi(QMainWindow):
         self.thread = QThread() 
         self.simulator =  Simulator(self.workload_name, self.scenario, self.etc, self.workload_id) 
         self.simulator.moveToThread(self.thread)
+        self.thread.started.connect(self.simulator.reset)
         self.thread.started.connect(self.simulator.run)         
         self.thread.finished.connect(self.thread.deleteLater)  
         self.simulator.simulation_done.connect(self.report)         
@@ -195,7 +196,8 @@ class SimUi(QMainWindow):
         self.gv.scene.clear()
         self.progress=0
         self.pbar.setValue(0)
-        self.gv.batch_queue.tasks = []
+        self.gv.display_time(0)
+        self.gv.batch_queue.reset()
         self.gv.machine_queues.reset()
         self.buttons['simulate'].setEnabled(True)
         self.buttons['speed'].setEnabled(False)

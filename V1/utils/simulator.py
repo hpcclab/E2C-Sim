@@ -40,6 +40,12 @@ class Simulator(QObject):
         self.sleep_time = 0.1
         self.set_scheduling_method()
         self.pause = False
+    
+    def reset(self):
+        config.time.sct(0.0)
+        config.available_energy = config.total_energy
+        for machine in config.machines:
+            machine.reset()
         
 	
     def simulate_pause(self, val):

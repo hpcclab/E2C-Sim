@@ -63,17 +63,19 @@ class Machine(BaseMachine):
     
     def reset(self):       
         self.status = MachineStatus.IDLE
-        self.queue = Queue(maxsize = self.queue_size)
+        self.queue = Queue(maxsize = self.queue_size)        
         self.running_task = []
-        self.completion_times = [-1] * (config.queue_size+1)
-
-        self.idle_time = config.time.gct()
+        self.idle_time = config.time.gct()       
 
         self.completed_tasks = []
         self.xcompleted_tasks = []        
-        self.missed = []
+        self.missed = []  
+       
         for key, _ in self.stats.items():
             self.stats[key] = 0
+
+        
+        
         
     def is_working(self):
         return bool(self.running_task)
