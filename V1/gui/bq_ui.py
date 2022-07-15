@@ -76,9 +76,8 @@ class BatchQueueUI(QGraphicsView):
                 r = 0.25*h_task
                 p = QPainterPath()
                 p.addRoundedRect(x_task, y_task, w_task, h_task, r, r)
-                t_frame = QGraphicsPathItem(p)
-                bcg = QColor(150,0,0)                
-                bcg = self.colors[task.type.id]
+                t_frame = QGraphicsPathItem(p)                                
+                bcg = self.colors[task.type.id%len(self.colors)]
                 pen = QPen(Qt.white,  2, Qt.SolidLine)
                 brush = QBrush(bcg)
                 if task == selected_task:
@@ -104,7 +103,7 @@ class BatchQueueUI(QGraphicsView):
                 p = QPainterPath()
                 p.addRoundedRect(x_task, y_task, w_task, h_task, r, r)
                 t_frame = QGraphicsPathItem(p)
-                bcg = self.colors[task.type.id]
+                bcg = self.colors[task.type.id%len(self.colors)]
                 pen = QPen(Qt.white,  2, Qt.SolidLine)
                 brush = QBrush(bcg)
                 t_frame.setBrush(brush)

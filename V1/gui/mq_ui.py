@@ -27,10 +27,10 @@ class MachineUi(QGraphicsView):
         self.queue_frames = {}
         self.no_of_machines = len(self.machines)
         self.colors = [QColor(150,0,0), 
-                        QColor(0,150,0),
-                        QColor(0,0,150),
-                        QColor(10,100,120),
-                        QColor(80,20,70) ]
+                        QColor(93,168,154),
+                        QColor(191,82,89),
+                        QColor(82,126,191),
+                        QColor(86,208,128) ]
 
     
     def reset(self):
@@ -109,7 +109,7 @@ class MachineUi(QGraphicsView):
                     p = QPainterPath()
                     p.addRoundedRect(x_task, y_task, w_task, h_task, r, r)
                     t_frame = QGraphicsPathItem(p)
-                    bcg = self.colors[task.type.id]
+                    bcg = self.colors[task.type.id%len(self.colors)]
                     pen = QPen(Qt.white,  2, Qt.SolidLine)
                     brush = QBrush(bcg)
                     t_frame.setBrush(brush)
@@ -132,7 +132,7 @@ class MachineUi(QGraphicsView):
                     p = QPainterPath()
                     p.addRoundedRect(x_task, y_task, w_task, h_task, r, r)
                     t_frame = QGraphicsPathItem(p)
-                    bcg = self.colors[task.type.id]
+                    bcg = self.colors[task.type.id%len(self.colors)]
                     pen = QPen(Qt.white,  2, Qt.SolidLine)
                     brush = QBrush(bcg)
                     t_frame.setBrush(brush)
@@ -182,7 +182,7 @@ class MachineUi(QGraphicsView):
                 p = QPainterPath()
                 p.addRoundedRect(x+length+r-0.5*w, y-0.5*h,w, h, rounded_radius, rounded_radius)
                 t_frame = QGraphicsPathItem(p)
-                bcg = QColor(150,0,0)
+                bcg = self.colors[running_task.type.id%len(self.colors)]
                 pen = QPen(Qt.white,  2, Qt.SolidLine)
                 brush = QBrush(bcg)
                 t_frame.setBrush(brush)

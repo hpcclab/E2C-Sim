@@ -1016,780 +1016,822 @@ MACHINES ==>>>
 	Machine m1 :	[40, [46, 48, 49]]
 	Machine m2 :	[42, [43, 45, 47]]
 	Machine m3 :	[44, [50, 51]]
-52 selected --> BQ = [53, 54, 55]
-executime: {'m1-1': 92.46, 'm2-1': 0.98, 'm3-1': 9.51}	estimeated_time{'m1': 108.62, 'm2': 1.03, 'm3': 10.5}
-task:52  assigned to:m3  ec:0   delta:254.572
+53 selected --> BQ = [52, 54, 55]
+executime: {'m1-1': 102.64, 'm2-1': 105.68, 'm3-1': 9.93}	estimeated_time{'m1': 95.92, 'm2': 94.53, 'm3': 9.5}
+task:53  assigned to:m3  ec:1   delta:257.904
 
 *****Task:56 		 ARRIVING  @time:167.594
-BQ = [53, 54, 55, 56]
+BQ = [52, 54, 55, 56]
 
 MACHINES ==>>>
 	Machine m1 :	[40, [46, 48, 49]]
 	Machine m2 :	[42, [43, 45, 47]]
-	Machine m3 :	[44, [50, 51, 52]]
+	Machine m3 :	[44, [50, 51, 53]]
 
 *****Task:57 		 ARRIVING  @time:174.103
-BQ = [53, 54, 55, 56, 57]
+BQ = [52, 54, 55, 56, 57]
 
 MACHINES ==>>>
 	Machine m1 :	[40, [46, 48, 49]]
 	Machine m2 :	[42, [43, 45, 47]]
-	Machine m3 :	[44, [50, 51, 52]]
+	Machine m3 :	[44, [50, 51, 53]]
 
 *****Task:58 		 ARRIVING  @time:176.615
-BQ = [53, 54, 55, 56, 57, 58]
+BQ = [52, 54, 55, 56, 57, 58]
 
 MACHINES ==>>>
 	Machine m1 :	[40, [46, 48, 49]]
 	Machine m2 :	[42, [43, 45, 47]]
-	Machine m3 :	[44, [50, 51, 52]]
+	Machine m3 :	[44, [50, 51, 53]]
 
 *****Task:44 		 COMPLETION  @time:177.808
 [ Task(44), Machine(m3) ]: COMPLETED      @time(177.808)
 [ Task(50), Machine(m3) ]: RUNNING        @time(177.808) exec:0.990 
-BQ = [53, 54, 55, 56, 57, 58]
+BQ = [52, 54, 55, 56, 57, 58]
 
 MACHINES ==>>>
 	Machine m1 :	[40, [46, 48, 49]]
 	Machine m2 :	[42, [43, 45, 47]]
-	Machine m3 :	[50, [51, 52]]
-53 selected --> BQ = [54, 55, 56, 57, 58]
-executime: {'m1-1': 102.64, 'm2-1': 105.68, 'm3-1': 9.93}	estimeated_time{'m1': 95.92, 'm2': 94.53, 'm3': 9.5}
-task:53  assigned to:m3  ec:0   delta:257.904
+	Machine m3 :	[50, [51, 53]]
+57 selected --> BQ = [52, 54, 55, 56, 58]
+executime: {'m1-1': 104.78, 'm2-1': 0.97, 'm3-1': 9.64}	estimeated_time{'m1': 107.54, 'm2': 1.08, 'm3': 9.16}
+task:57  assigned to:m3  ec:4   delta:274.103
 
 *****Task:50 		 COMPLETION  @time:178.798
 [ Task(50), Machine(m3) ]: COMPLETED      @time(178.798)
 [ Task(51), Machine(m3) ]: RUNNING        @time(178.798) exec:10.420 
-BQ = [54, 55, 56, 57, 58]
+BQ = [52, 54, 55, 56, 58]
 
 MACHINES ==>>>
 	Machine m1 :	[40, [46, 48, 49]]
 	Machine m2 :	[42, [43, 45, 47]]
-	Machine m3 :	[51, [52, 53]]
-54 selected --> BQ = [55, 56, 57, 58]
-executime: {'m1-1': 94.44, 'm2-1': 92.3, 'm3-1': 10.6}	estimeated_time{'m1': 91.92, 'm2': 104.59, 'm3': 10.79}
-task:54  assigned to:m3  ec:0   delta:259.565
+	Machine m3 :	[51, [53, 57]]
+58 selected --> BQ = [52, 54, 55, 56]
+executime: {'m1-1': 92.21, 'm2-1': 92.89, 'm3-1': 10.19}	estimeated_time{'m1': 105.85, 'm2': 92.71, 'm3': 9.96}
+task:58  assigned to:m3  ec:4   delta:276.615
 
 *****Task:59 		 ARRIVING  @time:179.874
-BQ = [55, 56, 57, 58, 59]
+BQ = [52, 54, 55, 56, 59]
 
 MACHINES ==>>>
 	Machine m1 :	[40, [46, 48, 49]]
 	Machine m2 :	[42, [43, 45, 47]]
-	Machine m3 :	[51, [52, 53, 54]]
+	Machine m3 :	[51, [53, 57, 58]]
 
 *****Task:60 		 ARRIVING  @time:181.333
-BQ = [55, 56, 57, 58, 59, 60]
+BQ = [52, 54, 55, 56, 59, 60]
 
 MACHINES ==>>>
 	Machine m1 :	[40, [46, 48, 49]]
 	Machine m2 :	[42, [43, 45, 47]]
-	Machine m3 :	[51, [52, 53, 54]]
+	Machine m3 :	[51, [53, 57, 58]]
 
 *****Task:61 		 ARRIVING  @time:182.659
-BQ = [55, 56, 57, 58, 59, 60, 61]
+BQ = [52, 54, 55, 56, 59, 60, 61]
 
 MACHINES ==>>>
 	Machine m1 :	[40, [46, 48, 49]]
 	Machine m2 :	[42, [43, 45, 47]]
-	Machine m3 :	[51, [52, 53, 54]]
+	Machine m3 :	[51, [53, 57, 58]]
 
 *****Task:62 		 ARRIVING  @time:184.009
-BQ = [55, 56, 57, 58, 59, 60, 61, 62]
+BQ = [52, 54, 55, 56, 59, 60, 61, 62]
 
 MACHINES ==>>>
 	Machine m1 :	[40, [46, 48, 49]]
 	Machine m2 :	[42, [43, 45, 47]]
-	Machine m3 :	[51, [52, 53, 54]]
+	Machine m3 :	[51, [53, 57, 58]]
 
 *****Task:63 		 ARRIVING  @time:184.276
-BQ = [55, 56, 57, 58, 59, 60, 61, 62, 63]
+BQ = [52, 54, 55, 56, 59, 60, 61, 62, 63]
 
 MACHINES ==>>>
 	Machine m1 :	[40, [46, 48, 49]]
 	Machine m2 :	[42, [43, 45, 47]]
-	Machine m3 :	[51, [52, 53, 54]]
+	Machine m3 :	[51, [53, 57, 58]]
 
 *****Task:64 		 ARRIVING  @time:186.734
-BQ = [55, 56, 57, 58, 59, 60, 61, 62, 63, 64]
+BQ = [52, 54, 55, 56, 59, 60, 61, 62, 63, 64]
 
 MACHINES ==>>>
 	Machine m1 :	[40, [46, 48, 49]]
 	Machine m2 :	[42, [43, 45, 47]]
-	Machine m3 :	[51, [52, 53, 54]]
+	Machine m3 :	[51, [53, 57, 58]]
 
 *****Task:51 		 COMPLETION  @time:189.218
 [ Task(51), Machine(m3) ]: COMPLETED      @time(189.218)
-[ Task(52), Machine(m3) ]: RUNNING        @time(189.218) exec:9.510 
-BQ = [55, 56, 57, 58, 59, 60, 61, 62, 63, 64]
+[ Task(53), Machine(m3) ]: RUNNING        @time(189.218) exec:9.930 
+BQ = [52, 54, 55, 56, 59, 60, 61, 62, 63, 64]
 
 MACHINES ==>>>
 	Machine m1 :	[40, [46, 48, 49]]
 	Machine m2 :	[42, [43, 45, 47]]
-	Machine m3 :	[52, [53, 54]]
-55 selected --> BQ = [56, 57, 58, 59, 60, 61, 62, 63, 64]
-executime: {'m1-1': 105.2, 'm2-1': 1.05, 'm3-1': 9.79}	estimeated_time{'m1': 107.37, 'm2': 1.06, 'm3': 10.24}
-task:55  assigned to:m3  ec:0   delta:265.216
+	Machine m3 :	[53, [57, 58]]
+62 selected --> BQ = [52, 54, 55, 56, 59, 60, 61, 63, 64]
+executime: {'m1-1': 100.65, 'm2-1': 9.85, 'm3-1': 1.03}	estimeated_time{'m1': 98.66, 'm2': 9.32, 'm3': 1.06}
+task:62  assigned to:m3  ec:7   delta:284.009
 
 *****Task:65 		 ARRIVING  @time:191.524
-BQ = [56, 57, 58, 59, 60, 61, 62, 63, 64, 65]
+BQ = [52, 54, 55, 56, 59, 60, 61, 63, 64, 65]
 
 MACHINES ==>>>
 	Machine m1 :	[40, [46, 48, 49]]
 	Machine m2 :	[42, [43, 45, 47]]
-	Machine m3 :	[52, [53, 54, 55]]
+	Machine m3 :	[53, [57, 58, 62]]
 
 *****Task:66 		 ARRIVING  @time:191.577
-BQ = [56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66]
+BQ = [52, 54, 55, 56, 59, 60, 61, 63, 64, 65, 66]
 
 MACHINES ==>>>
 	Machine m1 :	[40, [46, 48, 49]]
 	Machine m2 :	[42, [43, 45, 47]]
-	Machine m3 :	[52, [53, 54, 55]]
+	Machine m3 :	[53, [57, 58, 62]]
 
-*****Task:52 		 COMPLETION  @time:198.72799999999998
-[ Task(52), Machine(m3) ]: COMPLETED      @time(198.728)
-[ Task(53), Machine(m3) ]: RUNNING        @time(198.728) exec:9.930 
-BQ = [56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66]
+*****Task:53 		 COMPLETION  @time:199.148
+[ Task(53), Machine(m3) ]: COMPLETED      @time(199.148)
+[ Task(57), Machine(m3) ]: RUNNING        @time(199.148) exec:9.640 
+BQ = [52, 54, 55, 56, 59, 60, 61, 63, 64, 65, 66]
 
 MACHINES ==>>>
 	Machine m1 :	[40, [46, 48, 49]]
 	Machine m2 :	[42, [43, 45, 47]]
-	Machine m3 :	[53, [54, 55]]
-56 selected --> BQ = [57, 58, 59, 60, 61, 62, 63, 64, 65, 66]
-executime: {'m1-1': 102.53, 'm2-1': 97.72, 'm3-1': 9.37}	estimeated_time{'m1': 94.41, 'm2': 103.3, 'm3': 10.46}
-task:56  assigned to:m3  ec:0   delta:267.594
+	Machine m3 :	[57, [58, 62]]
+63 selected --> BQ = [52, 54, 55, 56, 59, 60, 61, 64, 65, 66]
+executime: {'m1-1': 107.07, 'm2-1': 10.3, 'm3-1': 1.08}	estimeated_time{'m1': 97.11, 'm2': 9.48, 'm3': 1.06}
+task:63  assigned to:m3  ec:7   delta:284.276
 
 *****Task:67 		 ARRIVING  @time:204.194
-BQ = [57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67]
+BQ = [52, 54, 55, 56, 59, 60, 61, 64, 65, 66, 67]
 
 MACHINES ==>>>
 	Machine m1 :	[40, [46, 48, 49]]
 	Machine m2 :	[42, [43, 45, 47]]
-	Machine m3 :	[53, [54, 55, 56]]
+	Machine m3 :	[57, [58, 62, 63]]
 
 *****Task:68 		 ARRIVING  @time:205.844
-BQ = [57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68]
+BQ = [52, 54, 55, 56, 59, 60, 61, 64, 65, 66, 67, 68]
 
 MACHINES ==>>>
 	Machine m1 :	[40, [46, 48, 49]]
 	Machine m2 :	[42, [43, 45, 47]]
-	Machine m3 :	[53, [54, 55, 56]]
+	Machine m3 :	[57, [58, 62, 63]]
 
-*****Task:53 		 COMPLETION  @time:208.658
-[ Task(53), Machine(m3) ]: COMPLETED      @time(208.658)
-[ Task(54), Machine(m3) ]: RUNNING        @time(208.658) exec:10.600 
-BQ = [57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68]
+*****Task:57 		 COMPLETION  @time:208.788
+[ Task(57), Machine(m3) ]: COMPLETED      @time(208.788)
+[ Task(58), Machine(m3) ]: RUNNING        @time(208.788) exec:10.190 
+BQ = [52, 54, 55, 56, 59, 60, 61, 64, 65, 66, 67, 68]
 
 MACHINES ==>>>
 	Machine m1 :	[40, [46, 48, 49]]
 	Machine m2 :	[42, [43, 45, 47]]
-	Machine m3 :	[54, [55, 56]]
-57 selected --> BQ = [58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68]
-executime: {'m1-1': 104.78, 'm2-1': 0.97, 'm3-1': 9.64}	estimeated_time{'m1': 107.54, 'm2': 1.08, 'm3': 9.16}
-task:57  assigned to:m3  ec:0   delta:274.103
+	Machine m3 :	[58, [62, 63]]
+60 selected --> BQ = [52, 54, 55, 56, 59, 61, 64, 65, 66, 67, 68]
+executime: {'m1-1': 104.5, 'm2-1': 10.07, 'm3-1': 1.07}	estimeated_time{'m1': 106.35, 'm2': 9.26, 'm3': 1.07}
+task:60  assigned to:m3  ec:5   delta:281.33299999999997
 
 *****Task:69 		 ARRIVING  @time:213.475
-BQ = [58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69]
+BQ = [52, 54, 55, 56, 59, 61, 64, 65, 66, 67, 68, 69]
 
 MACHINES ==>>>
 	Machine m1 :	[40, [46, 48, 49]]
 	Machine m2 :	[42, [43, 45, 47]]
-	Machine m3 :	[54, [55, 56, 57]]
+	Machine m3 :	[58, [62, 63, 60]]
 
-*****Task:54 		 COMPLETION  @time:219.25799999999998
-[ Task(54), Machine(m3) ]: COMPLETED      @time(219.258)
-[ Task(55), Machine(m3) ]: RUNNING        @time(219.258) exec:9.790 
-BQ = [58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69]
+*****Task:58 		 COMPLETION  @time:218.978
+[ Task(58), Machine(m3) ]: COMPLETED      @time(218.978)
+[ Task(62), Machine(m3) ]: RUNNING        @time(218.978) exec:1.030 
+BQ = [52, 54, 55, 56, 59, 61, 64, 65, 66, 67, 68, 69]
 
 MACHINES ==>>>
 	Machine m1 :	[40, [46, 48, 49]]
 	Machine m2 :	[42, [43, 45, 47]]
-	Machine m3 :	[55, [56, 57]]
-58 selected --> BQ = [59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69]
-executime: {'m1-1': 92.21, 'm2-1': 92.89, 'm3-1': 10.19}	estimeated_time{'m1': 105.85, 'm2': 92.71, 'm3': 9.96}
-task:58  assigned to:m3  ec:0   delta:276.615
+	Machine m3 :	[62, [63, 60]]
+69 selected --> BQ = [52, 54, 55, 56, 59, 61, 64, 65, 66, 67, 68]
+executime: {'m1-1': 91.54, 'm2-1': 9.8, 'm3-1': 1.06}	estimeated_time{'m1': 101.07, 'm2': 9.71, 'm3': 0.97}
+task:69  assigned to:m3  ec:11   delta:313.475
+
+*****Task:62 		 COMPLETION  @time:220.008
+[ Task(62), Machine(m3) ]: COMPLETED      @time(220.008)
+[ Task(63), Machine(m3) ]: RUNNING        @time(220.008) exec:1.080 
+BQ = [52, 54, 55, 56, 59, 61, 64, 65, 66, 67, 68]
+
+MACHINES ==>>>
+	Machine m1 :	[40, [46, 48, 49]]
+	Machine m2 :	[42, [43, 45, 47]]
+	Machine m3 :	[63, [60, 69]]
+68 selected --> BQ = [52, 54, 55, 56, 59, 61, 64, 65, 66, 67]
+executime: {'m1-1': 108.56, 'm2-1': 99.48, 'm3-1': 9.16}	estimeated_time{'m1': 102.67, 'm2': 107.21, 'm3': 9.2}
+task:68  assigned to:m3  ec:10   delta:305.844
+
+*****Task:63 		 COMPLETION  @time:221.08800000000002
+[ Task(63), Machine(m3) ]: COMPLETED      @time(221.088)
+[ Task(60), Machine(m3) ]: RUNNING        @time(221.088) exec:1.070 
+BQ = [52, 54, 55, 56, 59, 61, 64, 65, 66, 67]
+
+MACHINES ==>>>
+	Machine m1 :	[40, [46, 48, 49]]
+	Machine m2 :	[42, [43, 45, 47]]
+	Machine m3 :	[60, [69, 68]]
+66 selected --> BQ = [52, 54, 55, 56, 59, 61, 64, 65, 67]
+executime: {'m1-1': 101.8, 'm2-1': 102.9, 'm3-1': 10.12}	estimeated_time{'m1': 100.4, 'm2': 93.54, 'm3': 9.51}
+task:66  assigned to:m3  ec:8   delta:291.577
+
+*****Task:60 		 COMPLETION  @time:222.15800000000002
+[ Task(60), Machine(m3) ]: COMPLETED      @time(222.158)
+[ Task(69), Machine(m3) ]: RUNNING        @time(222.158) exec:1.060 
+BQ = [52, 54, 55, 56, 59, 61, 64, 65, 67]
+
+MACHINES ==>>>
+	Machine m1 :	[40, [46, 48, 49]]
+	Machine m2 :	[42, [43, 45, 47]]
+	Machine m3 :	[69, [68, 66]]
+65 selected --> BQ = [52, 54, 55, 56, 59, 61, 64, 67]
+executime: {'m1-1': 103.29, 'm2-1': 1.0, 'm3-1': 9.64}	estimeated_time{'m1': 97.99, 'm2': 1.08, 'm3': 9.68}
+task:65  assigned to:m3  ec:7   delta:291.524
+
+*****Task:69 		 COMPLETION  @time:223.21800000000002
+[ Task(69), Machine(m3) ]: COMPLETED      @time(223.218)
+[ Task(68), Machine(m3) ]: RUNNING        @time(223.218) exec:9.160 
+BQ = [52, 54, 55, 56, 59, 61, 64, 67]
+
+MACHINES ==>>>
+	Machine m1 :	[40, [46, 48, 49]]
+	Machine m2 :	[42, [43, 45, 47]]
+	Machine m3 :	[68, [66, 65]]
+67 selected --> BQ = [52, 54, 55, 56, 59, 61, 64]
+executime: {'m1-1': 106.69, 'm2-1': 93.42, 'm3-1': 9.63}	estimeated_time{'m1': 92.56, 'm2': 95.63, 'm3': 9.9}
+task:67  assigned to:m3  ec:7   delta:304.19399999999996
 
 *****Task:70 		 ARRIVING  @time:228.23
-BQ = [59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70]
+BQ = [52, 54, 55, 56, 59, 61, 64, 70]
 
 MACHINES ==>>>
 	Machine m1 :	[40, [46, 48, 49]]
 	Machine m2 :	[42, [43, 45, 47]]
-	Machine m3 :	[55, [56, 57, 58]]
-
-*****Task:55 		 COMPLETION  @time:229.04799999999997
-[ Task(55), Machine(m3) ]: COMPLETED      @time(229.048)
-[ Task(56), Machine(m3) ]: RUNNING        @time(229.048) exec:9.370 
-BQ = [59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70]
-
-MACHINES ==>>>
-	Machine m1 :	[40, [46, 48, 49]]
-	Machine m2 :	[42, [43, 45, 47]]
-	Machine m3 :	[56, [57, 58]]
-59 selected --> BQ = [60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70]
-executime: {'m1-1': 101.22, 'm2-1': 95.81, 'm3-1': 9.76}	estimeated_time{'m1': 98.96, 'm2': 93.88, 'm3': 10.82}
-task:59  assigned to:m3  ec:0   delta:279.874
+	Machine m3 :	[68, [66, 65, 67]]
 
 *****Task:40 		 DROPPED_RUNNING_TASK  @time:231.709
 [ Task(46), Machine(m1) ]: RUNNING        @time(231.709) exec:103.730 
 [ Task(46), Machine(m1) ]: MISSED         @time(243.071)
-BQ = [60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70]
+BQ = [52, 54, 55, 56, 59, 61, 64, 70]
 
 MACHINES ==>>>
 	Machine m1 :	[46, [48, 49]]
 	Machine m2 :	[42, [43, 45, 47]]
-	Machine m3 :	[56, [57, 58, 59]]
-60 selected --> BQ = [61, 62, 63, 64, 65, 66, 67, 68, 69, 70]
-executime: {'m1-1': 104.5, 'm2-1': 10.07, 'm3-1': 1.07}	estimeated_time{'m1': 106.35, 'm2': 9.26, 'm3': 1.07}
-task:60  assigned to:m1  ec:0   delta:281.33299999999997
+	Machine m3 :	[68, [66, 65, 67]]
+54 selected --> BQ = [52, 55, 56, 59, 61, 64, 70]
+executime: {'m1-1': 94.44, 'm2-1': 92.3, 'm3-1': 10.6}	estimeated_time{'m1': 91.92, 'm2': 104.59, 'm3': 10.79}
+task:54  assigned to:m1  ec:1   delta:259.565
 
-*****Task:71 		 ARRIVING  @time:233.086
-BQ = [61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71]
+*****Task:68 		 COMPLETION  @time:232.37800000000001
+[ Task(68), Machine(m3) ]: COMPLETED      @time(232.378)
+[ Task(66), Machine(m3) ]: RUNNING        @time(232.378) exec:10.120 
+BQ = [52, 55, 56, 59, 61, 64, 70]
 
 MACHINES ==>>>
-	Machine m1 :	[46, [48, 49, 60]]
+	Machine m1 :	[46, [48, 49, 54]]
 	Machine m2 :	[42, [43, 45, 47]]
-	Machine m3 :	[56, [57, 58, 59]]
+	Machine m3 :	[66, [65, 67]]
+55 selected --> BQ = [52, 56, 59, 61, 64, 70]
+executime: {'m1-1': 105.2, 'm2-1': 1.05, 'm3-1': 9.79}	estimeated_time{'m1': 107.37, 'm2': 1.06, 'm3': 10.24}
+task:55  assigned to:m3  ec:1   delta:265.216
+
+*****Task:71 		 ARRIVING  @time:233.086
+BQ = [52, 56, 59, 61, 64, 70, 71]
+
+MACHINES ==>>>
+	Machine m1 :	[46, [48, 49, 54]]
+	Machine m2 :	[42, [43, 45, 47]]
+	Machine m3 :	[66, [65, 67, 55]]
 
 *****Task:42 		 DROPPED_RUNNING_TASK  @time:234.36
 [ Task(43), Machine(m2) ]: RUNNING        @time(234.360) exec:1.020 
 [ Task(43), Machine(m2) ]: MISSED         @time(inf)
-BQ = [61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71]
+BQ = [52, 56, 59, 61, 64, 70, 71]
 
 MACHINES ==>>>
-	Machine m1 :	[46, [48, 49, 60]]
+	Machine m1 :	[46, [48, 49, 54]]
 	Machine m2 :	[43, [45, 47]]
-	Machine m3 :	[56, [57, 58, 59]]
-61 selected --> BQ = [62, 63, 64, 65, 66, 67, 68, 69, 70, 71]
-executime: {'m1-1': 97.99, 'm2-1': 1.05, 'm3-1': 10.74}	estimeated_time{'m1': 103.73, 'm2': 1.08, 'm3': 10.45}
-task:61  assigned to:m2  ec:0   delta:282.659
+	Machine m3 :	[66, [65, 67, 55]]
+64 selected --> BQ = [52, 56, 59, 61, 70, 71]
+executime: {'m1-1': 105.38, 'm2-1': 0.98, 'm3-1': 10.34}	estimeated_time{'m1': 99.61, 'm2': 1.0, 'm3': 10.67}
+task:64  assigned to:m2  ec:4   delta:286.73400000000004
 
 *****Task:43 		 COMPLETION  @time:235.38000000000002
 [ Task(43), Machine(m2) ]: COMPLETED      @time(235.380)
 [ Task(45), Machine(m2) ]: RUNNING        @time(235.380) exec:1.090 
-BQ = [62, 63, 64, 65, 66, 67, 68, 69, 70, 71]
+BQ = [52, 56, 59, 61, 70, 71]
 
 MACHINES ==>>>
-	Machine m1 :	[46, [48, 49, 60]]
-	Machine m2 :	[45, [47, 61]]
-	Machine m3 :	[56, [57, 58, 59]]
-62 selected --> BQ = [63, 64, 65, 66, 67, 68, 69, 70, 71]
-executime: {'m1-1': 100.65, 'm2-1': 9.85, 'm3-1': 1.03}	estimeated_time{'m1': 98.66, 'm2': 9.32, 'm3': 1.06}
-task:62  assigned to:m2  ec:0   delta:284.009
+	Machine m1 :	[46, [48, 49, 54]]
+	Machine m2 :	[45, [47, 64]]
+	Machine m3 :	[66, [65, 67, 55]]
+52 selected --> BQ = [56, 59, 61, 70, 71]
+executime: {'m1-1': 92.46, 'm2-1': 0.98, 'm3-1': 9.51}	estimeated_time{'m1': 108.62, 'm2': 1.03, 'm3': 10.5}
+task:52  assigned to:m2  ec:0   delta:254.572
 
 *****Task:45 		 COMPLETION  @time:236.47000000000003
 [ Task(45), Machine(m2) ]: COMPLETED      @time(236.470)
 [ Task(47), Machine(m2) ]: RUNNING        @time(236.470) exec:1.020 
-BQ = [63, 64, 65, 66, 67, 68, 69, 70, 71]
+BQ = [56, 59, 61, 70, 71]
 
 MACHINES ==>>>
-	Machine m1 :	[46, [48, 49, 60]]
-	Machine m2 :	[47, [61, 62]]
-	Machine m3 :	[56, [57, 58, 59]]
-63 selected --> BQ = [64, 65, 66, 67, 68, 69, 70, 71]
-executime: {'m1-1': 107.07, 'm2-1': 10.3, 'm3-1': 1.08}	estimeated_time{'m1': 97.11, 'm2': 9.48, 'm3': 1.06}
-task:63  assigned to:m2  ec:0   delta:284.276
+	Machine m1 :	[46, [48, 49, 54]]
+	Machine m2 :	[47, [64, 52]]
+	Machine m3 :	[66, [65, 67, 55]]
+61 selected --> BQ = [56, 59, 70, 71]
+executime: {'m1-1': 97.99, 'm2-1': 1.05, 'm3-1': 10.74}	estimeated_time{'m1': 103.73, 'm2': 1.08, 'm3': 10.45}
+task:61  assigned to:m2  ec:2   delta:282.659
 
 *****Task:47 		 COMPLETION  @time:237.49000000000004
 [ Task(47), Machine(m2) ]: COMPLETED      @time(237.490)
-[ Task(61), Machine(m2) ]: RUNNING        @time(237.490) exec:1.050 
-BQ = [64, 65, 66, 67, 68, 69, 70, 71]
+[ Task(64), Machine(m2) ]: RUNNING        @time(237.490) exec:0.980 
+BQ = [56, 59, 70, 71]
 
 MACHINES ==>>>
-	Machine m1 :	[46, [48, 49, 60]]
-	Machine m2 :	[61, [62, 63]]
-	Machine m3 :	[56, [57, 58, 59]]
-64 selected --> BQ = [65, 66, 67, 68, 69, 70, 71]
-executime: {'m1-1': 105.38, 'm2-1': 0.98, 'm3-1': 10.34}	estimeated_time{'m1': 99.61, 'm2': 1.0, 'm3': 10.67}
-task:64  assigned to:m2  ec:0   delta:286.73400000000004
+	Machine m1 :	[46, [48, 49, 54]]
+	Machine m2 :	[64, [52, 61]]
+	Machine m3 :	[66, [65, 67, 55]]
+59 selected --> BQ = [56, 70, 71]
+executime: {'m1-1': 101.22, 'm2-1': 95.81, 'm3-1': 9.76}	estimeated_time{'m1': 98.96, 'm2': 93.88, 'm3': 10.82}
+task:59  assigned to:m2  ec:1   delta:279.874
 
-*****Task:56 		 COMPLETION  @time:238.41799999999998
-[ Task(56), Machine(m3) ]: COMPLETED      @time(238.418)
-[ Task(57), Machine(m3) ]: RUNNING        @time(238.418) exec:9.640 
-BQ = [65, 66, 67, 68, 69, 70, 71]
-
-MACHINES ==>>>
-	Machine m1 :	[46, [48, 49, 60]]
-	Machine m2 :	[61, [62, 63, 64]]
-	Machine m3 :	[57, [58, 59]]
-65 selected --> BQ = [66, 67, 68, 69, 70, 71]
-executime: {'m1-1': 103.29, 'm2-1': 1.0, 'm3-1': 9.64}	estimeated_time{'m1': 97.99, 'm2': 1.08, 'm3': 9.68}
-task:65  assigned to:m3  ec:0   delta:291.524
-
-*****Task:61 		 COMPLETION  @time:238.54000000000005
-[ Task(61), Machine(m2) ]: COMPLETED      @time(238.540)
-[ Task(62), Machine(m2) ]: RUNNING        @time(238.540) exec:9.850 
-BQ = [66, 67, 68, 69, 70, 71]
+*****Task:64 		 COMPLETION  @time:238.47000000000003
+[ Task(64), Machine(m2) ]: COMPLETED      @time(238.470)
+[ Task(52), Machine(m2) ]: RUNNING        @time(238.470) exec:0.980 
+BQ = [56, 70, 71]
 
 MACHINES ==>>>
-	Machine m1 :	[46, [48, 49, 60]]
-	Machine m2 :	[62, [63, 64]]
-	Machine m3 :	[57, [58, 59, 65]]
-66 selected --> BQ = [67, 68, 69, 70, 71]
-executime: {'m1-1': 101.8, 'm2-1': 102.9, 'm3-1': 10.12}	estimeated_time{'m1': 100.4, 'm2': 93.54, 'm3': 9.51}
-task:66  assigned to:m2  ec:0   delta:291.577
+	Machine m1 :	[46, [48, 49, 54]]
+	Machine m2 :	[52, [61, 59]]
+	Machine m3 :	[66, [65, 67, 55]]
+70 selected --> BQ = [56, 71]
+executime: {'m1-1': 106.19, 'm2-1': 103.57, 'm3-1': 9.41}	estimeated_time{'m1': 99.92, 'm2': 95.75, 'm3': 10.62}
+task:70  assigned to:m2  ec:1   delta:328.23
 
 *****Task:72 		 ARRIVING  @time:238.951
-BQ = [67, 68, 69, 70, 71, 72]
+BQ = [56, 71, 72]
 
 MACHINES ==>>>
-	Machine m1 :	[46, [48, 49, 60]]
-	Machine m2 :	[62, [63, 64, 66]]
-	Machine m3 :	[57, [58, 59, 65]]
+	Machine m1 :	[46, [48, 49, 54]]
+	Machine m2 :	[52, [61, 59, 70]]
+	Machine m3 :	[66, [65, 67, 55]]
+
+*****Task:52 		 COMPLETION  @time:239.45000000000002
+[ Task(52), Machine(m2) ]: COMPLETED      @time(239.450)
+[ Task(61), Machine(m2) ]: RUNNING        @time(239.450) exec:1.050 
+BQ = [56, 71, 72]
+
+MACHINES ==>>>
+	Machine m1 :	[46, [48, 49, 54]]
+	Machine m2 :	[61, [59, 70]]
+	Machine m3 :	[66, [65, 67, 55]]
+72 selected --> BQ = [56, 71]
+executime: {'m1-1': 104.5, 'm2-1': 9.53, 'm3-1': 0.92}	estimeated_time{'m1': 93.03, 'm2': 9.9, 'm3': 1.0}
+task:72  assigned to:m2  ec:2   delta:338.951
+
+*****Task:61 		 COMPLETION  @time:240.50000000000003
+[ Task(61), Machine(m2) ]: COMPLETED      @time(240.500)
+[ Task(59), Machine(m2) ]: RUNNING        @time(240.500) exec:95.810 
+BQ = [56, 71]
+
+MACHINES ==>>>
+	Machine m1 :	[46, [48, 49, 54]]
+	Machine m2 :	[59, [70, 72]]
+	Machine m3 :	[66, [65, 67, 55]]
+56 selected --> BQ = [71]
+executime: {'m1-1': 102.53, 'm2-1': 97.72, 'm3-1': 9.37}	estimeated_time{'m1': 94.41, 'm2': 103.3, 'm3': 10.46}
+task:56  assigned to:m2  ec:0   delta:267.594
 
 *****Task:73 		 ARRIVING  @time:241.324
-BQ = [67, 68, 69, 70, 71, 72, 73]
+BQ = [71, 73]
 
 MACHINES ==>>>
-	Machine m1 :	[46, [48, 49, 60]]
-	Machine m2 :	[62, [63, 64, 66]]
-	Machine m3 :	[57, [58, 59, 65]]
+	Machine m1 :	[46, [48, 49, 54]]
+	Machine m2 :	[59, [70, 72, 56]]
+	Machine m3 :	[66, [65, 67, 55]]
 
 *****Task:74 		 ARRIVING  @time:242.432
-BQ = [67, 68, 69, 70, 71, 72, 73, 74]
+BQ = [71, 73, 74]
 
 MACHINES ==>>>
-	Machine m1 :	[46, [48, 49, 60]]
-	Machine m2 :	[62, [63, 64, 66]]
-	Machine m3 :	[57, [58, 59, 65]]
+	Machine m1 :	[46, [48, 49, 54]]
+	Machine m2 :	[59, [70, 72, 56]]
+	Machine m3 :	[66, [65, 67, 55]]
+
+*****Task:66 		 COMPLETION  @time:242.49800000000002
+[ Task(66), Machine(m3) ]: COMPLETED      @time(242.498)
+[ Task(65), Machine(m3) ]: RUNNING        @time(242.498) exec:9.640 
+BQ = [71, 73, 74]
+
+MACHINES ==>>>
+	Machine m1 :	[46, [48, 49, 54]]
+	Machine m2 :	[59, [70, 72, 56]]
+	Machine m3 :	[65, [67, 55]]
+74 selected --> BQ = [71, 73]
+executime: {'m1-1': 96.74, 'm2-1': 10.82, 'm3-1': 1.04}	estimeated_time{'m1': 92.65, 'm2': 9.91, 'm3': 1.04}
+task:74  assigned to:m3  ec:2   delta:342.432
 
 *****Task:46 		 DROPPED_RUNNING_TASK  @time:243.071
 [ Task(48), Machine(m1) ]: RUNNING        @time(243.071) exec:94.820 
 [ Task(48), Machine(m1) ]: MISSED         @time(243.858)
-BQ = [67, 68, 69, 70, 71, 72, 73, 74]
+BQ = [71, 73]
 
 MACHINES ==>>>
-	Machine m1 :	[48, [49, 60]]
-	Machine m2 :	[62, [63, 64, 66]]
-	Machine m3 :	[57, [58, 59, 65]]
-67 selected --> BQ = [68, 69, 70, 71, 72, 73, 74]
-executime: {'m1-1': 106.69, 'm2-1': 93.42, 'm3-1': 9.63}	estimeated_time{'m1': 92.56, 'm2': 95.63, 'm3': 9.9}
-task:67  assigned to:m1  ec:0   delta:304.19399999999996
+	Machine m1 :	[48, [49, 54]]
+	Machine m2 :	[59, [70, 72, 56]]
+	Machine m3 :	[65, [67, 55, 74]]
+73 selected --> BQ = [71]
+executime: {'m1-1': 108.31, 'm2-1': 101.68, 'm3-1': 10.66}	estimeated_time{'m1': 102.16, 'm2': 105.43, 'm3': 9.58}
+task:73  assigned to:m1  ec:1   delta:341.324
 
 *****Task:75 		 ARRIVING  @time:243.104
-BQ = [68, 69, 70, 71, 72, 73, 74, 75]
+BQ = [71, 75]
 
 MACHINES ==>>>
-	Machine m1 :	[48, [49, 60, 67]]
-	Machine m2 :	[62, [63, 64, 66]]
-	Machine m3 :	[57, [58, 59, 65]]
+	Machine m1 :	[48, [49, 54, 73]]
+	Machine m2 :	[59, [70, 72, 56]]
+	Machine m3 :	[65, [67, 55, 74]]
 
 *****Task:48 		 DROPPED_RUNNING_TASK  @time:243.858
 [ Task(49), Machine(m1) ]: RUNNING        @time(243.858) exec:106.290 
 [ Task(49), Machine(m1) ]: MISSED         @time(244.292)
-BQ = [68, 69, 70, 71, 72, 73, 74, 75]
+BQ = [71, 75]
 
 MACHINES ==>>>
-	Machine m1 :	[49, [60, 67]]
-	Machine m2 :	[62, [63, 64, 66]]
-	Machine m3 :	[57, [58, 59, 65]]
-68 selected --> BQ = [69, 70, 71, 72, 73, 74, 75]
-executime: {'m1-1': 108.56, 'm2-1': 99.48, 'm3-1': 9.16}	estimeated_time{'m1': 102.67, 'm2': 107.21, 'm3': 9.2}
-task:68  assigned to:m1  ec:0   delta:305.844
+	Machine m1 :	[49, [54, 73]]
+	Machine m2 :	[59, [70, 72, 56]]
+	Machine m3 :	[65, [67, 55, 74]]
+75 selected --> BQ = [71]
+executime: {'m1-1': 98.8, 'm2-1': 103.21, 'm3-1': 9.81}	estimeated_time{'m1': 107.48, 'm2': 105.26, 'm3': 9.6}
+task:75  assigned to:m1  ec:1   delta:343.10400000000004
 
 *****Task:76 		 ARRIVING  @time:244.25
-BQ = [69, 70, 71, 72, 73, 74, 75, 76]
+BQ = [71, 76]
 
 MACHINES ==>>>
-	Machine m1 :	[49, [60, 67, 68]]
-	Machine m2 :	[62, [63, 64, 66]]
-	Machine m3 :	[57, [58, 59, 65]]
+	Machine m1 :	[49, [54, 73, 75]]
+	Machine m2 :	[59, [70, 72, 56]]
+	Machine m3 :	[65, [67, 55, 74]]
 
 *****Task:49 		 DROPPED_RUNNING_TASK  @time:244.292
-[ Task(60), Machine(m1) ]: RUNNING        @time(244.292) exec:104.500 
-[ Task(60), Machine(m1) ]: MISSED         @time(281.333)
-BQ = [69, 70, 71, 72, 73, 74, 75, 76]
+[ Task(54), Machine(m1) ]: RUNNING        @time(244.292) exec:94.440 
+[ Task(54), Machine(m1) ]: MISSED         @time(259.565)
+BQ = [71, 76]
 
 MACHINES ==>>>
-	Machine m1 :	[60, [67, 68]]
-	Machine m2 :	[62, [63, 64, 66]]
-	Machine m3 :	[57, [58, 59, 65]]
-69 selected --> BQ = [70, 71, 72, 73, 74, 75, 76]
-executime: {'m1-1': 91.54, 'm2-1': 9.8, 'm3-1': 1.06}	estimeated_time{'m1': 101.07, 'm2': 9.71, 'm3': 0.97}
-task:69  assigned to:m1  ec:0   delta:313.475
-
-*****Task:57 		 COMPLETION  @time:248.058
-[ Task(57), Machine(m3) ]: COMPLETED      @time(248.058)
-[ Task(58), Machine(m3) ]: RUNNING        @time(248.058) exec:10.190 
-BQ = [70, 71, 72, 73, 74, 75, 76]
-
-MACHINES ==>>>
-	Machine m1 :	[60, [67, 68, 69]]
-	Machine m2 :	[62, [63, 64, 66]]
-	Machine m3 :	[58, [59, 65]]
-70 selected --> BQ = [71, 72, 73, 74, 75, 76]
-executime: {'m1-1': 106.19, 'm2-1': 103.57, 'm3-1': 9.41}	estimeated_time{'m1': 99.92, 'm2': 95.75, 'm3': 10.62}
-task:70  assigned to:m3  ec:0   delta:328.23
-
-*****Task:62 		 COMPLETION  @time:248.39000000000004
-[ Task(62), Machine(m2) ]: COMPLETED      @time(248.390)
-[ Task(63), Machine(m2) ]: RUNNING        @time(248.390) exec:10.300 
-BQ = [71, 72, 73, 74, 75, 76]
-
-MACHINES ==>>>
-	Machine m1 :	[60, [67, 68, 69]]
-	Machine m2 :	[63, [64, 66]]
-	Machine m3 :	[58, [59, 65, 70]]
-71 selected --> BQ = [72, 73, 74, 75, 76]
-executime: {'m1-1': 101.81, 'm2-1': 108.18, 'm3-1': 9.62}	estimeated_time{'m1': 107.82, 'm2': 104.31, 'm3': 9.99}
-task:71  assigned to:m2  ec:0   delta:333.086
+	Machine m1 :	[54, [73, 75]]
+	Machine m2 :	[59, [70, 72, 56]]
+	Machine m3 :	[65, [67, 55, 74]]
+76 selected --> BQ = [71]
+executime: {'m1-1': 92.28, 'm2-1': 10.29, 'm3-1': 1.0}	estimeated_time{'m1': 94.75, 'm2': 9.24, 'm3': 0.94}
+task:76  assigned to:m1  ec:1   delta:344.25
 
 *****Task:77 		 ARRIVING  @time:249.282
-BQ = [72, 73, 74, 75, 76, 77]
+BQ = [71, 77]
 
 MACHINES ==>>>
-	Machine m1 :	[60, [67, 68, 69]]
-	Machine m2 :	[63, [64, 66, 71]]
-	Machine m3 :	[58, [59, 65, 70]]
+	Machine m1 :	[54, [73, 75, 76]]
+	Machine m2 :	[59, [70, 72, 56]]
+	Machine m3 :	[65, [67, 55, 74]]
+
+*****Task:65 		 COMPLETION  @time:252.13800000000003
+[ Task(65), Machine(m3) ]: COMPLETED      @time(252.138)
+[ Task(67), Machine(m3) ]: RUNNING        @time(252.138) exec:9.630 
+BQ = [71, 77]
+
+MACHINES ==>>>
+	Machine m1 :	[54, [73, 75, 76]]
+	Machine m2 :	[59, [70, 72, 56]]
+	Machine m3 :	[67, [55, 74]]
+77 selected --> BQ = [71]
+executime: {'m1-1': 93.8, 'm2-1': 9.93, 'm3-1': 1.0}	estimeated_time{'m1': 94.86, 'm2': 9.17, 'm3': 0.94}
+task:77  assigned to:m3  ec:1   delta:349.28200000000004
 
 *****Task:78 		 ARRIVING  @time:255.463
-BQ = [72, 73, 74, 75, 76, 77, 78]
+BQ = [71, 78]
 
 MACHINES ==>>>
-	Machine m1 :	[60, [67, 68, 69]]
-	Machine m2 :	[63, [64, 66, 71]]
-	Machine m3 :	[58, [59, 65, 70]]
+	Machine m1 :	[54, [73, 75, 76]]
+	Machine m2 :	[59, [70, 72, 56]]
+	Machine m3 :	[67, [55, 74, 77]]
 
 *****Task:79 		 ARRIVING  @time:256.43
-BQ = [72, 73, 74, 75, 76, 77, 78, 79]
+BQ = [71, 78, 79]
 
 MACHINES ==>>>
-	Machine m1 :	[60, [67, 68, 69]]
-	Machine m2 :	[63, [64, 66, 71]]
-	Machine m3 :	[58, [59, 65, 70]]
-
-*****Task:58 		 COMPLETION  @time:258.248
-[ Task(58), Machine(m3) ]: COMPLETED      @time(258.248)
-[ Task(59), Machine(m3) ]: RUNNING        @time(258.248) exec:9.760 
-BQ = [72, 73, 74, 75, 76, 77, 78, 79]
-
-MACHINES ==>>>
-	Machine m1 :	[60, [67, 68, 69]]
-	Machine m2 :	[63, [64, 66, 71]]
-	Machine m3 :	[59, [65, 70]]
-72 selected --> BQ = [73, 74, 75, 76, 77, 78, 79]
-executime: {'m1-1': 104.5, 'm2-1': 9.53, 'm3-1': 0.92}	estimeated_time{'m1': 93.03, 'm2': 9.9, 'm3': 1.0}
-task:72  assigned to:m3  ec:0   delta:338.951
+	Machine m1 :	[54, [73, 75, 76]]
+	Machine m2 :	[59, [70, 72, 56]]
+	Machine m3 :	[67, [55, 74, 77]]
 
 *****Task:80 		 ARRIVING  @time:258.352
-BQ = [73, 74, 75, 76, 77, 78, 79, 80]
+BQ = [71, 78, 79, 80]
 
 MACHINES ==>>>
-	Machine m1 :	[60, [67, 68, 69]]
-	Machine m2 :	[63, [64, 66, 71]]
-	Machine m3 :	[59, [65, 70, 72]]
+	Machine m1 :	[54, [73, 75, 76]]
+	Machine m2 :	[59, [70, 72, 56]]
+	Machine m3 :	[67, [55, 74, 77]]
 
-*****Task:63 		 COMPLETION  @time:258.69000000000005
-[ Task(63), Machine(m2) ]: COMPLETED      @time(258.690)
-[ Task(64), Machine(m2) ]: RUNNING        @time(258.690) exec:0.980 
-BQ = [73, 74, 75, 76, 77, 78, 79, 80]
-
-MACHINES ==>>>
-	Machine m1 :	[60, [67, 68, 69]]
-	Machine m2 :	[64, [66, 71]]
-	Machine m3 :	[59, [65, 70, 72]]
-73 selected --> BQ = [74, 75, 76, 77, 78, 79, 80]
-executime: {'m1-1': 108.31, 'm2-1': 101.68, 'm3-1': 10.66}	estimeated_time{'m1': 102.16, 'm2': 105.43, 'm3': 9.58}
-task:73  assigned to:m2  ec:0   delta:341.324
-
-*****Task:64 		 COMPLETION  @time:259.6700000000001
-[ Task(64), Machine(m2) ]: COMPLETED      @time(259.670)
-[ Task(66), Machine(m2) ]: RUNNING        @time(259.670) exec:102.900 
-BQ = [74, 75, 76, 77, 78, 79, 80]
+*****Task:54 		 DROPPED_RUNNING_TASK  @time:259.565
+[ Task(73), Machine(m1) ]: RUNNING        @time(259.565) exec:108.310 
+[ Task(73), Machine(m1) ]: MISSED         @time(341.324)
+BQ = [71, 78, 79, 80]
 
 MACHINES ==>>>
-	Machine m1 :	[60, [67, 68, 69]]
-	Machine m2 :	[66, [71, 73]]
-	Machine m3 :	[59, [65, 70, 72]]
-74 selected --> BQ = [75, 76, 77, 78, 79, 80]
-executime: {'m1-1': 96.74, 'm2-1': 10.82, 'm3-1': 1.04}	estimeated_time{'m1': 92.65, 'm2': 9.91, 'm3': 1.04}
-task:74  assigned to:m2  ec:0   delta:342.432
+	Machine m1 :	[73, [75, 76]]
+	Machine m2 :	[59, [70, 72, 56]]
+	Machine m3 :	[67, [55, 74, 77]]
+78 selected --> BQ = [71, 79, 80]
+executime: {'m1-1': 101.66, 'm2-1': 94.84, 'm3-1': 10.25}	estimeated_time{'m1': 96.82, 'm2': 99.14, 'm3': 9.57}
+task:78  assigned to:m1  ec:1   delta:355.46299999999997
 
 *****Task:81 		 ARRIVING  @time:260.112
-BQ = [75, 76, 77, 78, 79, 80, 81]
+BQ = [71, 79, 80, 81]
 
 MACHINES ==>>>
-	Machine m1 :	[60, [67, 68, 69]]
-	Machine m2 :	[66, [71, 73, 74]]
-	Machine m3 :	[59, [65, 70, 72]]
+	Machine m1 :	[73, [75, 76, 78]]
+	Machine m2 :	[59, [70, 72, 56]]
+	Machine m3 :	[67, [55, 74, 77]]
 
 *****Task:82 		 ARRIVING  @time:260.962
-BQ = [75, 76, 77, 78, 79, 80, 81, 82]
+BQ = [71, 79, 80, 81, 82]
 
 MACHINES ==>>>
-	Machine m1 :	[60, [67, 68, 69]]
-	Machine m2 :	[66, [71, 73, 74]]
-	Machine m3 :	[59, [65, 70, 72]]
+	Machine m1 :	[73, [75, 76, 78]]
+	Machine m2 :	[59, [70, 72, 56]]
+	Machine m3 :	[67, [55, 74, 77]]
+
+*****Task:67 		 COMPLETION  @time:261.76800000000003
+[ Task(67), Machine(m3) ]: COMPLETED      @time(261.768)
+[ Task(55), Machine(m3) ]: RUNNING        @time(261.768) exec:9.790 
+BQ = [71, 79, 80, 81, 82]
+
+MACHINES ==>>>
+	Machine m1 :	[73, [75, 76, 78]]
+	Machine m2 :	[59, [70, 72, 56]]
+	Machine m3 :	[55, [74, 77]]
+79 selected --> BQ = [71, 80, 81, 82]
+executime: {'m1-1': 100.76, 'm2-1': 9.79, 'm3-1': 1.03}	estimeated_time{'m1': 100.81, 'm2': 10.54, 'm3': 0.95}
+task:79  assigned to:m3  ec:1   delta:356.43
 
 *****Task:83 		 ARRIVING  @time:263.658
-BQ = [75, 76, 77, 78, 79, 80, 81, 82, 83]
+BQ = [71, 80, 81, 82, 83]
 
 MACHINES ==>>>
-	Machine m1 :	[60, [67, 68, 69]]
-	Machine m2 :	[66, [71, 73, 74]]
-	Machine m3 :	[59, [65, 70, 72]]
+	Machine m1 :	[73, [75, 76, 78]]
+	Machine m2 :	[59, [70, 72, 56]]
+	Machine m3 :	[55, [74, 77, 79]]
+
+*****Task:55 		 DROPPED_RUNNING_TASK  @time:265.216
+[ Task(74), Machine(m3) ]: RUNNING        @time(265.216) exec:1.040 
+[ Task(74), Machine(m3) ]: MISSED         @time(inf)
+BQ = [71, 80, 81, 82, 83]
+
+MACHINES ==>>>
+	Machine m1 :	[73, [75, 76, 78]]
+	Machine m2 :	[59, [70, 72, 56]]
+	Machine m3 :	[74, [77, 79]]
+81 selected --> BQ = [71, 80, 82, 83]
+executime: {'m1-1': 96.88, 'm2-1': 10.65, 'm3-1': 0.97}	estimeated_time{'m1': 93.43, 'm2': 9.62, 'm3': 1.01}
+task:81  assigned to:m3  ec:2   delta:360.112
 
 *****Task:84 		 ARRIVING  @time:265.725
-BQ = [75, 76, 77, 78, 79, 80, 81, 82, 83, 84]
+BQ = [71, 80, 82, 83, 84]
 
 MACHINES ==>>>
-	Machine m1 :	[60, [67, 68, 69]]
-	Machine m2 :	[66, [71, 73, 74]]
-	Machine m3 :	[59, [65, 70, 72]]
+	Machine m1 :	[73, [75, 76, 78]]
+	Machine m2 :	[59, [70, 72, 56]]
+	Machine m3 :	[74, [77, 79, 81]]
 
-*****Task:59 		 COMPLETION  @time:268.008
-[ Task(59), Machine(m3) ]: COMPLETED      @time(268.008)
-[ Task(65), Machine(m3) ]: RUNNING        @time(268.008) exec:9.640 
-BQ = [75, 76, 77, 78, 79, 80, 81, 82, 83, 84]
+*****Task:74 		 COMPLETION  @time:266.25600000000003
+[ Task(74), Machine(m3) ]: COMPLETED      @time(266.256)
+[ Task(77), Machine(m3) ]: RUNNING        @time(266.256) exec:1.000 
+BQ = [71, 80, 82, 83, 84]
 
 MACHINES ==>>>
-	Machine m1 :	[60, [67, 68, 69]]
-	Machine m2 :	[66, [71, 73, 74]]
-	Machine m3 :	[65, [70, 72]]
-75 selected --> BQ = [76, 77, 78, 79, 80, 81, 82, 83, 84]
-executime: {'m1-1': 98.8, 'm2-1': 103.21, 'm3-1': 9.81}	estimeated_time{'m1': 107.48, 'm2': 105.26, 'm3': 9.6}
-task:75  assigned to:m3  ec:0   delta:343.10400000000004
+	Machine m1 :	[73, [75, 76, 78]]
+	Machine m2 :	[59, [70, 72, 56]]
+	Machine m3 :	[77, [79, 81]]
+84 selected --> BQ = [71, 80, 82, 83]
+executime: {'m1-1': 98.64, 'm2-1': 10.18, 'm3-1': 0.97}	estimeated_time{'m1': 96.6, 'm2': 10.47, 'm3': 1.09}
+task:84  assigned to:m3  ec:4   delta:365.725
+
+*****Task:77 		 COMPLETION  @time:267.25600000000003
+[ Task(77), Machine(m3) ]: COMPLETED      @time(267.256)
+[ Task(79), Machine(m3) ]: RUNNING        @time(267.256) exec:1.030 
+BQ = [71, 80, 82, 83]
+
+MACHINES ==>>>
+	Machine m1 :	[73, [75, 76, 78]]
+	Machine m2 :	[59, [70, 72, 56]]
+	Machine m3 :	[79, [81, 84]]
+83 selected --> BQ = [71, 80, 82]
+executime: {'m1-1': 98.02, 'm2-1': 107.47, 'm3-1': 9.21}	estimeated_time{'m1': 94.95, 'm2': 99.76, 'm3': 9.46}
+task:83  assigned to:m3  ec:3   delta:363.658
+
+*****Task:79 		 COMPLETION  @time:268.286
+[ Task(79), Machine(m3) ]: COMPLETED      @time(268.286)
+[ Task(81), Machine(m3) ]: RUNNING        @time(268.286) exec:0.970 
+BQ = [71, 80, 82]
+
+MACHINES ==>>>
+	Machine m1 :	[73, [75, 76, 78]]
+	Machine m2 :	[59, [70, 72, 56]]
+	Machine m3 :	[81, [84, 83]]
+82 selected --> BQ = [71, 80]
+executime: {'m1-1': 103.05, 'm2-1': 101.21, 'm3-1': 10.6}	estimeated_time{'m1': 96.39, 'm2': 106.23, 'm3': 9.92}
+task:82  assigned to:m3  ec:2   delta:360.962
+
+*****Task:81 		 COMPLETION  @time:269.25600000000003
+[ Task(81), Machine(m3) ]: COMPLETED      @time(269.256)
+[ Task(84), Machine(m3) ]: RUNNING        @time(269.256) exec:0.970 
+BQ = [71, 80]
+
+MACHINES ==>>>
+	Machine m1 :	[73, [75, 76, 78]]
+	Machine m2 :	[59, [70, 72, 56]]
+	Machine m3 :	[84, [83, 82]]
+71 selected --> BQ = [80]
+executime: {'m1-1': 101.81, 'm2-1': 108.18, 'm3-1': 9.62}	estimeated_time{'m1': 107.82, 'm2': 104.31, 'm3': 9.99}
+task:71  assigned to:m3  ec:0   delta:333.086
+
+*****Task:84 		 COMPLETION  @time:270.22600000000006
+[ Task(84), Machine(m3) ]: COMPLETED      @time(270.226)
+[ Task(83), Machine(m3) ]: RUNNING        @time(270.226) exec:9.210 
+BQ = [80]
+
+MACHINES ==>>>
+	Machine m1 :	[73, [75, 76, 78]]
+	Machine m2 :	[59, [70, 72, 56]]
+	Machine m3 :	[83, [82, 71]]
+80 selected --> BQ = []
+executime: {'m1-1': 106.58, 'm2-1': 106.88, 'm3-1': 9.67}	estimeated_time{'m1': 98.5, 'm2': 96.48, 'm3': 10.0}
+task:80  assigned to:m3  ec:0   delta:358.352
 
 *****Task:85 		 ARRIVING  @time:276.855
-BQ = [76, 77, 78, 79, 80, 81, 82, 83, 84, 85]
+BQ = [85]
 
 MACHINES ==>>>
-	Machine m1 :	[60, [67, 68, 69]]
-	Machine m2 :	[66, [71, 73, 74]]
-	Machine m3 :	[65, [70, 72, 75]]
+	Machine m1 :	[73, [75, 76, 78]]
+	Machine m2 :	[59, [70, 72, 56]]
+	Machine m3 :	[83, [82, 71, 80]]
 
-*****Task:65 		 COMPLETION  @time:277.64799999999997
-[ Task(65), Machine(m3) ]: COMPLETED      @time(277.648)
-[ Task(70), Machine(m3) ]: RUNNING        @time(277.648) exec:9.410 
-BQ = [76, 77, 78, 79, 80, 81, 82, 83, 84, 85]
-
-MACHINES ==>>>
-	Machine m1 :	[60, [67, 68, 69]]
-	Machine m2 :	[66, [71, 73, 74]]
-	Machine m3 :	[70, [72, 75]]
-76 selected --> BQ = [77, 78, 79, 80, 81, 82, 83, 84, 85]
-executime: {'m1-1': 92.28, 'm2-1': 10.29, 'm3-1': 1.0}	estimeated_time{'m1': 94.75, 'm2': 9.24, 'm3': 0.94}
-task:76  assigned to:m3  ec:0   delta:344.25
-
-*****Task:60 		 DROPPED_RUNNING_TASK  @time:281.33299999999997
-[ Task(67), Machine(m1) ]: RUNNING        @time(281.333) exec:106.690 
-[ Task(67), Machine(m1) ]: MISSED         @time(304.194)
-BQ = [77, 78, 79, 80, 81, 82, 83, 84, 85]
+*****Task:83 		 COMPLETION  @time:279.43600000000004
+[ Task(83), Machine(m3) ]: COMPLETED      @time(279.436)
+[ Task(82), Machine(m3) ]: RUNNING        @time(279.436) exec:10.600 
+BQ = [85]
 
 MACHINES ==>>>
-	Machine m1 :	[67, [68, 69]]
-	Machine m2 :	[66, [71, 73, 74]]
-	Machine m3 :	[70, [72, 75, 76]]
-77 selected --> BQ = [78, 79, 80, 81, 82, 83, 84, 85]
-executime: {'m1-1': 93.8, 'm2-1': 9.93, 'm3-1': 1.0}	estimeated_time{'m1': 94.86, 'm2': 9.17, 'm3': 0.94}
-task:77  assigned to:m1  ec:0   delta:349.28200000000004
-
-*****Task:86 		 ARRIVING  @time:282.886
-BQ = [78, 79, 80, 81, 82, 83, 84, 85, 86]
-
-MACHINES ==>>>
-	Machine m1 :	[67, [68, 69, 77]]
-	Machine m2 :	[66, [71, 73, 74]]
-	Machine m3 :	[70, [72, 75, 76]]
-
-*****Task:87 		 ARRIVING  @time:283.449
-BQ = [78, 79, 80, 81, 82, 83, 84, 85, 86, 87]
-
-MACHINES ==>>>
-	Machine m1 :	[67, [68, 69, 77]]
-	Machine m2 :	[66, [71, 73, 74]]
-	Machine m3 :	[70, [72, 75, 76]]
-
-*****Task:88 		 ARRIVING  @time:284.482
-BQ = [78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88]
-
-MACHINES ==>>>
-	Machine m1 :	[67, [68, 69, 77]]
-	Machine m2 :	[66, [71, 73, 74]]
-	Machine m3 :	[70, [72, 75, 76]]
-
-*****Task:70 		 COMPLETION  @time:287.058
-[ Task(70), Machine(m3) ]: COMPLETED      @time(287.058)
-[ Task(72), Machine(m3) ]: RUNNING        @time(287.058) exec:0.920 
-BQ = [78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88]
-
-MACHINES ==>>>
-	Machine m1 :	[67, [68, 69, 77]]
-	Machine m2 :	[66, [71, 73, 74]]
-	Machine m3 :	[72, [75, 76]]
-78 selected --> BQ = [79, 80, 81, 82, 83, 84, 85, 86, 87, 88]
-executime: {'m1-1': 101.66, 'm2-1': 94.84, 'm3-1': 10.25}	estimeated_time{'m1': 96.82, 'm2': 99.14, 'm3': 9.57}
-task:78  assigned to:m3  ec:0   delta:355.46299999999997
-
-*****Task:72 		 COMPLETION  @time:287.978
-[ Task(72), Machine(m3) ]: COMPLETED      @time(287.978)
-[ Task(75), Machine(m3) ]: RUNNING        @time(287.978) exec:9.810 
-BQ = [79, 80, 81, 82, 83, 84, 85, 86, 87, 88]
-
-MACHINES ==>>>
-	Machine m1 :	[67, [68, 69, 77]]
-	Machine m2 :	[66, [71, 73, 74]]
-	Machine m3 :	[75, [76, 78]]
-79 selected --> BQ = [80, 81, 82, 83, 84, 85, 86, 87, 88]
-executime: {'m1-1': 100.76, 'm2-1': 9.79, 'm3-1': 1.03}	estimeated_time{'m1': 100.81, 'm2': 10.54, 'm3': 0.95}
-task:79  assigned to:m3  ec:0   delta:356.43
-
-*****Task:66 		 DROPPED_RUNNING_TASK  @time:291.577
-[ Task(71), Machine(m2) ]: RUNNING        @time(291.577) exec:108.180 
-[ Task(71), Machine(m2) ]: MISSED         @time(333.086)
-BQ = [80, 81, 82, 83, 84, 85, 86, 87, 88]
-
-MACHINES ==>>>
-	Machine m1 :	[67, [68, 69, 77]]
-	Machine m2 :	[71, [73, 74]]
-	Machine m3 :	[75, [76, 78, 79]]
-80 selected --> BQ = [81, 82, 83, 84, 85, 86, 87, 88]
-executime: {'m1-1': 106.58, 'm2-1': 106.88, 'm3-1': 9.67}	estimeated_time{'m1': 98.5, 'm2': 96.48, 'm3': 10.0}
-task:80  assigned to:m2  ec:0   delta:358.352
-
-*****Task:89 		 ARRIVING  @time:291.713
-BQ = [81, 82, 83, 84, 85, 86, 87, 88, 89]
-
-MACHINES ==>>>
-	Machine m1 :	[67, [68, 69, 77]]
-	Machine m2 :	[71, [73, 74, 80]]
-	Machine m3 :	[75, [76, 78, 79]]
-
-*****Task:90 		 ARRIVING  @time:293.877
-BQ = [81, 82, 83, 84, 85, 86, 87, 88, 89, 90]
-
-MACHINES ==>>>
-	Machine m1 :	[67, [68, 69, 77]]
-	Machine m2 :	[71, [73, 74, 80]]
-	Machine m3 :	[75, [76, 78, 79]]
-
-*****Task:75 		 COMPLETION  @time:297.788
-[ Task(75), Machine(m3) ]: COMPLETED      @time(297.788)
-[ Task(76), Machine(m3) ]: RUNNING        @time(297.788) exec:1.000 
-BQ = [81, 82, 83, 84, 85, 86, 87, 88, 89, 90]
-
-MACHINES ==>>>
-	Machine m1 :	[67, [68, 69, 77]]
-	Machine m2 :	[71, [73, 74, 80]]
-	Machine m3 :	[76, [78, 79]]
-81 selected --> BQ = [82, 83, 84, 85, 86, 87, 88, 89, 90]
-executime: {'m1-1': 96.88, 'm2-1': 10.65, 'm3-1': 0.97}	estimeated_time{'m1': 93.43, 'm2': 9.62, 'm3': 1.01}
-task:81  assigned to:m3  ec:0   delta:360.112
-
-*****Task:76 		 COMPLETION  @time:298.788
-[ Task(76), Machine(m3) ]: COMPLETED      @time(298.788)
-[ Task(78), Machine(m3) ]: RUNNING        @time(298.788) exec:10.250 
-BQ = [82, 83, 84, 85, 86, 87, 88, 89, 90]
-
-MACHINES ==>>>
-	Machine m1 :	[67, [68, 69, 77]]
-	Machine m2 :	[71, [73, 74, 80]]
-	Machine m3 :	[78, [79, 81]]
-82 selected --> BQ = [83, 84, 85, 86, 87, 88, 89, 90]
-executime: {'m1-1': 103.05, 'm2-1': 101.21, 'm3-1': 10.6}	estimeated_time{'m1': 96.39, 'm2': 106.23, 'm3': 9.92}
-task:82  assigned to:m3  ec:0   delta:360.962
-
-*****Task:91 		 ARRIVING  @time:301.537
-BQ = [83, 84, 85, 86, 87, 88, 89, 90, 91]
-
-MACHINES ==>>>
-	Machine m1 :	[67, [68, 69, 77]]
-	Machine m2 :	[71, [73, 74, 80]]
-	Machine m3 :	[78, [79, 81, 82]]
-
-*****Task:67 		 DROPPED_RUNNING_TASK  @time:304.19399999999996
-[ Task(68), Machine(m1) ]: RUNNING        @time(304.194) exec:108.560 
-[ Task(68), Machine(m1) ]: MISSED         @time(305.844)
-BQ = [83, 84, 85, 86, 87, 88, 89, 90, 91]
-
-MACHINES ==>>>
-	Machine m1 :	[68, [69, 77]]
-	Machine m2 :	[71, [73, 74, 80]]
-	Machine m3 :	[78, [79, 81, 82]]
-83 selected --> BQ = [84, 85, 86, 87, 88, 89, 90, 91]
-executime: {'m1-1': 98.02, 'm2-1': 107.47, 'm3-1': 9.21}	estimeated_time{'m1': 94.95, 'm2': 99.76, 'm3': 9.46}
-task:83  assigned to:m1  ec:0   delta:363.658
-
-*****Task:68 		 DROPPED_RUNNING_TASK  @time:305.844
-[ Task(69), Machine(m1) ]: RUNNING        @time(305.844) exec:91.540 
-[ Task(69), Machine(m1) ]: MISSED         @time(313.475)
-BQ = [84, 85, 86, 87, 88, 89, 90, 91]
-
-MACHINES ==>>>
-	Machine m1 :	[69, [77, 83]]
-	Machine m2 :	[71, [73, 74, 80]]
-	Machine m3 :	[78, [79, 81, 82]]
-84 selected --> BQ = [85, 86, 87, 88, 89, 90, 91]
-executime: {'m1-1': 98.64, 'm2-1': 10.18, 'm3-1': 0.97}	estimeated_time{'m1': 96.6, 'm2': 10.47, 'm3': 1.09}
-task:84  assigned to:m1  ec:0   delta:365.725
-
-*****Task:92 		 ARRIVING  @time:307.251
-BQ = [85, 86, 87, 88, 89, 90, 91, 92]
-
-MACHINES ==>>>
-	Machine m1 :	[69, [77, 83, 84]]
-	Machine m2 :	[71, [73, 74, 80]]
-	Machine m3 :	[78, [79, 81, 82]]
-
-*****Task:78 		 COMPLETION  @time:309.038
-[ Task(78), Machine(m3) ]: COMPLETED      @time(309.038)
-[ Task(79), Machine(m3) ]: RUNNING        @time(309.038) exec:1.030 
-BQ = [85, 86, 87, 88, 89, 90, 91, 92]
-
-MACHINES ==>>>
-	Machine m1 :	[69, [77, 83, 84]]
-	Machine m2 :	[71, [73, 74, 80]]
-	Machine m3 :	[79, [81, 82]]
-85 selected --> BQ = [86, 87, 88, 89, 90, 91, 92]
+	Machine m1 :	[73, [75, 76, 78]]
+	Machine m2 :	[59, [70, 72, 56]]
+	Machine m3 :	[82, [71, 80]]
+85 selected --> BQ = []
 executime: {'m1-1': 102.55, 'm2-1': 99.5, 'm3-1': 9.77}	estimeated_time{'m1': 99.47, 'm2': 108.16, 'm3': 9.14}
 task:85  assigned to:m3  ec:0   delta:376.855
 
-*****Task:93 		 ARRIVING  @time:309.485
-BQ = [86, 87, 88, 89, 90, 91, 92, 93]
+*****Task:59 		 DROPPED_RUNNING_TASK  @time:279.874
+[ Task(70), Machine(m2) ]: RUNNING        @time(279.874) exec:103.570 
+[ Task(70), Machine(m2) ]: MISSED         @time(328.230)
+BQ = []
 
 MACHINES ==>>>
-	Machine m1 :	[69, [77, 83, 84]]
-	Machine m2 :	[71, [73, 74, 80]]
-	Machine m3 :	[79, [81, 82, 85]]
+	Machine m1 :	[73, [75, 76, 78]]
+	Machine m2 :	[70, [72, 56]]
+	Machine m3 :	[82, [71, 80, 85]]
 
-*****Task:79 		 COMPLETION  @time:310.068
-[ Task(79), Machine(m3) ]: COMPLETED      @time(310.068)
-[ Task(81), Machine(m3) ]: RUNNING        @time(310.068) exec:0.970 
-BQ = [86, 87, 88, 89, 90, 91, 92, 93]
+*****Task:86 		 ARRIVING  @time:282.886
+BQ = [86]
 
 MACHINES ==>>>
-	Machine m1 :	[69, [77, 83, 84]]
-	Machine m2 :	[71, [73, 74, 80]]
-	Machine m3 :	[81, [82, 85]]
-86 selected --> BQ = [87, 88, 89, 90, 91, 92, 93]
+	Machine m1 :	[73, [75, 76, 78]]
+	Machine m2 :	[70, [72, 56]]
+	Machine m3 :	[82, [71, 80, 85]]
+86 selected --> BQ = []
 executime: {'m1-1': 106.65, 'm2-1': 99.94, 'm3-1': 10.4}	estimeated_time{'m1': 104.83, 'm2': 93.26, 'm3': 9.21}
-task:86  assigned to:m3  ec:0   delta:382.886
+task:86  assigned to:m2  ec:0   delta:382.886
 
-*****Task:81 		 COMPLETION  @time:311.038
-[ Task(81), Machine(m3) ]: COMPLETED      @time(311.038)
-[ Task(82), Machine(m3) ]: RUNNING        @time(311.038) exec:10.600 
-BQ = [87, 88, 89, 90, 91, 92, 93]
+*****Task:87 		 ARRIVING  @time:283.449
+BQ = [87]
 
 MACHINES ==>>>
-	Machine m1 :	[69, [77, 83, 84]]
-	Machine m2 :	[71, [73, 74, 80]]
-	Machine m3 :	[82, [85, 86]]
-87 selected --> BQ = [88, 89, 90, 91, 92, 93]
+	Machine m1 :	[73, [75, 76, 78]]
+	Machine m2 :	[70, [72, 56, 86]]
+	Machine m3 :	[82, [71, 80, 85]]
+
+*****Task:88 		 ARRIVING  @time:284.482
+BQ = [87, 88]
+
+MACHINES ==>>>
+	Machine m1 :	[73, [75, 76, 78]]
+	Machine m2 :	[70, [72, 56, 86]]
+	Machine m3 :	[82, [71, 80, 85]]
+
+*****Task:82 		 COMPLETION  @time:290.03600000000006
+[ Task(82), Machine(m3) ]: COMPLETED      @time(290.036)
+[ Task(71), Machine(m3) ]: RUNNING        @time(290.036) exec:9.620 
+BQ = [87, 88]
+
+MACHINES ==>>>
+	Machine m1 :	[73, [75, 76, 78]]
+	Machine m2 :	[70, [72, 56, 86]]
+	Machine m3 :	[71, [80, 85]]
+87 selected --> BQ = [88]
 executime: {'m1-1': 103.78, 'm2-1': 9.54, 'm3-1': 0.97}	estimeated_time{'m1': 93.03, 'm2': 10.55, 'm3': 1.04}
 task:87  assigned to:m3  ec:0   delta:383.449
 
-*****Task:69 		 DROPPED_RUNNING_TASK  @time:313.475
-[ Task(77), Machine(m1) ]: RUNNING        @time(313.475) exec:93.800 
-[ Task(77), Machine(m1) ]: MISSED         @time(349.282)
-BQ = [88, 89, 90, 91, 92, 93]
+*****Task:89 		 ARRIVING  @time:291.713
+BQ = [88, 89]
 
 MACHINES ==>>>
-	Machine m1 :	[77, [83, 84]]
-	Machine m2 :	[71, [73, 74, 80]]
-	Machine m3 :	[82, [85, 86, 87]]
-88 selected --> BQ = [89, 90, 91, 92, 93]
-executime: {'m1-1': 104.24, 'm2-1': 107.52, 'm3-1': 9.57}	estimeated_time{'m1': 104.69, 'm2': 92.72, 'm3': 9.96}
-task:88  assigned to:m1  ec:0   delta:384.482
+	Machine m1 :	[73, [75, 76, 78]]
+	Machine m2 :	[70, [72, 56, 86]]
+	Machine m3 :	[71, [80, 85, 87]]
+
+*****Task:90 		 ARRIVING  @time:293.877
+BQ = [88, 89, 90]
+
+MACHINES ==>>>
+	Machine m1 :	[73, [75, 76, 78]]
+	Machine m2 :	[70, [72, 56, 86]]
+	Machine m3 :	[71, [80, 85, 87]]
+
+*****Task:71 		 COMPLETION  @time:299.65600000000006
+[ Task(71), Machine(m3) ]: COMPLETED      @time(299.656)
+[ Task(80), Machine(m3) ]: RUNNING        @time(299.656) exec:9.670 
+BQ = [88, 89, 90]
+
+MACHINES ==>>>
+	Machine m1 :	[73, [75, 76, 78]]
+	Machine m2 :	[70, [72, 56, 86]]
+	Machine m3 :	[80, [85, 87]]
+89 selected --> BQ = [88, 90]
+executime: {'m1-1': 95.54, 'm2-1': 10.52, 'm3-1': 0.93}	estimeated_time{'m1': 101.82, 'm2': 9.58, 'm3': 0.98}
+task:89  assigned to:m3  ec:1   delta:391.713
+
+*****Task:91 		 ARRIVING  @time:301.537
+BQ = [88, 90, 91]
+
+MACHINES ==>>>
+	Machine m1 :	[73, [75, 76, 78]]
+	Machine m2 :	[70, [72, 56, 86]]
+	Machine m3 :	[80, [85, 87, 89]]
+
+*****Task:92 		 ARRIVING  @time:307.251
+BQ = [88, 90, 91, 92]
+
+MACHINES ==>>>
+	Machine m1 :	[73, [75, 76, 78]]
+	Machine m2 :	[70, [72, 56, 86]]
+	Machine m3 :	[80, [85, 87, 89]]
+
+*****Task:80 		 COMPLETION  @time:309.3260000000001
+[ Task(80), Machine(m3) ]: COMPLETED      @time(309.326)
+[ Task(85), Machine(m3) ]: RUNNING        @time(309.326) exec:9.770 
+BQ = [88, 90, 91, 92]
+
+MACHINES ==>>>
+	Machine m1 :	[73, [75, 76, 78]]
+	Machine m2 :	[70, [72, 56, 86]]
+	Machine m3 :	[85, [87, 89]]
+90 selected --> BQ = [88, 91, 92]
+executime: {'m1-1': 100.42, 'm2-1': 92.0, 'm3-1': 10.68}	estimeated_time{'m1': 92.15, 'm2': 102.04, 'm3': 9.67}
+task:90  assigned to:m3  ec:1   delta:393.877
+
+*****Task:93 		 ARRIVING  @time:309.485
+BQ = [88, 91, 92, 93]
+
+MACHINES ==>>>
+	Machine m1 :	[73, [75, 76, 78]]
+	Machine m2 :	[70, [72, 56, 86]]
+	Machine m3 :	[85, [87, 89, 90]]
 
 *****Task:94 		 ARRIVING  @time:313.625
+BQ = [88, 91, 92, 93, 94]
+
+MACHINES ==>>>
+	Machine m1 :	[73, [75, 76, 78]]
+	Machine m2 :	[70, [72, 56, 86]]
+	Machine m3 :	[85, [87, 89, 90]]
+
+*****Task:85 		 COMPLETION  @time:319.09600000000006
+[ Task(85), Machine(m3) ]: COMPLETED      @time(319.096)
+[ Task(87), Machine(m3) ]: RUNNING        @time(319.096) exec:0.970 
+BQ = [88, 91, 92, 93, 94]
+
+MACHINES ==>>>
+	Machine m1 :	[73, [75, 76, 78]]
+	Machine m2 :	[70, [72, 56, 86]]
+	Machine m3 :	[87, [89, 90]]
+93 selected --> BQ = [88, 91, 92, 94]
+executime: {'m1-1': 97.32, 'm2-1': 10.69, 'm3-1': 0.95}	estimeated_time{'m1': 102.54, 'm2': 10.34, 'm3': 1.06}
+task:93  assigned to:m3  ec:3   delta:409.485
+
+*****Task:87 		 COMPLETION  @time:320.0660000000001
+[ Task(87), Machine(m3) ]: COMPLETED      @time(320.066)
+[ Task(89), Machine(m3) ]: RUNNING        @time(320.066) exec:0.930 
+BQ = [88, 91, 92, 94]
+
+MACHINES ==>>>
+	Machine m1 :	[73, [75, 76, 78]]
+	Machine m2 :	[70, [72, 56, 86]]
+	Machine m3 :	[89, [90, 93]]
