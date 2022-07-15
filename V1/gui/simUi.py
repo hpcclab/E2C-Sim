@@ -288,6 +288,7 @@ class SimUi(QMainWindow):
         self.gv.connecting_lines()
         
         self.gv.batch_queue.draw_tasks(selected_task)
+        self.gv.machine_queues.outer_frame()
         self.gv.machine_queues.draw_queues()
         self.gv.machine_queues.fill_queues()
         self.gv.machine_queues.runnings()        

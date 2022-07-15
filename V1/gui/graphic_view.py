@@ -75,8 +75,7 @@ class GraphicView(QGraphicsView):
         self.mapper_ui = MapperUi(self.scene, self.x_mapper, self.y_mapper, self.mapper_size,
                                              self.x_trash, self.y_trash, self.trash_size)
         self.batch_queue.outer_frame()
-        self.batch_queue.inner_frame()
-        schedulers = ['MinCompletion-MinCompletion','FCFS']        
+        self.batch_queue.inner_frame()             
         self.mapper_ui.mapper()
         self.mapper_ui.trash()
         machines = config.machines
@@ -84,6 +83,7 @@ class GraphicView(QGraphicsView):
         x_outer =  self.x_mq, y_outer = self.y_mq , w_outer = self.mq_w_outer,h_outer = self.mq_h_outer, max_h_q=self.bq_h_inner)        
         self.machine_queues.outer_frame()
         self.machine_queues.draw_queues()
+        self.machine_queues.fill_queues()
         self.machine_queues.runnings()
         self.display_time(0.0)
         self.connecting_lines()

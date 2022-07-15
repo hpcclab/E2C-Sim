@@ -22,10 +22,10 @@ class BatchQueueUI(QGraphicsView):
         self.t_frames = []
         self.others = []   
         self.colors = [QColor(150,0,0), 
-                        QColor(0,150,0),
-                        QColor(0,0,150),
-                        QColor(10,100,120),
-                        QColor(80,20,70) ]
+                        QColor(93,168,154),
+                        QColor(191,82,89),
+                        QColor(82,126,191),
+                        QColor(86,208,128) ]
         
         
 
