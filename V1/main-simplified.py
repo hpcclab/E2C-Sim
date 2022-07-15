@@ -41,7 +41,7 @@ for machine_type in config.machine_types:
 simulation = Simulator(workload_name, sc, etc, workload_id) 
 simulation.create_event_queue()
 scheduler = config.get_scheduler()
-simulation.set_scheduling_method(scheduler)        
+simulation.set_scheduling_method()        
 simulation.run()           
 row = simulation.report()   
 report.writerows(row)        

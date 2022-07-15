@@ -53,8 +53,8 @@ class SimUi(QMainWindow):
         self._centralWidget = QWidget(self)
         self.setCentralWidget(self._centralWidget)
         self._centralWidget.setLayout(self.general_layout)
-        self.label = QLabel('simulator')
-        self.general_layout.addWidget(self.label)
+        #self.label = QLabel('simulator')
+        #self.general_layout.addWidget(self.label)
         self.gv = GraphicView(self.width, self.height)   
         
         #self.dock_left = ItemDockDetail()
@@ -75,15 +75,30 @@ class SimUi(QMainWindow):
     def dock_update(self,item):
          
         if item.data(0) == 'task_in_bq' or item.data(0) == 'task_in_mq' or item.data(0)=='task_in_machine' :      
-            brush = QBrush(Qt.yellow)
-            item.setBrush(brush) 
+            # brush = QBrush(Qt.yellow)
+            # item.setBrush(brush) 
             self.dock_right.task_in_bq(item.data(1)) 
+        elif item.data(0) == 'task_in_bq_others':
+            # brush = QBrush(Qt.yellow)
+            # item.setBrush(brush)
+            self.dock_right.task_others(self.gv.batch_queue.tasks[self.gv.batch_queue.size-1:])
+        elif item.data(0) == 'task_in_mq_others':
+            # brush = QBrush(Qt.yellow)
+            # item.setBrush(brush)
+            m_id = item.data(1)
+            self.dock_right.task_others(self.gv.machine_queues.m_queues[m_id][self.gv.machine_queues.max_qsize-1:])
         elif item.data(0) == 'machine':
-            brush = QBrush(Qt.yellow)
-            item.setBrush(brush) 
+            # brush = QBrush(Qt.yellow)
+            # item.setBrush(brush) 
             self.dock_right.machine_data(item.data(1))
         elif item.data(0) == 'trash':
             self.dock_right.trash_data(self.gv.mapper_ui.cancelled_tasks)
+        elif item.data(0) == 'mapper':
+            try:
+                scheduler = self.simulator.scheduler.name
+            except:
+                scheduler = 'N/A'
+            self.dock_right.mapper_data(scheduler)
         self.gv.scene.update()
                
     def create_ctrl_buttons(self):
@@ -254,6 +269,17 @@ class SimUi(QMainWindow):
             m_id = machine.id   
             #print(f'{location} @{time} Task {task.id} dropped from Machine {m_id}')                      
             self.gv.machine_queues.m_runnings[m_id].remove(task)
+
+        elif signal_type == 'cancelled_machine':
+            self.progress +=100*(1/self.simulator.total_no_of_tasks)
+            self.pbar.setValue(self.progress)
+            task = signal_data['task']
+            machine= signal_data['assigned_machine']   
+            m_id = machine.id   
+            self.gv.connect_machine_to_trash(QPen(Qt.red, 4), Qt.red)
+            #print(f'{location} @{time} Task {task.id} dropped from Machine {m_id}')                      
+            self.gv.machine_queues.m_queues[m_id].remove(task)
+            self.gv.mapper_ui.cancelled_tasks.append(task)
 
         self.gv.batch_queue.outer_frame()
         self.gv.batch_queue.inner_frame()

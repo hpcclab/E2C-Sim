@@ -287,16 +287,16 @@ class ItemDockDetail(QMainWindow):
             self.tableWidget.setItem(idx,2, QTableWidgetItem(f"{task.arrival_time:6.2f}"))
             self.tableWidget.setItem(idx,3, QTableWidgetItem(f"{task.drop_time:6.2f}"))
 
-            self.tableWidget.item(idx,0).setTextAlignment(Qt.AlignHCenter)
-            self.tableWidget.item(idx,1).setTextAlignment(Qt.AlignHCenter)
-            self.tableWidget.item(idx,2).setTextAlignment(Qt.AlignHCenter)
-            self.tableWidget.item(idx,3).setTextAlignment(Qt.AlignHCenter)
+            self.tableWidget.item(idx,0).setTextAlignment(Qt.AlignCenter)
+            self.tableWidget.item(idx,1).setTextAlignment(Qt.AlignCenter)
+            self.tableWidget.item(idx,2).setTextAlignment(Qt.AlignCenter)
+            self.tableWidget.item(idx,3).setTextAlignment(Qt.AlignCenter)
         
             if idx%2 == 0 :
-                self.tableWidget.item(idx,0).setBackground(Qt.white )
-                self.tableWidget.item(idx,1).setBackground(Qt.white )
-                self.tableWidget.item(idx,2).setBackground(Qt.white)
-                self.tableWidget.item(idx,3).setBackground(Qt.white)
+                self.tableWidget.item(idx,0).setBackground(QColor(250,250,250) )
+                self.tableWidget.item(idx,1).setBackground(QColor(250,250,250) )
+                self.tableWidget.item(idx,2).setBackground(QColor(250,250,250))
+                self.tableWidget.item(idx,3).setBackground(QColor(250,250,250))
             else:
                 self.tableWidget.item(idx,0).setBackground(QColor(205,205,205) )
                 self.tableWidget.item(idx,1).setBackground(QColor(205,205,205) )
@@ -312,3 +312,87 @@ class ItemDockDetail(QMainWindow):
         vlayout.addStretch(1)
         widget.setLayout(vlayout)
         self.dock.setWidget(widget)
+
+    
+    def task_others(self, other_tasks):        
+        widget = QWidget(self)
+        vlayout=QVBoxLayout()        
+        self.tableWidget = QTableWidget()        
+        self.tableWidget.setRowCount(len(other_tasks)) 
+        self.tableWidget.setColumnCount(4) 
+
+        for idx, task in enumerate(other_tasks):
+            self.tableWidget.setItem(idx,0, QTableWidgetItem(f"{task.id}"))
+            self.tableWidget.setItem(idx,1, QTableWidgetItem(f"{task.type.name}"))
+            self.tableWidget.setItem(idx,2, QTableWidgetItem(f"{task.arrival_time:6.2f}"))
+            self.tableWidget.setItem(idx,3, QTableWidgetItem(f"{task.deadline:6.2f}"))
+
+            self.tableWidget.item(idx,0).setTextAlignment(Qt.AlignCenter)
+            self.tableWidget.item(idx,1).setTextAlignment(Qt.AlignCenter)
+            self.tableWidget.item(idx,2).setTextAlignment(Qt.AlignCenter)
+            self.tableWidget.item(idx,3).setTextAlignment(Qt.AlignCenter)
+        
+            if idx%2 != 0 :
+                self.tableWidget.item(idx,0).setBackground(QColor(250,250,250) )
+                self.tableWidget.item(idx,1).setBackground(QColor(250,250,250) )
+                self.tableWidget.item(idx,2).setBackground(QColor(250,250,250))
+                self.tableWidget.item(idx,3).setBackground(QColor(250,250,250))
+            else:
+                self.tableWidget.item(idx,0).setBackground(QColor(205,205,205) )
+                self.tableWidget.item(idx,1).setBackground(QColor(205,205,205) )
+                self.tableWidget.item(idx,2).setBackground(QColor(205,205,205))
+                self.tableWidget.item(idx,3).setBackground(QColor(205,205,205))
+
+            
+        self.tableWidget.setHorizontalHeaderLabels(["Task ID", "Type", f"Arrival\nTime", f"Deadline"])
+        self.tableWidget.horizontalHeader().setStretchLastSection(True)
+        self.tableWidget.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        
+        vlayout.addWidget(self.tableWidget)
+        vlayout.addStretch(1)
+        widget.setLayout(vlayout)
+        self.dock.setWidget(widget)
+
+    
+    def mapper_data(self, scheduler):
+        self.tabs = QTabWidget()
+        self.tab_mapper = QWidget()
+
+        self.tabs.addTab(self.tab_mapper, "Scheduler")        
+        self.tab_mapper.layout = QVBoxLayout(self)
+        
+        
+        
+        self.mapper_grid = QGridLayout(self)
+        self.name_lbl = QLabel('Policy')
+        self.name_text = QLineEdit()
+        
+        if scheduler == 'MM':
+            name = 'MinCompletion-MinCompletion'
+        elif scheduler == 'MSD':
+            name = 'MinCompletion-SoonestDeadline'
+        elif scheduler == 'MMU':
+            name = 'MinCompletion-MaxUrgency'
+        elif scheduler == 'FCFS':
+            name = 'FirstCome-FirstServe'
+        elif scheduler == 'MECT':
+            name = 'Min-Expected-Completion-Time'
+        elif scheduler == 'MEET':
+            name = 'Min-Expected-Execution-Time'
+        elif scheduler == 'N/A':
+            name = 'N/A'
+    
+        self.name_text.setText(name)
+        self.name_text.setReadOnly(True)
+        self.name_text.setAlignment(Qt.AlignLeft)
+                        
+        self.mapper_grid.addWidget(self.name_lbl,0,0)
+        self.mapper_grid.addWidget(self.name_text,0,1)
+        
+        self.tab_mapper.layout.addLayout(self.mapper_grid)                
+        self.tab_mapper.layout.addStretch(1)
+        self.tab_mapper.setLayout(self.tab_mapper.layout)
+        self.dock.setWidget(self.tabs)
+        
+
+    

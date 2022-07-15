@@ -18,13 +18,22 @@ class EE(BaseScheduler):
         super().__init__()
         self.name = 'EE'
         self.total_no_of_tasks = total_no_of_tasks
-        self.gui_machine_log = []
+        self.sleep_time = 0.1
         
         
             
     def choose(self, index=0):
         task = self.batch_queue.get(index)     
         self.unmapped_task.append(task)
+        if config.gui==1:
+            self.decision.emit({'type':'choose',
+                                'time':config.time.gct(),
+                                'where':'simulator: choose',
+                                'data': {'task':task,
+                                        'bq_indx': index,
+                                        },                                
+                                        })
+            time.sleep(self.timer)
         if config.settings['verbosity']:
             s =f'\n{task.id} selected --> BQ = '
             bq = [t.id for t in self.batch_queue.list]
@@ -40,6 +49,14 @@ class EE(BaseScheduler):
         if config.time.gct() > task.deadline:
             self.drop(task)
             return 1
+        if config.gui==1:
+            self.decision.emit({'type':'defer',
+                            'time':config.time.gct(),
+                            'where':'simulator: defer',
+                            'data': {'task':task,                                    
+                                    },                            
+                                    })
+            time.sleep(self.sleep_time)
         self.unmapped_task.pop()
         task.status =  TaskStatus.DEFERRED
         task.no_of_deferring += 1
@@ -65,7 +82,15 @@ class EE(BaseScheduler):
         self.unmapped_task.pop()
         task.status = TaskStatus.CANCELLED
         task.drop_time = config.time.gct()
-        self.stats['dropped'].append(task)    
+        self.stats['dropped'].append(task) 
+        if config.gui==1:
+            self.decision.emit({'type':'cancelled',
+                                'time':config.time.gct(),
+                                'where':'simulator: drop',
+                                'data': {'task':task,                                    
+                                        },                               
+                                        })
+            time.sleep(self.sleep_time)  
         
         if config.settings['verbosity']:
             s = '\n[ Task({:}),  _________ ]: Cancelled      @time({:3.3f})'.format(
@@ -81,6 +106,15 @@ class EE(BaseScheduler):
         if assignment != 'notEmpty':
             task.assigned_machine = machine
             self.stats['mapped'].append(task)
+            if config.gui==1:
+                self.decision.emit({'type':'map',
+                                'time':config.time.gct(),
+                                'where':'scheduler: map',
+                                'data': {'task':task,
+                                         'assigned_machine':machine,                                    
+                                        },
+                                        })
+                time.sleep(self.sleep_time)
         else:
             self.defer(task)
     

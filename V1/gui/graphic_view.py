@@ -108,21 +108,7 @@ class GraphicView(QGraphicsView):
                     break
         self.scene.update()   
        
-    # def mousePressEvent(self, event):
-    #     if event.button() == Qt.MidButton: # or Qt.MiddleButton
-    #         self.__prevMousePos = event.pos()
-    #     else:
-    #         super(GraphicView, self).mousePressEvent(event)
-
-    # def mouseMoveEvent(self, event):
-    #     if event.buttons() == Qt.MidButton: # or Qt.MiddleButton
-    #         offset = self.__prevMousePos - event.pos()
-    #         self.__prevMousePos = event.pos()
-
-    #         self.verticalScrollBar().setValue(self.verticalScrollBar().value() + offset.y())
-    #         self.horizontalScrollBar().setValue(self.horizontalScrollBar().value() + offset.x())
-    #     else:
-    #         super(GraphicView, self).mouseMoveEvent(event)
+    
 
     def display_time(self, time):
         self.current_time = time
@@ -132,23 +118,6 @@ class GraphicView(QGraphicsView):
         self.time_lbl.setPos(-140,0)
         self.scene.addItem(self.time_lbl)
         self.update()
-
-
-    # def mapper(self):              
-    #     self.mapper_pix= QPixmap('./gui/icons/mapper.png') 
-    #     self.mapper_pix = self.mapper_pix.scaled(QSize(self.mapper_size,self.mapper_size), Qt.IgnoreAspectRatio)
-    #     self.mapper_item = QGraphicsPixmapItem(self.mapper_pix) 
-    #     self.mapper_item.setOffset(self.x_mapper, self.y_mapper)       
-    #     self.scene.addItem(self.mapper_item)
-    
-
-    # def trash(self):
-    #     self.trash_pix= QPixmap('./gui/icons/trash.png') 
-    #     self.trash_pix = self.trash_pix.scaled(QSize(self.trash_size,self.trash_size), Qt.IgnoreAspectRatio)
-    #     self.trash_item = QGraphicsPixmapItem(self.trash_pix) 
-    #     self.trash_item.setOffset(self.x_trash, self.y_trash) 
-    #     self.trash_item.setData(0,'trash')      
-    #     self.scene.addItem(self.trash_item)
 
 
     
@@ -175,7 +144,21 @@ class GraphicView(QGraphicsView):
         y1 = self.y_mapper + self.mapper_size   
         x2 = self.x_trash + 0.5 * self.trash_size
         y2 = self.y_trash
-        l3 = self.arrow(x1,y1,x2,y2, pen, color)
+        l3 = self.arrow1(x1,y1,x2,y2, pen, color)
+    
+    def connect_machine_to_trash(self, pen, color):
+        x1 = self.x_mq + 0.5*self.mq_w_outer
+        y1 = self.y_mq + self.mq_h_outer 
+
+        x2 = self.x_mq + 0.5*self.mq_w_outer
+        y2 = self.y_trash + 0.5*self.trash_size
+
+
+        x3 = self.x_trash + self.trash_size
+        y3 = self.y_trash + 0.5 * self.trash_size
+        
+        l2 = self.scene.addLine(x1,y1,x2,y2,pen)
+        l3 = self.arrow2(x2,y2,x3,y3, pen, color)
 
         
         
@@ -187,6 +170,32 @@ class GraphicView(QGraphicsView):
         poly = QPolygonF([QPointF(x2 - head_size[0], y2-0.5*head_size[1]),
                         QPointF(x2 , y2),
                         QPointF(x2 - head_size[0], y2+0.5*head_size[1])])
+        head = self.scene.addPolygon(poly)
+        head.setBrush(color)
+        pen.setWidthF(1)
+        head.setPen(pen)
+    
+    def arrow1(self, x1,y1,x2,y2, pen,color):
+        w = pen.width()
+        line = self.scene.addLine(x1,y1,x2,y2-w,pen)
+        
+        head_size = [6*w, 4*w]
+        poly = QPolygonF([QPointF(x2 + head_size[1], y2-0.5*head_size[0]),
+                        QPointF(x2 , y2),
+                        QPointF(x2 - head_size[1], y2-0.5*head_size[0])])
+        head = self.scene.addPolygon(poly)
+        head.setBrush(color)
+        pen.setWidthF(1)
+        head.setPen(pen)
+    
+    def arrow2(self, x1,y1,x2,y2, pen,color):
+        w = pen.width()
+        line = self.scene.addLine(x1,y1,x2+w,y2,pen)
+        
+        head_size = [6*w, 4*w]
+        poly = QPolygonF([QPointF(x2 + head_size[0], y2-0.5*head_size[1]),
+                        QPointF(x2 , y2),
+                        QPointF(x2 + head_size[0], y2+0.5*head_size[1])])
         head = self.scene.addPolygon(poly)
         head.setBrush(color)
         pen.setWidthF(1)

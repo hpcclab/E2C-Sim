@@ -1,9 +1,9 @@
 {
     "parameters": [
         {
-            "machine_queue_size": 1,
+            "machine_queue_size": 3,
             "batch_queue_size": 5,
-            "scheduling_method": "MM",
+            "scheduling_method": "MSD",
             "fairness_factor": 1.0
         }
     ],

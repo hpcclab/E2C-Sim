@@ -9,6 +9,7 @@ from utils.base_task import TaskStatus
 from utils.base_scheduler import BaseScheduler
 import utils.config as config
 from utils.event import Event, EventTypes
+import time
 
 
 class MEET(BaseScheduler):
@@ -18,12 +19,21 @@ class MEET(BaseScheduler):
         super().__init__()
         self.name = 'MEET'
         self.total_no_of_tasks = total_no_of_tasks
-        self.gui_machine_log = []
+        self.sleep_time = 0.1
         
 
     def choose(self, index=0):
         task = self.batch_queue.get(index)     
         self.unmapped_task.append(task)
+        if config.gui==1:
+            self.decision.emit({'type':'choose',
+                                'time':config.time.gct(),
+                                'where':'simulator: choose',
+                                'data': {'task':task,
+                                        'bq_indx': index,
+                                        },                                
+                                        })
+            time.sleep(self.sleep_time)
         if config.settings['verbosity']:
             s =f'\n{task.id} selected --> BQ = '
             bq = [t.id for t in self.batch_queue.list]
@@ -42,6 +52,15 @@ class MEET(BaseScheduler):
         machine.admit(task)        
         task.assigned_machine = machine
         self.stats['mapped'].append(task)
+        if config.gui==1:
+                self.decision.emit({'type':'map',
+                                'time':config.time.gct(),
+                                'where':'scheduler: map',
+                                'data': {'task':task,
+                                         'assigned_machine':machine,                                    
+                                        },
+                                        })
+                time.sleep(self.sleep_time)
         
     
 

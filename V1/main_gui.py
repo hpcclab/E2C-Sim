@@ -17,6 +17,7 @@ etc = 'etc-0'
 workload_id = 1
 
 config.init()
+
 id = 0
 for machine_type in config.machine_types:
     for r in range(1,machine_type.replicas+1):
@@ -25,7 +26,8 @@ for machine_type in config.machine_types:
         config.machines.append(machine)            
         id += 1
 
-
+path_to_result = f'./output/data/{workload_name}/{scenario}/{etc}/{config.scheduling_method}'        
+makedirs(path_to_result, exist_ok = True)
 app = QApplication(sys.argv)   
 view = gui.SimUi(workload_name, scenario, etc, workload_id)
 

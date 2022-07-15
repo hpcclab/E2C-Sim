@@ -21,6 +21,11 @@ class BatchQueueUI(QGraphicsView):
         self.tasks = []  
         self.t_frames = []
         self.others = []   
+        self.colors = [QColor(150,0,0), 
+                        QColor(0,150,0),
+                        QColor(0,0,150),
+                        QColor(10,100,120),
+                        QColor(80,20,70) ]
         
         
 
@@ -72,7 +77,8 @@ class BatchQueueUI(QGraphicsView):
                 p = QPainterPath()
                 p.addRoundedRect(x_task, y_task, w_task, h_task, r, r)
                 t_frame = QGraphicsPathItem(p)
-                bcg = QColor(150,0,0)
+                bcg = QColor(150,0,0)                
+                bcg = self.colors[task.type.id]
                 pen = QPen(Qt.white,  2, Qt.SolidLine)
                 brush = QBrush(bcg)
                 if task == selected_task:
@@ -98,11 +104,12 @@ class BatchQueueUI(QGraphicsView):
                 p = QPainterPath()
                 p.addRoundedRect(x_task, y_task, w_task, h_task, r, r)
                 t_frame = QGraphicsPathItem(p)
-                bcg = QColor(150,0,0)
+                bcg = self.colors[task.type.id]
                 pen = QPen(Qt.white,  2, Qt.SolidLine)
                 brush = QBrush(bcg)
                 t_frame.setBrush(brush)
                 t_frame.setPen(pen) 
+                t_frame.setData(0,'task_in_bq_others')
                 
                 text = QGraphicsTextItem('o o o')
                 text.setFont(QFont('Arial',12))

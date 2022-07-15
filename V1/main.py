@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 import csv
 from os import makedirs
-from gui.gui import window
+
 
 from utils.simulator import Simulator
 from utils.machine import Machine

@@ -339,6 +339,16 @@ class Machine(BaseMachine):
         task.drop_time = config.time.gct()
 
         self.queue.remove(task)
+
+        if config.gui==1:
+            self.machine_signal.emit({'type':'cancelled_machine',
+                            'time':config.time.gct(),
+                            'where':'scheduelr: prune',
+                            'data': {'task':task,
+                                    'assigned_machine':self,                                                                                  
+                                    },                                        
+                                    })
+            time.sleep(self.sleep_time)
         
         if self.running_task:
             if self.running_task[0].completion_time < self.running_task[0].deadline:

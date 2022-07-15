@@ -9,8 +9,8 @@ from utils.base_task import TaskStatus
 from utils.base_scheduler import BaseScheduler
 import utils.config as config
 from utils.queue import Queue
+import time
 
-from PyQt5.QtCore import pyqtSignal,QObject
 
 class FCFS(BaseScheduler):
     
@@ -20,7 +20,7 @@ class FCFS(BaseScheduler):
         self.name = 'FCFS'
         self.total_no_of_tasks = total_no_of_tasks
         self.prev_assignment_idx = -1
-        self.gui_machine_log = []
+        self.sleep_time = 0.1
 
        
 
@@ -32,10 +32,12 @@ class FCFS(BaseScheduler):
         if config.gui==1:
             self.decision.emit({'type':'choose',
                                 'time':config.time.gct(),
-                                'data': {'t_id':task.id,
+                                'where':'simulator: choose',
+                                'data': {'task':task,
                                         'bq_indx': index,
-                                        }
+                                        },                                
                                         })
+            time.sleep(self.sleep_time)
         
         if config.settings['verbosity']:
             s =f'\n{task.id} selected --> BQ = '
@@ -55,11 +57,13 @@ class FCFS(BaseScheduler):
             return 1
 
         if config.gui==1:
-            self.decision.emit({'type':'defer',
-                            'time':config.time.gct(),
-                            'data': {'t_id':task.id,                                    
-                                    }
-                                    })
+                self.decision.emit({'type':'defer',
+                                'time':config.time.gct(),
+                                'where':'simulator: defer',
+                                'data': {'task':task,                                    
+                                        },                            
+                                        })
+                time.sleep(self.sleep_time)
         task.status =  TaskStatus.DEFERRED
         task.no_of_deferring += 1
         self.batch_queue.put(task)
@@ -72,16 +76,18 @@ class FCFS(BaseScheduler):
         
         
 
-    def drop(self, task):
-        if config.gui==1:
-            self.decision.emit({'type':'cacnel',
-                                'time':config.time.gct(),
-                                'data': {'t_id':task.id,                                    
-                                        }
-                                        })
+    def drop(self, task):        
         task.status = TaskStatus.CANCELLED
         task.drop_time = config.time.gct()
-        self.stats['dropped'].append(task)        
+        self.stats['dropped'].append(task)
+        if config.gui==1:
+            self.decision.emit({'type':'cancelled',
+                                'time':config.time.gct(),
+                                'where':'simulator: drop',
+                                'data': {'task':task,                                    
+                                        },                               
+                                        })
+            time.sleep(self.sleep_time)        
         if config.settings['verbosity']:       
             s = '\n[ Task({:}),  _________ ]: Cancelled      @time({:3.3f})'.format(
                 task.id, config.time.gct()       )
@@ -95,10 +101,12 @@ class FCFS(BaseScheduler):
             if config.gui==1:
                 self.decision.emit({'type':'map',
                                 'time':config.time.gct(),
-                                'data': {'t_id':task.id,
-                                         'm_id':machine.id,                                    
-                                        }
+                                'where':'scheduler: map',
+                                'data': {'task':task,
+                                         'assigned_machine':machine,                                    
+                                        },
                                         })
+                time.sleep(self.sleep_time)
             task.assigned_machine = machine
             self.stats['mapped'].append(task)
             s = f"\ntask:{task.id}  assigned to:{task.assigned_machine.type.name}  delta:{task.deadline}"
@@ -153,10 +161,11 @@ class FCFS(BaseScheduler):
         if self.batch_queue.empty():
             return None
                 
-        # machine_index = (self.prev_assignment_idx+1) % config.no_of_machines        
-        # machine = config.machines[machine_index]
-        # self.prev_assignment_idx = machine_index
-        available_machine = self.first_available_machine()
+        machine_index = (self.prev_assignment_idx+1) % config.no_of_machines        
+        machine = config.machines[machine_index]
+        self.prev_assignment_idx = machine_index
+        #available_machine = self.first_available_machine()
+        available_machine = machine
         if available_machine != None:
             self.choose()
             self.map(available_machine)
