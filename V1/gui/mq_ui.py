@@ -87,6 +87,46 @@ class MachineUi(QGraphicsView):
             t_frame.setBrush(brush)
             t_frame.setPen(pen) 
             self.scene.addItem(t_frame)
+        self.mq_placeholders()
+    
+    def mq_placeholders(self):
+        for m_id, _ in self.m_queues.items():
+            [x,y] = self.queue_frames[m_id]
+            task_xspace = 0.05 * self.w_q
+            task_yspace = 0.1 * self.h_q
+            self.w_task = (self.w_q - (self.max_qsize+1)*task_xspace)/ self.max_qsize        
+            self.h_task = self.h_q - 2*task_yspace
+            w_task = self.w_task
+            h_task = self.h_task
+            x_task = x + self.w_q
+            y_task = y + task_yspace            
+            for idx in range(self.max_qsize):                
+                if idx <= (self.max_qsize-2) : 
+                    x_task -= (w_task +  task_xspace)     
+                    r = 0.25*h_task
+                    p = QPainterPath()
+                    p.addRoundedRect(x_task, y_task, w_task, h_task, r, r)
+                    t_frame = QGraphicsPathItem(p)
+                    bcg = Qt.white
+                    pen = QPen(Qt.white,  2, Qt.SolidLine)
+                    brush = QBrush(bcg)
+                    t_frame.setBrush(brush)
+                    t_frame.setPen(pen)                
+                    self.scene.addItem(t_frame)
+                    
+                elif idx == self.max_qsize-1:
+                    x_task = x_task - (w_task +  task_xspace)                 
+                    r = 0.25*h_task
+                    p = QPainterPath()
+                    p.addRoundedRect(x_task, y_task, w_task, h_task, r, r)
+                    t_frame = QGraphicsPathItem(p)
+                    bcg = Qt.white
+                    pen = QPen(Qt.white,  2, Qt.SolidLine)
+                    brush = QBrush(bcg)
+                    t_frame.setBrush(brush)
+                    t_frame.setPen(pen)
+                    self.scene.addItem(t_frame)
+                    
         
 
     def fill_queues(self):

@@ -33,7 +33,7 @@ class EE(BaseScheduler):
                                         'bq_indx': index,
                                         },                                
                                         })
-            time.sleep(self.timer)
+            time.sleep(self.sleep_time)
         if config.settings['verbosity']:
             s =f'\n{task.id} selected --> BQ = '
             bq = [t.id for t in self.batch_queue.list]

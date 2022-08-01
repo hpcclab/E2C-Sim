@@ -38,7 +38,7 @@ class Simulator(QObject):
         self.total_no_of_tasks = None
         self.energy_statistics = []
         self.sleep_time = 0.1
-        self.set_scheduling_method()
+        self.set_scheduling_method(config.scheduling_method)
         self.pause = False
     
     def reset(self):
@@ -56,7 +56,7 @@ class Simulator(QObject):
         df = pd.read_csv(self.path_to_arrival)
         est_clmns =[]
         ext_clmns = []
-        print(df.head(5))
+        #print(df.head(5))
         for machine_type in config.machine_types:
             column_name = f'est_{machine_type.name}'
             column_idx = df.columns.get_loc(column_name)
@@ -92,22 +92,22 @@ class Simulator(QObject):
             event = Event(task.arrival_time, EventTypes.ARRIVING, task)
             config.event_queue.add_event(event)
         
-    def set_scheduling_method(self):        
-        if config.scheduling_method == 'EE':
+    def set_scheduling_method(self, scheduling_method):
+        if scheduling_method == 'EE':
             self.scheduler = EE(self.total_no_of_tasks)        
-        elif config.scheduling_method == 'MM':
+        elif scheduling_method == 'MM':
             self.scheduler = MM(self.total_no_of_tasks)
-        elif config.scheduling_method == 'FEE':
+        elif scheduling_method == 'FEE':
             self.scheduler = FEE(self.total_no_of_tasks)
-        elif config.scheduling_method == 'MSD':
+        elif scheduling_method == 'MSD':
             self.scheduler = MSD(self.total_no_of_tasks)
-        elif config.scheduling_method == 'MMU':
+        elif scheduling_method == 'MMU':
             self.scheduler = MMU(self.total_no_of_tasks)              
-        elif config.scheduling_method == 'FCFS':
+        elif scheduling_method == 'FCFS':
             self.scheduler = FCFS(self.total_no_of_tasks) 
-        elif config.scheduling_method == 'MECT':
+        elif scheduling_method == 'MECT':
             self.scheduler = MECT(self.total_no_of_tasks) 
-        elif config.scheduling_method == 'MEET':
+        elif scheduling_method == 'MEET':
             self.scheduler = MEET(self.total_no_of_tasks)
         else:
             print('ERROR: Scheduler ' + config.scheduling_method + ' does not exist')

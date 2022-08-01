@@ -63,8 +63,46 @@ class BatchQueueUI(QGraphicsView):
         brush = QBrush(bcg)
         i_frame.setBrush(brush)
         i_frame.setPen(pen) 
-        self.scene.addItem(i_frame) 
+        self.scene.addItem(i_frame)
+        self.draw_placeholders()
+    
 
+    def draw_placeholders(self):
+        task_xspace = 0.02 * self.w_inner
+        task_yspace = 0.1 * self.h_inner
+        w_task = (self.w_inner - (self.size+1)*task_xspace)/ self.size        
+        h_task = self.h_inner - 2*task_yspace
+        x_task = self.x_inner + self.w_inner 
+        y_task = self.y_inner + task_yspace
+        
+        for idx  in range(self.size): 
+               
+            if idx <= (self.size-2) : 
+                x_task -= (w_task +  task_xspace)     
+                r = 0.25*h_task
+                p = QPainterPath()
+                p.addRoundedRect(x_task, y_task, w_task, h_task, r, r)
+                t_frame = QGraphicsPathItem(p)                                
+                bcg = Qt.white
+                pen = QPen(Qt.white,  2, Qt.SolidLine)
+                brush = QBrush(bcg)                
+                t_frame.setBrush(brush)
+                t_frame.setPen(pen)            
+                self.scene.addItem(t_frame)
+                
+            elif idx == self.size-1:
+                x_task = x_task - (w_task +  task_xspace)                 
+                r = 0.25*h_task
+                p = QPainterPath()
+                p.addRoundedRect(x_task, y_task, w_task, h_task, r, r)
+                t_frame = QGraphicsPathItem(p)
+                bcg = Qt.white
+                pen = QPen(Qt.white,  2, Qt.SolidLine)
+                brush = QBrush(bcg)
+                t_frame.setBrush(brush)
+                t_frame.setPen(pen)             
+                self.scene.addItem(t_frame)
+               
         
 
     def draw_tasks(self, selected_task):

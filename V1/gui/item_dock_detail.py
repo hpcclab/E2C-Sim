@@ -9,6 +9,9 @@ class ItemDockDetail(QMainWindow):
 
     def __init__(self):
         super().__init__()
+        self.configs={'mapper':{'checkbox':True,
+                                'policy':'FirstCome-FirstServe'}}
+        self.mapper_enabled = True
 
         self.init_dock()
     
@@ -46,7 +49,7 @@ class ItemDockDetail(QMainWindow):
 
         self.eet_lbl = []
         self.eet_text = []
-        print(task.estimated_time)
+        #print(task.estimated_time)
         for m_type, eet in task.estimated_time.items():
             lbl = QLabel(f'{m_type.upper()}')            
             txt = QLineEdit(f"{eet}")
@@ -354,45 +357,106 @@ class ItemDockDetail(QMainWindow):
         self.dock.setWidget(widget)
 
     
-    def mapper_data(self, scheduler):
+    def mapper_data(self, enabled):
         self.tabs = QTabWidget()
         self.tab_mapper = QWidget()
 
         self.tabs.addTab(self.tab_mapper, "Scheduler")        
         self.tab_mapper.layout = QVBoxLayout(self)
-        
-        
-        
+
         self.mapper_grid = QGridLayout(self)
-        self.name_lbl = QLabel('Policy')
-        self.name_text = QLineEdit()
+
+        self.chb_policy = QCheckBox()
+        self.chb_policy.setText('Immediate Scheduling')
+        self.chb_policy.setChecked(self.configs['mapper']['checkbox'])
+        self.chb_policy.toggled.connect(self.mapper_chb)
+
+        self.policy_lbl = QLabel('Policy')
+        self.policy_cb = QComboBox(self)
+        if self.chb_policy.isChecked():
+            self.policies = ['FirstCome-FirstServe',
+                             'Min-Expected-Completion-Time',
+                             'Min-Expected-Execution-Time',
+                             ]
+        else:
+            self.policies = ['FELARE',
+                             'ELARE',
+                             'MinCompletion-MinCompletion',
+                             'MinCompletion-SoonestDeadline',
+                             'MinCompletion-MaxUrgency',
+                            ]       
+        self.policy_cb.addItems(self.policies)  
+        self.policy_cb.setCurrentText(self.configs['mapper']['policy'])
+
+        style =  "QComboBox QAbstractItemView {"
+        style += " border: 2px solid grey;"
+        style += " background: white;"
+        style += " selection-background-color: blue;"
+        style += " }"
+        style += " QComboBox {"
+        style += " background: white;"
+        style += "}"
+        self.policy_cb.setStyleSheet(style)
         
-        if scheduler == 'MM':
-            name = 'MinCompletion-MinCompletion'
-        elif scheduler == 'MSD':
-            name = 'MinCompletion-SoonestDeadline'
-        elif scheduler == 'MMU':
-            name = 'MinCompletion-MaxUrgency'
-        elif scheduler == 'FCFS':
-            name = 'FirstCome-FirstServe'
-        elif scheduler == 'MECT':
-            name = 'Min-Expected-Completion-Time'
-        elif scheduler == 'MEET':
-            name = 'Min-Expected-Execution-Time'
-        elif scheduler == 'N/A':
-            name = 'N/A'
-    
-        self.name_text.setText(name)
-        self.name_text.setReadOnly(True)
-        self.name_text.setAlignment(Qt.AlignLeft)
+        if not enabled:
+            self.chb_policy.setEnabled(False)
+            self.policy_cb.setEnabled(False)
+        else:
+            self.chb_policy.setEnabled(True)
+            self.policy_cb.setEnabled(True)
+
+
                         
-        self.mapper_grid.addWidget(self.name_lbl,0,0)
-        self.mapper_grid.addWidget(self.name_text,0,1)
+        
+        self.mapper_grid.addWidget(self.chb_policy,0,0,1,2)   
+        self.mapper_grid.addWidget(self.policy_lbl,1,0)        
+        self.mapper_grid.addWidget(self.policy_cb,1,1)
         
         self.tab_mapper.layout.addLayout(self.mapper_grid)                
         self.tab_mapper.layout.addStretch(1)
         self.tab_mapper.setLayout(self.tab_mapper.layout)
         self.dock.setWidget(self.tabs)
+    
+    
+    def mapper_chb(self):        
+        self.policy_cb.clear()
+        if self.chb_policy.isChecked():
+            self.policies = ['FirstCome-FirstServe',
+                        'Min-Expected-Completion-Time',
+                        'Min-Expected-Execution-Time',]
+        else:
+            self.policies = ['FELARE',
+                    'ELARE',
+                    'MinCompletion-MinCompletion',
+                    'MinCompletion-SoonestDeadline',
+                    'MinCompletion-MaxUrgency',
+                    ]
+        self.policy_cb.addItems(self.policies)
+    
+    def workload_data(self, enabled):
+        self.tabs = QTabWidget()
+        self.tab_workload = QWidget()
+
+        self.tabs.addTab(self.tab_workload, "Workload")        
+        self.tab_workload.layout = QVBoxLayout(self)
+
+        self.workload_grid = QGridLayout(self)
+
         
+
+        self.path_lbl = QLabel('Path')
+        self.path_entry = QLineEdit(self)
+        
+        
+        self.workload_grid.addWidget(self.path_lbl,0,0)   
+        self.workload_grid.addWidget(self.path_entry,0,1)        
+        
+        self.tab_workload.layout.addLayout(self.workload_grid)                
+        self.tab_workload.layout.addStretch(1)
+        self.tab_workload.setLayout(self.tab_workload.layout)
+        self.dock.setWidget(self.tabs)
+
+
+
 
     

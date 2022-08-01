@@ -112,10 +112,7 @@ class FCFS(BaseScheduler):
             s = f"\ntask:{task.id}  assigned to:{task.assigned_machine.type.name}  delta:{task.deadline}"
             config.log.write(s)
         else:
-            self.unmapped_task.append(task)
-            if config.gui==1:
-                self.full_signal.emit({'t_id':task.id,                                    
-                                       'time':config.gct()})
+            self.unmapped_task.append(task)            
         
     
     def first_available_machine(self):

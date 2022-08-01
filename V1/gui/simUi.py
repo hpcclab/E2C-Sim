@@ -44,7 +44,10 @@ class SimUi(QMainWindow):
         self.setWindowTitle(self.title)        
         self.setStyleSheet(f"background-color: rgb(217,217,217);")
         self.setGeometry(self.top, self.left, self.width, self.height)
-        #self.setFixedSize(self.width, self.height)
+        self.configs ={'scheduler': 'default',
+                        'workload': 'default',
+                        'machines':'default',
+                         }
 
         self.initUI()
     
@@ -57,8 +60,8 @@ class SimUi(QMainWindow):
         #self.general_layout.addWidget(self.label)
         self.gv = GraphicView(self.width, self.height)   
         
-        #self.dock_left = ItemDockDetail()
-        self.dock_right = ItemDockDetail()
+        
+        self.dock_right = ItemDockDetail()        
         self.gv.itemClicked.connect(self.dock_update)     
         hlayout = QHBoxLayout()
         #hlayout.addWidget(self.dock_left)
@@ -93,13 +96,24 @@ class SimUi(QMainWindow):
             self.dock_right.machine_data(item.data(1))
         elif item.data(0) == 'trash':
             self.dock_right.trash_data(self.gv.mapper_ui.cancelled_tasks)
-        elif item.data(0) == 'mapper':
+        elif item.data(0) == 'mapper':            
             try:
                 scheduler = self.simulator.scheduler.name
+                self.dock_right.mapper_data(0)
             except:
-                scheduler = 'N/A'
-            self.dock_right.mapper_data(scheduler)
+                self.dock_right.mapper_data(1)
+                self.dock_right.policy_cb.activated.connect(self.set_scheduler)
+        elif item.data(0) == 'workload':
+            self.dock_right.workload_data(0)
+
         self.gv.scene.update()
+    
+    def activate_mapper(self, enabled):
+        if enabled:
+            self.dock_right.mapper_enabled = True
+        else:
+            self.dock_right.mapper_enabled = False
+
                
     def create_ctrl_buttons(self):
         self.buttons = {'reset':None,
@@ -151,12 +165,49 @@ class SimUi(QMainWindow):
         vlayout.addWidget(self.speed_label)
         vlayout.addLayout(hlayout)
         self.btn_layout.addLayout(vlayout)
-        self.general_layout.addLayout(self.btn_layout)    
+        self.general_layout.addLayout(self.btn_layout) 
+
+
+
+    def set_scheduler(self):
+        self.dock_right.configs['mapper']['policy'] = self.dock_right.policy_cb.currentText()
+        self.dock_right.configs['mapper']['checkbox'] = self.dock_right.chb_policy.isChecked()
+        self.policy = self.dock_right.policy_cb.currentText()
+        if self.policy ==   'MinCompletion-MinCompletion':
+            self.policy = 'MM'
+        elif self.policy ==   'MinCompletion-SoonestDeadline':
+            self.policy = 'MSD'
+        elif self.policy == 'MinCompletion-MaxUrgency':
+            self.policy = 'MMU'
+        elif self.policy == 'FELARE':
+            self.policy == 'FEE'
+        elif self.policy == 'ELARE':
+            self.policy = 'EE'
+        elif self.policy == 'FirstCome-FirstServe':
+            self.policy = 'FCFS'
+        elif self.policy == 'Min-Expected-Completion-Time':
+            self.policy = 'MECT'
+        elif self.policy == 'Min-Expected-Execution-Time':
+            self.policy = 'MEET'
+        self.configs['scheduler'] = self.policy
     
+    def setup_config(self, simulator):
+        if self.configs['scheduler'] == 'default':
+            self.policy = 'FCFS'
+        else:
+            self.policy = self.configs['scheduler']
+        print(f'New Policy: {self.policy}')
+        simulator.set_scheduling_method(self.policy)
+
+        
+        
+
             
     def simulate_start(self):
         self.thread = QThread() 
         self.simulator =  Simulator(self.workload_name, self.scenario, self.etc, self.workload_id) 
+        self.setup_config(self.simulator)
+        print(self.simulator.scheduler.name)
         self.simulator.moveToThread(self.thread)
         self.thread.started.connect(self.simulator.reset)
         self.thread.started.connect(self.simulator.run)         
@@ -170,19 +221,27 @@ class SimUi(QMainWindow):
         self.simulator.simulation_done.connect(lambda: self.buttons['reset'].setEnabled(True))
         self.simulator.simulation_done.connect(lambda: self.buttons['simulate'].setEnabled(False))
         self.simulator.simulation_done.connect(lambda: self.buttons['speed'].setEnabled(False))
+        self.simulator.simulation_done.connect(lambda: self.activate_mapper(1))
         self.buttons['speed'].setEnabled(True)
         for machine in config.machines:
             machine.machine_signal.connect(self.msg_handler)
         self.buttons['simulate'].clicked.disconnect()
         self.buttons['simulate'].clicked.connect(self.simulate_start_pause)
         self.buttons['simulate'].setIcon(QIcon(f'./gui/icons/pause.png')) 
+
+        try:
+            self.dock_right.policy_cb.setEnabled(False)
+            self.dock_right.chb_policy.setEnabled(False)
+        except:
+            pass
+
         self.simulator.pause = False
         self.buttons['reset'].setEnabled(False)
         self.thread.start() 
         
 
     def simulate_start_pause(self):  
-        print('pause clicked!')
+        #print('pause clicked!')
         if self.simulator.pause:
             self.buttons['simulate'].setIcon(QIcon(f'./gui/icons/pause.png'))             
             self.simulator.pause = False            
@@ -198,7 +257,7 @@ class SimUi(QMainWindow):
         self.pbar.setValue(0)
         self.gv.display_time(0)
         self.gv.batch_queue.reset()
-        self.gv.machine_queues.reset()
+        self.gv.machine_queues.reset()        
         self.buttons['simulate'].setEnabled(True)
         self.buttons['speed'].setEnabled(False)
         for machine in config.machines:
@@ -287,6 +346,8 @@ class SimUi(QMainWindow):
         self.gv.batch_queue.inner_frame()
         self.gv.mapper_ui.mapper()
         self.gv.mapper_ui.trash()
+        self.gv.workload_ui.draw_frame()
+        self.gv.connect_workload()
         self.gv.connecting_lines()
         
         self.gv.batch_queue.draw_tasks(selected_task)
