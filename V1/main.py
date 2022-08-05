@@ -13,13 +13,13 @@ from workload.generator import workloads_generator
 from workload.workload import Workload
 
 config.init()
-workload_name = 'mini'
+workload_name = 'hete'
 scenarios = ['sc-2']
 etcs = [f'etc-{i}' for i in range(1)]
 workload_id_range = list(range(1))
 workloads_exist = True
 is_etc_exist = True
-is_et_exist = True
+is_et_exist = False
 
 def simulate(workload_name, scenarios, etcs, workload_id_range, workloads_exist=False,is_etc_exist = False, is_et_exist = False):
     for sc in scenarios:
@@ -27,7 +27,7 @@ def simulate(workload_name, scenarios, etcs, workload_id_range, workloads_exist=
             config.init()
             workloads_generator(workload_name,sc , is_etc_exist, is_et_exist ,
                         no_of_etcs = 1, et_set = [1,1,5,5,10,10,10,25,25,25,25,100,100,100,100,100, 150,150]  ,
-                        et_variance=0.05, et_size=1000, sample_size = 30)
+                        et_variance=0.0001, et_size=1000, sample_size = 30)
         for etc in etcs:
             config.init()            
             path_to_result = f'./output/data/{workload_name}/{sc}/{etc}/{config.scheduling_method}'        
@@ -47,13 +47,12 @@ def simulate(workload_name, scenarios, etcs, workload_id_range, workloads_exist=
                         config.machines.append(machine)            
                         id += 1
 
-                if config.gui == 1:
-                    window(workload_name, sc, etc, workload_id)
+                
                     
                 simulation = Simulator(workload_name, sc, etc, workload_id) 
-                simulation.create_event_queue()
+                #simulation.create_event_queue()
                 # scheduler = config.get_scheduler()
-                simulation.set_scheduling_method()        
+                simulation.set_scheduling_method(config.scheduling_method)        
                 simulation.run()   
                        
                 row = simulation.report()   

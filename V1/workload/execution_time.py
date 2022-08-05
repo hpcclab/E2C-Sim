@@ -30,9 +30,19 @@ class ExecutionTime:
         path_to_file =f"./workload/execution_times/{self.name}/{etc_name}/{task_type_id}-{machine_type.name}.csv"
         data = pd.read_csv(path_to_file)
         self.execution_times = np.random.choice(data['execution_time'].values, size)
-        self.execution_times = [round(x, precesion) for x in self.execution_times]    
+        self.execution_times = [round(x, precesion) for x in self.execution_times]   
         
         return self.execution_times
+
+    def estimated_et(self, etc_name, task_type, machine_type, size, precesion=3):
+        path_to_etc =  f'./workload/etcs/{self.name}/{etc_name}.csv'       
+        etc = pd.read_csv(path_to_etc)
+        etc = etc.rename(columns={'Unnamed: 0':'task_types'})
+        etc = etc.set_index('task_types')
+        etc_ij = etc.loc[f'{task_type}',f'{machine_type}']
+        estimated_ets = np.repeat(etc_ij, size)
+        
+        return estimated_ets
     
     def synthesize(self, etc_name, task_type, machine_type,variance, size):
         path_to_etc =  f'./workload/etcs/{self.name}/{etc_name}.csv'       

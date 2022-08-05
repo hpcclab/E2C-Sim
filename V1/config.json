@@ -1,8 +1,8 @@
 {
     "parameters": [
         {
-            "machine_queue_size": 3000,
-            "batch_queue_size": 1,
+            "machine_queue_size": 3,
+            "batch_queue_size": 5,
             "scheduling_method": "FCFS",
             "fairness_factor": 1.0
         }
@@ -12,7 +12,7 @@
             "path_to_output": "./output",
             "path_to_workload": "./workload",
             "verbosity": 3,
-            "gui": 1
+            "gui": 0
         }
     ],
     "task_types": [
@@ -20,24 +20,30 @@
             "id": 1,
             "name": "T1",
             "urgency": "best_effort",
-            "deadline": 100.0
+            "deadline": 5.0
         },
         {
             "id": 2,
             "name": "T2",
             "urgency": "best_effort",
-            "deadline": 100.0
+            "deadline": 5.0
         },
         {
             "id": 3,
             "name": "T3",
             "urgency": "best_effort",
-            "deadline": 100.0
+            "deadline": 5.0
+        },
+        {
+            "id": 4,
+            "name": "T4",
+            "urgency": "best_effort",
+            "deadline": 5.0
         }
     ],
     "battery": [
         {
-            "capacity": 50.0
+            "capacity": 500.0
         }
     ],
     "machines": [

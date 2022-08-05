@@ -10,6 +10,7 @@ from utils.base_scheduler import BaseScheduler
 import utils.config as config
 from utils.event import Event, EventTypes
 import time
+import numpy as np
 
 
 class MECT(BaseScheduler):
@@ -88,18 +89,19 @@ class MECT(BaseScheduler):
         
         if not self.batch_queue.empty():
             task = self.choose()
-            #print(f'task: {task.id}')
-            min_ct = float('inf')
-            assigned_machine = None 
-            for machine in config.machines:
-                pct = machine.provisional_map(task)
-                if pct < min_ct:
-                    min_ct = pct
-                    assigned_machine = machine
             
+            pcts = [[machine.provisional_map(task), machine.id] for machine in config.machines]           
+            min_pct = min(pcts, key=lambda x:x[0])[0]            
+            pcts = np.array(pcts)
+            ties = pcts[pcts[:,0] == min_pct]
+            np.random.seed(task.id)
+            assigned_machine_idx = int(np.random.choice(ties[:,1]))            
+            assigned_machine = config.machines[assigned_machine_idx]
+
             self.map(assigned_machine)
-            s = f"\ntask:{task.id}  assigned to:{assigned_machine.type.name}  delta:{task.deadline}"
-            config.log.write(s)                  
+            s = f"\ntask:{task.id}  assigned to:{assigned_machine.type.name}  delta:{task.deadline} min_pct:{min_pct}"
+            config.log.write(s)     
+                       
             return assigned_machine
         
     #####

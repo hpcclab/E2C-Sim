@@ -12,7 +12,7 @@ from os import makedirs
 
 
 workload_name = 'mini'
-scenario = 'sc-2'
+scenario = 'sc-1'
 etc = 'etc-0'
 workload_id = 1
 

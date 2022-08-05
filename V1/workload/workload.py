@@ -82,9 +82,9 @@ class Workload:
             self.workload = self.workload.append(arrival_time, ignore_index=True)
             
             for machine_type in config.machine_types:
-
-                est = ExecutionTime(self.name).sample(etc_name, task_type,machine_type,no_of_tasks, precesion=precision)                                
-                
+                #print(task_type, machine_type.name)
+                #est = ExecutionTime(self.name).sample(etc_name, task_type,machine_type,no_of_tasks, precesion=precision)                                
+                est = ExecutionTime(self.name).estimated_et(etc_name, task_type,machine_type.name,no_of_tasks, precesion=precision)                                
                 self.workload.loc[last_index+1:, f'est_{machine_type.name}'] = est
                 
                 for r in range(1,machine_type.replicas+1):

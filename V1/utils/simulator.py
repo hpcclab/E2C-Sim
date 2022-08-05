@@ -135,9 +135,8 @@ class Simulator(QObject):
         self.create_event_queue()
         
         while config.event_queue.event_list and config.available_energy > 0.0:
-            #print(self.pause)
-            while self.pause:
-                #time.sleep(self.sleep_time)
+            
+            while config.gui==1 and self.pause:               
                 time.sleep(0.0)
             self.idle_energy_consumption()
             event = config.event_queue.get_first_event()
@@ -146,8 +145,9 @@ class Simulator(QObject):
             if self.verbosity:
                 s = f'\n\n*****Task:{task.id} \t\t {event.event_type.name}  @time:{event.time}'
                 config.log.write(s)   
+                #print(s)
 
-            # animation  will start from batch queue
+            
             
 
             row =[config.time.gct(),config.available_energy]

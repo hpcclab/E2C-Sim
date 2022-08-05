@@ -10,7 +10,7 @@ from utils.base_scheduler import BaseScheduler
 import utils.config as config
 from utils.event import Event, EventTypes
 import time
-
+import numpy as np
 
 class MEET(BaseScheduler):
     
@@ -88,13 +88,22 @@ class MEET(BaseScheduler):
         if not self.batch_queue.empty():
             task = self.choose()
             #print(f'task: {task.id}')
-            min_et = float('inf')
-            assigned_machine = None 
-            for machine in config.machines:
-                eet = task.estimated_time[machine.type.name]
-                if eet < min_et:
-                    min_et = eet
-                    assigned_machine = machine
+            # min_et = float('inf')
+            # assigned_machine = None 
+            ties = []
+            eets = [[task.estimated_time[m.type.name],m.id] for m in config.machines]
+            min_eet = min(eets, key=lambda x:x[0])[0]            
+            eets = np.array(eets)
+            ties = eets[eets[:,0] == min_eet]
+            np.random.seed(task.id)
+            assigned_machine_idx = int(np.random.choice(ties[:,1]))            
+            assigned_machine = config.machines[assigned_machine_idx]
+            
+            # for machine in config.machines:
+            #     eet = task.estimated_time[machine.type.name]
+            #     if eet < min_et:
+            #         min_et = eet
+            #         assigned_machine = machine
             
             self.map(assigned_machine)
             s = f"\ntask:{task.id}  assigned to:{assigned_machine.type.name}  delta:{task.deadline}"
