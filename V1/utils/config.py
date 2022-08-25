@@ -47,13 +47,14 @@ def create_machine_types(machines_info):
     machine_types = []
     machine_type_names = [] 
     no_of_machines = 0   
-    for machine_type in machines_info:
-        type_id = machine_type['type_id']
+    
+    for id, machine_type in enumerate(machines_info):
+        #type_id = machine_type['type_id']        
         name = machine_type['name']
         power = machine_type['power']
         idle_power = machine_type['idle_power']
         replicas = machine_type['replicas']
-        type = MachineType(type_id, name, power,idle_power, replicas)
+        type = MachineType(id, name, power,idle_power, replicas)
         no_of_machines += replicas
         machine_types.append(type)
         machine_type_names.append(name)

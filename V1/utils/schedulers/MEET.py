@@ -92,8 +92,8 @@ class MEET(BaseScheduler):
             # assigned_machine = None 
             ties = []
             eets = [[task.estimated_time[m.type.name],m.id] for m in config.machines]
-            min_eet = min(eets, key=lambda x:x[0])[0]            
-            eets = np.array(eets)
+            min_eet = min(eets, key=lambda x:x[0])[0]
+            eets = np.array(eets)            
             ties = eets[eets[:,0] == min_eet]
             np.random.seed(task.id)
             assigned_machine_idx = int(np.random.choice(ties[:,1]))            

@@ -1,43 +1,40 @@
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
-import sys
-class checkdemo(QWidget):
-   def __init__(self, parent = None):
-      super(checkdemo, self).__init__(parent)
-      
-      layout = QHBoxLayout()
-      self.b1 = QCheckBox("Button1")
-      self.b1.setChecked(True)
-      self.b1.stateChanged.connect(lambda:self.btnstate(self.b1))
-      layout.addWidget(self.b1)
-		
-      self.b2 = QCheckBox("Button2")
-      self.b2.toggled.connect(lambda:self.btnstate(self.b2))
+from PyQt5 import QtWidgets, QtCore, QtGui
 
-      layout.addWidget(self.b2)
-      self.setLayout(layout)
-      self.setWindowTitle("checkbox demo")
+class Model(QtGui.QStandardItemModel):
 
-   def btnstate(self,b):
-      if b.text() == "Button1":
-         if b.isChecked() == True:
-            print (b.text()+" is selected")
-         else:
-            print (b.text()+" is deselected")
-				
-      if b.text() == "Button2":
-         if b.isChecked() == True:
-            print (b.text()+" is selected")
-         else:
-            print (b.text()+" is deselected")
-				
-def main():
+    def __init__(self, rows, columns, parent = None):
+        super().__init__(rows, columns, parent)
+        self._editable = True
 
-   app = QApplication(sys.argv)
-   ex = checkdemo()
-   ex.show()
-   sys.exit(app.exec_())
-	
-if __name__ == '__main__':
-   main()
+    def flags(self, index: QtCore.QModelIndex) -> QtCore.Qt.ItemFlags:
+        flags = super().flags(index)
+        if not self._editable:
+            flags = flags &~ QtCore.Qt.ItemIsEditable
+        return flags
+
+    def setEditable(self, editable):
+        print(editable)
+        self._editable = editable
+
+if __name__ == "__main__":
+    app = QtWidgets.QApplication([])
+
+    model = Model(4, 3)
+
+    widget = QtWidgets.QWidget()
+    layout = QtWidgets.QVBoxLayout()
+    
+    view = QtWidgets.QTableView()
+    view.setModel(model)
+    view.show()
+
+    checkBox = QtWidgets.QCheckBox("Editable")
+    checkBox.setChecked(True)
+    checkBox.clicked.connect(model.setEditable)
+
+    layout.addWidget(view)
+    layout.addWidget(checkBox)
+    widget.setLayout(layout)
+    widget.show()
+    
+    app.exec()

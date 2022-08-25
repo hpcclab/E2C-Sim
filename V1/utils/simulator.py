@@ -6,10 +6,11 @@ Created on Nov., 15, 2021
 """
 import pandas as pd
 import csv
-import json
+import os
 import time
 import utils.config as config
 from utils.event import Event, EventTypes
+from utils.execution_time import ExecutionTime
 from utils.task import Task
 from utils.schedulers.EE import EE
 from utils.schedulers.MM import MM
@@ -22,24 +23,26 @@ from utils.schedulers.MEET import MEET
 from PyQt5.QtCore import pyqtSignal,QObject
 from PyQt5.QtCore import QTimer
 
-class Simulator(QObject):    
-	# for signal slot
+class Simulator(QObject):
     event_signal = pyqtSignal(dict)
     simulation_done = pyqtSignal()
+    increment = pyqtSignal()
     
-    
-    def __init__(self, workload_name, scenario, etc, workload_id):     
-        super(Simulator, self).__init__()                                 
-        self.path_to_arrival = f"./workload/workloads/{workload_name}/{scenario}/{etc}/workload-{workload_id}.csv" 
-        self.path_to_results = f"./output/data/{workload_name}/{scenario}/{etc}" 
-        self.verbosity = config.settings['verbosity']
-        self.workload_id = workload_id
+    def __init__(self, path_to_arrivals, path_to_etc, path_to_reports, seed=1):     
+        super(Simulator, self).__init__()  
+        self.path_to_arrivals = path_to_arrivals
+        self.path_to_etc= path_to_etc
+        self.path_to_reports = path_to_reports                
+        self.seed = seed  
+        self.execution_time_var = 0.05
+        self.verbosity = 3
         self.tasks = []
         self.total_no_of_tasks = None
         self.energy_statistics = []
         self.sleep_time = 0.1
         self.set_scheduling_method(config.scheduling_method)
         self.pause = False
+        self.is_incremented = False
     
     def reset(self):
         config.time.sct(0.0)
@@ -53,44 +56,40 @@ class Simulator(QObject):
     
 
     def create_event_queue(self):        
-        df = pd.read_csv(self.path_to_arrival)
-        est_clmns =[]
-        ext_clmns = []
-        #print(df.head(5))
-        for machine_type in config.machine_types:
-            column_name = f'est_{machine_type.name}'
-            column_idx = df.columns.get_loc(column_name)
-            est_clmns.append(column_idx)
-            for r in range(1,machine_type.replicas+1):
-                column_name = f'ext_{machine_type.name}-{r}'
-                column_idx = df.columns.get_loc(column_name)
-                ext_clmns.append(column_idx)
-
-
-        for idx, row in df.iterrows():
-            task_id = idx
-            task_type_name = row['task_type']
-            arrival_time = row['arrival_time']
-            d_est = {}
-            d_real = {}
+        arrivals = pd.read_csv(self.path_to_arrivals) 
+        etc = pd.read_csv(self.path_to_etc,index_col=0)
+                
+        execution_time = ExecutionTime(self.seed)
+        with open(f'{os.path.dirname(self.path_to_etc)}/execution_times.csv','w') as et_file:
+            et_writer = csv.writer(et_file)
+            header = ['task_type']
+            for machine_type in config.machine_types:
+                    for r in range(1,machine_type.replicas+1):
+                        header.append(f'{machine_type.name}_{r}')
+            et_writer.writerow(header)
+            for idx, row in arrivals.iterrows():                                
+                task_id = idx
+                task_type_name = row['task_type']
+                arrival_time = row['arrival_time']  
+                estimated_times = etc.loc[task_type_name,:].to_dict()
+                execution_times = {}
+                execution_times_li = [task_type_name]
+                for mt_id, machine_type in enumerate(config.machine_types):
+                    for r in range(1,machine_type.replicas+1): 
+                        execution_time.seed += idx * mt_id + r                    
+                        execution_times[f'{machine_type.name}-{r}'] = execution_time.synthesize(etc, task_type_name, machine_type.name, self.execution_time_var)
+                        execution_times_li.append(execution_times[f'{machine_type.name}-{r}'])
+                et_writer.writerow( execution_times_li)
             
-            for est_clmn in est_clmns:
-                d_est[df.columns[est_clmn].split('_')[1]] = row[est_clmn]            
-
-            for ext_clmn in ext_clmns:
-                d_real[df.columns[ext_clmn].split('_')[1]] = row[ext_clmn]          
-           
-            
-            estimated_time = d_est
-            execution_time = d_real
-            type = config.find_task_type(task_type_name)
-            self.tasks.append(Task(task_id, type, estimated_time,
-                                      execution_time, arrival_time))    
+                type = config.find_task_type(task_type_name)
+                self.tasks.append(Task(task_id, type, estimated_times,
+                                        execution_times, arrival_time))    
         
         self.total_no_of_tasks = len(self.tasks)
-        for task in self.tasks:
+        for task in self.tasks:            
             event = Event(task.arrival_time, EventTypes.ARRIVING, task)
             config.event_queue.add_event(event)
+        return config.event_queue
         
     def set_scheduling_method(self, scheduling_method):
         if scheduling_method == 'EE':
@@ -133,10 +132,9 @@ class Simulator(QObject):
 
     def run(self):        
         self.create_event_queue()
-        
-        while config.event_queue.event_list and config.available_energy > 0.0:
-            
-            while config.gui==1 and self.pause:               
+
+        while config.event_queue.event_list and config.available_energy > 0.0:               
+            while config.gui==1 and (self.pause and self.is_incremented):               
                 time.sleep(0.0)
             self.idle_energy_consumption()
             event = config.event_queue.get_first_event()
@@ -147,11 +145,7 @@ class Simulator(QObject):
                 config.log.write(s)   
                 #print(s)
 
-            
-            
-
             row =[config.time.gct(),config.available_energy]
-
             for machine in config.machines:                
                 row.append(machine.stats['energy_usage'])
             self.energy_statistics.append(row)
@@ -168,9 +162,6 @@ class Simulator(QObject):
                     time.sleep(self.sleep_time)
                 self.scheduler.stats[f'{task.type.name}-arrived'] += 1                
                 assigned_machine = self.scheduler.schedule()
-                
-
-                
 
             elif event.event_type == EventTypes.DEFERRED:
                 assigned_machine = self.scheduler.schedule()
@@ -183,26 +174,45 @@ class Simulator(QObject):
             elif event.event_type == EventTypes.DROPPED_RUNNING_TASK:
                 machine = task.assigned_machine
                 machine.drop()     
-                self.scheduler.schedule() 
+                self.scheduler.schedule()
+            
+            if self.pause:
+                self.is_incremented = True
+        
+         
+                
 
         if config.gui == 1: 
             print(20*'-')
             for task in self.tasks:
                 print(f'{task.id} : {task.status}')  
             self.simulation_done.emit()
-        self.report()
+        #self.report()
         #config.log.close()
 
             
-    def report(self, is_detailed = True):     
-        path_to_report = f'{self.path_to_results}/{self.scheduler.name}'
-        
+    def report(self,is_detailed = True):     
+        path_to_report = f'{self.path_to_reports}/{self.scheduler.name}'        
+        os.makedirs(path_to_report, exist_ok = True)        
         if is_detailed:  
             detailed_header = ['id','type','urgency','status','assigned_machine', 
                     'arrival_time','execution_time','energy_usage','start_time',
                     'completion_time','missed_time','deadline',
                     'extended_deadline']
-            detailed = open(f'{path_to_report}/detailed-{self.workload_id}.csv','w')
+            # try:
+
+            #     files = [x for x in os.listdir(f'{path_to_report}/') if x.endswith('csv')]
+            # except:
+            #     files = []
+            # new_file = 'detailed-0.csv'
+            # i=0
+            # while files and (new_file in files):
+            #     new_file = f'detailed-{i}.csv'
+            #     i+=1
+            workload_id = self.path_to_arrivals.split('/')[-1].split('-')[-1].split('.')[0]
+            new_file = f'detailed-{workload_id}.csv'
+
+            detailed = open(f'{path_to_report}/{new_file}','w')
             detailed_writer = csv.writer(detailed)
             detailed_writer.writerow(detailed_header)
 
@@ -256,7 +266,7 @@ class Simulator(QObject):
             
                       
             # if self.verbosity <= 3 :
-            #     print(s)
+            print(s)
             config.log.write(s)
 
         total_completion_percent = 100 * (total_completion / self.total_no_of_tasks)
@@ -293,7 +303,7 @@ class Simulator(QObject):
             energy_per_completion = 0.0
 
         row.append(
-            [self.workload_id,self.total_no_of_tasks ,
+            [self.path_to_arrivals,self.total_no_of_tasks ,
             total_assigned_tasks, len(self.scheduler.stats['dropped']),
             missed_urg,
             missed_be,
@@ -303,7 +313,7 @@ class Simulator(QObject):
             100*(consumed_energy/config.total_energy),            
             energy_per_completion ])       
 
-        
+        print(row)
         return row
     
     

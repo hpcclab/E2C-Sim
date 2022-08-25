@@ -1,7 +1,7 @@
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
-import sys
+import sys,csv
 
 
 
@@ -9,9 +9,13 @@ class ItemDockDetail(QMainWindow):
 
     def __init__(self):
         super().__init__()
-        self.configs={'mapper':{'checkbox':True,
+        self.configs={'mapper':{'immediate':True,
                                 'policy':'FirstCome-FirstServe'}}
-        self.mapper_enabled = True
+        self.mapper_enabled = True        
+        self.workload_path = './workloads/default/workload.csv'
+        self.path_to_etc = './task_machine_performance/default/etc.csv'
+        self.etc_editable = True
+        
 
         self.init_dock()
     
@@ -87,7 +91,7 @@ class ItemDockDetail(QMainWindow):
         self.start_text.setReadOnly(True)
         self.start_text.setAlignment(Qt.AlignLeft)
 
-        self.deferred_lbl = QLabel('Deferred#')
+        self.deferred_lbl = QLabel('#of deferred')
         self.deferred_text = QLineEdit()
         self.deferred_text.setText(f'{task.no_of_deferring}')
         self.deferred_text.setReadOnly(True)
@@ -172,12 +176,154 @@ class ItemDockDetail(QMainWindow):
 
         self.dock.setWidget(self.tabs)
 
+    def machine_etc(self, tt, mt):                
+        self.tabs = QTabWidget()
+        self.tab_etc = QWidget()
+        self.tabs.addTab(self.tab_etc, "Profiling Table (ETC)")        
+        self.tab_etc.layout = QVBoxLayout(self)        
+        self.etc_grid = QGridLayout(self)    
+
+            
+        self.etc_matrix = QTableWidget()        
+        etc = []
+        mt = []
+        tt = []
+
+        with open(self.path_to_etc,'r') as workload:
+            etc_reader = csv.reader(workload) 
+            mt = next(etc_reader)[1:]
+            for idx, row in enumerate(etc_reader):
+                tt.append(row[0])
+                etc.append(row[1:])  
+
+        self.etc_matrix.setRowCount(len(tt)) 
+        self.etc_matrix.setColumnCount(len(mt)) 
+        
+        for i in range(len(tt)):                
+                for j in range(len(mt)):        
+                    cell_item = QTableWidgetItem(str(etc[i][j]))
+                    self.etc_matrix.setItem(i,j, cell_item) 
+                    
+        if not self.etc_editable:
+            self.etc_matrix.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        
+        self.etc_matrix.setHorizontalHeaderLabels(mt)        
+        self.etc_matrix.setVerticalHeaderLabels(tt)
+        self.etc_matrix.horizontalHeader().setStretchLastSection(True)
+        self.etc_matrix.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+
+                    
+
+        self.etc_matrix.horizontalHeader().sectionDoubleClicked.connect(self.changeHorizontalHeader)
+        self.etc_matrix.verticalHeader().sectionDoubleClicked.connect(self.changeVerticalHeader)
+        self.etc_generate = QPushButton('Submit')
+        self.etc_edit = QPushButton('Edit')
+        self.etc_edit.clicked.connect(self.enable_etc_table)
+       
+        self.etc_grid.addWidget(self.etc_matrix,0,0, len(tt),len(mt))
+        self.etc_grid.addWidget(self.etc_edit,1+len(tt),0,1,len(mt)/2)
+        self.etc_grid.addWidget(self.etc_generate,1+len(tt),(len(mt)/2)+1,1,len(mt)/2)        
+        self.tab_etc.layout.addLayout(self.etc_grid)                
+        self.tab_etc.layout.addStretch(1)
+        self.tab_etc.setLayout(self.tab_etc.layout)
+        self.dock.setWidget(self.tabs)
+
+    def enable_etc_table(self):
+        if not self.etc_editable:
+            self.etc_matrix.setEditTriggers(QAbstractItemView.DoubleClicked | QAbstractItemView.SelectedClicked)            
+            self.etc_editable = True
 
 
-    def machine_data(self, machine):
-        # title = QLabel("Machine", self)
-        # self.dock.setTitleBarWidget(title)
 
+    @pyqtSlot(int)
+    def changeHorizontalHeader(self, index):
+        it = self.etc_matrix.horizontalHeaderItem(index)
+        if it is None:
+            val = self.etc_matrix.model().headerData(index, Qt.Horizontal)
+            it = QTableWidgetItem(str(val))
+            self.etc_matrix.setHorizontalHeaderItem(index, it)
+        oldHeader = it.text()
+        newHeader, okPressed  = QInputDialog.getText(self,
+            'Machine Type Name', "New machine type name:", 
+            QLineEdit.Normal, oldHeader)
+        if okPressed:
+            it.setText(newHeader)
+
+    @pyqtSlot(int)
+    def changeVerticalHeader(self, index):
+        it = self.etc_matrix.verticalHeaderItem(index)
+        if it is None:
+            val = self.etc_matrix.model().headerData(index, Qt.Horizontal)
+            it = QTableWidgetItem(str(val))
+            self.etc_matrix.setVerticalHeaderItem(index, it)
+        oldHeader = it.text()
+        newHeader, okPressed  = QInputDialog.getText(self,
+            'Task Type Name', "New task type name:", 
+            QLineEdit.Normal, oldHeader)
+        if okPressed:
+            it.setText(newHeader)
+
+
+    def homo_selected(self):
+        for row in range(self.etc_matrix.rowCount()):
+            for column in range(self.etc_matrix.columnCount()):
+                self.etc_matrix.setItem(row, column,QTableWidgetItem(self.homo_et.text())) 
+    
+    def hete_selected(self):
+        self.etc_matrix.clearContents()
+        self.homo_et.clear()
+        self.homo_et.setReadOnly(True)
+
+
+    def set_mq(self):
+        self.tabs = QTabWidget()
+        self.tab_mq = QWidget()
+        self.tabs.addTab(self.tab_mq, "Machine Queue")        
+        self.tab_mq.layout = QVBoxLayout(self)        
+        self.mq_grid = QGridLayout(self)        
+        
+        self.mq_lbl = QLabel('Machine queue size')
+        self.mq_size = QLineEdit()
+        self.mq_size.setToolTip('The size of machine queues')
+        if self.configs['mapper']['immediate']:
+            self.mq_size.setText("unlimited")
+        else:
+            self.mq_size.setText("")
+        self.mq_size.setReadOnly(False)
+        self.mq_size.setAlignment(Qt.AlignLeft)
+        
+        self.mq_grid.addWidget(self.mq_lbl,0,0)
+        self.mq_grid.addWidget(self.mq_size,1,0)
+              
+        self.tab_mq.layout.addLayout(self.mq_grid)                
+        self.tab_mq.layout.addStretch(1)
+        self.tab_mq.setLayout(self.tab_mq.layout)
+        self.dock.setWidget(self.tabs)
+
+
+    def set_bq(self):
+        self.tabs = QTabWidget()
+        self.tab_bq = QWidget()
+        self.tabs.addTab(self.tab_bq, "Batch Queue")        
+        self.tab_bq.layout = QVBoxLayout(self)        
+        self.bq_grid = QGridLayout(self)        
+        
+        self.bq_lbl = QLabel('Batch queue size')
+        self.bq_size = QLineEdit()
+        self.bq_size.setText("")
+        self.bq_size.setReadOnly(False)
+        self.bq_size.setAlignment(Qt.AlignLeft)
+        
+        self.bq_grid.addWidget(self.bq_lbl,0,0)
+        self.bq_grid.addWidget(self.bq_size,1,0)
+              
+        self.tab_bq.layout.addLayout(self.bq_grid)                
+        self.tab_bq.layout.addStretch(1)
+        self.tab_bq.setLayout(self.tab_bq.layout)
+        self.dock.setWidget(self.tabs)
+
+
+    def machine_data(self, machine):       
         self.tabs = QTabWidget()
         self.tab_machine = QWidget()
         self.tab_perf = QWidget()
@@ -216,19 +362,19 @@ class ItemDockDetail(QMainWindow):
 
 
         self.perf_grid = QGridLayout(self)
-        self.assigned_lbl = QLabel('Assigned Tasks#')
+        self.assigned_lbl = QLabel('#of Assigned Tasks')
         self.assigned_text = QLineEdit()
         self.assigned_text.setText(f"{machine.stats['assigned_tasks']}")
         self.assigned_text.setReadOnly(True)
         self.assigned_text.setAlignment(Qt.AlignLeft)
 
-        self.completed_lbl = QLabel('Completed Tasks#')
+        self.completed_lbl = QLabel('#of completed Tasks')
         self.completed_text = QLineEdit()
         self.completed_text.setText(f"{machine.stats['completed_tasks']}")
         self.completed_text.setReadOnly(True)
         self.completed_text.setAlignment(Qt.AlignLeft)
 
-        self.missed_lbl = QLabel('Missed Tasks#')
+        self.missed_lbl = QLabel('#of Missed Tasks')
         self.missed_text = QLineEdit()
         self.missed_text.setText(f"{machine.stats['missed_BE_tasks']}")
         self.missed_text.setReadOnly(True)
@@ -366,27 +512,37 @@ class ItemDockDetail(QMainWindow):
 
         self.mapper_grid = QGridLayout(self)
 
-        self.chb_policy = QCheckBox()
-        self.chb_policy.setText('Immediate Scheduling')
-        self.chb_policy.setChecked(self.configs['mapper']['checkbox'])
-        self.chb_policy.toggled.connect(self.mapper_chb)
+        self.rb_immediate = QRadioButton('Immediate Scheduling')
+        self.rb_batch = QRadioButton('Batch Scheduling')
+       
+        self.rb_immediate.setChecked(self.configs['mapper']['immediate'])
+        self.rb_batch.setChecked(not self.configs['mapper']['immediate'])
 
-        self.policy_lbl = QLabel('Policy')
-        self.policy_cb = QComboBox(self)
-        if self.chb_policy.isChecked():
-            self.policies = ['FirstCome-FirstServe',
-                             'Min-Expected-Completion-Time',
-                             'Min-Expected-Execution-Time',
-                             ]
-        else:
-            self.policies = ['FELARE',
-                             'ELARE',
-                             'MinCompletion-MinCompletion',
-                             'MinCompletion-SoonestDeadline',
-                             'MinCompletion-MaxUrgency',
-                            ]       
-        self.policy_cb.addItems(self.policies)  
-        self.policy_cb.setCurrentText(self.configs['mapper']['policy'])
+        self.rb_immediate.toggled.connect(lambda:self.rb_policy_state(self.rb_immediate))
+        self.rb_batch.toggled.connect(lambda:self.rb_policy_state(self.rb_batch))
+
+        self.immediate_lbl = QLabel('Policy')
+        self.immediate_cb = QComboBox(self)        
+        self.immediate_policies = ['FirstCome-FirstServe',
+                            'Min-Expected-Completion-Time',
+                            'Min-Expected-Execution-Time',
+                            ]
+        
+        self.immediate_cb.addItems(self.immediate_policies) 
+        self.immediate_cb.setEnabled(self.rb_immediate.isChecked())
+        
+         
+
+        self.batch_lbl = QLabel('Policy')
+        self.batch_cb = QComboBox(self)
+        self.batch_policies = ['FELARE',
+                            'ELARE',
+                            'MinCompletion-MinCompletion',
+                            'MinCompletion-SoonestDeadline',
+                            'MinCompletion-MaxUrgency',
+                        ]       
+        self.batch_cb.addItems(self.batch_policies) 
+        self.batch_cb.setEnabled(self.rb_batch.isChecked())        
 
         style =  "QComboBox QAbstractItemView {"
         style += " border: 2px solid grey;"
@@ -395,43 +551,46 @@ class ItemDockDetail(QMainWindow):
         style += " }"
         style += " QComboBox {"
         style += " background: white;"
+        style += " selection-background-color: blue;"
         style += "}"
-        self.policy_cb.setStyleSheet(style)
+        self.immediate_cb.setStyleSheet(style)
+        self.batch_cb.setStyleSheet(style)
         
-        if not enabled:
-            self.chb_policy.setEnabled(False)
-            self.policy_cb.setEnabled(False)
+        if self.rb_immediate.isChecked():
+            self.immediate_cb.setCurrentText(self.configs['mapper']['policy'])
         else:
-            self.chb_policy.setEnabled(True)
-            self.policy_cb.setEnabled(True)
+            self.batch_cb.setCurrentText(self.configs['mapper']['policy'])
 
+        if not enabled:
+            self.rb_immediate.setCheckable(False)
+            self.rb_batch.setCheckable(False)
 
-                        
+            self.immediate_cb.setEnabled(False)
+            self.batch_cb.setEnabled(False)
+
+        self.mapper_grid.addWidget(self.rb_immediate,0,0,1,2)   
+        self.mapper_grid.addWidget(self.immediate_lbl,1,0)        
+        self.mapper_grid.addWidget(self.immediate_cb,1,1)
+
+        self.mapper_grid.addWidget(self.rb_batch,3,0,1,2)   
+        self.mapper_grid.addWidget(self.batch_lbl,4,0)        
+        self.mapper_grid.addWidget(self.batch_cb,4,1)
         
-        self.mapper_grid.addWidget(self.chb_policy,0,0,1,2)   
-        self.mapper_grid.addWidget(self.policy_lbl,1,0)        
-        self.mapper_grid.addWidget(self.policy_cb,1,1)
         
         self.tab_mapper.layout.addLayout(self.mapper_grid)                
         self.tab_mapper.layout.addStretch(1)
         self.tab_mapper.setLayout(self.tab_mapper.layout)
         self.dock.setWidget(self.tabs)
     
-    
-    def mapper_chb(self):        
-        self.policy_cb.clear()
-        if self.chb_policy.isChecked():
-            self.policies = ['FirstCome-FirstServe',
-                        'Min-Expected-Completion-Time',
-                        'Min-Expected-Execution-Time',]
-        else:
-            self.policies = ['FELARE',
-                    'ELARE',
-                    'MinCompletion-MinCompletion',
-                    'MinCompletion-SoonestDeadline',
-                    'MinCompletion-MaxUrgency',
-                    ]
-        self.policy_cb.addItems(self.policies)
+
+    def rb_policy_state(self,rb):
+        if rb.isChecked():
+            if rb.text() == 'Immediate Scheduling':
+                self.immediate_cb.setEnabled(True)
+                self.batch_cb.setEnabled(False)
+            else:
+                self.immediate_cb.setEnabled(False)
+                self.batch_cb.setEnabled(True)
     
     def workload_data(self, enabled):
         self.tabs = QTabWidget()
@@ -444,17 +603,71 @@ class ItemDockDetail(QMainWindow):
 
         
 
-        self.path_lbl = QLabel('Path')
         self.path_entry = QLineEdit(self)
+        self.path_entry.setStyleSheet("QLineEdit"
+                        "{"
+                        "background : white;"
+                        "}")
+        self.path_entry.setText(self.workload_path)
+        self.browse_btn = QPushButton('Load', self)
+        self.browse_btn.clicked.connect(self.get_workload_file)
+
+
+        self.workload_table = QTableWidget()        
+        self.workload_table.setRowCount(0) 
+        self.workload_table.setColumnCount(2) 
+
+        self.workload_table.setHorizontalHeaderLabels(['Task Type', 'Arrival Time'])
+        self.workload_table.horizontalHeader().setStretchLastSection(True)
+        self.workload_table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)        
+        with open(self.workload_path,'r') as workload:
+            workload_reader = csv.reader(workload)     
+            next(workload_reader)        
+            for idx, row in enumerate(workload_reader):                 
+                self.workload_table.setRowCount(idx+1) 
+                type_item = QTableWidgetItem(row[0])       
+                arrival_item = QTableWidgetItem(str(row[1]))
+                self.workload_table.setItem(idx, 0, type_item)
+                self.workload_table.setItem(idx, 1, arrival_item )            
+                type_item.setFlags(type_item.flags() ^ Qt.ItemIsEditable)
+                arrival_item.setFlags(arrival_item.flags() ^ Qt.ItemIsEditable)
+            
+
+        self.workload_grid.addWidget(self.path_entry,0,0)        
+        self.workload_grid.addWidget(self.browse_btn,0,1)   
         
-        
-        self.workload_grid.addWidget(self.path_lbl,0,0)   
-        self.workload_grid.addWidget(self.path_entry,0,1)        
-        
-        self.tab_workload.layout.addLayout(self.workload_grid)                
+        self.tab_workload.layout.addLayout(self.workload_grid) 
+        self.tab_workload.layout.addWidget(self.workload_table)               
         self.tab_workload.layout.addStretch(1)
         self.tab_workload.setLayout(self.tab_workload.layout)
         self.dock.setWidget(self.tabs)
+    
+    def get_workload_file(self):     
+        loaded_path  = QFileDialog.getOpenFileName(self, caption='Choose File',
+                                                    directory=QDir.currentPath(),
+                                                    filter='*.csv')
+        if loaded_path[0]:
+            self.workload_path = loaded_path[0]
+        
+        self.path_entry.setText(self.workload_path)
+        with open(self.workload_path,'r') as workload:
+            workload_reader = csv.reader(workload)     
+            next(workload_reader)        
+            for idx, row in enumerate(workload_reader):                                
+                self.workload_table.setRowCount(idx+1)
+                type_item = QTableWidgetItem(row[0])       
+                arrival_item = QTableWidgetItem(str(row[1]))
+                self.workload_table.setItem(idx, 0, type_item)
+                self.workload_table.setItem(idx, 1, arrival_item)
+                type_item.setFlags(type_item.flags() ^ Qt.ItemIsEditable)
+                arrival_item.setFlags(arrival_item.flags() ^ Qt.ItemIsEditable)
+            
+    
+    
+
+        
+         
+            
 
 
 

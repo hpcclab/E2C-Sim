@@ -11,9 +11,11 @@ import pandas as pd
 from os import makedirs
 
 
-workload_name = 'mini'
-scenario = 'sc-1'
+
+heterogeneity_folder = 'homo'
+scenario = 'default'
 etc = 'etc-0'
+
 workload_id = 1
 
 config.init()
@@ -26,13 +28,17 @@ for machine_type in config.machine_types:
         config.machines.append(machine)            
         id += 1
 
-path_to_result = f'./output/data/{workload_name}/{scenario}/{etc}/{config.scheduling_method}'        
-makedirs(path_to_result, exist_ok = True)
+#path_to_result = f'./output/data/{heterogeneity_folder}/{etc}/{scenario}/{config.scheduling_method}'        
+#makedirs(path_to_result, exist_ok = True)
 app = QApplication(sys.argv)   
-view = gui.SimUi(workload_name, scenario, etc, workload_id)
+path_to_arrivals = './workloads/default/workload.csv'
+path_to_etc = './task_machine_performance/default/etc.csv'
+path_to_report = './output/data/default'
+view = gui.SimUi(path_to_arrivals, path_to_etc, path_to_report)
 
 view.show()
 app.exec()
+
     
-  
+
 

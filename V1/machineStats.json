@@ -1,1 +1,0 @@
-{"no_of_machine": 3, "scheduler": "FCFS", "batch_queue_size": 1, "machine_queue_size": 3000, "statistics": {"%Total Completion": 59.0, "%Total xCompletion": 0.0, "%Deferred": 0, "%Dropped": 0, "totalCompletion%": 59.0, "consumed_energy%": 86.89344722222219, "energy_per_completion": 1.4727702919020709}}

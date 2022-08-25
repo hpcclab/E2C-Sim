@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import (QGraphicsView,QGraphicsPathItem, QGraphicsTextItem,
 QGraphicsEllipseItem, QLabel, QLineEdit, QGroupBox,QFormLayout,QPushButton,QWidget)
-from PyQt5.QtGui import QBrush,  QPen, QFont, QPainterPath, QColor,QTransform
+from PyQt5.QtGui import QBrush,  QPen, QFont, QPainterPath, QColor,QTransform, QFontMetrics
 from PyQt5.QtCore import Qt, pyqtSignal
 
 
@@ -44,14 +44,25 @@ class MachineUi(QGraphicsView):
 
         
 
+    def machines_frame(self, x,y, w, h):        
+        r = 0.05*h
+        p = QPainterPath()
+        p.addRoundedRect(x, y, w, h, r, r)
+        o_frame = QGraphicsPathItem(p)
+        bcg = QColor(250,250,250)
+        pen = QPen(Qt.white,  1, Qt.SolidLine)
+        brush = QBrush(bcg)
+        o_frame.setBrush(brush)
+        o_frame.setPen(pen) 
+        o_frame.setData(0,'machines_frame')
+        self.scene.addItem(o_frame)
 
-
-    def outer_frame(self):        
-        r = 0.05*self.h_outer
+    def outer_frame(self): 
         r = 0.1* self.h_outer
         p = QPainterPath()
         p.addRoundedRect(self.x_outer, self.y_outer, self.w_outer, self.h_outer, r, r)
         o_frame = QGraphicsPathItem(p)
+        o_frame.setData(0, 'machine_queues_frame')
         bcg = QColor(250,250,250)
         pen = QPen(Qt.white,  1, Qt.SolidLine)
         brush = QBrush(bcg)
@@ -157,8 +168,21 @@ class MachineUi(QGraphicsView):
                     t_frame.setData(0, 'task_in_mq')
                     t_frame.setData(1, task) 
                     
-                    text = QGraphicsTextItem(f'{task.id}')
-                    text.setFont(QFont('Arial',16))
+                    text = QGraphicsTextItem(f'{task.id}')  
+                    font_size = 16                  
+                    font = QFont('Arial',font_size)
+                    # font_metrics = QFontMetrics(font)
+                    # font_width = font_metrics.width(text)
+                    # font_height = font_metrics.height(text)
+                    # while font_width > w_task or font_height> h_task:
+                    #     font_size -= 0.5
+                    #     font = QFont('Arial',font_size)
+                    #     font_metrics = QFontMetrics(font)
+                    #     font_width = font_metrics.width(text)
+                    #     font_height = font_metrics.height(text)
+
+                    text.setFont(font)
+                    text.adjustSize()
                     text.setFlag(text.ItemIsSelectable, False)
                     w_text = text.boundingRect().width()
                     h_text = text.boundingRect().height()                            
@@ -193,14 +217,18 @@ class MachineUi(QGraphicsView):
     
 
     def runnings(self):
-       
+        length = 1.0*self.h_q
+        r = 0.8*self.h_q
+        gap = 0.05*length
+        [x,y] = self.queue_frames[0]
+        self.machines_frame(x+self.w_q+length+r-0.5*2.5*r,self.y_outer,2.5*r, self.h_outer)       
+
         for machine in self.machines:
             m_id = machine.id
             [x,y] = self.queue_frames[m_id]
             x += self.w_q
-            y += 0.5*self.h_q
-            length = 1.5*self.h_q
-            r = 0.65*self.h_q
+            y += 0.5*self.h_q            
+            
             pen = QPen(QColor(72,72,72),  4, Qt.SolidLine)           
             connecting_line = self.scene.addLine(x,y,x+length,y,pen)
 
@@ -218,6 +246,9 @@ class MachineUi(QGraphicsView):
                 running_task = self.m_runnings[m_id][0]                
                 w = self.w_task
                 h = self.h_task
+                w = 1.2*r
+                h= 1.2*r
+
                 rounded_radius = 0.25*h         
                 p = QPainterPath()
                 p.addRoundedRect(x+length+r-0.5*w, y-0.5*h,w, h, rounded_radius, rounded_radius)
@@ -228,7 +259,20 @@ class MachineUi(QGraphicsView):
                 t_frame.setBrush(brush)
                 t_frame.setPen(pen)                 
                 text = QGraphicsTextItem(f'{running_task.id}')
-                text.setFont(QFont('Arial',16))
+                font_size = 16
+                font = QFont('Arial',font_size)
+                font_metrics = QFontMetrics(font)
+                font_width = font_metrics.width(f'{running_task.id}')
+                font_height = font_metrics.height()
+                while font_width > w or font_height> h:
+                    font_size -= 0.5
+                    font = QFont('Arial',font_size)
+                    font_metrics = QFontMetrics(font)
+                    font_width = font_metrics.width(f'{running_task.id}')
+                    font_height = font_metrics.height()
+                
+                text.setFont(font)
+                text.adjustSize()
                 text.setFlag(text.ItemIsSelectable, False)
                 w_text = text.boundingRect().width()
                 h_text = text.boundingRect().height()                            

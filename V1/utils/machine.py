@@ -55,6 +55,10 @@ class Machine(BaseMachine):
             self.stats[f'{task_type.name}-energy_usage']=0
         
         self.sleep_time = 0.1
+    
+    def recreate_queue(self):
+        self.queue = Queue(maxsize = self.queue_size)
+
 
             
     
@@ -140,7 +144,8 @@ class Machine(BaseMachine):
         return completion_time, running_time, completed
 
 
-    def admit(self, task):        
+    def admit(self, task): 
+        #print(self.queue.maxsize)       
         if not self.queue.full():
             self.queue.put(task)            
             task.status = TaskStatus.PENDING                
@@ -382,7 +387,7 @@ class Machine(BaseMachine):
         
 
     def terminate(self, task):
-              
+        #print(task.id, self.type.name, task.assigned_machine.type.name)
         self.running_task.pop()
 
         if config.gui == 1:

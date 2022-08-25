@@ -48,6 +48,7 @@ class BatchQueueUI(QGraphicsView):
         brush = QBrush(bcg)
         o_frame.setBrush(brush)
         o_frame.setPen(pen) 
+        o_frame.setData(0,'batch_queue_frame')
         self.scene.addItem(o_frame)
 
     def inner_frame(self): 
