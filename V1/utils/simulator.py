@@ -67,7 +67,7 @@ class Simulator(QObject):
                     for r in range(1,machine_type.replicas+1):
                         header.append(f'{machine_type.name}_{r}')
             et_writer.writerow(header)
-            for idx, row in arrivals.iterrows():                                
+            for idx, row in arrivals.iterrows():                                                
                 task_id = idx
                 task_type_name = row['task_type']
                 arrival_time = row['arrival_time']  
@@ -79,11 +79,13 @@ class Simulator(QObject):
                         execution_time.seed += idx * mt_id + r                    
                         execution_times[f'{machine_type.name}-{r}'] = execution_time.synthesize(etc, task_type_name, machine_type.name, self.execution_time_var)
                         execution_times_li.append(execution_times[f'{machine_type.name}-{r}'])
+                    
                 et_writer.writerow( execution_times_li)
             
                 type = config.find_task_type(task_type_name)
                 self.tasks.append(Task(task_id, type, estimated_times,
-                                        execution_times, arrival_time))    
+                                        execution_times, arrival_time))
+               
         
         self.total_no_of_tasks = len(self.tasks)
         for task in self.tasks:            
@@ -187,7 +189,7 @@ class Simulator(QObject):
             for task in self.tasks:
                 print(f'{task.id} : {task.status}')  
             self.simulation_done.emit()
-        #self.report()
+        self.report()
         #config.log.close()
 
             
@@ -199,18 +201,22 @@ class Simulator(QObject):
                     'arrival_time','execution_time','energy_usage','start_time',
                     'completion_time','missed_time','deadline',
                     'extended_deadline']
-            # try:
+            
+            if config.gui:
+                try:
 
-            #     files = [x for x in os.listdir(f'{path_to_report}/') if x.endswith('csv')]
-            # except:
-            #     files = []
-            # new_file = 'detailed-0.csv'
-            # i=0
-            # while files and (new_file in files):
-            #     new_file = f'detailed-{i}.csv'
-            #     i+=1
-            workload_id = self.path_to_arrivals.split('/')[-1].split('-')[-1].split('.')[0]
-            new_file = f'detailed-{workload_id}.csv'
+                    files = [x for x in os.listdir(f'{path_to_report}/') if x.endswith('csv')]
+                except:
+                    files = []
+                new_file = 'detailed.csv'
+                i=1
+                while files and (new_file in files):
+                    new_file = f'detailed-copy({i}).csv'
+                    i+=1
+            else:
+
+                workload_id = self.path_to_arrivals.split('/')[-1].split('-')[-1].split('.')[0]
+                new_file = f'detailed-{workload_id}.csv'
 
             detailed = open(f'{path_to_report}/{new_file}','w')
             detailed_writer = csv.writer(detailed)
@@ -229,7 +235,8 @@ class Simulator(QObject):
                     task.completion_time,task.missed_time,
                     task.deadline - task.devaluation_window, task.deadline]       
 
-                detailed_writer.writerow(detailed_row)            
+                detailed_writer.writerow(detailed_row) 
+            detailed.close()           
         
         total_assigned_tasks = 0
         total_completion = 0
@@ -312,7 +319,7 @@ class Simulator(QObject):
             total_wasted_energy_percent,
             100*(consumed_energy/config.total_energy),            
             energy_per_completion ])       
-
+        config.log.close()
         print(row)
         return row
     
