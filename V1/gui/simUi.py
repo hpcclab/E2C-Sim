@@ -37,7 +37,7 @@ class SimUi(QMainWindow):
         self.path_to_reports = path_to_reports
 
         self.title = "E2C Simulator"
-        self.top= 0
+        self.top= 20
         self.left= 0      
         self.width = 1200 
         self.height = 600        
