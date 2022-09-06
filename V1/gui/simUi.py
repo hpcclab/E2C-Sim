@@ -327,7 +327,7 @@ class SimUi(QMainWindow):
         self.thread.started.connect(self.simulator.reset)
         self.thread.started.connect(self.simulator.run)         
         self.thread.finished.connect(self.thread.deleteLater)  
-        #self.simulator.simulation_done.connect(self.report)         
+        self.simulator.simulation_done.connect(self.report)         
         self.simulator.simulation_done.connect(self.simulator.deleteLater) 
         
 
@@ -486,10 +486,11 @@ class SimUi(QMainWindow):
         self.update()
     
     def report(self):
+        print("********************* report **********************")
         self.simulate_pause = True
         #self.report_data = self.simulator.report()
         self.buttons['simulate'].setIcon(QIcon(f'./gui/icons/simulate.png'))       
-        config.log.close()
+        #config.log.close()
         
 
     def set_timer(self,value):
