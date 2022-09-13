@@ -78,13 +78,13 @@ class SimUi(QMainWindow):
         self.initUI()
 
     def full_report_action(self):
-        self.report = FullReport(self.path_to_reports)
+        self.report = FullReport(self.path_to_reports, config.scheduling_method)
 
     def task_report_action(self):
-        self.report = TaskReport(self.path_to_reports)
+        self.report = TaskReport(self.path_to_reports, config.scheduling_method)
 
     def mach_report_action(self):
-        self.report = MachineReport(self.path_to_reports)
+        self.report = MachineReport(self.path_to_reports, config.scheduling_method)
     
     def initUI(self):
         self.general_layout = QVBoxLayout() 

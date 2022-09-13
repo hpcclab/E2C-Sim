@@ -15,14 +15,14 @@ def fetchReport(path_to_reports):
 # ========================================================================= FULL REPORT
 class FullReport(QMainWindow):
 
-    def __init__(self, path_to_reports):
+    def __init__(self, path_to_reports, method):
         #Initialize window
         super().__init__()
         self.setWindowTitle("Full Simulation Report")
         self.setStyleSheet(f"background-color: rgb(217,217,217);")
 
         # Fetch CSV file
-        df = pd.read_csv(fetchReport(path_to_reports + "/FCFS/"))
+        df = pd.read_csv(fetchReport(path_to_reports + "/" + method + "/"))
 
         # Reorder columns
         df = df.reindex(columns=[
@@ -47,7 +47,7 @@ class FullReport(QMainWindow):
 
         save_report = QAction("&Save", self)
         save_report.setToolTip("Save report to CSV file")
-        save_report.triggered.connect(lambda: Downloader.download(df, "Full"))
+        save_report.triggered.connect(lambda: self.full_report_save(df))
         
         self.report_menu.addAction(save_report)
 
@@ -94,17 +94,20 @@ class FullReport(QMainWindow):
         self.resize(1200, 800)
         self.show()
 
+    def full_report_save(self, df):
+        self.dialog= Downloader(df, "Full")
+
 # ========================================================================= TASK REPORT
 class TaskReport(QMainWindow):
 
-    def __init__(self, path_to_reports):
+    def __init__(self, path_to_reports, method):
         #Initialize window
         super().__init__()
         self.setWindowTitle("Task-based Simulation Report")
         self.setStyleSheet(f"background-color: rgb(217,217,217);")
 
         # Fetch CSV file
-        df = pd.read_csv(fetchReport(path_to_reports + "/FCFS/"), usecols=[
+        df = pd.read_csv(fetchReport(path_to_reports + "/" + method + "/"), usecols=[
             'id', 
             'type', 
             'status', 
@@ -120,7 +123,8 @@ class TaskReport(QMainWindow):
 
         save_report = QAction("&Save", self)
         save_report.setToolTip("Save report to CSV file")
-        save_report.triggered.connect(lambda: Downloader.download(df, "Task"))
+        save_report.triggered.connect(lambda: self.task_report_save(df))
+        save_report.setFont
         
         self.report_menu.addAction(save_report)
 
@@ -164,7 +168,8 @@ class TaskReport(QMainWindow):
         self.query = QLineEdit()
         self.query.setPlaceholderText("Search id")
         self.query.textChanged.connect(self.search)
-        self.setMenuWidget(self.query)
+        tb = self.addToolBar("farat")
+        tb.addWidget(self.query)
 
         # Build layout & Go live
         self.layout = QVBoxLayout(self)
@@ -186,10 +191,13 @@ class TaskReport(QMainWindow):
             item = matches[0]
             self.tableWidget.setCurrentItem(item)
 
+    def task_report_save(self, df):
+        self.dialog= Downloader(df, "Task")
+
 # ========================================================================= MACHINE REPORT
 class MachineReport(QMainWindow):
 
-    def __init__(self, path_to_reports):
+    def __init__(self, path_to_reports, method):
 
         #Initialize window
         super().__init__()
@@ -197,7 +205,7 @@ class MachineReport(QMainWindow):
         self.setStyleSheet(f"background-color: rgb(217,217,217);")
 
         # Fetch CSV file
-        df = pd.read_csv(fetchReport(path_to_reports + "/FCFS/"))
+        df = pd.read_csv(fetchReport(path_to_reports + "/" + method + "/"))
         df = MachineReport.makeReport(df).sort_index(ascending=True)
 
         # Initialize menu bar
@@ -206,7 +214,7 @@ class MachineReport(QMainWindow):
 
         save_report = QAction("&Save", self)
         save_report.setToolTip("Save report to CSV file")
-        save_report.triggered.connect(lambda: Downloader.download(df, "Machine"))
+        save_report.triggered.connect(lambda: self.mach_report_save(df))
         
         self.report_menu.addAction(save_report)
 
@@ -288,3 +296,6 @@ class MachineReport(QMainWindow):
         }
 
         return df_machine
+
+    def mach_report_save(self, df):
+        self.dialog= Downloader(df, "Machine")

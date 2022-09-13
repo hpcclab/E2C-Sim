@@ -1,68 +1,54 @@
 import os, urllib.request, datetime
+import sys
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 from pandas import DataFrame
 from sympy import content
 
-class Downloader(QWidget):
+class Downloader(QMainWindow):
 
-    def __init__(self):
+    def __init__(self, df: DataFrame, type: str):
+        # Initialize self
         super().__init__()
-        self.title = 'Save File'
-        self.left = 10
-        self.top = 10
-        self.width = 640
-        self.height = 480
-        self.initUI()
+        self.setWindowTitle("Save File")
+        self.setStyleSheet(f"background-color: rgb(217,217,217);")
+        self.df = df
+        self.type = type
 
-    def initUI(self):
-        self.setWindowTitle(self.title)
-        self.setGeometry(self.left, self.top, self.width, self.height)
-
-        self.openFileNameDialog()
-        self.openFileNamesDialog()
+        # Go live
+        self.layout = QVBoxLayout(self)
+        self.setLayout(self.layout)
+        self.resize(640, 480)
         self.saveFileDialog()
 
-        self.show()
-
-    def openFileNameDialog(self):
-        options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog
-        fileName, _ = QFileDialog.getOpenFileName(self,"QFileDialog.getOpenFileName()", "","All Files (*);;Python Files (*.py)", options=options)
-        if fileName:
-            print(fileName)
-
-    def openFileNamesDialog(self):
-        options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog
-        files, _ = QFileDialog.getOpenFileNames(self,"QFileDialog.getOpenFileNames()", "","All Files (*);;Python Files (*.py)", options=options)
-        if files:
-            print(files)
-
     def saveFileDialog(self):
-        options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog
-        fileName, _ = QFileDialog.getSaveFileName(self,"QFileDialog.getSaveFileName()","","All Files (*);;Text Files (*.txt)", options=options)
-        if fileName:
-            print(fileName)
+        # Get user's Downloads dir
+        if os.name == "nt":
+            DL_DIR = f"{os.getenv('USERPROFILE')}\\Downloads"            
+        else:
+            DL_DIR = f"{os.getenv('HOME')}/Downloads"
 
-    def download(df: DataFrame, type):
+        # Initialize dialog
+        self.dialog = QFileDialog.Options()
+        self.dialog |= QFileDialog.DontUseNativeDialog
+        path, _ = QFileDialog.getSaveFileName(
+            self,
+            "QFileDialog.getSaveFileName()",
+            DL_DIR,
+            "CSV Files (*.csv)", 
+            options=self.dialog
+        )
+
+        if path:
+            self.download(path)
+
+    def download(self, path):
+        if not path.endswith(".csv"):
+            path = path + ".csv"
         try:
-            if os.name == "nt":
-                DL_DIR = f"{os.getenv('USERPROFILE')}\\Downloads"
-                df.to_csv(DL_DIR + "\\" + type + "_Simulation_Report_" + str(datetime.date.today()) + ".csv")
+            self.df.to_csv(path)
 
-            else:
-                DL_DIR = f"{os.getenv('HOME')}/Downloads"
-                df.to_csv(
-                    path_or_buf= DL_DIR + "/" + type + "_Simulation_Report_" + str(datetime.date.today()) + ".csv",
-                    sep=',',
-                    na_rep='',
-                    header=True,
-                    index=False
-                )
-
-            print("succeeded")
+            print("Download succeeded")
 
         except Exception as e:
             print("ERROR:", e)
