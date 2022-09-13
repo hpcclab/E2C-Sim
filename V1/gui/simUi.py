@@ -1,4 +1,5 @@
 import sys, time, csv
+from gui.reports import FullReport, MachineReport, TaskReport
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
@@ -53,7 +54,37 @@ class SimUi(QMainWindow):
                          }
         self.sim_done = 0
 
+        menu = self.menuBar()
+        self.report_menu = menu.addMenu("Reports")
+
+        full_report = QAction("&Full Report", self)
+        full_report.setToolTip("Display full report of simulation")
+        full_report.triggered.connect(self.full_report_action)
+
+        task_report = QAction("&Task Report", self)
+        task_report.setToolTip("Display task-centric report of simulation")
+        task_report.triggered.connect(self.task_report_action)
+
+        mach_report = QAction("&Machine Report", self)
+        mach_report.setToolTip("Display machine-centric report of simulation")
+        mach_report.triggered.connect(self.mach_report_action)
+
+        self.report_menu.addAction(full_report)
+        self.report_menu.addAction(task_report)
+        self.report_menu.addAction(mach_report)
+        self.report_menu.setToolTipsVisible(True)
+        self.report_menu.setEnabled(False)
+
         self.initUI()
+
+    def full_report_action(self):
+        self.report = FullReport(self.path_to_reports)
+
+    def task_report_action(self):
+        self.report = TaskReport(self.path_to_reports)
+
+    def mach_report_action(self):
+        self.report = MachineReport(self.path_to_reports)
     
     def initUI(self):
         self.general_layout = QVBoxLayout() 
@@ -338,6 +369,7 @@ class SimUi(QMainWindow):
         self.simulator.simulation_done.connect(lambda: self.buttons['reset'].setEnabled(True))
         self.simulator.simulation_done.connect(lambda: self.buttons['simulate'].setEnabled(False))
         self.simulator.simulation_done.connect(lambda: self.buttons['speed'].setEnabled(False))
+        self.simulator.simulation_done.connect(lambda: self.report_menu.setEnabled(True))
         self.simulator.simulation_done.connect(lambda: self.activate_mapper(1))
         
         self.buttons['speed'].setEnabled(True)
