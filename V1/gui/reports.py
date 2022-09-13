@@ -3,6 +3,8 @@ import os, glob, pathlib
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 
+from gui.downloader import Downloader
+
 def fetchReport(path_to_reports):
     files = os.listdir(path_to_reports)
     for i in range(len(files)):
@@ -38,6 +40,16 @@ class FullReport(QMainWindow):
             'deadline',
             'extended_deadline'
         ])
+
+        # Initialize menu bar
+        menu = self.menuBar()
+        self.report_menu = menu.addMenu("File")
+
+        save_report = QAction("&Save", self)
+        save_report.setToolTip("Save report to CSV file")
+        save_report.triggered.connect(lambda: Downloader.download(df, "Full"))
+        
+        self.report_menu.addAction(save_report)
 
         # Initialize widget
         self.tableWidget = QTableWidget()
@@ -101,6 +113,16 @@ class TaskReport(QMainWindow):
             'start_time', 
             'completion_time', 
             'missed_time'])
+
+        # Initialize menu bar
+        menu = self.menuBar()
+        self.report_menu = menu.addMenu("File")
+
+        save_report = QAction("&Save", self)
+        save_report.setToolTip("Save report to CSV file")
+        save_report.triggered.connect(lambda: Downloader.download(df, "Task"))
+        
+        self.report_menu.addAction(save_report)
 
         # Initialize widget
         self.tableWidget = QTableWidget()
@@ -177,6 +199,16 @@ class MachineReport(QMainWindow):
         # Fetch CSV file
         df = pd.read_csv(fetchReport(path_to_reports + "/FCFS/"))
         df = MachineReport.makeReport(df).sort_index(ascending=True)
+
+        # Initialize menu bar
+        menu = self.menuBar()
+        self.report_menu = menu.addMenu("File")
+
+        save_report = QAction("&Save", self)
+        save_report.setToolTip("Save report to CSV file")
+        save_report.triggered.connect(lambda: Downloader.download(df, "Machine"))
+        
+        self.report_menu.addAction(save_report)
 
         # Initialize widget
         self.tableWidget = QTableWidget()

@@ -73,7 +73,7 @@ class SimUi(QMainWindow):
         self.report_menu.addAction(task_report)
         self.report_menu.addAction(mach_report)
         self.report_menu.setToolTipsVisible(True)
-        self.report_menu.setEnabled(False)
+        #self.report_menu.setEnabled(False)
 
         self.initUI()
 

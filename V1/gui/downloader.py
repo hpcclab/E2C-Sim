@@ -1,6 +1,8 @@
 import os, urllib.request, datetime
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
+from pandas import DataFrame
+from sympy import content
 
 class Downloader(QWidget):
 
@@ -44,22 +46,23 @@ class Downloader(QWidget):
         if fileName:
             print(fileName)
 
-def download(df, type):
-    PREFIX = "../../V1/output/data/default/FCFS/"
-    FILE = df.to_csv(type + "_Report_" + datetime.now() + ".csv")
-    try:
-        if os.name == "nt":
-            DL_DIR = f"{os.getenv('USERPROFILE')}\\Downloads"
-        else:
-            DL_DIR = f"{os.getenv('HOME')}/Downloads"
+    def download(df: DataFrame, type):
+        try:
+            if os.name == "nt":
+                DL_DIR = f"{os.getenv('USERPROFILE')}\\Downloads"
+                df.to_csv(DL_DIR + "\\" + type + "_Simulation_Report_" + str(datetime.date.today()) + ".csv")
 
-        if not os.path.exists(PREFIX + FILE):
-            raise FileNotFoundError
+            else:
+                DL_DIR = f"{os.getenv('HOME')}/Downloads"
+                df.to_csv(
+                    path_or_buf= DL_DIR + "/" + type + "_Simulation_Report_" + str(datetime.date.today()) + ".csv",
+                    sep=',',
+                    na_rep='',
+                    header=True,
+                    index=False
+                )
 
-        urllib.request.urlretrieve(PREFIX + FILE, DL_DIR + FILE)
+            print("succeeded")
 
-    except Exception as e:
-        print("ERROR:", e)
-
-download("detailed-copy(1).csv")
-print(os.path.exists("../../V1/"))
+        except Exception as e:
+            print("ERROR:", e)
