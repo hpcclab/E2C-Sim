@@ -75,6 +75,7 @@ class SimUi(QMainWindow):
         self.report_menu.setToolTipsVisible(True)
         self.report_menu.setEnabled(False)
 
+        self.center()
         self.initUI()
 
     def full_report_action(self):
@@ -108,6 +109,13 @@ class SimUi(QMainWindow):
         self.general_layout.addLayout(hlayout)
         self.create_ctrl_buttons()
         self.connect_signals()
+        
+    def center(self):
+        qr = self.frameGeometry()
+        cp = QDesktopWidget().availableGeometry().center()
+        qr.moveCenter(cp)
+        self.move(qr.topLeft())
+
        
 
     def dock_update(self,item):
