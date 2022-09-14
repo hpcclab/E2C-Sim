@@ -38,12 +38,12 @@ class SimUi(QMainWindow):
 
         self.title = "E2C Simulator"
         self.top= 20
-        self.left= 0      
+        self.left= 20      
         self.width = 1200 
         self.height = 600        
         self.setWindowTitle(self.title)        
         self.setStyleSheet(f"background-color: rgb(217,217,217);")
-        self.setGeometry(self.top, self.left, self.width, self.height)
+        self.setGeometry(self.left, self.top, self.width, self.height)
         self.configs ={ 'scheduler': 'default',
                         'immediate_scheduling': True,
                         'mq_size':'unlimited',
@@ -366,7 +366,7 @@ class SimUi(QMainWindow):
             
 
     def reset(self):
-        #config.log.close()        
+        
         self.gv.scene.clear()
         self.progress=0
         self.p_count = 0
