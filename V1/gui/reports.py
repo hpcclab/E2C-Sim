@@ -44,7 +44,7 @@ class FullReport(QMainWindow):
         # Initialize menu bar
         menu = self.menuBar()
         self.report_menu = menu.addMenu("File")
-
+        self.report_menu.setStyleSheet("""QMenu::item::selected { background-color: blue; } """)
         save_report = QAction("&Save", self)
         save_report.setToolTip("Save report to CSV file")
         save_report.triggered.connect(lambda: self.full_report_save(df))
@@ -63,12 +63,16 @@ class FullReport(QMainWindow):
         self.tableWidget.setStyleSheet("""
             alternate-background-color: lightgray;
             background-color: white;
+            selection-background-color:lightblue;
+            ;
         """)
 
         # Format floating points to 3 decimal places
         for col in list(df.select_dtypes(include=['float64']).columns):
             df.loc[:, col] = df[col].map('{:.3f}'.format)
-
+        
+        df = df.replace(to_replace="inf",
+           value="N/A")
         # Populate cells with values from CSV    
         for r in range(df.shape[0]):
             for c in range(df.shape[1]):
@@ -117,10 +121,11 @@ class TaskReport(QMainWindow):
             'completion_time', 
             'missed_time'])
 
+        
         # Initialize menu bar
         menu = self.menuBar()
         self.report_menu = menu.addMenu("File")
-
+        self.report_menu.setStyleSheet("""QMenu::item::selected { background-color: blue; } """)
         save_report = QAction("&Save", self)
         save_report.setToolTip("Save report to CSV file")
         save_report.triggered.connect(lambda: self.task_report_save(df))
@@ -141,11 +146,15 @@ class TaskReport(QMainWindow):
         self.tableWidget.setStyleSheet("""
             alternate-background-color: lightgray;
             background-color: white;
+            selection-background-color:lightblue;
         """)
 
         # Format floating points to 3 decimal places
         for col in list(df.select_dtypes(include=['float64']).columns):
             df.loc[:, col] = df[col].map('{:.3f}'.format)
+
+        df = df.replace(to_replace="inf",
+           value="N/A")
 
         # Populate cells with values from CSV    
         for r in range(df.shape[0]):
@@ -207,11 +216,12 @@ class MachineReport(QMainWindow):
         # Fetch CSV file
         df = pd.read_csv(fetchReport(path_to_reports + "/" + method + "/"))
         df = MachineReport.makeReport(df).sort_index(ascending=True)
-
+        print('Machine Report:')
+        print(df)
         # Initialize menu bar
         menu = self.menuBar()
         self.report_menu = menu.addMenu("File")
-
+        self.report_menu.setStyleSheet("""QMenu::item::selected { background-color: blue; } """)
         save_report = QAction("&Save", self)
         save_report.setToolTip("Save report to CSV file")
         save_report.triggered.connect(lambda: self.mach_report_save(df))
@@ -230,6 +240,7 @@ class MachineReport(QMainWindow):
         self.tableWidget.setStyleSheet("""
             alternate-background-color: lightgray;
             background-color: white;
+            selection-background-color:lightblue;
         """)
 
         # Populate cells with values from CSV    
@@ -294,6 +305,7 @@ class MachineReport(QMainWindow):
             'tasks_completed': complete_t,
             'tasks_missed': missed_t
         }
+        df_machine = df_machine.drop(['machine'],axis=1)
 
         return df_machine
 

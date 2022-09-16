@@ -75,6 +75,8 @@ class SimUi(QMainWindow):
         self.report_menu.setToolTipsVisible(True)
         self.report_menu.setEnabled(False)
 
+        self.report_menu.setStyleSheet("""QMenu::item::selected { background-color: blue; } """)
+
         self.center()
         self.initUI()
 
