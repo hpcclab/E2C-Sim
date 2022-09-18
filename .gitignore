@@ -6,7 +6,7 @@ node_modules/
 /V1/report/
 
 # The file containing pycache 
-*.pyc
+**.pyc
 
 # Ignore IDE specific files
 .vscode/

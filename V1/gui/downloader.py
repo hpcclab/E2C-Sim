@@ -3,7 +3,7 @@ import sys
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 from pandas import DataFrame
-from sympy import content
+
 
 class Downloader(QMainWindow):
 

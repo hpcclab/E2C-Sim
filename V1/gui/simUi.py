@@ -410,16 +410,11 @@ class SimUi(QMainWindow):
             
 
     def reset(self):
-<<<<<<< HEAD
         del self.simulator
         try:
             config.log = open(f"{config.settings['path_to_output']}/log.txt",'w')
         except OSError as err:
             print(err)                
-=======
-        
-        self.gv.scene.clear()
->>>>>>> f550bf429a3264826fcb39270c0e0afd88287636
         self.progress=0
         self.p_count = 0        
         self.pbar.setFormat(f'{self.p_count}/0 tasks ({self.progress}%)')
