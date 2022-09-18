@@ -184,12 +184,14 @@ class Simulator(QObject):
          
                 
 
-        if config.gui == 1: 
-            print(20*'-')
-            for task in self.tasks:
-                print(f'{task.id} : {task.status}')  
+        # if config.gui == 1: 
+        #     print(20*'-')
+        #     for task in self.tasks:
+        #         print(f'{task.id} : {task.status}')  
+            # self.simulation_done.emit()
+        if config.gui :
             self.simulation_done.emit()
-        self.report()
+            self.report()
         #config.log.close()
 
             
@@ -273,7 +275,7 @@ class Simulator(QObject):
             
                       
             # if self.verbosity <= 3 :
-            print(s)
+            #print(s)
             config.log.write(s)
 
         total_completion_percent = 100 * (total_completion / self.total_no_of_tasks)
@@ -285,7 +287,7 @@ class Simulator(QObject):
         s += '\n%dropped: {:2.1f}'.format(len(self.scheduler.stats['dropped']))
         
         # if self.verbosity <= 3:
-        #     print(s)
+        print(s)
         config.log.write(s)
 
         # d = {}
@@ -320,7 +322,7 @@ class Simulator(QObject):
             100*(consumed_energy/config.total_energy),            
             energy_per_completion ])       
         config.log.close()
-        print(row)
+        #print(row)
         return row
     
     

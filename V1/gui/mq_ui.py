@@ -1,14 +1,14 @@
 from PyQt5.QtWidgets import (QGraphicsView,QGraphicsPathItem, QGraphicsTextItem,
-QGraphicsEllipseItem, QLabel, QLineEdit, QGroupBox,QFormLayout,QPushButton,QWidget)
-from PyQt5.QtGui import QBrush,  QPen, QFont, QPainterPath, QColor,QTransform, QFontMetrics
-from PyQt5.QtCore import Qt, pyqtSignal
+QGraphicsEllipseItem, QLabel, QLineEdit, QGroupBox,QFormLayout,QPushButton,QWidget, QGraphicsPixmapItem)
+from PyQt5.QtGui import QBrush,  QPen, QFont, QPainterPath, QColor,QTransform, QFontMetrics,QPixmap, QPolygonF
+from PyQt5.QtCore import Qt, pyqtSignal, QSize, QPointF
 
 
 
 
 class MachineUi(QGraphicsView):
     
-    def __init__(self, scene,machines, qsize, x_outer, y_outer, w_outer, h_outer, max_h_q):
+    def __init__(self, scene,machines, qsize, x_outer, y_outer, w_outer, h_outer, max_h_q, x_machine_trash, y_trash, trash_size):
         super().__init__()
         self.scene = scene 
         self.max_h_q = max_h_q
@@ -16,14 +16,20 @@ class MachineUi(QGraphicsView):
         self.y_outer = y_outer
         self.w_outer = w_outer
         self.h_outer = h_outer
+        self.x_trash = x_machine_trash
+        self.y_trash = y_trash
+        self.trash_size = trash_size
         self.max_qsize = qsize
         self.machines = machines
+        self.machine_circles = {}
         self.m_runnings = {}
-        self.m_queues={}        
+        self.m_queues={}   
+        self.missed_tasks_machines = []
         for machine in self.machines:
             m_id = machine.id
             self.m_queues[m_id] = []            
             self.m_runnings[m_id] = []
+            
         self.queue_frames = {}
         self.no_of_machines = len(self.machines)
         self.colors = [QColor(150,0,0), 
@@ -36,13 +42,14 @@ class MachineUi(QGraphicsView):
     def reset(self):
         self.m_runnings = {}
         self.m_queues={}
+        self.missed_tasks_machines = []
         for machine in self.machines:
             m_id = machine.id
             self.m_queues[m_id] = []
-            self.m_runnings[m_id] = []
+            self.m_runnings[m_id] = []            
         self.queue_frames = {}
 
-        
+    
 
     def machines_frame(self, x,y, w, h):        
         r = 0.05*h
@@ -218,10 +225,12 @@ class MachineUi(QGraphicsView):
 
     def runnings(self):
         length = 1.0*self.h_q
-        r = 0.8*self.h_q
+        self.machine_r = 0.8*self.h_q
         gap = 0.05*length
         [x,y] = self.queue_frames[0]
-        self.machines_frame(x+self.w_q+length+r-0.5*2.5*r,self.y_outer,2.5*r, self.h_outer)       
+        self.machines_frame(x+self.w_q+length+self.machine_r-0.5*2.5*self.machine_r,
+                            self.y_outer,
+                            2.5*self.machine_r, self.h_outer)       
 
         for machine in self.machines:
             m_id = machine.id
@@ -234,7 +243,8 @@ class MachineUi(QGraphicsView):
 
             pen = QPen(QColor(82,126,191),  1, Qt.SolidLine)
             brush = QBrush(QColor(82,126,191))
-            machine_circle = QGraphicsEllipseItem (x+length, y-r, 2*r,2*r)
+            self.machine_circles[m_id] = [x+length, y-self.machine_r]
+            machine_circle = QGraphicsEllipseItem (x+length, y-self.machine_r, 2*self.machine_r,2*self.machine_r)
             machine_circle.setPen(pen)
             machine_circle.setBrush(brush)
             machine_circle.setData(0, 'machine')
@@ -246,12 +256,12 @@ class MachineUi(QGraphicsView):
                 running_task = self.m_runnings[m_id][0]                
                 w = self.w_task
                 h = self.h_task
-                w = 1.2*r
-                h= 1.2*r
+                w = 1.2*self.machine_r
+                h= 1.2*self.machine_r
 
                 rounded_radius = 0.25*h         
                 p = QPainterPath()
-                p.addRoundedRect(x+length+r-0.5*w, y-0.5*h,w, h, rounded_radius, rounded_radius)
+                p.addRoundedRect(x+length+self.machine_r-0.5*w, y-0.5*h,w, h, rounded_radius, rounded_radius)
                 t_frame = QGraphicsPathItem(p)
                 bcg = self.colors[running_task.type.id%len(self.colors)]
                 pen = QPen(Qt.white,  2, Qt.SolidLine)
@@ -276,16 +286,51 @@ class MachineUi(QGraphicsView):
                 text.setFlag(text.ItemIsSelectable, False)
                 w_text = text.boundingRect().width()
                 h_text = text.boundingRect().height()                            
-                text.setPos(x+length+r-0.5*w_text, y - 0.5*h_text)
+                text.setPos(x+length+self.machine_r-0.5*w_text, y - 0.5*h_text)
                 t_frame.setData(0,'task_in_machine')
                 t_frame.setData(1, running_task)
                 
                 self.scene.addItem(t_frame)
                 self.scene.addItem(text)
             #self.scene.addItem(machine_circle)
+    
+    def trash(self):
+        self.trash_pix= QPixmap('./gui/icons/trash.png') 
+        self.trash_pix = self.trash_pix.scaled(QSize(self.trash_size,self.trash_size), Qt.IgnoreAspectRatio)
+        self.trash_item = QGraphicsPixmapItem(self.trash_pix) 
+
+        #self.x_trash = self.x_outer + self.w_outer + self.h_q + 3*self.machine_r
+        #self.y_trash = self.y_outer + self.h_outer + self.machine_r
+
+        self.trash_item.setOffset(self.x_trash, self.y_trash)         
+        self.trash_item.setData(0,'trash_missed')
+        self.scene.addItem(self.trash_item)
+    
+    def connect_machine_running_to_trash(self, task, machine, pen, color):
+        x1,y1 = self.machine_circles[machine.id]
+        y1 += self.machine_r
+        x1 += 2*self.machine_r
+        x2,y2 = self.x_trash + 0.5*self.trash_size, y1
+        x3,y3 = x2, self.y_trash
+        
+        l1 = self.scene.addLine(x1,y1,x2,y2,pen)
+        l2 = self.arrow1(x2,y2,x3,y3, pen, color)
+        
 
 
-
+    def arrow1(self, x1,y1,x2,y2, pen,color):
+        w = pen.width()
+        line = self.scene.addLine(x1,y1,x2,y2-w,pen)
+        
+        head_w = 4*w
+        head_h = 6*w
+        poly = QPolygonF([QPointF(x2 + 0.5*head_w, y2-head_h),
+                        QPointF(x2 , y2),
+                        QPointF(x2 - 0.5*head_w, y2-head_h)])
+        head = self.scene.addPolygon(poly)
+        head.setBrush(color)
+        pen.setWidthF(1)
+        head.setPen(pen)
             
             
         

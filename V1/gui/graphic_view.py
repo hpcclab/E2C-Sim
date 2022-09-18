@@ -72,6 +72,8 @@ class GraphicView(QGraphicsView):
         self.x_trash = self.x_mapper + 0.5 * (self.mapper_size - self.trash_size)
         self.y_trash = self.view_h - 1.5*self.trash_size
 
+        self.x_machine_trash = self.x_mq + 1.5*self.mq_w_outer 
+
         self.x_wl = 0.01*self.view_w
         self.y_wl = 0.1*self.view_h
         
@@ -88,11 +90,16 @@ class GraphicView(QGraphicsView):
         self.connect_workload(QPen(Qt.red, 4), Qt.red)
         machines = config.machines
         self.machine_queues = MachineUi(self.scene,machines = machines, qsize = 5,
-        x_outer =  self.x_mq, y_outer = self.y_mq , w_outer = self.mq_w_outer,h_outer = self.mq_h_outer, max_h_q=self.bq_h_inner)        
+                                        x_outer =  self.x_mq, y_outer = self.y_mq ,
+                                        w_outer = self.mq_w_outer,h_outer = self.mq_h_outer,
+                                        max_h_q=self.bq_h_inner,
+                                        x_machine_trash = self.x_machine_trash,
+                                        y_trash = self.y_trash, trash_size = self.trash_size)        
         self.machine_queues.outer_frame()
         self.machine_queues.draw_queues()
         self.machine_queues.fill_queues()
         self.machine_queues.runnings()
+        self.machine_queues.trash()
         self.display_time(0.0)
         self.connecting_lines()
 
@@ -176,7 +183,6 @@ class GraphicView(QGraphicsView):
         
         l2 = self.scene.addLine(x1,y1,x2,y2,pen)
         l3 = self.arrow2(x2,y2,x3,y3, pen, color)
-
         
         
     def arrow(self, x1,y1,x2,y2, pen,color):

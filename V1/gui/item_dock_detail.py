@@ -185,10 +185,57 @@ class ItemDockDetail(QMainWindow):
 
             
         self.etc_matrix = QTableWidget()        
+        # etc = []
+        # mt = []
+        # tt = []
+
+        # with open(self.path_to_etc,'r') as workload:
+        #     etc_reader = csv.reader(workload) 
+        #     mt = next(etc_reader)[1:]
+        #     for idx, row in enumerate(etc_reader):
+        #         tt.append(row[0])
+        #         etc.append(row[1:])  
+
+        # self.etc_matrix.setRowCount(len(tt)) 
+        # self.etc_matrix.setColumnCount(len(mt)) 
+        
+        # for i in range(len(tt)):                
+        #         for j in range(len(mt)):        
+        #             cell_item = QTableWidgetItem(str(etc[i][j]))
+        #             self.etc_matrix.setItem(i,j, cell_item) 
+                    
+        # if not self.etc_editable:
+        #     self.etc_matrix.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        
+        # self.etc_matrix.setHorizontalHeaderLabels(mt)        
+        # self.etc_matrix.setVerticalHeaderLabels(tt)
+        # self.etc_matrix.horizontalHeader().setStretchLastSection(True)
+        # self.etc_matrix.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self.write_etc_matrix()
+
+                    
+
+        self.etc_matrix.horizontalHeader().sectionDoubleClicked.connect(self.changeHorizontalHeader)
+        self.etc_matrix.verticalHeader().sectionDoubleClicked.connect(self.changeVerticalHeader)
+        self.etc_generate = QPushButton('Submit')
+        self.etc_load = QPushButton('Load')
+        self.etc_edit = QPushButton('Edit')
+        self.etc_edit.clicked.connect(self.enable_etc_table)
+        self.etc_load.clicked.connect(self.get_etc_file)
+       
+        self.etc_grid.addWidget(self.etc_matrix,0,0, len(tt),len(mt))
+        self.etc_grid.addWidget(self.etc_edit,1+len(tt),0,1,len(mt)/2)
+        self.etc_grid.addWidget(self.etc_load,1+len(tt),(len(mt)/2)+1,1,len(mt)/2)
+        self.etc_grid.addWidget(self.etc_generate,2+len(tt),0,1,len(mt))        
+        self.tab_etc.layout.addLayout(self.etc_grid)                
+        self.tab_etc.layout.addStretch(1)
+        self.tab_etc.setLayout(self.tab_etc.layout)
+        self.dock.setWidget(self.tabs)
+
+    def write_etc_matrix(self):
         etc = []
         mt = []
         tt = []
-
         with open(self.path_to_etc,'r') as workload:
             etc_reader = csv.reader(workload) 
             mt = next(etc_reader)[1:]
@@ -212,26 +259,31 @@ class ItemDockDetail(QMainWindow):
         self.etc_matrix.horizontalHeader().setStretchLastSection(True)
         self.etc_matrix.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
 
-                    
-
-        self.etc_matrix.horizontalHeader().sectionDoubleClicked.connect(self.changeHorizontalHeader)
-        self.etc_matrix.verticalHeader().sectionDoubleClicked.connect(self.changeVerticalHeader)
-        self.etc_generate = QPushButton('Submit')
-        self.etc_edit = QPushButton('Edit')
-        self.etc_edit.clicked.connect(self.enable_etc_table)
-       
-        self.etc_grid.addWidget(self.etc_matrix,0,0, len(tt),len(mt))
-        self.etc_grid.addWidget(self.etc_edit,1+len(tt),0,1,len(mt)/2)
-        self.etc_grid.addWidget(self.etc_generate,1+len(tt),(len(mt)/2)+1,1,len(mt)/2)        
-        self.tab_etc.layout.addLayout(self.etc_grid)                
-        self.tab_etc.layout.addStretch(1)
-        self.tab_etc.setLayout(self.tab_etc.layout)
-        self.dock.setWidget(self.tabs)
-
     def enable_etc_table(self):
         if not self.etc_editable:
             self.etc_matrix.setEditTriggers(QAbstractItemView.DoubleClicked | QAbstractItemView.SelectedClicked)            
             self.etc_editable = True
+    
+    def get_etc_file(self):     
+        path  = QFileDialog.getOpenFileName(self, caption='Choose File',
+                                                    directory=QDir.currentPath(),
+                                                    filter='*.csv')
+        if path[0]:
+            self.path_to_etc = path[0]
+        
+        # with open(self.path_to_etc,'r') as etc_file:
+        #     etc_reader = csv.reader(etc_file)     
+        #     next(etc_reader)        
+        #     for idx, row in enumerate(etc_reader):                                
+        #         self.etc_matrix.setRowCount(idx+1)
+        #         type_item = QTableWidgetItem(row[0]) 
+        #         self.etc_matrix.setItem(idx, 0, type_item)
+        #         type_item.setFlags(type_item.flags() ^ Qt.ItemIsEditable)
+        #         for m in row[1:]:
+        #             e_ij = QTableWidgetItem(str(m))               
+        #             self.etc_matrix.setItem(idx, 1, e_ij)
+        #             e_ij.setFlags(e_ij.flags() ^ Qt.ItemIsEditable)
+        self.write_etc_matrix()
 
 
 
@@ -462,6 +514,56 @@ class ItemDockDetail(QMainWindow):
         widget.setLayout(vlayout)
         self.dock.setWidget(widget)
 
+
+    def trash__missed_data(self, missed_tasks):        
+        widget = QWidget(self)
+        vlayout=QVBoxLayout()        
+        self.missed_tasks_table = QTableWidget()        
+        self.missed_tasks_table.setRowCount(len(missed_tasks)) 
+        self.missed_tasks_table.setColumnCount(6) 
+
+        for idx, task_machine in enumerate(missed_tasks):
+            task = task_machine[0]
+            machine = task_machine[1]
+            self.missed_tasks_table.setItem(idx,0, QTableWidgetItem(f"{task.id}"))
+            self.missed_tasks_table.setItem(idx,1, QTableWidgetItem(f"{task.type.name}"))
+            self.missed_tasks_table.setItem(idx,2, QTableWidgetItem(f"{machine.type.name}"))
+            self.missed_tasks_table.setItem(idx,3, QTableWidgetItem(f"{task.arrival_time:6.2f}"))
+            self.missed_tasks_table.setItem(idx,4, QTableWidgetItem(f"{task.start_time:6.2f}"))
+            self.missed_tasks_table.setItem(idx,5, QTableWidgetItem(f"{task.missed_time:6.2f}"))
+
+            self.missed_tasks_table.item(idx,0).setTextAlignment(Qt.AlignCenter)
+            self.missed_tasks_table.item(idx,1).setTextAlignment(Qt.AlignCenter)
+            self.missed_tasks_table.item(idx,2).setTextAlignment(Qt.AlignCenter)
+            self.missed_tasks_table.item(idx,3).setTextAlignment(Qt.AlignCenter)
+            self.missed_tasks_table.item(idx,4).setTextAlignment(Qt.AlignCenter)
+            self.missed_tasks_table.item(idx,5).setTextAlignment(Qt.AlignCenter)
+        
+            if idx%2 == 0 :
+                self.missed_tasks_table.item(idx,0).setBackground(QColor(250,250,250) )
+                self.missed_tasks_table.item(idx,1).setBackground(QColor(250,250,250) )
+                self.missed_tasks_table.item(idx,2).setBackground(QColor(250,250,250))
+                self.missed_tasks_table.item(idx,3).setBackground(QColor(250,250,250))
+                self.missed_tasks_table.item(idx,4).setBackground(QColor(250,250,250))
+                self.missed_tasks_table.item(idx,5).setBackground(QColor(250,250,250))
+            else:
+                self.missed_tasks_table.item(idx,0).setBackground(QColor(205,205,205) )
+                self.missed_tasks_table.item(idx,1).setBackground(QColor(205,205,205) )
+                self.missed_tasks_table.item(idx,2).setBackground(QColor(205,205,205))
+                self.missed_tasks_table.item(idx,3).setBackground(QColor(205,205,205))
+                self.missed_tasks_table.item(idx,4).setBackground(QColor(205,205,205))
+                self.missed_tasks_table.item(idx,5).setBackground(QColor(205,205,205))
+
+            
+        self.missed_tasks_table.setHorizontalHeaderLabels(["Task ID", "Type", f"Assigned\nMachine", f"Start\nTime",f"Arrival\nTime", f"Missed\nTime"])
+        self.missed_tasks_table.horizontalHeader().setStretchLastSection(True)
+        self.missed_tasks_table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        
+        vlayout.addWidget(self.missed_tasks_table)
+        vlayout.addStretch(1)
+        widget.setLayout(vlayout)
+        self.dock.setWidget(widget)
+
     
     def task_others(self, other_tasks):        
         widget = QWidget(self)
@@ -661,6 +763,11 @@ class ItemDockDetail(QMainWindow):
                 self.workload_table.setItem(idx, 1, arrival_item)
                 type_item.setFlags(type_item.flags() ^ Qt.ItemIsEditable)
                 arrival_item.setFlags(arrival_item.flags() ^ Qt.ItemIsEditable)
+
+
+    
+               
+                
             
     
     

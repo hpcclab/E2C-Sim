@@ -25,12 +25,15 @@ df_summary = pd.DataFrame(columns=['SEP','etc_id','completion%'])
 
 for SEP in SEPs:
     path_to_SEP = f'{base_path}/{SEP}'
+    hindices = pd.read_csv(f'../task_machine_performance/heterogeneous/{SEP}/hindices.csv')
+    
 
     for etc_id in etcs:
+        sep = hindices[hindices['etc_id']==f'etc-{etc_id}']['SEP'].values[0]
         path = f'{path_to_SEP}/etc_{etc_id}/{scheduler}/results-summary.csv'
         df = pd.read_csv(path, usecols=['totalCompletion%'])
         avg_completion = df.mean().loc['totalCompletion%']
-        d = {'SEP':float(SEP.split('_')[0]+'.'+SEP.split('_')[1]),
+        d = {'SEP':sep,
              'etc_id':etc_id,
              'completion%':avg_completion}
         df_summary = df_summary.append(d, ignore_index = True)
@@ -49,3 +52,7 @@ sns.displot(C, ax=ax_hist, kind='ecdf')
  
 # Remove x axis name for the boxplot
 ax_box.set(xlabel='')
+plt.figure()
+plt.scatter(df_summary['SEP'].values, df_summary['completion%'].values)
+plt.xlabel('SEP')
+plt.ylabel('Completion(%)')

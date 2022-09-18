@@ -52,6 +52,7 @@ class Workload:
         os.makedirs(folder, exist_ok = True)
         path_to_output = f"{folder}/workload-{workload_id}.csv"
         self.workload.to_csv(path_to_output, index = False)
+        print('here')
         return self.workload
 
 

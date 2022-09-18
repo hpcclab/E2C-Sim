@@ -110,6 +110,9 @@ class SimUi(QMainWindow):
         elif item.data(0) == 'trash':
             self.dock_right.trash_data(self.gv.mapper_ui.cancelled_tasks)
 
+        elif item.data(0) == 'trash_missed':
+            self.dock_right.trash__missed_data(self.gv.machine_queues.missed_tasks_machines)
+
         elif item.data(0) == 'mapper':  
                       
             try:
@@ -155,7 +158,7 @@ class SimUi(QMainWindow):
     
     def set_arrival_path(self):
         self.path_to_arrivals = self.dock_right.path_entry.text()
-        print(self.path_to_arrivals)
+        
 
     def set_mq_size(self):
         mq_size = int(self.dock_right.mq_size.text())
@@ -353,8 +356,7 @@ class SimUi(QMainWindow):
         self.thread.start() 
         
 
-    def simulate_start_pause(self):  
-        #print('pause clicked!')
+    def simulate_start_pause(self):          
         if self.simulator.pause:
             self.buttons['simulate'].setIcon(QIcon(f'./gui/icons/pause.png'))  
             self.buttons['increment'].setEnabled(False)
@@ -366,19 +368,28 @@ class SimUi(QMainWindow):
             
 
     def reset(self):
-        #config.log.close()        
-        self.gv.scene.clear()
+        del self.simulator
+        try:
+            config.log = open(f"{config.settings['path_to_output']}/log.txt",'w')
+        except OSError as err:
+            print(err)                
         self.progress=0
-        self.p_count = 0
-        self.pbar.setValue(0)
-        self.gv.display_time(0)
+        self.p_count = 0        
+        self.pbar.setFormat(f'{self.p_count}/0 tasks ({self.progress}%)')
+        self.pbar.setValue(self.progress)        
         self.gv.batch_queue.reset()
         self.gv.machine_queues.reset()        
         self.buttons['simulate'].setEnabled(True)
         self.buttons['speed'].setEnabled(False)
+        config.time.sct(0.0)
+        config.available_energy = config.total_energy
         for machine in config.machines:
+            machine.reset()
             machine.machine_signal.disconnect()
-        self.simulate_start() 
+        self.buttons['simulate'].clicked.disconnect()
+        self.buttons['simulate'].clicked.connect(self.simulate_start)
+        self.gv.scene.update()
+         
         
         
         
@@ -445,6 +456,8 @@ class SimUi(QMainWindow):
             self.gv.machine_queues.m_runnings[m_id].remove(task)
 
         elif signal_type == 'missed':
+            task = signal_data['task']
+            machine = signal_data['assigned_machine'] 
             # self.progress +=100*(1/self.simulator.total_no_of_tasks) 
             self.p_count +=1
             self.progress = round(100*self.p_count/self.simulator.total_no_of_tasks)
@@ -455,6 +468,8 @@ class SimUi(QMainWindow):
             m_id = machine.id   
             #print(f'{location} @{time} Task {task.id} dropped from Machine {m_id}')                      
             self.gv.machine_queues.m_runnings[m_id].remove(task)
+            self.gv.machine_queues.missed_tasks_machines.append([task, machine])
+            self.gv.machine_queues.connect_machine_running_to_trash(task, machine,QPen(Qt.red, 4), Qt.red)
 
         elif signal_type == 'cancelled_machine':
             # self.progress +=100*(1/self.simulator.total_no_of_tasks)  
@@ -469,7 +484,7 @@ class SimUi(QMainWindow):
             #print(f'{location} @{time} Task {task.id} dropped from Machine {m_id}')                      
             self.gv.machine_queues.m_queues[m_id].remove(task)
             self.gv.mapper_ui.cancelled_tasks.append(task)
-        
+        #print(self.p_count,self.progress)
         self.gv.batch_queue.outer_frame()
         self.gv.batch_queue.inner_frame()
         self.gv.mapper_ui.mapper()
@@ -483,6 +498,7 @@ class SimUi(QMainWindow):
         self.gv.machine_queues.draw_queues()
         self.gv.machine_queues.fill_queues()
         self.gv.machine_queues.runnings()        
+        self.gv.machine_queues.trash()
         self.update()
     
     def report(self):

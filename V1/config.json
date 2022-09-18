@@ -1,9 +1,9 @@
 {
     "parameters": [
         {
-            "machine_queue_size": 3,
-            "batch_queue_size": 5,
-            "scheduling_method": "MM",
+            "machine_queue_size": 3000,
+            "batch_queue_size": 1,
+            "scheduling_method": "FCFS",
             "fairness_factor": 1.0
         }
     ],
@@ -32,13 +32,13 @@
             "id": 3,
             "name": "T3",
             "urgency": "best_effort",
-            "deadline": 50.0
+            "deadline": 45.0
         },
         {
             "id": 4,
             "name": "T4",
             "urgency": "best_effort",
-            "deadline": 50.0
+            "deadline": 45.0
         }
     ],
     "battery": [
@@ -65,6 +65,7 @@
             "idle_power": 5,
             "replicas": 1
         }
+        
     ],
     "cloud": [
         {

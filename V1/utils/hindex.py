@@ -108,7 +108,7 @@ class HINDEX:
         _, _, max_e, flattened = self.read_data(etc_id)
         speedup = stats.gmean(flattened)
         h_index = max_e / max(speedup)
-        #print(etc_id, speedup, max_e, h_index)
+        
         
 
         #self.plot(etc_id, flattened, avg, saved)

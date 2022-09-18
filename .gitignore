@@ -1,0 +1,12 @@
+# Ignore the node_modules directory
+node_modules/
+
+# Ignore the build directory
+/V1/output/
+/V1/report/
+
+# The file containing pycache 
+*.pyc
+
+# Ignore IDE specific files
+.vscode/

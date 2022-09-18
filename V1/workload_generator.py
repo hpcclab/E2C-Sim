@@ -1,11 +1,11 @@
 import utils.config as config
 from utils.workload import Workload
 
-scenario = 'sc-1'
+scenarios = ['extreme_intensity']
 
 
-for scenario in [f'sc-{k}' for k in range(1,5)]:
+for scenario in scenarios:
     seed = 100
-    for i in range(30):
+    for i in range(1):
         seed += 7*i
         Workload().generate(scenario_name = scenario, workload_id = i, seed = seed)
