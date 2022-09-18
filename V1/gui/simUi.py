@@ -1,4 +1,5 @@
 import sys, time, csv
+from gui.reports import FullReport, MachineReport, TaskReport
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
@@ -37,13 +38,13 @@ class SimUi(QMainWindow):
         self.path_to_reports = path_to_reports
 
         self.title = "E2C Simulator"
-        self.top= 0
-        self.left= 0      
+        self.top= 20
+        self.left= 20      
         self.width = 1200 
         self.height = 600        
         self.setWindowTitle(self.title)        
         self.setStyleSheet(f"background-color: rgb(217,217,217);")
-        self.setGeometry(self.top, self.left, self.width, self.height)
+        self.setGeometry(self.left, self.top, self.width, self.height)
         self.configs ={ 'scheduler': 'default',
                         'immediate_scheduling': True,
                         'mq_size':'unlimited',
@@ -53,7 +54,40 @@ class SimUi(QMainWindow):
                          }
         self.sim_done = 0
 
+        menu = self.menuBar()
+        self.report_menu = menu.addMenu("Reports")
+
+        full_report = QAction("&Full Report", self)
+        full_report.setToolTip("Display full report of simulation")
+        full_report.triggered.connect(self.full_report_action)
+
+        task_report = QAction("&Task Report", self)
+        task_report.setToolTip("Display task-centric report of simulation")
+        task_report.triggered.connect(self.task_report_action)
+
+        mach_report = QAction("&Machine Report", self)
+        mach_report.setToolTip("Display machine-centric report of simulation")
+        mach_report.triggered.connect(self.mach_report_action)
+
+        self.report_menu.addAction(full_report)
+        self.report_menu.addAction(task_report)
+        self.report_menu.addAction(mach_report)
+        self.report_menu.setToolTipsVisible(True)
+        self.report_menu.setEnabled(False)
+
+        self.report_menu.setStyleSheet("""QMenu::item::selected { background-color: blue; } """)
+
+        self.center()
         self.initUI()
+
+    def full_report_action(self):
+        self.report = FullReport(self.path_to_reports, config.scheduling_method)
+
+    def task_report_action(self):
+        self.report = TaskReport(self.path_to_reports, config.scheduling_method)
+
+    def mach_report_action(self):
+        self.report = MachineReport(self.path_to_reports, config.scheduling_method)
     
     def initUI(self):
         self.general_layout = QVBoxLayout() 
@@ -77,6 +111,13 @@ class SimUi(QMainWindow):
         self.general_layout.addLayout(hlayout)
         self.create_ctrl_buttons()
         self.connect_signals()
+        
+    def center(self):
+        qr = self.frameGeometry()
+        cp = QDesktopWidget().availableGeometry().center()
+        qr.moveCenter(cp)
+        self.move(qr.topLeft())
+
        
 
     def dock_update(self,item):
@@ -341,6 +382,7 @@ class SimUi(QMainWindow):
         self.simulator.simulation_done.connect(lambda: self.buttons['reset'].setEnabled(True))
         self.simulator.simulation_done.connect(lambda: self.buttons['simulate'].setEnabled(False))
         self.simulator.simulation_done.connect(lambda: self.buttons['speed'].setEnabled(False))
+        self.simulator.simulation_done.connect(lambda: self.report_menu.setEnabled(True))
         self.simulator.simulation_done.connect(lambda: self.activate_mapper(1))
         
         self.buttons['speed'].setEnabled(True)
@@ -368,11 +410,16 @@ class SimUi(QMainWindow):
             
 
     def reset(self):
+<<<<<<< HEAD
         del self.simulator
         try:
             config.log = open(f"{config.settings['path_to_output']}/log.txt",'w')
         except OSError as err:
             print(err)                
+=======
+        
+        self.gv.scene.clear()
+>>>>>>> f550bf429a3264826fcb39270c0e0afd88287636
         self.progress=0
         self.p_count = 0        
         self.pbar.setFormat(f'{self.p_count}/0 tasks ({self.progress}%)')
