@@ -27,11 +27,12 @@ from gui.graphic_view import GraphicView
 from gui.item_dock_detail import ItemDockDetail
 import utils.config as config
 from utils.task import Task
+import pandas as pd
 
 
 class SimUi(QMainWindow):
     
-    def __init__(self,path_to_arrivals, path_to_etc, path_to_reports):
+    def __init__(self,w,h,path_to_arrivals, path_to_etc, path_to_reports):
         super().__init__()
         self.path_to_arrivals = path_to_arrivals
         self.path_to_etc= path_to_etc
@@ -40,8 +41,8 @@ class SimUi(QMainWindow):
         self.title = "E2C Simulator"
         self.top= 20
         self.left= 20      
-        self.width = 1200 
-        self.height = 600        
+        self.width = w
+        self.height = h        
         self.setWindowTitle(self.title)        
         self.setStyleSheet(f"background-color: rgb(217,217,217);")
         self.setGeometry(self.left, self.top, self.width, self.height)
@@ -78,6 +79,8 @@ class SimUi(QMainWindow):
         self.report_menu.setStyleSheet("""QMenu::item::selected { background-color: blue; } """)
 
         self.center()
+        #self.showMaximized()
+        
         self.initUI()
 
     def full_report_action(self):
@@ -135,10 +138,11 @@ class SimUi(QMainWindow):
             self.dock_right.machine_data(item.data(1))
 
         elif item.data(0) == 'machines_frame':            
-            tt = config.task_type_names
-            mt = config.machine_type_names            
-            self.dock_right.machine_etc(tt, mt)
-            self.dock_right.etc_generate.clicked.connect(self.set_etc)
+            # tt = config.task_type_names
+            # mt = config.machine_type_names            
+            # self.dock_right.machine_etc(tt, mt)
+            # self.dock_right.etc_generate.clicked.connect(self.set_etc)
+            pass
             
         elif item.data(0) == 'machine_queues_frame': 
             self.dock_right.set_mq()
@@ -154,8 +158,7 @@ class SimUi(QMainWindow):
         elif item.data(0) == 'trash_missed':
             self.dock_right.trash__missed_data(self.gv.machine_queues.missed_tasks_machines)
 
-        elif item.data(0) == 'mapper':  
-                      
+        elif item.data(0) == 'mapper':                        
             try:
                 scheduler = self.simulator.scheduler.name
                 self.dock_right.mapper_data(0)
@@ -166,9 +169,24 @@ class SimUi(QMainWindow):
                 self.dock_right.immediate_cb.activated.connect(self.set_scheduler)
                 self.dock_right.batch_cb.activated.connect(self.set_scheduler)
 
-        elif item.data(0) == 'workload':            
-            self.dock_right.workload_data(0)
-            self.dock_right.path_entry.textChanged.connect(self.set_arrival_path)
+        elif item.data(0) == 'workload':                 
+            #print(globals())
+            tt = config.task_type_names
+            mt = config.machine_type_names            
+            #self.dock_right.machine_etc(tt, mt)                     
+            self.dock_right.workload_data(0,tt, mt)
+            #self.dock_right.path_entry.textChanged.connect(self.set_arrival_path)
+            self.dock_right.etc_generate.clicked.connect(self.set_etc)
+            
+            try:
+                self.simulator
+                self.dock_right.etc_generate.setEnabled(False)
+                self.dock_right.etc_load.setEnabled(False)
+                self.dock_right.etc_edit.setEnabled(False)
+                self.dock_right.load_wl_btn.setEnabled(False)
+                self.dock_right.etc_matrix.setEditTriggers(QAbstractItemView.NoEditTriggers)
+            except:
+                pass
             
         self.gv.scene.update()
 
@@ -198,7 +216,8 @@ class SimUi(QMainWindow):
             
     
     def set_arrival_path(self):
-        self.path_to_arrivals = self.dock_right.path_entry.text()
+        #self.path_to_arrivals = self.dock_right.path_entry.text()
+        self.path_to_arrivals = self.dock_right.workload_path
         
 
     def set_mq_size(self):
@@ -299,6 +318,10 @@ class SimUi(QMainWindow):
 
     def set_etc(self):
         etc_matrix = self.dock_right.etc_matrix
+        not_matched_tt = self.check_etc_format(etc_matrix)
+
+        if not_matched_tt:
+            return
         self.dock_right.path_to_etc = './task_machine_performance/gui_generated/etc.csv'
         with open(self.dock_right.path_to_etc,'w') as etc_file:
             etc_writer = csv.writer(etc_file)
@@ -318,13 +341,46 @@ class SimUi(QMainWindow):
             mt.name = machine_types[idx+1]
         for idx, tt in enumerate(config.task_types):
             tt.name = task_types[idx]
+        
+        for machine in config.machines:
+                machine.reset_tt_stats()
+                
+        
+
         self.path_to_etc = f'./task_machine_performance/gui_generated/etc.csv'
         self.dock_right.etc_matrix.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.dock_right.etc_editable = False  
+    
+    def check_etc_format(self, etc_matrix):
+        task_types_etc = []
+        workload = pd.read_csv(self.dock_right.workload_path)
+        for row_count in range(etc_matrix.rowCount()):
+            task_type_name = etc_matrix.verticalHeaderItem(row_count).text()
+            task_types_etc.append(task_type_name)
+            workload = workload.replace(to_replace=f'T{row_count+1}', value = task_type_name)
         
-        
+        task_types_wl = workload['task_type'].unique()        
+        not_matched_tt = [tt for tt in task_types_wl if tt not in task_types_etc]
+        if not_matched_tt:
+            err_txt = f"Task type {not_matched_tt} in workload are not found in ETC"
+            self.err_msg('Format Error', err_txt)
+            return not_matched_tt
+        else:
+            workload.to_csv(self.dock_right.workload_path, index = False)
+            self.dock_right.rewrite_workload_table()
+
         
 
+        
+        return not_matched_tt
+    
+    def err_msg(self, err_title, err_txt):
+        msg = QMessageBox()
+        msg.setIcon(QMessageBox.Critical)
+        msg.setText(f"{err_txt}")
+        msg.setWindowTitle(f"{err_title}")
+        msg.setStandardButtons(QMessageBox.Cancel)
+        msg.exec_()
 
     def set_scheduler(self):
         if self.dock_right.rb_immediate.isChecked():
@@ -382,10 +438,36 @@ class SimUi(QMainWindow):
         self.simulator.simulation_done.connect(lambda: self.buttons['reset'].setEnabled(True))
         self.simulator.simulation_done.connect(lambda: self.buttons['simulate'].setEnabled(False))
         self.simulator.simulation_done.connect(lambda: self.buttons['speed'].setEnabled(False))
+        
+        
+        
         self.simulator.simulation_done.connect(lambda: self.report_menu.setEnabled(True))
         self.simulator.simulation_done.connect(lambda: self.activate_mapper(1))
         
         self.buttons['speed'].setEnabled(True)
+        self.dock_right.etc_editable = False
+
+        try:
+            self.dock_right.etc_edit
+            self.dock_right.etc_load
+            self.dock_right.load_wl_btn
+            self.dock_right.etc_generate
+            self.simulator.simulation_done.connect(lambda: self.dock_right.etc_edit.setEnabled(True))
+            self.simulator.simulation_done.connect(lambda: self.dock_right.etc_load.setEnabled(True))
+            self.simulator.simulation_done.connect(lambda: self.dock_right.load_wl_btn.setEnabled(True))
+            self.simulator.simulation_done.connect(lambda: self.dock_right.etc_generate.setEnabled(True))
+        except:
+            pass
+
+        try:            
+            self.dock_right.etc_generate.setEnabled(False)
+            self.dock_right.etc_load.setEnabled(False)
+            self.dock_right.etc_edit.setEnabled(False)
+            self.dock_right.load_wl_btn.setEnabled(False)
+            self.dock_right.etc_matrix.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        except:
+            pass
+        
         for machine in config.machines:
             machine.machine_signal.connect(self.msg_handler)
         self.buttons['simulate'].clicked.disconnect()
@@ -410,7 +492,10 @@ class SimUi(QMainWindow):
             
 
     def reset(self):
-        del self.simulator
+        try:
+            del self.simulator
+        except:
+            pass
         try:
             config.log = open(f"{config.settings['path_to_output']}/log.txt",'w')
         except OSError as err:
@@ -427,7 +512,10 @@ class SimUi(QMainWindow):
         config.available_energy = config.total_energy
         for machine in config.machines:
             machine.reset()
-            machine.machine_signal.disconnect()
+            try:
+                machine.machine_signal.disconnect()
+            except:
+                pass
         self.buttons['simulate'].clicked.disconnect()
         self.buttons['simulate'].clicked.connect(self.simulate_start)
         self.gv.scene.update()
@@ -444,6 +532,7 @@ class SimUi(QMainWindow):
         location = d['where']
         self.gv.scene.clear()
         self.gv.display_time(time)
+        self.gv.display_logos()
         selected_task = None
         
         if signal_type =='arriving':            
@@ -532,7 +621,7 @@ class SimUi(QMainWindow):
         self.gv.mapper_ui.mapper()
         self.gv.mapper_ui.trash()
         self.gv.workload_ui.draw_frame()
-        self.gv.connect_workload()
+        self.gv.connect_workload(QPen(Qt.red, 4), Qt.red)
         self.gv.connecting_lines()
         
         self.gv.batch_queue.draw_tasks(selected_task)

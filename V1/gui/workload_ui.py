@@ -25,8 +25,8 @@ class WorkloadUi(QGraphicsView):
         h_label = self.label.boundingRect().height()   
 
         self.d_frame = max(w_label, h_label)      
-
-        self.frame = QGraphicsEllipseItem(self.x, self.y, self.d_frame, self.d_frame)
+        y = self.y - 0.5*self.d_frame
+        self.frame = QGraphicsEllipseItem(self.x, y, self.d_frame, self.d_frame)        
         bcg = QColor(72,72,72)
         pen = QPen(bcg,  1, Qt.SolidLine)
         brush = QBrush(bcg)
@@ -34,17 +34,10 @@ class WorkloadUi(QGraphicsView):
         self.frame.setBrush(brush)
         self.frame.setData(0,'workload')
                           
-        self.label.setPos(self.x+(self.d_frame-w_label)/2, self.y + (self.d_frame-h_label)/2)
+        self.label.setPos(self.x+(self.d_frame-w_label)/2, y + (self.d_frame-h_label)/2)
 
         self.scene.addItem(self.frame)
         self.scene.addItem(self.label)
-
-
-
-
-        
-        
-
 
 
     

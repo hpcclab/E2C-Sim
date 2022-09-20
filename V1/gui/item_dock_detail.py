@@ -14,7 +14,7 @@ class ItemDockDetail(QMainWindow):
         self.mapper_enabled = True        
         self.workload_path = './workloads/default/workload.csv'
         self.path_to_etc = './task_machine_performance/default/etc.csv'
-        self.etc_editable = True
+        self.etc_editable = False
         
 
         self.init_dock()
@@ -177,60 +177,43 @@ class ItemDockDetail(QMainWindow):
         self.dock.setWidget(self.tabs)
 
     def machine_etc(self, tt, mt):                
-        self.tabs = QTabWidget()
+        #self.tabs = QTabWidget()
         self.tab_etc = QWidget()
-        self.tabs.addTab(self.tab_etc, "Profiling Table (ETC)")        
+        #self.tabs.addTab(self.tab_etc, "Profiling Table (ETC)")        
         self.tab_etc.layout = QVBoxLayout(self)        
-        self.etc_grid = QGridLayout(self)    
+        self.etc_grid = QGridLayout(self)  
 
-            
-        self.etc_matrix = QTableWidget()        
-        # etc = []
-        # mt = []
-        # tt = []
-
-        # with open(self.path_to_etc,'r') as workload:
-        #     etc_reader = csv.reader(workload) 
-        #     mt = next(etc_reader)[1:]
-        #     for idx, row in enumerate(etc_reader):
-        #         tt.append(row[0])
-        #         etc.append(row[1:])  
-
-        # self.etc_matrix.setRowCount(len(tt)) 
-        # self.etc_matrix.setColumnCount(len(mt)) 
-        
-        # for i in range(len(tt)):                
-        #         for j in range(len(mt)):        
-        #             cell_item = QTableWidgetItem(str(etc[i][j]))
-        #             self.etc_matrix.setItem(i,j, cell_item) 
-                    
-        # if not self.etc_editable:
-        #     self.etc_matrix.setEditTriggers(QAbstractItemView.NoEditTriggers)
-        
-        # self.etc_matrix.setHorizontalHeaderLabels(mt)        
-        # self.etc_matrix.setVerticalHeaderLabels(tt)
-        # self.etc_matrix.horizontalHeader().setStretchLastSection(True)
-        # self.etc_matrix.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self.etc_label = QLabel('Profiling Table (EET)')
+        self.etc_path_entry = QLineEdit(self)
+        self.etc_path_entry.setStyleSheet("QLineEdit"
+                        "{"
+                        "background : white;"
+                        "}")
+        self.etc_path_entry.setText(self.workload_path)
+        self.etc_matrix = QTableWidget()   
+        delegate = MyDelegate()
+        self.etc_matrix.setItemDelegate(delegate)             
         self.write_etc_matrix()
-
-                    
 
         self.etc_matrix.horizontalHeader().sectionDoubleClicked.connect(self.changeHorizontalHeader)
         self.etc_matrix.verticalHeader().sectionDoubleClicked.connect(self.changeVerticalHeader)
-        self.etc_generate = QPushButton('Submit')
+        # self.etc_generate = QPushButton('Submit')
         self.etc_load = QPushButton('Load')
         self.etc_edit = QPushButton('Edit')
         self.etc_edit.clicked.connect(self.enable_etc_table)
         self.etc_load.clicked.connect(self.get_etc_file)
        
-        self.etc_grid.addWidget(self.etc_matrix,0,0, len(tt),len(mt))
-        self.etc_grid.addWidget(self.etc_edit,1+len(tt),0,1,len(mt)/2)
-        self.etc_grid.addWidget(self.etc_load,1+len(tt),(len(mt)/2)+1,1,len(mt)/2)
-        self.etc_grid.addWidget(self.etc_generate,2+len(tt),0,1,len(mt))        
+        #self.etc_grid.addWidget(self.etc_matrix,0,0, len(tt),len(mt))
+        self.etc_grid.addWidget(self.etc_path_entry,0,0)
+        self.etc_grid.addWidget(self.etc_load,0,1)
+        # self.etc_grid.addWidget(self.etc_generate,2+len(tt),0,1,len(mt)) 
+        self.tab_etc.layout.addWidget(self.etc_label)
+        self.tab_etc.layout.addWidget(self.etc_matrix)
         self.tab_etc.layout.addLayout(self.etc_grid)                
         self.tab_etc.layout.addStretch(1)
         self.tab_etc.setLayout(self.tab_etc.layout)
-        self.dock.setWidget(self.tabs)
+        #self.dock.setWidget(self.tabs)
+        return self.tab_etc
 
     def write_etc_matrix(self):
         etc = []
@@ -248,16 +231,23 @@ class ItemDockDetail(QMainWindow):
         
         for i in range(len(tt)):                
                 for j in range(len(mt)):        
-                    cell_item = QTableWidgetItem(str(etc[i][j]))
+                    cell_item = QTableWidgetItem(str(etc[i][j]))                    
                     self.etc_matrix.setItem(i,j, cell_item) 
                     
         if not self.etc_editable:
+            print(self.etc_editable)
             self.etc_matrix.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        
+        self.etc_matrix.setStyleSheet("background-color: white; selection-background-color: #353535;")
         
         self.etc_matrix.setHorizontalHeaderLabels(mt)        
         self.etc_matrix.setVerticalHeaderLabels(tt)
         self.etc_matrix.horizontalHeader().setStretchLastSection(True)
         self.etc_matrix.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+
+        self.etc_matrix.verticalHeader().setStretchLastSection(False)
+        self.etc_matrix.resizeRowsToContents()        
+        self.etc_matrix.verticalHeader().setSectionResizeMode(QHeaderView.Stretch)
 
     def enable_etc_table(self):
         if not self.etc_editable:
@@ -270,19 +260,7 @@ class ItemDockDetail(QMainWindow):
                                                     filter='*.csv')
         if path[0]:
             self.path_to_etc = path[0]
-        
-        # with open(self.path_to_etc,'r') as etc_file:
-        #     etc_reader = csv.reader(etc_file)     
-        #     next(etc_reader)        
-        #     for idx, row in enumerate(etc_reader):                                
-        #         self.etc_matrix.setRowCount(idx+1)
-        #         type_item = QTableWidgetItem(row[0]) 
-        #         self.etc_matrix.setItem(idx, 0, type_item)
-        #         type_item.setFlags(type_item.flags() ^ Qt.ItemIsEditable)
-        #         for m in row[1:]:
-        #             e_ij = QTableWidgetItem(str(m))               
-        #             self.etc_matrix.setItem(idx, 1, e_ij)
-        #             e_ij.setFlags(e_ij.flags() ^ Qt.ItemIsEditable)
+
         self.write_etc_matrix()
 
 
@@ -295,7 +273,7 @@ class ItemDockDetail(QMainWindow):
             it = QTableWidgetItem(str(val))
             self.etc_matrix.setHorizontalHeaderItem(index, it)
         oldHeader = it.text()
-        newHeader, okPressed  = QInputDialog.getText(self,
+        newHeader, okPressed  = QInputDialog.getText(self.etc_matrix,
             'Machine Type Name', "New machine type name:", 
             QLineEdit.Normal, oldHeader)
         if okPressed:
@@ -309,22 +287,11 @@ class ItemDockDetail(QMainWindow):
             it = QTableWidgetItem(str(val))
             self.etc_matrix.setVerticalHeaderItem(index, it)
         oldHeader = it.text()
-        newHeader, okPressed  = QInputDialog.getText(self,
+        newHeader, okPressed  = QInputDialog.getText(self.etc_matrix,
             'Task Type Name', "New task type name:", 
             QLineEdit.Normal, oldHeader)
         if okPressed:
             it.setText(newHeader)
-
-
-    def homo_selected(self):
-        for row in range(self.etc_matrix.rowCount()):
-            for column in range(self.etc_matrix.columnCount()):
-                self.etc_matrix.setItem(row, column,QTableWidgetItem(self.homo_et.text())) 
-    
-    def hete_selected(self):
-        self.etc_matrix.clearContents()
-        self.homo_et.clear()
-        self.homo_et.setReadOnly(True)
 
 
     def set_mq(self):
@@ -694,28 +661,31 @@ class ItemDockDetail(QMainWindow):
                 self.immediate_cb.setEnabled(False)
                 self.batch_cb.setEnabled(True)
     
-    def workload_data(self, enabled):
-        self.tabs = QTabWidget()
+    def workload_data(self, enabled, tt, mt):
+        self.tabs = QTabWidget()        
         self.tab_workload = QWidget()
 
-        self.tabs.addTab(self.tab_workload, "Workload")        
+        self.tabs.addTab(self.tab_workload, "Workload and Profiling Table")        
         self.tab_workload.layout = QVBoxLayout(self)
-
         self.workload_grid = QGridLayout(self)
-
+        self.btns_grid = QGridLayout(self)
         
-
         self.path_entry = QLineEdit(self)
         self.path_entry.setStyleSheet("QLineEdit"
                         "{"
                         "background : white;"
                         "}")
         self.path_entry.setText(self.workload_path)
-        self.browse_btn = QPushButton('Load', self)
-        self.browse_btn.clicked.connect(self.get_workload_file)
+
+        self.wl_label = QLabel('Workload')
+
+        self.load_wl_btn = QPushButton('Load', self)
+        self.load_wl_btn.clicked.connect(self.get_workload_file)
 
 
-        self.workload_table = QTableWidget()        
+        self.workload_table = QTableWidget() 
+        delegate = MyDelegate()
+        self.workload_table.setItemDelegate(delegate) 
         self.workload_table.setRowCount(0) 
         self.workload_table.setColumnCount(2) 
 
@@ -733,16 +703,32 @@ class ItemDockDetail(QMainWindow):
                 self.workload_table.setItem(idx, 1, arrival_item )            
                 type_item.setFlags(type_item.flags() ^ Qt.ItemIsEditable)
                 arrival_item.setFlags(arrival_item.flags() ^ Qt.ItemIsEditable)
-            
+        self.workload_table.setStyleSheet("background-color: white; selection-background-color: #353535;")
+        self.tab_etc  = self.machine_etc(tt,mt)
+        self.etc_generate = QPushButton('Submit')
 
-        self.workload_grid.addWidget(self.path_entry,0,0)        
-        self.workload_grid.addWidget(self.browse_btn,0,1)   
+        self.tab_workload.layout.addWidget(self.tab_etc)
         
+        self.workload_grid.addWidget(self.path_entry,0,0)        
+        self.workload_grid.addWidget(self.load_wl_btn,0,1)   
+        
+        self.tab_workload.layout.addWidget(self.wl_label)
+        self.tab_workload.layout.addWidget(self.workload_table)
         self.tab_workload.layout.addLayout(self.workload_grid) 
-        self.tab_workload.layout.addWidget(self.workload_table)               
+
+        self.btns_grid.addWidget(self.etc_edit, 0,0)
+        self.btns_grid.addWidget(self.etc_generate,0,1)
+
+        self.spaceItem = QSpacerItem(100, 25, QSizePolicy.Expanding)
+        self.tab_workload.layout.addSpacerItem(self.spaceItem)
+
+        self.tab_workload.layout.addLayout(self.btns_grid)
+        
         self.tab_workload.layout.addStretch(1)
         self.tab_workload.setLayout(self.tab_workload.layout)
         self.dock.setWidget(self.tabs)
+
+        
     
     def get_workload_file(self):     
         loaded_path  = QFileDialog.getOpenFileName(self, caption='Choose File',
@@ -751,7 +737,20 @@ class ItemDockDetail(QMainWindow):
         if loaded_path[0]:
             self.workload_path = loaded_path[0]
         
-        self.path_entry.setText(self.workload_path)
+        #self.path_entry.setText(self.workload_path)
+        with open(self.workload_path,'r') as workload:
+            workload_reader = csv.reader(workload)     
+            next(workload_reader)        
+            for idx, row in enumerate(workload_reader):                                
+                self.workload_table.setRowCount(idx+1)
+                type_item = QTableWidgetItem(row[0])       
+                arrival_item = QTableWidgetItem(str(row[1]))
+                self.workload_table.setItem(idx, 0, type_item)
+                self.workload_table.setItem(idx, 1, arrival_item)
+                type_item.setFlags(type_item.flags() ^ Qt.ItemIsEditable)
+                arrival_item.setFlags(arrival_item.flags() ^ Qt.ItemIsEditable)
+    
+    def rewrite_workload_table(self):
         with open(self.workload_path,'r') as workload:
             workload_reader = csv.reader(workload)     
             next(workload_reader)        
@@ -767,7 +766,17 @@ class ItemDockDetail(QMainWindow):
 
     
                
-                
+class MyDelegate(QItemDelegate):
+
+    def createEditor(self, parent, option, index):
+        d_spin_box = QDoubleSpinBox(parent)
+        d_spin_box.setMaximum(99999999.99)
+        d_spin_box.setMinimum(0.00)
+        d_spin_box.setDecimals(3)
+        return d_spin_box
+
+
+        
             
     
     

@@ -65,6 +65,25 @@ class Machine(BaseMachine):
     def start(self):
         raise NotImplementedError
     
+    def reset_tt_stats(self):
+        self.stats = {}
+
+        self.stats = {'assigned_tasks': 0,
+                      'completed_tasks': 0,
+                      'xcompleted_tasks': 0,
+                      'missed_BE_tasks': 0,
+                      'missed_URG_tasks': 0,
+                      'energy_usage': 0,
+                      'wasted_energy': 0,
+                      'idle_energy_usage':0}
+
+        for task_type in config.task_types:
+            self.stats[f'{task_type.name}-completed']=0
+            self.stats[f'{task_type.name}-assigned']=0
+            self.stats[f'{task_type.name}-wasted_energy']=0
+            self.stats[f'{task_type.name}-energy_usage']=0
+
+    
     def reset(self):       
         self.status = MachineStatus.IDLE
         self.queue = Queue(maxsize = self.queue_size)        

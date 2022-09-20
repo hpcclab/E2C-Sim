@@ -45,7 +45,14 @@ class MapperUi(QGraphicsView):
         self.trash_item = QGraphicsPixmapItem(self.trash_pix) 
         self.trash_item.setOffset(self.x_trash, self.y_trash)         
         self.trash_item.setData(0,'trash')
+        self.cancelled_lbl = QGraphicsTextItem('Cancelled Tasks')
+        self.cancelled_lbl.setFont(QFont('Arial',14))
+        self.cancelled_lbl.setFlag(self.cancelled_lbl.ItemIsSelectable, False)  
+        w_lbl = self.cancelled_lbl.boundingRect().width()                              
+        h_lbl = self.cancelled_lbl.boundingRect().height()                              
+        self.cancelled_lbl.setPos(self.x_trash+0.5*(self.trash_size-w_lbl),self.y_trash + self.trash_size+0.5*h_lbl)
         self.scene.addItem(self.trash_item)
+        self.scene.addItem(self.cancelled_lbl)
 
 
 

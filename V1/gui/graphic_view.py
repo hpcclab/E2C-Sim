@@ -35,47 +35,51 @@ class GraphicView(QGraphicsView):
 
     def __init__(self, main_window_width, main_window_height,parent=None):
         super(GraphicView, self).__init__(parent)
-        self.view_w = 0.8*main_window_width
-        self.view_h = 0.8*main_window_height
+        self.view_w = 0.95*main_window_width
+        self.view_h = 0.95*main_window_height
         self.scene = QGraphicsScene(0,0,self.view_w,self.view_h)
         self.setScene(self.scene)
         #self.setFixedSize(self.view_w, self.view_h)
         self.setRenderHint(QPainter.Antialiasing)
-        self.initView()
         
+        self.initView()
     
+        
     def initView(self):
         self.current_time = 0.0
+        scale = 0.6
 
-        self.bq_w_outer = 0.26*self.view_w
-        self.bq_h_outer = 0.1*self.view_h
-        self.bq_w_innre = 0.25*self.view_w
-        self.bq_h_inner = 0.08*self.view_h
+        self.bq_w_outer = scale*0.26*self.view_w
+        self.bq_h_outer = scale*0.1*self.view_h
+        self.bq_w_innre = scale*0.25*self.view_w
+        self.bq_h_inner = scale*0.08*self.view_h
 
-        self.x_bq = 0.02*self.view_w
-        self.y_bq = 0.5* (self.view_h - self.bq_h_outer)
+        self.x_bq =0.1*self.view_w
+        self.y_bq =0.5* (self.view_h - self.bq_h_outer)
         
 
-        self.mq_h_outer = 0.6*self.view_h
-        self.mq_w_outer = 0.3*self.view_w
-        self.mq_to_bq_space = 0.3*self.view_w
+        self.mq_h_outer = scale*0.6*self.view_h
+        self.mq_w_outer = scale*0.3*self.view_w
+        self.mq_to_bq_space = scale*0.3*self.view_w
         self.x_mq = self.x_bq + self.bq_w_outer + self.mq_to_bq_space
         self.y_mq = self.y_bq + 0.5*(self.bq_h_outer - self.mq_h_outer)
 
-        self.mapper_to_bq_space = 0.15*self.view_h
-        self.mapper_size = 0.15*self.view_h
+        self.mapper_to_bq_space = scale*0.15*self.view_h
+        self.mapper_size = scale*0.15*self.view_h
         self.x_mapper = self.x_bq+self.bq_w_outer + self.mapper_size
-        self.y_mapper = self.y_bq+0.5*(self.bq_h_outer - self.mapper_size)
+        self.y_mapper =self.y_bq+0.5*(self.bq_h_outer - self.mapper_size)
 
         
-        self.trash_size = 0.1*self.view_h
+        self.trash_size = scale*0.1*self.view_h
         self.x_trash = self.x_mapper + 0.5 * (self.mapper_size - self.trash_size)
         self.y_trash = self.view_h - 1.5*self.trash_size
+        self.y_trash = self.y_mq + self.mq_h_outer+ self.trash_size
 
         self.x_machine_trash = self.x_mq + 1.5*self.mq_w_outer 
 
         self.x_wl = 0.01*self.view_w
-        self.y_wl = 0.1*self.view_h
+        #self.y_wl = 0.5*self.view_h
+        self.y_wl = self.y_bq + 0.5 * self.bq_h_outer
         
 
         self.batch_queue = BatchQueueUI(self.scene, 5, self.x_bq, self.y_bq ,self.bq_w_outer,self.bq_h_outer, self.bq_w_innre,self.bq_h_inner)        
@@ -101,7 +105,10 @@ class GraphicView(QGraphicsView):
         self.machine_queues.runnings()
         self.machine_queues.trash()
         self.display_time(0.0)
+        self.display_logos()
         self.connecting_lines()
+
+        
 
         # self.time_lbl= QLabel(f'Current Time:{self.current_time}')
         # self.time_lbl.setFont(QFont('Arial', 10))
@@ -122,8 +129,8 @@ class GraphicView(QGraphicsView):
                     self.itemClicked.emit(item)
                     break
         self.scene.update()   
-       
-    
+
+   
 
     def display_time(self, time):
         self.current_time = time
@@ -135,6 +142,29 @@ class GraphicView(QGraphicsView):
         self.time_lbl.setPos(self.x_mapper+0.5*(self.mapper_size-w_time),self.y_mapper - self.mapper_size)
         self.scene.addItem(self.time_lbl)
         self.update()
+    
+    def display_logos(self):
+        self.logo_size = 100
+
+        self.x_nsf_logo = 0
+        self.y_nsf_logo = 70
+        self.nsf_logo = QPixmap('./gui/icons/NSF.png') 
+        self.nsf_logo = self.nsf_logo.scaled(QSize(self.logo_size,self.logo_size), Qt.IgnoreAspectRatio)
+        self.nsf_logo_item = QGraphicsPixmapItem(self.nsf_logo) 
+        self.nsf_logo_item.setOffset(self.x_nsf_logo, self.y_nsf_logo) 
+
+
+        self.x_hpcc_logo = self.view_w-self.logo_size
+        self.y_hpcc_logo = 90     
+        self.hpcc_logo = QPixmap('./gui/icons/HPCC.svg') 
+        self.hpcc_logo = self.hpcc_logo.scaled(QSize(0.8*self.logo_size,0.8*self.logo_size))
+        self.hpcc_logo_item = QGraphicsPixmapItem(self.hpcc_logo) 
+        self.hpcc_logo_item.setOffset(self.x_hpcc_logo, self.y_hpcc_logo) 
+
+
+        self.scene.addItem(self.nsf_logo_item)
+        self.scene.addItem(self.hpcc_logo_item)
+
 
 
     
@@ -164,11 +194,11 @@ class GraphicView(QGraphicsView):
         l3 = self.arrow1(x1,y1,x2,y2, pen, color)
 
     def connect_workload(self, pen=QPen(Qt.red, 4), color=Qt.red):
-        x1 = self.x_wl + 0.5 * self.workload_ui.d_frame
-        y1 = self.y_wl + self.workload_ui.d_frame 
-        x2 = x1
-        y2 = self.y_bq
-        l3 = self.arrow1(x1,y1,x2,y2, pen, color)
+        x1 = self.x_wl + self.workload_ui.d_frame
+        y1 = self.y_wl 
+        x2 = self.x_bq
+        y2 = y1
+        l3 = self.arrow(x1,y1,x2,y2, pen, color)
     
     def connect_machine_to_trash(self, pen, color):
         x1 = self.x_mq + 0.5*self.mq_w_outer

@@ -298,13 +298,18 @@ class MachineUi(QGraphicsView):
         self.trash_pix= QPixmap('./gui/icons/trash.png') 
         self.trash_pix = self.trash_pix.scaled(QSize(self.trash_size,self.trash_size), Qt.IgnoreAspectRatio)
         self.trash_item = QGraphicsPixmapItem(self.trash_pix) 
-
-        #self.x_trash = self.x_outer + self.w_outer + self.h_q + 3*self.machine_r
-        #self.y_trash = self.y_outer + self.h_outer + self.machine_r
-
         self.trash_item.setOffset(self.x_trash, self.y_trash)         
         self.trash_item.setData(0,'trash_missed')
+
+        self.missed_lbl = QGraphicsTextItem('Missed Tasks')
+        self.missed_lbl.setFont(QFont('Arial',14))
+        self.missed_lbl.setFlag(self.missed_lbl.ItemIsSelectable, False)  
+        w_lbl = self.missed_lbl.boundingRect().width()                              
+        h_lbl = self.missed_lbl.boundingRect().height()                              
+        self.missed_lbl.setPos(self.x_trash+0.5*(self.trash_size-w_lbl),self.y_trash + self.trash_size+0.5*h_lbl)
+
         self.scene.addItem(self.trash_item)
+        self.scene.addItem(self.missed_lbl)
     
     def connect_machine_running_to_trash(self, task, machine, pen, color):
         x1,y1 = self.machine_circles[machine.id]

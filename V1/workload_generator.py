@@ -1,7 +1,7 @@
 import utils.config as config
 from utils.workload import Workload
 
-scenarios = ['extreme_intensity']
+scenarios = ['default']
 
 
 for scenario in scenarios:

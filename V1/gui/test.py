@@ -1,40 +1,69 @@
-from PyQt5 import QtWidgets, QtCore, QtGui
+import sys
+from PyQt5.QtWidgets import QWidget, QApplication, qApp, QMainWindow, QGraphicsScene, QGraphicsView, QStatusBar, QGraphicsWidget, QStyle, QGraphicsItem
+from PyQt5.QtCore    import Qt, QSizeF, pyqtSignal
 
-class Model(QtGui.QStandardItemModel):
+class Square(QGraphicsWidget) :
+ 
+ def __init__(self,*args, name = None, **kvps) :
+    super().__init__(*args, **kvps)
+    self.radius = 5
+    self.name = name
+    self.setAcceptHoverEvents(True)
+    self.setFlag(self.ItemIsSelectable)
+    self.setFlag(self.ItemIsFocusable)
 
-    def __init__(self, rows, columns, parent = None):
-        super().__init__(rows, columns, parent)
-        self._editable = True
+ def sizeHint(self, hint, size):
+    size = super().sizeHint(hint, size)
+    print(size)
+    return QSizeF(50,50)
 
-    def flags(self, index: QtCore.QModelIndex) -> QtCore.Qt.ItemFlags:
-        flags = super().flags(index)
-        if not self._editable:
-            flags = flags &~ QtCore.Qt.ItemIsEditable
-        return flags
+ def paint(self, painter, options, widget):
+    self.initStyleOption(options)
+    ink = options.palette.highLight() if options.state == QStyle.State_Selected else options.palette.button()
+    painter.setBrush(ink) # ink
+    painter.drawRoundedRect(self.rect(), self.radius, self.radius)
 
-    def setEditable(self, editable):
-        print(editable)
-        self._editable = editable
+ def hoverEnterEvent(self, event) :
+    super().hoverEnterEvent(event)
+    self.scene().entered.emit(self)
+    self.update()
 
-if __name__ == "__main__":
-    app = QtWidgets.QApplication([])
+class GraphicsScene(QGraphicsScene) :
+ entered = pyqtSignal([QGraphicsItem],[QGraphicsWidget])
 
-    model = Model(4, 3)
 
-    widget = QtWidgets.QWidget()
-    layout = QtWidgets.QVBoxLayout()
-    
-    view = QtWidgets.QTableView()
-    view.setModel(model)
-    view.show()
+class MainWindow(QMainWindow):
 
-    checkBox = QtWidgets.QCheckBox("Editable")
-    checkBox.setChecked(True)
-    checkBox.clicked.connect(model.setEditable)
+ def __init__(self, *args, **kvps) : 
+    super().__init__(*args, **kvps)
+    # Status bar
+    self.stat = QStatusBar(self)
+    self.setStatusBar(self.stat)
+    self.stat.showMessage("Started")
+    # Widget(s)
+    self.data = GraphicsScene(self)
+    self.data.entered.connect(self.itemInfo)
+    self.data.focusItemChanged.connect(self.update)
+    self.view = QGraphicsView(self.data, self)
+    item = Square(name = "A")
+    item.setPos( 50,0)
+    self.data.addItem(item)
+    item = Square(name = "B")
+    item.setPos(-50,0)
+    self.data.addItem(item)
+    self.view.ensureVisible(self.data.sceneRect())
+    self.setCentralWidget(self.view)
+    # Visibility
+    self.showMaximized()
 
-    layout.addWidget(view)
-    layout.addWidget(checkBox)
-    widget.setLayout(layout)
-    widget.show()
-    
-    app.exec()
+ def itemInfo(self, item):
+    print("Here it is -> ", item)
+
+if __name__ == "__main__" :
+ # Application
+ app = QApplication(sys.argv)
+ # Scene Tests
+ main = MainWindow()
+ main.show()
+ # Loop
+ sys.exit(app.exec_())

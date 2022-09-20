@@ -31,10 +31,15 @@ for machine_type in config.machine_types:
 #path_to_result = f'./output/data/{heterogeneity_folder}/{etc}/{scenario}/{config.scheduling_method}'        
 #makedirs(path_to_result, exist_ok = True)
 app = QApplication(sys.argv)   
+main_w_rect = app.desktop().screenGeometry()
+w = main_w_rect.width()
+h = main_w_rect.height()
+# w = 1200
+# h = 600
 path_to_arrivals = './workloads/default/workload.csv'
 path_to_etc = './task_machine_performance/default/etc.csv'
 path_to_report = './output/data/default'
-view = gui.SimUi(path_to_arrivals, path_to_etc, path_to_report)
+view = gui.SimUi(w,h,path_to_arrivals, path_to_etc, path_to_report)
 
 view.show()
 app.exec()
