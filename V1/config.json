@@ -12,7 +12,7 @@
             "path_to_output": "./output",
             "path_to_workload": "./workload",
             "verbosity": 3,
-            "gui": 1
+            "gui": 0
         }
     ],
     "task_types": [
