@@ -506,23 +506,24 @@ class ItemDockDetail(QMainWindow):
             self.missed_tasks_table.item(idx,4).setTextAlignment(Qt.AlignCenter)
             self.missed_tasks_table.item(idx,5).setTextAlignment(Qt.AlignCenter)
         
-            if idx%2 == 0 :
-                self.missed_tasks_table.item(idx,0).setBackground(QColor(250,250,250) )
-                self.missed_tasks_table.item(idx,1).setBackground(QColor(250,250,250) )
-                self.missed_tasks_table.item(idx,2).setBackground(QColor(250,250,250))
-                self.missed_tasks_table.item(idx,3).setBackground(QColor(250,250,250))
-                self.missed_tasks_table.item(idx,4).setBackground(QColor(250,250,250))
-                self.missed_tasks_table.item(idx,5).setBackground(QColor(250,250,250))
-            else:
-                self.missed_tasks_table.item(idx,0).setBackground(QColor(205,205,205) )
-                self.missed_tasks_table.item(idx,1).setBackground(QColor(205,205,205) )
-                self.missed_tasks_table.item(idx,2).setBackground(QColor(205,205,205))
-                self.missed_tasks_table.item(idx,3).setBackground(QColor(205,205,205))
-                self.missed_tasks_table.item(idx,4).setBackground(QColor(205,205,205))
-                self.missed_tasks_table.item(idx,5).setBackground(QColor(205,205,205))
+            # if idx%2 == 0 :
+            #     self.missed_tasks_table.item(idx,0).setBackground(QColor(250,250,250) )
+            #     self.missed_tasks_table.item(idx,1).setBackground(QColor(250,250,250) )
+            #     self.missed_tasks_table.item(idx,2).setBackground(QColor(250,250,250))
+            #     self.missed_tasks_table.item(idx,3).setBackground(QColor(250,250,250))
+            #     self.missed_tasks_table.item(idx,4).setBackground(QColor(250,250,250))
+            #     self.missed_tasks_table.item(idx,5).setBackground(QColor(250,250,250))
+            # else:
+            #     self.missed_tasks_table.item(idx,0).setBackground(QColor(205,205,205) )
+            #     self.missed_tasks_table.item(idx,1).setBackground(QColor(205,205,205) )
+            #     self.missed_tasks_table.item(idx,2).setBackground(QColor(205,205,205))
+            #     self.missed_tasks_table.item(idx,3).setBackground(QColor(205,205,205))
+            #     self.missed_tasks_table.item(idx,4).setBackground(QColor(205,205,205))
+            #     self.missed_tasks_table.item(idx,5).setBackground(QColor(205,205,205))
+            self.missed_tasks_table.setAlternatingRowColors(True)
 
             
-        self.missed_tasks_table.setHorizontalHeaderLabels(["Task ID", "Type", f"Assigned\nMachine", f"Start\nTime",f"Arrival\nTime", f"Missed\nTime"])
+        self.missed_tasks_table.setHorizontalHeaderLabels(["Task ID", "Type", f"Assigned\nMachine", f"Arrival\nTime",f"Start\nTime", f"Missed\nTime"])
         self.missed_tasks_table.horizontalHeader().setStretchLastSection(True)
         self.missed_tasks_table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         
@@ -737,7 +738,7 @@ class ItemDockDetail(QMainWindow):
         if loaded_path[0]:
             self.workload_path = loaded_path[0]
         
-        #self.path_entry.setText(self.workload_path)
+        self.path_entry.setText(self.workload_path)
         with open(self.workload_path,'r') as workload:
             workload_reader = csv.reader(workload)     
             next(workload_reader)        
@@ -749,7 +750,7 @@ class ItemDockDetail(QMainWindow):
                 self.workload_table.setItem(idx, 1, arrival_item)
                 type_item.setFlags(type_item.flags() ^ Qt.ItemIsEditable)
                 arrival_item.setFlags(arrival_item.flags() ^ Qt.ItemIsEditable)
-    
+        print('wl_path set in dock: ',self.workload_path)
     def rewrite_workload_table(self):
         with open(self.workload_path,'r') as workload:
             workload_reader = csv.reader(workload)     

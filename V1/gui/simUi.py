@@ -169,13 +169,11 @@ class SimUi(QMainWindow):
                 self.dock_right.immediate_cb.activated.connect(self.set_scheduler)
                 self.dock_right.batch_cb.activated.connect(self.set_scheduler)
 
-        elif item.data(0) == 'workload':                 
-            #print(globals())
+        elif item.data(0) == 'workload':   
             tt = config.task_type_names
-            mt = config.machine_type_names            
-            #self.dock_right.machine_etc(tt, mt)                     
+            mt = config.machine_type_names  
             self.dock_right.workload_data(0,tt, mt)
-            #self.dock_right.path_entry.textChanged.connect(self.set_arrival_path)
+            self.dock_right.path_entry.textChanged.connect(self.set_arrival_path)
             self.dock_right.etc_generate.clicked.connect(self.set_etc)
             
             try:
@@ -216,8 +214,10 @@ class SimUi(QMainWindow):
             
     
     def set_arrival_path(self):
-        #self.path_to_arrivals = self.dock_right.path_entry.text()
-        self.path_to_arrivals = self.dock_right.workload_path
+        print(f'wlPath: {self.dock_right.workload_path}')
+        print(f'txt_entry: {self.dock_right.path_entry.text()}')
+        self.path_to_arrivals = self.dock_right.path_entry.text()
+        #self.path_to_arrivals = self.dock_right.workload_path
         
 
     def set_mq_size(self):
