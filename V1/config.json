@@ -32,13 +32,13 @@
             "id": 3,
             "name": "T3",
             "urgency": "best_effort",
-            "deadline": 45.0
+            "deadline": 50.0
         },
         {
             "id": 4,
             "name": "T4",
             "urgency": "best_effort",
-            "deadline": 45.0
+            "deadline": 50.0
         }
     ],
     "battery": [
@@ -61,6 +61,12 @@
         },
         {
             "name": "m3",
+            "power": 10,
+            "idle_power": 5,
+            "replicas": 1
+        },
+        {
+            "name": "m4",
             "power": 10,
             "idle_power": 5,
             "replicas": 1

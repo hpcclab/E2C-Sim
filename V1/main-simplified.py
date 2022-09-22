@@ -7,12 +7,12 @@ from utils.simulator import Simulator
 from utils.machine import Machine
 import utils.config as config
 
-scenario = 'sample-low'
-etc_folder = 'sample-homogeneous'
+scenario = 'arrival_0_1'
+etc_folder = 'heterogeneous-arithmetic'
 SEPs = listdir(f'./task_machine_performance/{etc_folder}/')
 #SEPs = ['3_5']
-workloads = range(1)
-etcs = range(1)
+workloads = range(30)
+etcs = range(30)
 #etcs= [10,28]
 for SEP in SEPs:
     for etc_id in etcs:

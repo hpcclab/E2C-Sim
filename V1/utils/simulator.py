@@ -55,7 +55,8 @@ class Simulator(QObject):
         self.pause = val
     
 
-    def create_event_queue(self):        
+    def create_event_queue(self): 
+        print(self.path_to_arrivals)      
         arrivals = pd.read_csv(self.path_to_arrivals) 
         etc = pd.read_csv(self.path_to_etc,index_col=0)
                 
