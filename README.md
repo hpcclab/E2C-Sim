@@ -6,7 +6,7 @@ Below, you can find the steps to execute the program:
 1. Download Anaconda from ``` https://www.anaconda.com/products/distribution ``` and install it.
 2. Clone the repository:
 ```git clone https://github.com/hpcclab/E2C-Sim.git ```
-3. Run this command in ```V1``` directory to install required packages (Linux users may need to run `conda env export --no-builds > environment.yml` prior to this command)
+3. Go to the ```E2C-Sim/V1``` directory and run the following command to install required packages (Linux users may need to run `conda env export --no-builds > environment.yml` prior to this command)
    ```
     conda env create -f environment.yml
     ```
