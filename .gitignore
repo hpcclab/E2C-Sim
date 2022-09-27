@@ -2,9 +2,10 @@
 node_modules/
 
 # Ignore the build directory
-/V1/output/
+/V1/output/data/
+/V1/output/figures
 /V1/report/
-
+/V1/output/log.txt
 # The file containing pycache 
 **.pyc
 

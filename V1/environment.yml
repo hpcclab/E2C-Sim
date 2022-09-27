@@ -1,4 +1,4 @@
-name: simulator2
+name: simulator
 channels:
   - defaults
 dependencies:

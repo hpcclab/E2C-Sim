@@ -105,7 +105,7 @@ class GraphicView(QGraphicsView):
         self.machine_queues.runnings()
         self.machine_queues.trash()
         self.display_time(0.0)
-        self.display_logos()
+        #self.display_logos()
         self.connecting_lines()
 
         
@@ -157,7 +157,8 @@ class GraphicView(QGraphicsView):
         self.x_hpcc_logo = self.view_w-self.logo_size
         self.y_hpcc_logo = 90     
         self.hpcc_logo = QPixmap('./gui/icons/HPCC.svg') 
-        self.hpcc_logo = self.hpcc_logo.scaled(QSize(0.8*self.logo_size,0.8*self.logo_size))
+        #self.hpcc_logo = self.hpcc_logo.scaled(QSize(0.8*self.logo_size,0.8*self.logo_size))
+        self.hpcc_logo = self.hpcc_logo.scaled(self.logo_size,self.logo_size, Qt.KeepAspectRatio)
         self.hpcc_logo_item = QGraphicsPixmapItem(self.hpcc_logo) 
         self.hpcc_logo_item.setOffset(self.x_hpcc_logo, self.y_hpcc_logo) 
 

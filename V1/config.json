@@ -12,7 +12,7 @@
             "path_to_output": "./output",
             "path_to_workload": "./workload",
             "verbosity": 3,
-            "gui": 0
+            "gui": 1
         }
     ],
     "task_types": [
@@ -61,12 +61,6 @@
         },
         {
             "name": "m3",
-            "power": 10,
-            "idle_power": 5,
-            "replicas": 1
-        },
-        {
-            "name": "m4",
             "power": 10,
             "idle_power": 5,
             "replicas": 1

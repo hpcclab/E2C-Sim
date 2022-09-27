@@ -1,7 +1,7 @@
 import utils.config as config
 from utils.workload import Workload
 
-scenarios = ['arrival_100_0']
+scenarios = ['arrival_0_5']
 
 
 for scenario in scenarios:

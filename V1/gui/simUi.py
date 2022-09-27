@@ -1,5 +1,6 @@
 import sys, time, csv
 from gui.reports import FullReport, MachineReport, TaskReport
+from gui.help import HelpMenu
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
@@ -57,26 +58,36 @@ class SimUi(QMainWindow):
 
         menu = self.menuBar()
         self.report_menu = menu.addMenu("Reports")
+        self.help_menu = menu.addMenu("Help")
 
-        full_report = QAction("&Full Report", self)
-        full_report.setToolTip("Display full report of simulation")
-        full_report.triggered.connect(self.full_report_action)
+        self.full_report = QAction("&Full Report", self)
+        self.full_report.setToolTip("Display full report of simulation")
+        self.full_report.triggered.connect(self.full_report_action)
 
-        task_report = QAction("&Task Report", self)
-        task_report.setToolTip("Display task-centric report of simulation")
-        task_report.triggered.connect(self.task_report_action)
+        self.task_report = QAction("&Task Report", self)
+        self.task_report.setToolTip("Display task-centric report of simulation")
+        self.task_report.triggered.connect(self.task_report_action)
 
-        mach_report = QAction("&Machine Report", self)
-        mach_report.setToolTip("Display machine-centric report of simulation")
-        mach_report.triggered.connect(self.mach_report_action)
+        self.mach_report = QAction("&Machine Report", self)
+        self.mach_report.setToolTip("Display machine-centric report of simulation")
+        self.mach_report.triggered.connect(self.mach_report_action)
 
-        self.report_menu.addAction(full_report)
-        self.report_menu.addAction(task_report)
-        self.report_menu.addAction(mach_report)
+        help = QAction("About ...", self)
+        help.triggered.connect(self.help_menu_action)
+
+        self.report_menu.addAction(self.full_report)
+        self.report_menu.addAction(self.task_report)
+        self.report_menu.addAction(self.mach_report)
         self.report_menu.setToolTipsVisible(True)
-        self.report_menu.setEnabled(False)
+        self.report_menu.setEnabled(True)
+        self.full_report.setEnabled(False)
+        self.task_report.setEnabled(False)
+        self.mach_report.setEnabled(False)
+
+        self.help_menu.addAction(help)
 
         self.report_menu.setStyleSheet("""QMenu::item::selected { background-color: blue; } """)
+        self.help_menu.setStyleSheet("""QMenu::item::selected { background-color: blue; } """)
 
         self.center()
         #self.showMaximized()
@@ -92,6 +103,10 @@ class SimUi(QMainWindow):
     def mach_report_action(self):
         self.report = MachineReport(self.path_to_reports, config.scheduling_method)
     
+    def help_menu_action(self):
+        self.simulate_pause = True
+        self.help_menu = HelpMenu()
+
     def initUI(self):
         self.general_layout = QVBoxLayout() 
         self._centralWidget = QWidget(self)
@@ -261,7 +276,34 @@ class SimUi(QMainWindow):
         else:
             self.dock_right.mapper_enabled = False
 
-               
+    def create_logos(self, hlayout_btns):
+        #--------------------------------------------
+        right_dummy = QLabel('         ')
+        logo_dummy = QLabel(' ')
+
+        hpcc_label = QLabel(self)
+        pixmap = QPixmap(f'./gui/icons/hpccLogo.png')
+        hpcc_label.setPixmap(pixmap)
+        hlayout_btns.addWidget(hpcc_label,Qt.AlignLeft)
+        hlayout_btns.addWidget(logo_dummy) 
+
+        ull_label = QLabel(self)
+        pixmap = QPixmap(f'./gui/icons/ullLogo.png')
+        ull_label.setPixmap(pixmap)
+        hlayout_btns.addWidget(ull_label,Qt.AlignLeft)
+        hlayout_btns.addWidget(logo_dummy) 
+
+        nsf_label = QLabel(self)
+        pixmap = QPixmap(f'./gui/icons/nsfLogo.png')
+        nsf_label.setPixmap(pixmap)
+        hlayout_btns.addWidget(nsf_label,Qt.AlignLeft)
+
+        
+        right_dummy.setMinimumWidth(20)
+        hlayout_btns.addWidget(right_dummy) 
+        #--------------------------------------------
+
+
     def create_ctrl_buttons(self):
         self.buttons = {'reset':None,
                         'simulate':None,
@@ -273,9 +315,10 @@ class SimUi(QMainWindow):
         self.btn_layout =  QHBoxLayout()
         hlayout_btns = QHBoxLayout()
         vlayout_pbar = QVBoxLayout()
-        dummy = QLabel('         ')
-        dummy.setMinimumWidth(70)
-        hlayout_btns.addWidget(dummy)
+        # dummy = QLabel('         ')
+        # dummy.setMinimumWidth(70)
+        # hlayout_btns.addWidget(dummy)
+        self.create_logos(hlayout_btns)
         for btn_text, _ in self.buttons.items():           
             self.buttons[btn_text] = QPushButton('',self)
             self.buttons[btn_text].setIcon(QIcon(f'./gui/icons/{btn_text}.png'))
@@ -441,7 +484,10 @@ class SimUi(QMainWindow):
         
         
         
-        self.simulator.simulation_done.connect(lambda: self.report_menu.setEnabled(True))
+        #self.simulator.simulation_done.connect(lambda: self.report_menu.setEnabled(True))
+        self.simulator.simulation_done.connect(lambda: self.full_report.setEnabled(True))
+        self.simulator.simulation_done.connect(lambda: self.mach_report.setEnabled(True))
+        self.simulator.simulation_done.connect(lambda: self.task_report.setEnabled(True))
         self.simulator.simulation_done.connect(lambda: self.activate_mapper(1))
         
         self.buttons['speed'].setEnabled(True)
@@ -499,7 +545,10 @@ class SimUi(QMainWindow):
         try:
             config.log = open(f"{config.settings['path_to_output']}/log.txt",'w')
         except OSError as err:
-            print(err)                
+            print(err)  
+        self.full_report.setEnabled(False)
+        self.task_report.setEnabled(False)
+        self.mach_report.setEnabled(False)              
         self.progress=0
         self.p_count = 0        
         self.pbar.setFormat(f'{self.p_count}/0 tasks ({self.progress}%)')
@@ -532,7 +581,7 @@ class SimUi(QMainWindow):
         location = d['where']
         self.gv.scene.clear()
         self.gv.display_time(time)
-        self.gv.display_logos()
+        #self.gv.display_logos()
         selected_task = None
         
         if signal_type =='arriving':            

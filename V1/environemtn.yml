@@ -1,0 +1,42 @@
+name: test-env
+channels:
+  - defaults
+dependencies:
+  - _libgcc_mutex=0.1
+  - _openmp_mutex=5.1
+  - ca-certificates=2022.07.19
+  - certifi=2022.6.15
+  - ld_impl_linux-64=2.38
+  - libffi=3.3
+  - libgcc-ng=11.2.0
+  - libgomp=11.2.0
+  - libstdcxx-ng=11.2.0
+  - ncurses=6.3
+  - openssl=1.1.1q
+  - pip=22.1.2
+  - python=3.9.12
+  - readline=8.1.2
+  - setuptools=63.4.1
+  - sqlite=3.39.2
+  - tk=8.6.12
+  - tzdata=2022a
+  - wheel=0.37.1
+  - xz=5.2.5
+  - zlib=1.2.12
+  - pip:
+    - cycler==0.11.0
+    - fonttools==4.37.1
+    - kiwisolver==1.4.4
+    - matplotlib==3.5.3
+    - numpy==1.23.2
+    - packaging==21.3
+    - pandas==1.4.4
+    - pillow==9.2.0
+    - pyparsing==3.0.9
+    - pyqt5==5.15.4
+    - pyqt5-qt5==5.15.2
+    - pyqt5-sip==12.11.0
+    - python-dateutil==2.8.2
+    - pytz==2022.2.1
+    - six==1.16.0
+prefix: /home/C00424072/anaconda3/envs/test-env
