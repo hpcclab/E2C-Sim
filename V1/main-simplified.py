@@ -7,19 +7,22 @@ from utils.simulator import Simulator
 from utils.machine import Machine
 import utils.config as config
 
+rate = 'high'
+hete_homo = 'heterogeneous'
+
 scenario = 'arrival_0_1'
 etc_folder = 'heterogeneous-arithmetic'
 SEPs = listdir(f'./task_machine_performance/{etc_folder}/')
-#SEPs = ['3_5']
-workloads = range(30)
-etcs = range(30)
+SEPs = ['1_0']
+workloads = range(1)
+etcs = range(1)
 #etcs= [10,28]
 for SEP in SEPs:
     for etc_id in etcs:
         
         config.init()
-        path_to_etc = f'./task_machine_performance/{etc_folder}/{SEP}/etc-{etc_id}.csv'
-        #path_to_etc = f'/home/C00424072/Ali/Projects/E2C-Sim/V1/task_machine_performance/heterogeneous/1_75/etc-{etc_id}.csv'
+        #path_to_etc = f'./task_machine_performance/{etc_folder}/{SEP}/etc-{etc_id}.csv'
+        path_to_etc = f'./samples/{rate}/etc_{hete_homo}.csv'
         df = pd.read_csv(path_to_etc)
         df['idx'] = ['T1', 'T2', 'T3', 'T4']
         df = df.set_index(['idx'])
@@ -35,7 +38,8 @@ for SEP in SEPs:
         for workload_id in workloads:
             
             config.init()     
-            path_to_arrivals = f'./workloads/{scenario}/workload-{workload_id}.csv'
+            #path_to_arrivals = f'./workloads/{scenario}/workload-{workload_id}.csv'
+            path_to_arrivals = f'./samples/{rate}/workload_{rate}.csv'
             m_id = 0
             for machine_type in config.machine_types:
                 for r in range(1,machine_type.replicas+1):
