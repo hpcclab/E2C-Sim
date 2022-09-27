@@ -1,77 +1,49 @@
 
-import pandas as pd
-import numpy as np
-import csv
-from os import makedirs
-
-
 from utils.simulator import Simulator
 from utils.machine import Machine
 import utils.config as config
-from workload.generator import workloads_generator
+import  gui.simUi as gui
 
-from workload.workload import Workload
+from PyQt5.QtWidgets import QApplication
+import sys
+import csv
+import pandas as pd
+from os import makedirs
+
+
+
+heterogeneity_folder = 'homo'
+scenario = 'default'
+etc = 'etc-0'
+
+workload_id = 1
 
 config.init()
-workload_name = 'hete'
-scenarios = ['sc-2']
-etcs = [f'etc-{i}' for i in range(1)]
-workload_id_range = list(range(1))
-workloads_exist = True
-is_etc_exist = True
-is_et_exist = False
 
-def simulate(workload_name, scenarios, etcs, workload_id_range, workloads_exist=False,is_etc_exist = False, is_et_exist = False):
-    for sc in scenarios:
-        if not workloads_exist:    
-            config.init()
-            workloads_generator(workload_name,sc , is_etc_exist, is_et_exist ,
-                        no_of_etcs = 1, et_set = [1,1,5,5,10,10,10,25,25,25,25,100,100,100,100,100, 150,150]  ,
-                        et_variance=0.0001, et_size=1000, sample_size = 30)
-        for etc in etcs:
-            config.init()            
-            path_to_result = f'./output/data/{workload_name}/{sc}/{etc}/{config.scheduling_method}'        
-            makedirs(path_to_result, exist_ok = True)
-            report_summary = open(f'{path_to_result}/results-summary.csv','w')
-            report_header = ['workload_id', 'total_no_of_tasks','mapped','cancelled','URG_missed','BE_missed','Completion%','xCompletion%','totalCompletion%','wasted_energy%','consumed_energy%','energy_per_completion%']
-            report = csv.writer(report_summary)
-            report.writerow(report_header) 
-        
-            for workload_id in workload_id_range:        
-                config.init()
-                id = 0
-                for machine_type in config.machine_types:
-                    for r in range(1,machine_type.replicas+1):
-                        specs = {'power': machine_type.power, 'idle_power':machine_type.idle_power}
-                        machine = Machine(id,r, machine_type, specs)
-                        config.machines.append(machine)            
-                        id += 1
+id = 0
+for machine_type in config.machine_types:
+    for r in range(1,machine_type.replicas+1):
+        specs = {'power': machine_type.power, 'idle_power':machine_type.idle_power}
+        machine = Machine(id,r, machine_type, specs)
+        config.machines.append(machine)            
+        id += 1
 
-                
-                    
-                simulation = Simulator(workload_name, sc, etc, workload_id) 
-                #simulation.create_event_queue()
-                # scheduler = config.get_scheduler()
-                simulation.set_scheduling_method(config.scheduling_method)        
-                simulation.run()   
-                       
-                row = simulation.report()   
-                report.writerows(row)        
-            report_summary.close()
-            config.log.close()         
-            df_summary = pd.read_csv(f'{path_to_result}/results-summary.csv', 
-            usecols=['totalCompletion%',
-            'consumed_energy%','wasted_energy%'])
-            print('\n\n'+ 10*'*'+f'  <<{workload_name}>>||{sc} || {etc} --> {workload_id}: <<{config.scheduling_method}>> '+10*'*')
-            print(df_summary.mean())
+#path_to_result = f'./output/data/{heterogeneity_folder}/{etc}/{scenario}/{config.scheduling_method}'        
+#makedirs(path_to_result, exist_ok = True)
+app = QApplication(sys.argv)   
+main_w_rect = app.desktop().screenGeometry()
+w = main_w_rect.width()
+h = main_w_rect.height()
+# w = 1200
+# h = 600
+path_to_arrivals = './workloads/default/workload.csv'
+path_to_etc = './task_machine_performance/default/etc.csv'
+path_to_report = './output/data/default'
+view = gui.SimUi(w,h,path_to_arrivals, path_to_etc, path_to_report)
 
-# config.init()
-# workloads_generator(workload_name,scenarios[0] , is_etc_exist, is_et_exist ,
-#             no_of_etcs = 1, et_set = [1,1,5,5,10,10,10,25,25,25,25,100,100,100,100,100, 150,150]  ,
-#             et_variance=0.05, et_size=1000, sample_size = 30)
+view.show()
+app.exec()
 
-
-simulate(workload_name, scenarios, etcs, workload_id_range, workloads_exist,
-          is_etc_exist,is_et_exist)
-
+    
+ 
 
