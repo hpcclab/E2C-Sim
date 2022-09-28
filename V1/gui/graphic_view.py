@@ -47,7 +47,7 @@ class GraphicView(QGraphicsView):
         
     def initView(self):
         self.current_time = 0.0
-        scale = 0.9
+        scale = 0.6
 
         self.bq_w_outer = scale*0.26*self.view_w
         self.bq_h_outer = scale*0.1*self.view_h
