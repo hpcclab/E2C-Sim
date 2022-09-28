@@ -163,9 +163,9 @@ class SimUi(QMainWindow):
             self.dock_right.set_mq()
             self.dock_right.mq_size.returnPressed.connect(self.set_mq_size)
         
-        elif item.data(0) == 'batch_queue_frame': 
-            self.dock_right.set_bq()
-            self.dock_right.bq_size.returnPressed.connect(self.set_bq_size)
+        # elif item.data(0) == 'batch_queue_frame': 
+        #     self.dock_right.set_bq()
+        #     self.dock_right.bq_size.returnPressed.connect(self.set_bq_size)
 
         elif item.data(0) == 'trash':
             self.dock_right.trash_data(self.gv.mapper_ui.cancelled_tasks)

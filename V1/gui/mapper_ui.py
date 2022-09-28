@@ -35,7 +35,16 @@ class MapperUi(QGraphicsView):
         self.mapper_pix = self.mapper_pix.scaled(QSize(self.mapper_size,self.mapper_size), Qt.IgnoreAspectRatio)
         self.mapper_item = QGraphicsPixmapItem(self.mapper_pix) 
         self.mapper_item.setOffset(self.x_mapper, self.y_mapper)  
-        self.mapper_item.setData(0, 'mapper')     
+        self.mapper_item.setData(0, 'mapper')  
+
+        self.mapper_lbl = QGraphicsTextItem('Scheduler')
+        self.mapper_lbl.setFont(QFont('Arial',16))
+        self.mapper_lbl.setFlag(self.mapper_lbl.ItemIsSelectable, False) 
+        w_lbl = self.mapper_lbl.boundingRect().width()                              
+        h_lbl = self.mapper_lbl.boundingRect().height() 
+        self.mapper_lbl.setPos(self.x_mapper+0.5*self.mapper_size-0.5*w_lbl, self.y_mapper+self.mapper_size+0.5*h_lbl)
+        
+        self.scene.addItem(self.mapper_lbl) 
         self.scene.addItem(self.mapper_item)
     
 

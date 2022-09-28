@@ -62,6 +62,15 @@ class MachineUi(QGraphicsView):
         o_frame.setBrush(brush)
         o_frame.setPen(pen) 
         o_frame.setData(0,'machines_frame')
+
+        self.m_lbl = QGraphicsTextItem('Machines')
+        self.m_lbl.setFont(QFont('Arial',16))
+        self.m_lbl.setFlag(self.m_lbl.ItemIsSelectable, False) 
+        w_lbl = self.m_lbl.boundingRect().width()                              
+        h_lbl = self.m_lbl.boundingRect().height() 
+        self.m_lbl.setPos(x+0.5*w-0.5*w_lbl, y+h+0.5*h_lbl) 
+
+        self.scene.addItem(self.m_lbl)
         self.scene.addItem(o_frame)
 
     def outer_frame(self): 
@@ -75,7 +84,16 @@ class MachineUi(QGraphicsView):
         brush = QBrush(bcg)
         o_frame.setBrush(brush)
         o_frame.setPen(pen) 
+        
+        self.mq_lbl = QGraphicsTextItem('Machine Queues')
+        self.mq_lbl.setFont(QFont('Arial',16))
+        self.mq_lbl.setFlag(self.mq_lbl.ItemIsSelectable, False) 
+        w_lbl = self.mq_lbl.boundingRect().width()                              
+        h_lbl = self.mq_lbl.boundingRect().height() 
+        self.mq_lbl.setPos(self.x_outer+0.5*self.w_outer-0.5*w_lbl, self.y_outer+self.h_outer+0.5*h_lbl) 
+
         self.scene.addItem(o_frame)
+        self.scene.addItem(self.mq_lbl)
     
 
     def draw_queues(self):
@@ -144,7 +162,8 @@ class MachineUi(QGraphicsView):
                     t_frame.setBrush(brush)
                     t_frame.setPen(pen)
                     self.scene.addItem(t_frame)
-                    
+
+                   
         
 
     def fill_queues(self):
@@ -292,7 +311,8 @@ class MachineUi(QGraphicsView):
                 
                 self.scene.addItem(t_frame)
                 self.scene.addItem(text)
-            #self.scene.addItem(machine_circle)
+            
+        
     
     def trash(self):
         self.trash_pix= QPixmap('./gui/icons/trash.png') 
