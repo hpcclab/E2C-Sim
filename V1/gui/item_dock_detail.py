@@ -1,3 +1,4 @@
+from PyQt5.QtCore import Qt
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
@@ -22,7 +23,8 @@ class ItemDockDetail(QMainWindow):
 
     def init_dock(self):   
         self.dock=QDockWidget(self)
-        self.dock.setFloating(False)        
+        self.dock.setFloating(False)  
+        self.dock.setFeatures(QDockWidget.DockWidgetFloatable | QDockWidget.DockWidgetMovable)        
         self.addDockWidget(Qt.RightDockWidgetArea,self.dock)
     
     def task_in_bq(self, task):
