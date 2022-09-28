@@ -2,6 +2,7 @@ import pandas as pd
 import os, glob, pathlib
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
+from PyQt5.QtGui import *
 
 from gui.downloader import Downloader
 
@@ -41,15 +42,13 @@ class FullReport(QMainWindow):
             'extended_deadline'
         ])
 
-        # Initialize menu bar
-        menu = self.menuBar()
-        self.report_menu = menu.addMenu("File")
-        self.report_menu.setStyleSheet("""QMenu::item::selected { background-color: blue; } """)
+        # Initialize save action
         save_report = QAction("&Save", self)
         save_report.setToolTip("Save report to CSV file")
+        save_report.setIcon(QIcon("./gui/icons/save.png"))
         save_report.triggered.connect(lambda: self.full_report_save(df))
-        
-        self.report_menu.addAction(save_report)
+        tb = self.addToolBar("farat")
+        tb.addAction(save_report)
 
         # Initialize widget
         self.tableWidget = QTableWidget()
@@ -122,16 +121,11 @@ class TaskReport(QMainWindow):
             'missed_time'])
 
         
-        # Initialize menu bar
-        menu = self.menuBar()
-        self.report_menu = menu.addMenu("File")
-        self.report_menu.setStyleSheet("""QMenu::item::selected { background-color: blue; } """)
+        # Initialize save action
         save_report = QAction("&Save", self)
+        save_report.setIcon(QIcon("./gui/icons/save.png"))
         save_report.setToolTip("Save report to CSV file")
         save_report.triggered.connect(lambda: self.task_report_save(df))
-        save_report.setFont
-        
-        self.report_menu.addAction(save_report)
 
         # Initialize widget
         self.tableWidget = QTableWidget()
@@ -178,6 +172,7 @@ class TaskReport(QMainWindow):
         self.query.setPlaceholderText("Search id")
         self.query.textChanged.connect(self.search)
         tb = self.addToolBar("farat")
+        tb.addAction(save_report)
         tb.addWidget(self.query)
 
         # Build layout & Go live
@@ -218,15 +213,14 @@ class MachineReport(QMainWindow):
         df = MachineReport.makeReport(df).sort_index(ascending=True)
         print('Machine Report:')
         print(df)
-        # Initialize menu bar
-        menu = self.menuBar()
-        self.report_menu = menu.addMenu("File")
-        self.report_menu.setStyleSheet("""QMenu::item::selected { background-color: blue; } """)
+
+        # Initialize save action
         save_report = QAction("&Save", self)
         save_report.setToolTip("Save report to CSV file")
+        save_report.setIcon(QIcon("./gui/icons/save.png"))
         save_report.triggered.connect(lambda: self.mach_report_save(df))
-        
-        self.report_menu.addAction(save_report)
+        tb = self.addToolBar("farat")
+        tb.addAction(save_report)
 
         # Initialize widget
         self.tableWidget = QTableWidget()
