@@ -7,9 +7,10 @@ from PyQt5.QtGui import *
 from gui.downloader import Downloader
 
 def fetchReport(path_to_reports):
-    files = os.listdir(path_to_reports)
-    for i in range(len(files)):
-        files[i] = path_to_reports + files[i]
+    files = []    
+    for i, file in enumerate(os.listdir(path_to_reports)):                
+        if file.startswith('detailed'):
+            files.append(path_to_reports + file)
     file = max(files, key=os.path.getctime)
     return file
 
@@ -299,9 +300,83 @@ class MachineReport(QMainWindow):
             'tasks_completed': complete_t,
             'tasks_missed': missed_t
         }
-        df_machine = df_machine.drop(['machine'],axis=1)
+        #df_machine = df_machine.drop(['machine'],axis=1)
 
         return df_machine
 
     def mach_report_save(self, df):
+        print(df)
         self.dialog= Downloader(df, "Machine")
+
+
+# ========================================================================= Summary REPORT
+class SummaryReport(QMainWindow):
+
+    def __init__(self, path_to_reports, method):
+
+        #Initialize window
+        super().__init__()
+        self.setWindowTitle("Summarized Simulation Report")
+        self.setStyleSheet(f"background-color: rgb(217,217,217);")
+
+        # Fetch CSV file
+        df = pd.read_csv(path_to_reports + "/" + method + "/results-summary.csv")
+        for col in list(df.select_dtypes(include=['float64']).columns):
+            df.loc[:, col] = df[col].map('{:.3f}'.format)
+        print('Summary Report:')
+        print(df)
+
+        # Initialize save action
+        save_report = QAction("&Save", self)
+        save_report.setToolTip("Save report to CSV file")
+        save_report.setIcon(QIcon("./gui/icons/save.png"))
+        save_report.triggered.connect(lambda: self.summary_report_save(df))
+        tb = self.addToolBar("farat")
+        tb.addAction(save_report)
+
+        # Initialize widget
+        self.tableWidget = QTableWidget()
+        self.tableWidget.setRowCount(df.shape[0])
+        self.tableWidget.setColumnCount(df.shape[1])
+        self.tableWidget.verticalHeader().setVisible(False)
+
+        # Set column headers
+        self.tableWidget.setHorizontalHeaderLabels(df.columns)
+        self.tableWidget.setAlternatingRowColors(True)
+        self.tableWidget.setStyleSheet("""
+            alternate-background-color: lightgray;
+            background-color: white;
+            selection-background-color:lightblue;
+        """)
+
+        # Populate cells with values from CSV    
+        for r in range(df.shape[0]):
+            for c in range(df.shape[1]):
+                if not str(df.values[r][c]).isdigit():
+                    self.tableWidget.setItem(r, c, QTableWidgetItem(str(df.values[r][c])))
+                else:
+                    item = QTableWidgetItem()
+                    item.setData(Qt.DisplayRole, df.values[r][c])
+                    self.tableWidget.setItem(r, c, item)
+
+        # Enable sorting
+        self.tableWidget.setSortingEnabled(True)
+
+
+        # Table will fit the screen horizontally
+        self.tableWidget.horizontalHeader().setStretchLastSection(True)
+        self.tableWidget.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+
+        # Go live
+        self.layout = QVBoxLayout(self)
+        self.setCentralWidget(self.tableWidget)
+        self.setLayout(self.layout)
+        self.resize(600, 200)
+        self.show()
+
+    
+
+        
+
+    def summary_report_save(self, df):
+        self.dialog= Downloader(df, "Summary")

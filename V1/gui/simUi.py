@@ -1,5 +1,5 @@
 import sys, time, csv
-from gui.reports import FullReport, MachineReport, TaskReport
+from gui.reports import FullReport, MachineReport, TaskReport, SummaryReport
 from gui.help import HelpMenu
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
@@ -72,17 +72,23 @@ class SimUi(QMainWindow):
         self.mach_report.setToolTip("Display machine-centric report of simulation")
         self.mach_report.triggered.connect(self.mach_report_action)
 
+        self.summary_report = QAction("&Summary Report", self)
+        self.summary_report.setToolTip("Display a summary report of simulation")
+        self.summary_report.triggered.connect(self.summary_report_action)
+
         help = QAction("About ...", self)
         help.triggered.connect(self.help_menu_action)
 
         self.report_menu.addAction(self.full_report)
         self.report_menu.addAction(self.task_report)
         self.report_menu.addAction(self.mach_report)
+        self.report_menu.addAction(self.summary_report)
         self.report_menu.setToolTipsVisible(True)
         self.report_menu.setEnabled(True)
         self.full_report.setEnabled(False)
         self.task_report.setEnabled(False)
         self.mach_report.setEnabled(False)
+        self.summary_report.setEnabled(False)
 
         self.help_menu.addAction(help)
 
@@ -102,6 +108,9 @@ class SimUi(QMainWindow):
 
     def mach_report_action(self):
         self.report = MachineReport(self.path_to_reports, config.scheduling_method)
+    
+    def summary_report_action(self):
+        self.report = SummaryReport(self.path_to_reports, config.scheduling_method)
     
     def help_menu_action(self):
         self.simulate_pause = True
@@ -501,6 +510,7 @@ class SimUi(QMainWindow):
         self.simulator.simulation_done.connect(lambda: self.full_report.setEnabled(True))
         self.simulator.simulation_done.connect(lambda: self.mach_report.setEnabled(True))
         self.simulator.simulation_done.connect(lambda: self.task_report.setEnabled(True))
+        self.simulator.simulation_done.connect(lambda: self.summary_report.setEnabled(True))
         self.simulator.simulation_done.connect(lambda: self.activate_mapper(1))
         
         self.buttons['speed'].setEnabled(True)
@@ -562,6 +572,7 @@ class SimUi(QMainWindow):
         self.full_report.setEnabled(False)
         self.task_report.setEnabled(False)
         self.mach_report.setEnabled(False)              
+        self.summary_report.setEnabled(False)
         self.progress=0
         self.p_count = 0        
         self.pbar.setFormat(f'{self.p_count}/0 tasks ({self.progress}%)')
