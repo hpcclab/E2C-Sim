@@ -374,6 +374,14 @@ class SimUi(QMainWindow):
         not_matched_tt = self.check_etc_format()                
         if not_matched_tt:
             return
+        mt_etc = []
+        for clmn_idx in range(etc_matrix.columnCount()):                
+                mt_etc.append(etc_matrix.horizontalHeaderItem(clmn_idx).text())
+        if len(mt_etc) != len(config.machine_type_names):
+            print(mt_etc, config.machine_type_names)
+            self.err_msg("Machine Types", f'Profiling table has {len(mt_etc)} while {len(config.machine_type_names)} machine types are defined in config.json')
+            return
+            
         self.dock_right.path_to_etc = './task_machine_performance/gui_generated/etc.csv'
         with open(self.dock_right.path_to_etc,'w') as etc_file:
             etc_writer = csv.writer(etc_file)
