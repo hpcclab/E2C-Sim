@@ -195,7 +195,8 @@ class SimUi(QMainWindow):
 
         elif item.data(0) == 'workload':   
             tt = config.task_type_names
-            mt = config.machine_type_names  
+            mt = config.machine_type_names 
+            self.etc_submitted = False 
             self.dock_right.workload_data(0,tt, mt)
             self.dock_right.path_entry.textChanged.connect(self.set_arrival_path)
             self.dock_right.etc_generate.clicked.connect(self.set_etc)
@@ -370,8 +371,7 @@ class SimUi(QMainWindow):
 
     def set_etc(self):
         etc_matrix = self.dock_right.etc_matrix
-        not_matched_tt = self.check_etc_format()
-
+        not_matched_tt = self.check_etc_format()                
         if not_matched_tt:
             return
         self.dock_right.path_to_etc = './task_machine_performance/gui_generated/etc.csv'
@@ -396,38 +396,34 @@ class SimUi(QMainWindow):
         
         for machine in config.machines:
                 machine.reset_tt_stats()
-                
-        
-
         self.path_to_etc = f'./task_machine_performance/gui_generated/etc.csv'
-        self.dock_right.etc_matrix.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.dock_right.etc_matrix.setEditTriggers(QAbstractItemView.NoEditTriggers)        
         self.dock_right.etc_editable = False  
+        self.etc_submitted = True
     
     def check_etc_format(self):
         task_types_etc = []
         workload = pd.read_csv(self.dock_right.workload_path)
         try:
-            etc_matrix = self.dock_right.etc_matrix
-            print('row in etc: ', etc_matrix.rowCount())
+            etc_matrix = self.dock_right.etc_matrix            
             for row_count in range(etc_matrix.rowCount()):
                 task_type_name = etc_matrix.verticalHeaderItem(row_count).text()
                 task_types_etc.append(task_type_name)
                 workload = workload.replace(to_replace=f'T{row_count+1}', value = task_type_name)
         except:
-            etc_matrix = pd.read_csv(self.path_to_etc)        
-            for row_count, row in etc_matrix.iterrows():                
+            etc_file = pd.read_csv(self.path_to_etc)        
+            for row_count, row in etc_file.iterrows():                
                 task_type_name = row[0]
                 task_types_etc.append(task_type_name)
                 workload = workload.replace(to_replace=f'T{row_count+1}', value = task_type_name)
-        
-        task_types_wl = workload['task_type'].unique()   
-        print(task_types_etc, task_types_wl)     
+        task_types_etc_matrix = task_types_etc.copy()
+        task_types_wl = workload['task_type'].unique()           
         not_matched_tt = [tt for tt in task_types_wl if tt not in task_types_etc]
         if not_matched_tt:
             err_txt = f"Task type {not_matched_tt} in workload are not found in ETC"
             self.err_msg('Format Error', err_txt)
             return not_matched_tt
-        else:
+        else:   
             workload.to_csv(self.dock_right.workload_path, index = False)
             self.dock_right.rewrite_workload_table()
 
@@ -485,7 +481,10 @@ class SimUi(QMainWindow):
         not_matched_tt = self.check_etc_format()
         if not_matched_tt:
             return
-        self.thread = QThread() 
+        if not self.etc_submitted:
+            self.err_msg('EET Submision', 'First submit the changes made in profiling table and workload.')                                            
+            return 
+        self.thread = QThread(parent=self) 
         self.simulator =  Simulator(self.path_to_arrivals,self.path_to_etc, self.path_to_reports,  seed=123)         
         self.setup_config(self.simulator)       
         self.simulator.moveToThread(self.thread)
@@ -545,7 +544,7 @@ class SimUi(QMainWindow):
         
 
         self.simulator.pause = False
-        self.buttons['reset'].setEnabled(False)
+        #self.buttons['reset'].setEnabled(False)
         self.thread.start() 
         
 
@@ -553,15 +552,17 @@ class SimUi(QMainWindow):
         if self.simulator.pause:
             self.buttons['simulate'].setIcon(QIcon(f'./gui/icons/pause.png'))  
             self.buttons['increment'].setEnabled(False)
+            self.buttons['reset'].setEnabled(False)
             self.simulator.pause = False           
         else:            
             self.buttons['simulate'].setIcon(QIcon(f'./gui/icons/simulate.png')) 
-            self.buttons['increment'].setEnabled(True)            
+            self.buttons['increment'].setEnabled(True) 
+            self.buttons['reset'].setEnabled(True)           
             self.simulator.pause = True
             
 
     def reset(self):
-        try:
+        try:            
             del self.simulator
         except:
             pass
@@ -591,7 +592,20 @@ class SimUi(QMainWindow):
                 pass
         self.buttons['simulate'].clicked.disconnect()
         self.buttons['simulate'].clicked.connect(self.simulate_start)
-        self.gv.scene.update()
+        self.gv.batch_queue.outer_frame()
+        self.gv.batch_queue.inner_frame()
+        self.gv.mapper_ui.mapper()
+        self.gv.mapper_ui.trash()
+        self.gv.workload_ui.draw_frame()
+        self.gv.connect_workload(QPen(Qt.red, 4), Qt.red)
+        self.gv.connecting_lines()
+        self.gv.machine_queues.outer_frame()
+        self.gv.machine_queues.draw_queues()
+        self.gv.machine_queues.fill_queues()
+        self.gv.machine_queues.runnings()        
+        self.gv.machine_queues.trash()
+        self.update()
+        
          
         
         
