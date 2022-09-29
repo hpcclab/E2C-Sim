@@ -361,7 +361,7 @@ class SimUi(QMainWindow):
 
     def set_etc(self):
         etc_matrix = self.dock_right.etc_matrix
-        not_matched_tt = self.check_etc_format(etc_matrix)
+        not_matched_tt = self.check_etc_format()
 
         if not_matched_tt:
             return
@@ -394,15 +394,25 @@ class SimUi(QMainWindow):
         self.dock_right.etc_matrix.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.dock_right.etc_editable = False  
     
-    def check_etc_format(self, etc_matrix):
+    def check_etc_format(self):
         task_types_etc = []
         workload = pd.read_csv(self.dock_right.workload_path)
-        for row_count in range(etc_matrix.rowCount()):
-            task_type_name = etc_matrix.verticalHeaderItem(row_count).text()
-            task_types_etc.append(task_type_name)
-            workload = workload.replace(to_replace=f'T{row_count+1}', value = task_type_name)
+        try:
+            etc_matrix = self.dock_right.etc_matrix
+            print('row in etc: ', etc_matrix.rowCount())
+            for row_count in range(etc_matrix.rowCount()):
+                task_type_name = etc_matrix.verticalHeaderItem(row_count).text()
+                task_types_etc.append(task_type_name)
+                workload = workload.replace(to_replace=f'T{row_count+1}', value = task_type_name)
+        except:
+            etc_matrix = pd.read_csv(self.path_to_etc)        
+            for row_count, row in etc_matrix.iterrows():                
+                task_type_name = row[0]
+                task_types_etc.append(task_type_name)
+                workload = workload.replace(to_replace=f'T{row_count+1}', value = task_type_name)
         
-        task_types_wl = workload['task_type'].unique()        
+        task_types_wl = workload['task_type'].unique()   
+        print(task_types_etc, task_types_wl)     
         not_matched_tt = [tt for tt in task_types_wl if tt not in task_types_etc]
         if not_matched_tt:
             err_txt = f"Task type {not_matched_tt} in workload are not found in ETC"
@@ -463,6 +473,9 @@ class SimUi(QMainWindow):
 
             
     def simulate_start(self):
+        not_matched_tt = self.check_etc_format()
+        if not_matched_tt:
+            return
         self.thread = QThread() 
         self.simulator =  Simulator(self.path_to_arrivals,self.path_to_etc, self.path_to_reports,  seed=123)         
         self.setup_config(self.simulator)       
@@ -470,7 +483,7 @@ class SimUi(QMainWindow):
         self.thread.started.connect(self.simulator.reset)
         self.thread.started.connect(self.simulator.run)         
         self.thread.finished.connect(self.thread.deleteLater)  
-        self.simulator.simulation_done.connect(self.report)         
+        self.simulator.simulation_done.connect(self.simulation_done)         
         self.simulator.simulation_done.connect(self.simulator.deleteLater) 
         
 
@@ -481,7 +494,7 @@ class SimUi(QMainWindow):
         self.simulator.simulation_done.connect(lambda: self.buttons['reset'].setEnabled(True))
         self.simulator.simulation_done.connect(lambda: self.buttons['simulate'].setEnabled(False))
         self.simulator.simulation_done.connect(lambda: self.buttons['speed'].setEnabled(False))
-        
+        self.simulator.simulation_done.connect(lambda: self.buttons['simulate'].setIcon(QIcon(f'./gui/icons/simulate.png')))
         
         
         #self.simulator.simulation_done.connect(lambda: self.report_menu.setEnabled(True))
@@ -681,12 +694,10 @@ class SimUi(QMainWindow):
         self.gv.machine_queues.trash()
         self.update()
     
-    def report(self):
-        print("********************* report **********************")
-        self.simulate_pause = True
-        #self.report_data = self.simulator.report()
-        self.buttons['simulate'].setIcon(QIcon(f'./gui/icons/simulate.png'))       
-        #config.log.close()
+    def simulation_done(self):        
+        self.simulate_pause = True        
+               
+        
         
 
     def set_timer(self,value):
