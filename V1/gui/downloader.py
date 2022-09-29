@@ -46,7 +46,7 @@ class Downloader(QMainWindow):
         if not path.endswith(".csv"):
             path = path + ".csv"
         try:
-            self.df.to_csv(path)
+            self.df.to_csv(path, index = False)
 
             print("Download succeeded")
 

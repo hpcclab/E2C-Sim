@@ -192,7 +192,14 @@ class Simulator(QObject):
             # self.simulation_done.emit()
         if config.gui :
             self.simulation_done.emit()
-            self.report()
+            summary = self.report()
+            with open(f'{self.path_to_reports}/{config.scheduling_method}/results-summary.csv','w')  as report_summary:
+                report_header = ['workload_path', 'total_no_of_tasks','mapped','cancelled','URG_missed','BE_missed','Completion%','xCompletion%','totalCompletion%','wasted_energy%','consumed_energy%','energy_per_completion%']
+                report = csv.writer(report_summary)  
+                report.writerow(report_header)
+                report.writerows(summary)
+            
+
         #config.log.close()
 
             
