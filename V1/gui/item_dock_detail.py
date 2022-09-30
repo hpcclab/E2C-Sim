@@ -226,7 +226,7 @@ class ItemDockDetail(QMainWindow):
             mt = next(etc_reader)[1:]
             for idx, row in enumerate(etc_reader):
                 tt.append(row[0])
-                etc.append(row[1:])  
+                etc.append(row[1:])          
 
         self.etc_matrix.setRowCount(len(tt)) 
         self.etc_matrix.setColumnCount(len(mt)) 
