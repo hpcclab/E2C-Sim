@@ -191,7 +191,7 @@ class ItemDockDetail(QMainWindow):
                         "{"
                         "background : white;"
                         "}")
-        self.etc_path_entry.setText(self.workload_path)
+        self.etc_path_entry.setText(self.path_to_etc)
         self.etc_matrix = QTableWidget()   
         delegate = MyDelegate()
         self.etc_matrix.setItemDelegate(delegate)             
