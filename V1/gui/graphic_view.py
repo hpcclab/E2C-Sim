@@ -93,7 +93,7 @@ class GraphicView(QGraphicsView):
         self.workload_ui.draw_frame()
         self.connect_workload(QPen(Qt.red, 4), Qt.red)
         machines = config.machines
-        self.machine_queues = MachineUi(self.scene,machines = machines, qsize = 5,
+        self.machine_queues = MachineUi(self.scene,machines = machines, qsize = config.machine_queue_size,
                                         x_outer =  self.x_mq, y_outer = self.y_mq ,
                                         w_outer = self.mq_w_outer,h_outer = self.mq_h_outer,
                                         max_h_q=self.bq_h_inner,

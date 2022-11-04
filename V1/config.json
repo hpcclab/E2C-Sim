@@ -1,7 +1,7 @@
 {
     "parameters": [
         {
-            "machine_queue_size": 3000,
+            "machine_queue_size": 3,
             "batch_queue_size": 1,
             "scheduling_method": "FCFS",
             "fairness_factor": 1.0
