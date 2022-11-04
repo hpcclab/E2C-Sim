@@ -35,7 +35,7 @@ class Simulator(QObject):
         self.path_to_reports = path_to_reports                
         self.seed = seed  
         self.execution_time_var = 0.05
-        self.verbosity = 3
+        self.verbosity = config.verbosity
         self.tasks = []
         self.total_no_of_tasks = None
         self.energy_statistics = []

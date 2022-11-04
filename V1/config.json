@@ -10,7 +10,7 @@
     "settings": [
         {
             "path_to_output": "./output",
-            "path_to_workload": "./workload",
+            "path_to_workload": "./workloads",
             "verbosity": 3,
             "gui": 1
         }

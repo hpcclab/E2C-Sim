@@ -3,7 +3,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 import sys,csv
-
+import utils.config as config
 
 
 class ItemDockDetail(QMainWindow):
@@ -13,7 +13,7 @@ class ItemDockDetail(QMainWindow):
         self.configs={'mapper':{'immediate':True,
                                 'policy':'FirstCome-FirstServe'}}
         self.mapper_enabled = True        
-        self.workload_path = './workloads/default/workload.csv'
+        self.workload_path = f'{config.path_to_workload}/default/workload.csv'
         self.path_to_etc = './task_machine_performance/default/etc.csv'
         self.etc_editable = False
         
@@ -295,6 +295,15 @@ class ItemDockDetail(QMainWindow):
         if okPressed:
             it.setText(newHeader)
 
+    # To be implemented
+    # def change_machine_queue_size(self):
+    #     try:
+    #         config.set_machine_queue_size(int(self.mq_size.currentText()))
+    #         print(config.machine_queue_size)
+    #     except ValueError as val_err:
+    #         print(val_err)
+    #         self.mq_size.setText("0")
+            
 
     def set_mq(self):
         self.tabs = QTabWidget()
@@ -309,7 +318,7 @@ class ItemDockDetail(QMainWindow):
         if self.configs['mapper']['immediate']:
             self.mq_size.setText("unlimited")
         else:
-            self.mq_size.setText("")
+            self.mq_size.setText(str(config.machine_queue_size))
         self.mq_size.setReadOnly(False)
         self.mq_size.setAlignment(Qt.AlignLeft)
         
@@ -574,7 +583,35 @@ class ItemDockDetail(QMainWindow):
         widget.setLayout(vlayout)
         self.dock.setWidget(widget)
 
-    
+    def change_scheduling_method(self):
+        if self.rb_immediate.isChecked():
+            if self.immediate_cb.currentText() == 'FirstCome-FirstServe':
+                config.set_scheduler('FCFS')
+            elif self.immediate_cb.currentText() == 'Min-Expected-Completion-Time':
+                config.set_scheduler('MECT')
+            elif self.immediate_cb.currentText() == 'Min-Expected-Execution-Time':
+                config.set_scheduler('MEET')
+            else:
+                print("Unexpected erorr occurred. Selected scheduling method does not exist or has not been implemented yet.")
+            print("The scheduling method has been changed to " + config.scheduling_method)
+            
+
+    def change_batch_policy(self):
+        if self.rb_batch.isChecked():
+            if self.batch_cb.currentText() == 'FELARE':
+                config.set_scheduler('FEE')
+            elif self.batch_cb.currentText() == 'MinCompletion-MinCompletion':
+                config.set_scheduler('MM')
+            elif self.batch_cb.currentText() == 'MinCompletion-SoonestDeadline':
+                config.set_scheduler('MSD')
+            elif self.batch_cb.currentText() == 'MinCompletion-MaxUrgency':
+                config.set_scheduler('MMU')
+            elif self.batch_cb.currentText() == 'ELARE':
+                config.set_scheduler('EE')  
+            else:
+                print("Unexpected erorr occurred. Selected batch policy does not exist or has not been implemented yet.")
+            print(config.scheduling_method)
+
     def mapper_data(self, enabled):
         self.tabs = QTabWidget()
         self.tab_mapper = QWidget()
@@ -592,6 +629,8 @@ class ItemDockDetail(QMainWindow):
 
         self.rb_immediate.toggled.connect(lambda:self.rb_policy_state(self.rb_immediate))
         self.rb_batch.toggled.connect(lambda:self.rb_policy_state(self.rb_batch))
+        self.rb_immediate.toggled.connect(self.change_scheduling_method)
+        self.rb_batch.toggled.connect(self.change_batch_policy)
 
         self.immediate_lbl = QLabel('Policy')
         self.immediate_cb = QComboBox(self)        
@@ -602,6 +641,8 @@ class ItemDockDetail(QMainWindow):
         
         self.immediate_cb.addItems(self.immediate_policies) 
         self.immediate_cb.setEnabled(self.rb_immediate.isChecked())
+        self.immediate_cb.activated.connect(self.change_scheduling_method)
+        
         
          
 
@@ -615,6 +656,7 @@ class ItemDockDetail(QMainWindow):
                         ]       
         self.batch_cb.addItems(self.batch_policies) 
         self.batch_cb.setEnabled(self.rb_batch.isChecked())        
+        self.batch_cb.activated.connect(self.change_batch_policy)
 
         style =  "QComboBox QAbstractItemView {"
         style += " border: 2px solid grey;"

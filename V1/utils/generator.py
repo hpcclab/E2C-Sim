@@ -15,7 +15,7 @@ def workloads_generator(workload_name,scenario_subname , is_etc_exist = True, is
         etc.generate(config.task_type_names, config.machine_type_names, et_set, no_of_etcs, seed =100)
         etc.hindices()
 
-    path_to_etcs = f"./workload/etcs/{workload_name}"
+    path_to_etcs = f"{config.path_to_workload}/etcs/{workload_name}"
     etc_files = listdir(path_to_etcs) 
     if   'hindices.csv' in etc_files:
         etc_files.remove('hindices.csv') 

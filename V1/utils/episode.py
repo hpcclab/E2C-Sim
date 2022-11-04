@@ -32,7 +32,7 @@ class Epsiode():
         pbar = tqdm.tqdm(total=number_of_episodes)        
         for episode in range(number_of_episodes):
             pbar.update(1)
-            folder = f"{config.settings['path_to_workload']}/workloads/workload-{rate}-{task_hete}"
+            folder = f"{config.path_to_workload}/workloads/workload-{rate}-{task_hete}"
             makedirs(folder, exist_ok = True)            
             workload_id = f'{rate}-{task_hete}'
             Workload(workload_id).generate(episode)

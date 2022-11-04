@@ -9,6 +9,7 @@ Created on Tue May 10 00:14:57 2022
 import pandas as pd
 import numpy as np 
 import os
+import utils.config as config
 
 from workload.hindex import HINDEX
 
@@ -16,7 +17,7 @@ class ETC:
 
     def __init__(self,name):
         self.name = name
-        self.path_to_etcs = f"./workload/etcs/{self.name}"
+        self.path_to_etcs = f"{config.path_to_workload}/etcs/{self.name}"
         os.makedirs(self.path_to_etcs, exist_ok = True)
 
 
