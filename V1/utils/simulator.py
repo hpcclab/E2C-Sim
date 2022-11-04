@@ -18,6 +18,7 @@ from utils.schedulers.MSD import MSD
 from utils.schedulers.MMU import MMU
 from utils.schedulers.FEE import FEE
 from utils.schedulers.FCFS import FCFS
+from utils.schedulers.FCFS_NQ import FCFS_NQ
 from utils.schedulers.MECT import MECT
 from utils.schedulers.MEET import MEET
 from PyQt5.QtCore import pyqtSignal,QObject
@@ -71,7 +72,8 @@ class Simulator(QObject):
             for idx, row in arrivals.iterrows():                                                
                 task_id = idx
                 task_type_name = row['task_type']
-                arrival_time = row['arrival_time']  
+                arrival_time = row['arrival_time'] 
+                #arrival_time = 0.0                
                 estimated_times = etc.loc[task_type_name,:].to_dict()
                 execution_times = {}
                 execution_times_li = [task_type_name]
@@ -107,6 +109,8 @@ class Simulator(QObject):
             self.scheduler = MMU(self.total_no_of_tasks)              
         elif scheduling_method == 'FCFS':
             self.scheduler = FCFS(self.total_no_of_tasks) 
+        elif scheduling_method == 'FCFS_NQ':
+            self.scheduler = FCFS_NQ(self.total_no_of_tasks) 
         elif scheduling_method == 'MECT':
             self.scheduler = MECT(self.total_no_of_tasks) 
         elif scheduling_method == 'MEET':

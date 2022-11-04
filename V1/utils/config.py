@@ -37,7 +37,11 @@ def create_task_types(task_types_info):
             urgency = UrgencyLevel.BESTEFFORT
         elif urgency == 'urgent':
             urgency = UrgencyLevel.URGENT
-        deadline = task_type['deadline']
+        if task_type['deadline'] == 'inf':
+            deadline = float('inf')
+        else:
+            deadline = task_type['deadline']
+
         task_types.append(TaskType(id, name, urgency,deadline))
         task_type_names.append(name)
     return task_types, task_type_names
@@ -108,7 +112,10 @@ def init():
     machine_types, machine_type_names, no_of_machines = create_machine_types(data['machines'])
     machines = []
 
-    capacity = data['battery'][0]['capacity']
+    if data['battery'][0]['capacity'] == 'inf':
+        capacity = float('inf')
+    else:
+        capacity = data['battery'][0]['capacity']
     total_energy = capacity * 3600
     available_energy = total_energy
 

@@ -1,5 +1,4 @@
 import sys, time, csv
-from wsgiref.util import is_hop_by_hop
 from gui.reports import FullReport, MachineReport, TaskReport, SummaryReport
 from gui.help import HelpMenu
 from PyQt5.QtCore import *
@@ -30,7 +29,6 @@ from gui.item_dock_detail import ItemDockDetail
 import utils.config as config
 from utils.task import Task
 import pandas as pd
-import random
 
 
 class SimUi(QMainWindow):
@@ -127,7 +125,6 @@ class SimUi(QMainWindow):
         #self.general_layout.addWidget(self.label)
         self.gv = GraphicView(self.width, self.height)   
         
-        self.gv.machine_colors = []
         
         self.dock_right = ItemDockDetail()        
         self.gv.itemClicked.connect(self.dock_update)     
@@ -251,7 +248,7 @@ class SimUi(QMainWindow):
     def set_mq_size(self):
         mq_size = int(self.dock_right.mq_size.text())
         if self.configs['immediate_scheduling']:
-            # print('here')
+            print('here')
             mq_size = float('inf')
             config.machine_queue_size = mq_size
             msg = QMessageBox()
@@ -404,17 +401,13 @@ class SimUi(QMainWindow):
             mt.name = machine_types[idx+1]
         for idx, tt in enumerate(config.task_types):
             tt.name = task_types[idx]
-
+        
         for machine in config.machines:
                 machine.reset_tt_stats()
         self.path_to_etc = f'./task_machine_performance/gui_generated/etc.csv'
-
-        self.gv.machine_queues.machine_colors = self.is_heterogeneous()
-
         self.dock_right.etc_matrix.setEditTriggers(QAbstractItemView.NoEditTriggers)        
         self.dock_right.etc_editable = False  
         self.etc_submitted = True
-
     
     def check_etc_format(self):
         task_types_etc = []
@@ -483,39 +476,6 @@ class SimUi(QMainWindow):
             self.policy = 'MEET'
         self.configs['scheduler'] = self.policy
         config.scheduling_method = self.policy
-
-    def is_heterogeneous(self):
-        colors = []
-        m_col = []
-        hets = []
-        etc_file = pd.read_csv(self.path_to_etc)
-        etc_file = etc_file.iloc[:,1:]
-
-        for i in range(len(etc_file.columns)):
-            colors.extend([[82,126,191]]) #homogeneous colors
-
-        #make nested list of each machine column (the EETs of each task)
-        for i in range(len(etc_file.columns)):
-            temp = []
-            for j in range(len(etc_file)):
-                temp.append(etc_file.at[j,etc_file.columns[i]])
-            m_col.append(temp)
-
-        #passes if is heterogeneous
-        if m_col.count(m_col[0]) != len(m_col):
-            for i in range(len(m_col)):
-                for j in range(i + 1, len(m_col)):
-                    if(m_col[i] == m_col[j]):
-                        hets.append([i,j])
-
-            for i in range(len(m_col)):
-                colors[i] = [random.randint(0,255),random.randint(0,255),random.randint(0,255)]
-            for i in range(len(hets)):
-                colors[hets[i][0]] = colors[hets[i][1]]
-
-        return colors
-
-        
         
 
     def setup_config(self, simulator):
@@ -593,7 +553,7 @@ class SimUi(QMainWindow):
         
 
         self.simulator.pause = False
-        self.buttons['reset'].setEnabled(False)
+        #self.buttons['reset'].setEnabled(False)
         self.thread.start() 
         
 
@@ -606,7 +566,7 @@ class SimUi(QMainWindow):
         else:            
             self.buttons['simulate'].setIcon(QIcon(f'./gui/icons/simulate.png')) 
             self.buttons['increment'].setEnabled(True) 
-            self.buttons['reset'].setEnabled(True)
+            self.buttons['reset'].setEnabled(True)           
             self.simulator.pause = True
             
 
@@ -653,13 +613,6 @@ class SimUi(QMainWindow):
         self.gv.machine_queues.fill_queues()
         self.gv.machine_queues.runnings()        
         self.gv.machine_queues.trash()
-
-        self.dock_right.etc_generate.setEnabled(True) #-----
-        self.dock_right.etc_load.setEnabled(True)
-        self.dock_right.etc_edit.setEnabled(True)
-        self.dock_right.load_wl_btn.setEnabled(True)
-        self.dock_right.etc_matrix.setEditTriggers(QAbstractItemView.NoEditTriggers)
-
         self.update()
         
          
@@ -767,13 +720,11 @@ class SimUi(QMainWindow):
         self.gv.connect_workload(QPen(Qt.red, 4), Qt.red)
         self.gv.connecting_lines()
         
-        # print(self.gv.machine_colors)
-
         self.gv.batch_queue.draw_tasks(selected_task)
         self.gv.machine_queues.outer_frame()
         self.gv.machine_queues.draw_queues()
         self.gv.machine_queues.fill_queues()
-        self.gv.machine_queues.runnings()
+        self.gv.machine_queues.runnings()        
         self.gv.machine_queues.trash()
         self.update()
     

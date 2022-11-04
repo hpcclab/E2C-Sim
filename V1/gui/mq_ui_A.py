@@ -5,6 +5,7 @@ from PyQt5.QtCore import Qt, pyqtSignal, QSize, QPointF
 
 
 
+
 class MachineUi(QGraphicsView):
     
     def __init__(self, scene,machines, qsize, x_outer, y_outer, w_outer, h_outer, max_h_q, x_machine_trash, y_trash, trash_size):
@@ -18,14 +19,12 @@ class MachineUi(QGraphicsView):
         self.x_trash = x_machine_trash
         self.y_trash = y_trash
         self.trash_size = trash_size
-        self.machine_colors = [[82,126,191],[82,126,191],[82,126,191]] #default/homogeneous color
         self.max_qsize = qsize
         self.machines = machines
         self.machine_circles = {}
         self.m_runnings = {}
         self.m_queues={}   
         self.missed_tasks_machines = []
-
         for machine in self.machines:
             m_id = machine.id
             self.m_queues[m_id] = []            
@@ -241,6 +240,7 @@ class MachineUi(QGraphicsView):
                     self.scene.addItem(t_frame)
                     self.scene.addItem(text)
     
+    
 
     def runnings(self):
         length = 1.0*self.h_q
@@ -250,23 +250,18 @@ class MachineUi(QGraphicsView):
         self.machines_frame(x+self.w_q+length+self.machine_r-0.5*2.5*self.machine_r,
                             self.y_outer,
                             2.5*self.machine_r, self.h_outer)       
-        
-        i = 0
+
         for machine in self.machines:
             m_id = machine.id
             [x,y] = self.queue_frames[m_id]
             x += self.w_q
-            y += 0.5*self.h_q      
-
+            y += 0.5*self.h_q            
+            
             pen = QPen(QColor(72,72,72),  4, Qt.SolidLine)           
-            connecting_line = self.scene.addLine(x,y,x+length,y,pen)  
+            connecting_line = self.scene.addLine(x,y,x+length,y,pen)
 
-            c_1 = self.machine_colors[i][0]
-            c_2 = self.machine_colors[i][1]
-            c_3 = self.machine_colors[i][2]
-
-            pen = QPen(QColor(c_1,c_2,c_3),  1, Qt.SolidLine)
-            brush = QBrush(QColor(c_1,c_2,c_3))
+            pen = QPen(QColor(82,126,191),  1, Qt.SolidLine)
+            brush = QBrush(QColor(82,126,191))
             self.machine_circles[m_id] = [x+length, y-self.machine_r]
             machine_circle = QGraphicsEllipseItem (x+length, y-self.machine_r, 2*self.machine_r,2*self.machine_r)
             machine_circle.setPen(pen)
@@ -274,8 +269,6 @@ class MachineUi(QGraphicsView):
             machine_circle.setData(0, 'machine')
             machine_circle.setData(1,machine)
             self.scene.addItem(machine_circle)
-
-            i += 1
             
             if  self.m_runnings[m_id]:
                 machine_circle.setData(3,'busy')
@@ -318,7 +311,7 @@ class MachineUi(QGraphicsView):
                 
                 self.scene.addItem(t_frame)
                 self.scene.addItem(text)
-        
+            
         
     
     def trash(self):

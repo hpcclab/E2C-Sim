@@ -7,25 +7,24 @@ from utils.simulator import Simulator
 from utils.machine import Machine
 import utils.config as config
 
-#rate = 'high'
-#hete_homo = 'heterogeneous'
+rate = 'high'
+hete_homo = 'heterogeneous'
 
-scenario = 'SEP_test_arrival_100000_0'
-etc_folder = 'SEP_test_arrival'
+scenario = 'arrival_0_1'
+etc_folder = 'heterogeneous-arithmetic'
 SEPs = listdir(f'./task_machine_performance/{etc_folder}/')
-#SEPs = ['1_0']
-workloads = range(30)
-#etcs = range(1)
-etcs= ['heterogeneous_self_generated']
+SEPs = ['1_0']
+workloads = range(1)
+etcs = range(1)
+#etcs= [10,28]
 for SEP in SEPs:
     for etc_id in etcs:
         
         config.init()
-        path_to_etc = f'./task_machine_performance/{etc_folder}/{SEP}/etc-{etc_id}.csv'
-        #path_to_etc = f'./samples/{rate}/etc_{hete_homo}.csv'
+        #path_to_etc = f'./task_machine_performance/{etc_folder}/{SEP}/etc-{etc_id}.csv'
+        path_to_etc = f'./samples/{rate}/etc_{hete_homo}.csv'
         df = pd.read_csv(path_to_etc)
-        df['idx'] = ['T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9', 'T10']
-        #df['idx'] = ['T1']
+        df['idx'] = ['T1', 'T2', 'T3', 'T4']
         df = df.set_index(['idx'])
 
         df.to_csv(path_to_etc)
@@ -39,8 +38,8 @@ for SEP in SEPs:
         for workload_id in workloads:
             
             config.init()     
-            path_to_arrivals = f'./workloads/{scenario}/workload-{workload_id}.csv'
-            #path_to_arrivals = f'./samples/{rate}/workload_{rate}.csv'
+            #path_to_arrivals = f'./workloads/{scenario}/workload-{workload_id}.csv'
+            path_to_arrivals = f'./samples/{rate}/workload_{rate}.csv'
             m_id = 0
             for machine_type in config.machine_types:
                 for r in range(1,machine_type.replicas+1):

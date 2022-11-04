@@ -41,6 +41,16 @@ class Queue:
             print(err)
             sys.exit()
     
+    def insert(self, index, item):        
+        try:
+            if self.full():
+                raise FullQueueError(item)
+            else:
+                self.list.insert(index, item)
+        except FullQueueError as err:
+            print(err)
+            sys.exit()
+    
     def get(self, index = 0):                
         try:
             self.list[index]                   

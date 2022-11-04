@@ -91,10 +91,17 @@ class FullReport(QMainWindow):
         self.tableWidget.horizontalHeader().setStretchLastSection(True)
         self.tableWidget.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
 
+        #A label that indicates the scheduling policy
+        scheduling_lbl = QLabel(f'Scheduling Method: {method}')
+
         # Go live
-        self.layout = QVBoxLayout(self)
-        self.setCentralWidget(self.tableWidget)
-        self.setLayout(self.layout)
+        self.report_layout = QVBoxLayout(self)
+        self._centralWidget = QWidget(self)
+        self.setCentralWidget(self._centralWidget)
+        self._centralWidget.setLayout(self.report_layout)
+        
+        self.report_layout.addWidget(scheduling_lbl)
+        self.report_layout.addWidget(self.tableWidget)        
         self.resize(1200, 800)
         self.show()
 
@@ -176,12 +183,26 @@ class TaskReport(QMainWindow):
         tb.addAction(save_report)
         tb.addWidget(self.query)
 
-        # Build layout & Go live
-        self.layout = QVBoxLayout(self)
-        self.setCentralWidget(self.tableWidget)
-        self.setLayout(self.layout)
+        #A label that indicates the scheduling policy
+        scheduling_lbl = QLabel(f'Scheduling Method: {method}')
+
+        # Go live
+        self.report_layout = QVBoxLayout(self)
+        self._centralWidget = QWidget(self)
+        self.setCentralWidget(self._centralWidget)
+        self._centralWidget.setLayout(self.report_layout)
+        
+        self.report_layout.addWidget(scheduling_lbl)
+        self.report_layout.addWidget(self.tableWidget)        
         self.resize(1200, 800)
         self.show()
+
+        # # Build layout & Go live
+        # self.layout = QVBoxLayout(self)
+        # self.setCentralWidget(self.tableWidget)
+        # self.setLayout(self.layout)
+        # self.resize(1200, 800)
+        # self.show()
 
 
     def search(self, id):
@@ -256,12 +277,26 @@ class MachineReport(QMainWindow):
         self.tableWidget.horizontalHeader().setStretchLastSection(True)
         self.tableWidget.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
 
+        #A label that indicates the scheduling policy
+        scheduling_lbl = QLabel(f'Scheduling Method: {method}')
+
         # Go live
-        self.layout = QVBoxLayout(self)
-        self.setCentralWidget(self.tableWidget)
-        self.setLayout(self.layout)
+        self.report_layout = QVBoxLayout(self)
+        self._centralWidget = QWidget(self)
+        self.setCentralWidget(self._centralWidget)
+        self._centralWidget.setLayout(self.report_layout)
+        
+        self.report_layout.addWidget(scheduling_lbl)
+        self.report_layout.addWidget(self.tableWidget)        
         self.resize(600, 200)
         self.show()
+
+        # # Go live
+        # self.layout = QVBoxLayout(self)
+        # self.setCentralWidget(self.tableWidget)
+        # self.setLayout(self.layout)
+        # self.resize(600, 200)
+        # self.show()
 
     def makeReport(df):
         df_machine = pd.DataFrame(
@@ -367,12 +402,28 @@ class SummaryReport(QMainWindow):
         self.tableWidget.horizontalHeader().setStretchLastSection(True)
         self.tableWidget.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
 
-        # Go live
-        self.layout = QVBoxLayout(self)
-        self.setCentralWidget(self.tableWidget)
-        self.setLayout(self.layout)
+
+
+        #A label that indicates the scheduling policy
+        scheduling_lbl = QLabel(f'Scheduling Method: {method}')
+
+         # Go live
+        self.report_layout = QVBoxLayout(self)
+        self._centralWidget = QWidget(self)
+        self.setCentralWidget(self._centralWidget)
+        self._centralWidget.setLayout(self.report_layout)
+        
+        self.report_layout.addWidget(scheduling_lbl)
+        self.report_layout.addWidget(self.tableWidget)        
         self.resize(600, 200)
         self.show()
+        
+        # Go live
+        # self.layout = QVBoxLayout(self)
+        # self.setCentralWidget(self.tableWidget)
+        # self.setLayout(self.layout)
+        # self.resize(600, 200)
+        # self.show()
 
     
 
