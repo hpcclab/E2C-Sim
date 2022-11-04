@@ -191,11 +191,12 @@ class Simulator(QObject):
         #         print(f'{task.id} : {task.status}')  
             # self.simulation_done.emit()
 
-        # To be implemented:
-        # Create the folder if it does not exist.
+        
         if config.gui :
             self.simulation_done.emit()
             summary = self.report()
+            if not os.path.exists(f'{self.path_to_reports}/{config.scheduling_method}/'):
+                os.makedirs(f'{self.path_to_reports}/{config.scheduling_method}/')
             with open(f'{self.path_to_reports}/{config.scheduling_method}/results-summary.csv','w')  as report_summary:
                 report_header = ['workload_path', 'total_no_of_tasks','mapped','cancelled','URG_missed','BE_missed','Completion%','xCompletion%','totalCompletion%','wasted_energy%','consumed_energy%','energy_per_completion%']
                 report = csv.writer(report_summary)  
