@@ -190,6 +190,9 @@ class Simulator(QObject):
         #     for task in self.tasks:
         #         print(f'{task.id} : {task.status}')  
             # self.simulation_done.emit()
+
+        # To be implemented:
+        # Create the folder if it does not exist.
         if config.gui :
             self.simulation_done.emit()
             summary = self.report()
