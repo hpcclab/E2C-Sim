@@ -10,6 +10,7 @@ import os
 import time
 import utils.config as config
 from utils.event import Event, EventTypes
+from utils.event_queue import EventQueue
 from utils.execution_time import ExecutionTime
 from utils.task import Task
 from utils.schedulers.EE import EE
@@ -48,6 +49,7 @@ class Simulator(QObject):
     def reset(self):
         config.time.sct(0.0)
         config.available_energy = config.total_energy
+        config.event_queue = EventQueue()
         for machine in config.machines:
             machine.reset()
         
@@ -91,6 +93,7 @@ class Simulator(QObject):
                
         
         self.total_no_of_tasks = len(self.tasks)
+        config.event_queue.event_list = []
         for task in self.tasks:            
             event = Event(task.arrival_time, EventTypes.ARRIVING, task)
             config.event_queue.add_event(event)
@@ -139,6 +142,7 @@ class Simulator(QObject):
 
     def run(self):        
         self.create_event_queue()
+        print(f'len events: {len(config.event_queue.event_list)}')
 
         while config.event_queue.event_list and config.available_energy > 0.0:               
             while config.gui==1 and (self.pause and self.is_incremented):               

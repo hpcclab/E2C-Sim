@@ -29,6 +29,7 @@ from gui.graphic_view import GraphicView
 from gui.item_dock_detail import ItemDockDetail
 import utils.config as config
 from utils.task import Task
+from utils.event_queue import EventQueue
 import pandas as pd
 import random
 
@@ -57,7 +58,7 @@ class SimUi(QMainWindow):
                         'etc':'default',
                          }
         self.sim_done = 0
-
+        self.etc_submitted = True
         menu = self.menuBar()
         self.report_menu = menu.addMenu("Reports")
         self.help_menu = menu.addMenu("Help")
@@ -438,9 +439,12 @@ class SimUi(QMainWindow):
             err_txt = f"Task type {not_matched_tt} in workload are not found in ETC"
             self.err_msg('Format Error', err_txt)
             return not_matched_tt
-        else:   
+        else: 
             workload.to_csv(self.dock_right.workload_path, index = False)
-            self.dock_right.rewrite_workload_table()
+            try:   
+                self.dock_right.rewrite_workload_table()
+            except:
+                pass
 
         
 
@@ -535,6 +539,7 @@ class SimUi(QMainWindow):
             return 
         self.thread = QThread(parent=self) 
         self.simulator =  Simulator(self.path_to_arrivals,self.path_to_etc, self.path_to_reports,  seed=123)         
+        
         self.setup_config(self.simulator)       
         self.simulator.moveToThread(self.thread)
         self.thread.started.connect(self.simulator.reset)
@@ -614,7 +619,7 @@ class SimUi(QMainWindow):
         try:            
             del self.simulator
         except:
-            pass
+            pass        
         try:
             config.log = open(f"{config.settings['path_to_output']}/log.txt",'w')
         except OSError as err:
@@ -631,6 +636,7 @@ class SimUi(QMainWindow):
         self.gv.machine_queues.reset()        
         self.buttons['simulate'].setEnabled(True)
         self.buttons['speed'].setEnabled(False)
+        config.event_queue = EventQueue()
         config.time.sct(0.0)
         config.available_energy = config.total_energy
         for machine in config.machines:
@@ -654,11 +660,14 @@ class SimUi(QMainWindow):
         self.gv.machine_queues.runnings()        
         self.gv.machine_queues.trash()
 
-        self.dock_right.etc_generate.setEnabled(True) #-----
-        self.dock_right.etc_load.setEnabled(True)
-        self.dock_right.etc_edit.setEnabled(True)
-        self.dock_right.load_wl_btn.setEnabled(True)
-        self.dock_right.etc_matrix.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        try:
+            self.dock_right.etc_generate.setEnabled(True) #-----
+            self.dock_right.etc_load.setEnabled(True)
+            self.dock_right.etc_edit.setEnabled(True)
+            self.dock_right.load_wl_btn.setEnabled(True)
+            self.dock_right.etc_matrix.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        except:
+            pass
 
         self.update()
         
@@ -692,7 +701,7 @@ class SimUi(QMainWindow):
             task = signal_data['task']
             machine = signal_data['assigned_machine']
             m_id = machine.id            
-            #print(f'@{location} {time} Task {task.id} map to Machine {m_id}')
+            print(f'@{location} {time} Task {task.id} map to Machine {m_id}')
             self.gv.batch_queue.tasks.remove(task)               
             self.gv.connect_mapper_machine(m_id, QPen(Qt.red, 4), Qt.red)
             self.gv.machine_queues.m_queues[m_id].append(task)            
@@ -713,9 +722,10 @@ class SimUi(QMainWindow):
             task = signal_data['task']
             machine = signal_data['assigned_machine']             
             m_id = machine.id
-            #print(f'{location} @{time} Task {task.id} start running at Machine {m_id}')            
+            print(f'{location} @{time} Task {task.id} start running at Machine {m_id}')            
             self.gv.machine_queues.m_queues[m_id].remove(task)            
             self.gv.machine_queues.m_runnings[m_id].append(task)
+            print(f'RUNNING@ {m_id}:\n{[t.id for t in self.gv.machine_queues.m_runnings[m_id]]}')
         
         elif signal_type == 'completion':
             # self.progress +=100*(1/self.simulator.total_no_of_tasks)  
@@ -726,7 +736,8 @@ class SimUi(QMainWindow):
             task = signal_data['task']
             machine= signal_data['assigned_machine']   
             m_id = machine.id
-            #print(f'{location} @{time} Task {task.id} completed at Machine {m_id}')                     
+            print(f'{location} @{time} Task {task.id} completed at Machine {m_id}')  
+            print(f'RUNNING@ {m_id}:{self.gv.machine_queues.m_runnings[m_id][0].id}\n{task.id}')                               
             self.gv.machine_queues.m_runnings[m_id].remove(task)
 
         elif signal_type == 'missed':
@@ -740,7 +751,7 @@ class SimUi(QMainWindow):
             task = signal_data['task']
             machine= signal_data['assigned_machine']   
             m_id = machine.id   
-            #print(f'{location} @{time} Task {task.id} dropped from Machine {m_id}')                      
+            print(f'{location} @{time} Task {task.id} dropped from Machine {m_id}')                      
             self.gv.machine_queues.m_runnings[m_id].remove(task)
             self.gv.machine_queues.missed_tasks_machines.append([task, machine])
             self.gv.machine_queues.connect_machine_running_to_trash(task, machine,QPen(Qt.red, 4), Qt.red)
@@ -755,7 +766,7 @@ class SimUi(QMainWindow):
             machine= signal_data['assigned_machine']   
             m_id = machine.id   
             self.gv.connect_machine_to_trash(QPen(Qt.red, 4), Qt.red)
-            #print(f'{location} @{time} Task {task.id} dropped from Machine {m_id}')                      
+            print(f'{location} @{time} Task {task.id} dropped from Machine {m_id}')                      
             self.gv.machine_queues.m_queues[m_id].remove(task)
             self.gv.mapper_ui.cancelled_tasks.append(task)
         #print(self.p_count,self.progress)
