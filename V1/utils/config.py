@@ -321,7 +321,7 @@ def init():
         log = open(f'{path_to_workload}/log.txt', 'w')
     except OSError as err:
         print(err)
-        path_to_workload = '.workloads'
+        path_to_workload = './workloads'
 
     
     
