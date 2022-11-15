@@ -296,30 +296,30 @@ class ItemDockDetail(QMainWindow):
             it.setText(newHeader)
 
 
-    def set_mq(self):
-        self.tabs = QTabWidget()
-        self.tab_mq = QWidget()
-        self.tabs.addTab(self.tab_mq, "Machine Queue")        
-        self.tab_mq.layout = QVBoxLayout(self)        
-        self.mq_grid = QGridLayout(self)        
+    # def set_mq(self):
+    #     self.tabs = QTabWidget()
+    #     self.tab_mq = QWidget()
+    #     self.tabs.addTab(self.tab_mq, "Machine Queue")        
+    #     self.tab_mq.layout = QVBoxLayout(self)        
+    #     self.mq_grid = QGridLayout(self)        
         
-        self.mq_lbl = QLabel('Machine queue size')
-        self.mq_size = QLineEdit()
-        self.mq_size.setToolTip('The size of machine queues')
-        if self.configs['mapper']['immediate']:
-            self.mq_size.setText("unlimited")
-        else:
-            self.mq_size.setText("")
-        self.mq_size.setReadOnly(False)
-        self.mq_size.setAlignment(Qt.AlignLeft)
+    #     self.mq_lbl = QLabel('Machine queue size')
+    #     self.mq_size = QLineEdit()
+    #     self.mq_size.setToolTip('The size of machine queues')
+    #     if self.configs['mapper']['immediate']:
+    #         self.mq_size.setText("unlimited")
+    #     else:
+    #         self.mq_size.setText("")
+    #     self.mq_size.setReadOnly(False)
+    #     self.mq_size.setAlignment(Qt.AlignLeft)
         
-        self.mq_grid.addWidget(self.mq_lbl,0,0)
-        self.mq_grid.addWidget(self.mq_size,1,0)
+    #     self.mq_grid.addWidget(self.mq_lbl,0,0)
+    #     self.mq_grid.addWidget(self.mq_size,1,0)
               
-        self.tab_mq.layout.addLayout(self.mq_grid)                
-        self.tab_mq.layout.addStretch(1)
-        self.tab_mq.setLayout(self.tab_mq.layout)
-        self.dock.setWidget(self.tabs)
+    #     self.tab_mq.layout.addLayout(self.mq_grid)                
+    #     self.tab_mq.layout.addStretch(1)
+    #     self.tab_mq.setLayout(self.tab_mq.layout)
+    #     self.dock.setWidget(self.tabs)
 
 
     def set_bq(self):
@@ -579,10 +579,28 @@ class ItemDockDetail(QMainWindow):
         self.tabs = QTabWidget()
         self.tab_mapper = QWidget()
 
+        self.tabs = QTabWidget()
+
         self.tabs.addTab(self.tab_mapper, "Scheduler")        
         self.tab_mapper.layout = QVBoxLayout(self)
 
         self.mapper_grid = QGridLayout(self)
+        self.mq_grid = QGridLayout(self)  
+
+        self.mq_lbl = QLabel('Machine queue size')
+        self.mq_size = QLineEdit()
+        self.mq_size.setToolTip('The size of machine queues')
+        if self.configs['mapper']['immediate']:
+            self.mq_size.setText("unlimited")
+            self.mq_size.setDisabled(True)
+        else:
+            self.mq_size.setText("")
+        self.mq_size.setReadOnly(False)
+        self.mq_size.setAlignment(Qt.AlignLeft)
+        self.mq_size_gen = QPushButton('Submit')
+
+        self.mq_grid.addWidget(self.mq_lbl,0,0)
+        self.mq_grid.addWidget(self.mq_size,1,0)
 
         self.rb_immediate = QRadioButton('Immediate Scheduling')
         self.rb_batch = QRadioButton('Batch Scheduling')
@@ -648,7 +666,11 @@ class ItemDockDetail(QMainWindow):
         self.mapper_grid.addWidget(self.batch_lbl,4,0)        
         self.mapper_grid.addWidget(self.batch_cb,4,1)
         
-        
+
+        self.mapper_grid.addWidget(self.mq_lbl,6,0)
+        self.mapper_grid.addWidget(self.mq_size,6,1)
+        self.mapper_grid.addWidget(self.mq_size_gen,7,0)
+
         self.tab_mapper.layout.addLayout(self.mapper_grid)                
         self.tab_mapper.layout.addStretch(1)
         self.tab_mapper.setLayout(self.tab_mapper.layout)
@@ -660,9 +682,13 @@ class ItemDockDetail(QMainWindow):
             if rb.text() == 'Immediate Scheduling':
                 self.immediate_cb.setEnabled(True)
                 self.batch_cb.setEnabled(False)
+                self.mq_size.setText("unlimited")
+                self.mq_size.setDisabled(True)
             else:
                 self.immediate_cb.setEnabled(False)
                 self.batch_cb.setEnabled(True)
+                self.mq_size.setText("")
+                self.mq_size.setDisabled(False)
     
     def workload_data(self, enabled, tt, mt):
         self.tabs = QTabWidget()        
@@ -752,7 +778,7 @@ class ItemDockDetail(QMainWindow):
                 self.workload_table.setItem(idx, 1, arrival_item)
                 type_item.setFlags(type_item.flags() ^ Qt.ItemIsEditable)
                 arrival_item.setFlags(arrival_item.flags() ^ Qt.ItemIsEditable)
-        print('wl_path set in dock: ',self.workload_path)
+        #print('wl_path set in dock: ',self.workload_path)
     def rewrite_workload_table(self):
         with open(self.workload_path,'r') as workload:
             workload_reader = csv.reader(workload)     

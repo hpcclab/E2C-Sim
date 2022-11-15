@@ -172,9 +172,9 @@ class SimUi(QMainWindow):
             # self.dock_right.etc_generate.clicked.connect(self.set_etc)
             pass
             
-        elif item.data(0) == 'machine_queues_frame': 
-            self.dock_right.set_mq()
-            self.dock_right.mq_size.returnPressed.connect(self.set_mq_size)
+        # elif item.data(0) == 'machine_queues_frame': 
+        #     self.dock_right.set_mq()
+        #     self.dock_right.mq_size.returnPressed.connect(self.set_mq_size)
         
         # elif item.data(0) == 'batch_queue_frame': 
         #     self.dock_right.set_bq()
@@ -196,6 +196,8 @@ class SimUi(QMainWindow):
                 self.dock_right.rb_batch.toggled.connect(lambda:self.rb_policy_state(self.dock_right.rb_batch))
                 self.dock_right.immediate_cb.activated.connect(self.set_scheduler)
                 self.dock_right.batch_cb.activated.connect(self.set_scheduler)
+                # self.dock_right.mq_size.returnPressed.connect(self.set_mq_size)
+                self.dock_right.mq_size_gen.clicked.connect(self.set_mq_size)
 
         elif item.data(0) == 'workload':   
             tt = config.task_type_names
@@ -269,7 +271,7 @@ class SimUi(QMainWindow):
         if mq_size >5 :
             mq_size = 5        
         self.gv.machine_queues.max_qsize = mq_size
-        self.dock_right.mq_size.setReadOnly(True)
+        # self.dock_right.mq_size.setReadOnly(True)
         self.gv.machine_queues.draw_queues()
         self.gv.scene.update()
     
@@ -701,7 +703,7 @@ class SimUi(QMainWindow):
             task = signal_data['task']
             machine = signal_data['assigned_machine']
             m_id = machine.id            
-            print(f'@{location} {time} Task {task.id} map to Machine {m_id}')
+            #print(f'@{location} {time} Task {task.id} map to Machine {m_id}')
             self.gv.batch_queue.tasks.remove(task)               
             self.gv.connect_mapper_machine(m_id, QPen(Qt.red, 4), Qt.red)
             self.gv.machine_queues.m_queues[m_id].append(task)            
@@ -722,10 +724,10 @@ class SimUi(QMainWindow):
             task = signal_data['task']
             machine = signal_data['assigned_machine']             
             m_id = machine.id
-            print(f'{location} @{time} Task {task.id} start running at Machine {m_id}')            
+            #print(f'{location} @{time} Task {task.id} start running at Machine {m_id}')            
             self.gv.machine_queues.m_queues[m_id].remove(task)            
             self.gv.machine_queues.m_runnings[m_id].append(task)
-            print(f'RUNNING@ {m_id}:\n{[t.id for t in self.gv.machine_queues.m_runnings[m_id]]}')
+            #print(f'RUNNING@ {m_id}:\n{[t.id for t in self.gv.machine_queues.m_runnings[m_id]]}')
         
         elif signal_type == 'completion':
             # self.progress +=100*(1/self.simulator.total_no_of_tasks)  
@@ -736,8 +738,8 @@ class SimUi(QMainWindow):
             task = signal_data['task']
             machine= signal_data['assigned_machine']   
             m_id = machine.id
-            print(f'{location} @{time} Task {task.id} completed at Machine {m_id}')  
-            print(f'RUNNING@ {m_id}:{self.gv.machine_queues.m_runnings[m_id][0].id}\n{task.id}')                               
+            #print(f'{location} @{time} Task {task.id} completed at Machine {m_id}')  
+            #print(f'RUNNING@ {m_id}:{self.gv.machine_queues.m_runnings[m_id][0].id}\n{task.id}')                               
             self.gv.machine_queues.m_runnings[m_id].remove(task)
 
         elif signal_type == 'missed':
@@ -751,7 +753,7 @@ class SimUi(QMainWindow):
             task = signal_data['task']
             machine= signal_data['assigned_machine']   
             m_id = machine.id   
-            print(f'{location} @{time} Task {task.id} dropped from Machine {m_id}')                      
+            #print(f'{location} @{time} Task {task.id} dropped from Machine {m_id}')                      
             self.gv.machine_queues.m_runnings[m_id].remove(task)
             self.gv.machine_queues.missed_tasks_machines.append([task, machine])
             self.gv.machine_queues.connect_machine_running_to_trash(task, machine,QPen(Qt.red, 4), Qt.red)
@@ -766,7 +768,7 @@ class SimUi(QMainWindow):
             machine= signal_data['assigned_machine']   
             m_id = machine.id   
             self.gv.connect_machine_to_trash(QPen(Qt.red, 4), Qt.red)
-            print(f'{location} @{time} Task {task.id} dropped from Machine {m_id}')                      
+            #print(f'{location} @{time} Task {task.id} dropped from Machine {m_id}')                      
             self.gv.machine_queues.m_queues[m_id].remove(task)
             self.gv.mapper_ui.cancelled_tasks.append(task)
         #print(self.p_count,self.progress)

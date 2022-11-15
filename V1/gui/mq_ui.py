@@ -252,6 +252,7 @@ class MachineUi(QGraphicsView):
                             2.5*self.machine_r, self.h_outer)       
         
         i = 0
+
         for machine in self.machines:
             m_id = machine.id
             [x,y] = self.queue_frames[m_id]
@@ -269,11 +270,23 @@ class MachineUi(QGraphicsView):
             brush = QBrush(QColor(c_1,c_2,c_3))
             self.machine_circles[m_id] = [x+length, y-self.machine_r]
             machine_circle = QGraphicsEllipseItem (x+length, y-self.machine_r, 2*self.machine_r,2*self.machine_r)
+            
+            m_text = QGraphicsTextItem("M"+str(i+1), parent=machine_circle)
+            m_text.setFont(QFont("Arial", 16))
+            m_text.adjustSize()
+            m_text.setFlag(m_text.ItemIsSelectable, False)
+            w_m_text = m_text.boundingRect().width()
+            h_m_text = m_text.boundingRect().height()    
+            m_text.setPos(x+length+self.machine_r-0.5*w_m_text, y - 0.5*h_m_text)
+
+
             machine_circle.setPen(pen)
             machine_circle.setBrush(brush)
             machine_circle.setData(0, 'machine')
             machine_circle.setData(1,machine)
+
             self.scene.addItem(machine_circle)
+            self.scene.addItem(m_text)
 
             i += 1
             
