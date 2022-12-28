@@ -27,7 +27,7 @@ def load_config(path_to_config = './config.json'):
     return data
 
 def create_deadline(deadline_value):
-    deadline = 45.0
+    deadline = float('inf')
     try:
         if deadline_value < 0:
             print("WARNING: Value for deadline should not be negative")
@@ -36,8 +36,9 @@ def create_deadline(deadline_value):
         else:
             print("ERROR: Value for deadline cannot be 0. 45.0 will be set instead.")
     except ValueError as val_err:
-        print("ERROR: Invalid value for deadline. 45.0 will be set instead.")
-        deadline = 45.0
+        print(deadline_value)
+        print("ERROR: Invalid value for deadline. 'inf' will be set instead.")
+        deadline = float('inf')
     return deadline
 
 def create_idle_power(value):
@@ -89,17 +90,15 @@ def create_machine_types(machines_info):
     return machine_types, machine_type_names, no_of_machines
 
 def create_power(value):
-    power = 50
+    power = 0
     try:
         if value < 0:
             print("WARNING: Value for power should not be negative")
         if value != 0:
             power = abs(int(value))
-        else:
-            print("ERROR: Value for power cannot be 0. 50 will be set instead.")
     except ValueError as val_err:
-        print("ERROR: Invalid value for power. 50 will be set instead.")
-        power = 50
+        print("ERROR: Invalid value for power. 0 will be set instead.")
+        power = 0
     return power
 
 def create_replicas(value):
@@ -132,8 +131,9 @@ def find_task_type(task_type_name):
 
 def set_scheduler(scheduler):
     global scheduling_method
+    global implemented_schedulers
     scheduling_method = scheduler
-    if (str(scheduler) == 'EE' or 'MM' or 'FEE' or 'MSD' or 'MMU' or 'FCFS' or 'MECT' or 'MEET' ):
+    if (str(scheduler) in implemented_schedulers):
         scheduling_method = scheduler
     else:
         print('ERROR: Invalid Scheduling Method. FCFS will be set instead.')
@@ -146,17 +146,21 @@ def get_scheduler():
 
 def set_machine_queue_size(size):
     global machine_queue_size
-    machine_queue_size = 3
+    global scheduling_method
+    machine_queue_size = float('inf')
     try:
-        if size < 0:
-            print("WARNING: Value for machine_queue_size should not be negative")
-        if size != 0:
-            machine_queue_size = abs(int(size))
-        else:
-            print("ERROR: Value for machine_queue_size cannot be 0. 3 will be set instead.")
+        if (scheduling_method == "FCFS" or "MEET" or "MECT"):
+            machine_queue_size = float('inf')
+        else:    
+            if size < 0:
+                print("WARNING: Value for machine_queue_size should not be negative")
+            if size != 0:
+                machine_queue_size = abs(size)
+            else:
+                print("ERROR: Value for machine_queue_size cannot be 0. 3 will be set instead.")
     except ValueError as val_err:
-        print("ERROR: Invalid value for machine_queue_size. 3 will be set instead.")
-        machine_queue_size = 3
+        print("ERROR: Invalid value for machine_queue_size. 'inf' will be set instead.")
+        machine_queue_size = float('inf')
 
 
 def get_machine_queue_size():
@@ -167,16 +171,16 @@ def set_capacity(capacity_value):
     global capacity
     global total_energy
     global available_energy
-    capacity = 500.0
+    capacity = float('inf')
     try:
         if capacity_value < 0:
             print("WARNING: Value for capacity should not be negative.")
         if capacity_value != 0:
-            capacity = abs(int(capacity_value))
+            capacity = abs(capacity_value)
         else:
-            print("ERROR: Value for capacity cannot be 0. 500.0 will be set instead.")
+            print("ERROR: Value for capacity cannot be 0. 'inf' will be set instead.")
     except ValueError as val_err:
-        print("ERROR: Invalid value for capacity. 500.0 will be set instead.")
+        print("ERROR: Invalid value for capacity. 'inf' will be set instead.")
     total_energy = capacity * 3600
     available_energy = total_energy
 
@@ -258,6 +262,13 @@ def set_verbosity(value):
     except ValueError as val_err:
         print("ERROR: Invalid value for verbosity. 3 will be set instead.")
 
+def validate_file_path(value):
+    invalid_chars = set('0123456789!@#$%^&*()-=+')
+    if any((c in invalid_chars) for c in value):
+        return False
+    else:
+        return True
+
 def init():
     global event_queue
     global time
@@ -270,11 +281,11 @@ def init():
     global scheduling_method
     global fairness_factor
     global total_energy, available_energy    
-    global machine_queue_size, batch_queue_size
+    global machine_queue_size#, batch_queue_size
     global no_of_machines
     global bandwidth, network_latency
     global gui
-    
+    global implemented_schedulers
     global log
     global path_to_output
     global path_to_workload
@@ -289,27 +300,41 @@ def init():
 
     # add try/catch for input validation
 
+    implemented_schedulers = data['scheduling_methods']
+    # print(implemented_schedulers)
+
     task_types, task_type_names = create_task_types(data['task_types'])
     machine_types, machine_type_names, no_of_machines = create_machine_types(data['machines'])
     machines = []
 
     set_capacity(data['battery'][0]['capacity'])
 
+    set_scheduler(data['parameters'][0]['scheduling_method'])
     set_machine_queue_size(data['parameters'][0]['machine_queue_size'])
     # machine_queue_size = int(data['parameters'][0]['machine_queue_size'])
-    set_batch_queue_size(data['parameters'][0]['batch_queue_size'])     
+    #set_batch_queue_size(data['parameters'][0]['batch_queue_size'])     
     set_fairness_factor(data['parameters'][0]['fairness_factor'])
     set_bandwidth(data['cloud'][0]['bandwidth'])
     set_network_latency(data['cloud'][0]['network_latency'])
 
-    set_scheduler(data['parameters'][0]['scheduling_method'])
+    
     
 
     settings = data['settings'][0] 
     set_gui(settings['gui']) 
     set_verbosity(settings['verbosity'])
-    path_to_output = settings['path_to_output']
-    path_to_workload = settings['path_to_workload']
+
+    if (validate_file_path(settings['path_to_output'])):
+        path_to_output = settings['path_to_output']
+    else:
+        print("ERROR: Invalid value for path_to_output. /output will be set instead.")
+        path_to_output = "./output"
+
+    if (validate_file_path(settings['path_to_workload'])):
+        path_to_workload = settings['path_to_workload']
+    else:
+        print("ERROR: Invalid value for path_to_workload. /workloads will be set instead.")
+        path_to_workload = './workloads'
 
     try:
         log = open(f"{path_to_output}/log.txt",'w')
@@ -322,8 +347,6 @@ def init():
     except OSError as err:
         print(err)
         path_to_workload = './workloads'
-
-    
     
 
 

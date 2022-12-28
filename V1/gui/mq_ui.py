@@ -135,7 +135,10 @@ class MachineUi(QGraphicsView):
             w_task = self.w_task
             h_task = self.h_task
             x_task = x + self.w_q
-            y_task = y + task_yspace            
+            y_task = y + task_yspace 
+            # Temporary Fix to machine_queue_size being a 'inf' value
+            if self.max_qsize == float('inf'):
+                self.max_qsize = 5           
             for idx in range(self.max_qsize):                
                 if idx <= (self.max_qsize-2) : 
                     x_task -= (w_task +  task_xspace)     
