@@ -30,3 +30,4 @@ class TaskStatus(Enum):
     OFFLOADED = 7    
     DEFERRED = 9
     MISSED = 10
+    PREEMPTED = 11

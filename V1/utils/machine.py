@@ -203,7 +203,15 @@ class Machine(BaseMachine):
             if config.time.gct() > task.deadline :
                 self.cancel(task)
 
+### work in progress
+    def preempt(self, task):
+        #task.status = TaskStatus.PREEMPTED
+        preempted_task = self.running_task.pop()
+        preempted_task.status = TaskStatus.PREEMPTED
+        self.status = MachineStatus.IDLE
+        self.queue.put(preempted_task)
     
+###    
     def execute(self, task):                 
         try:
             assert(not self.running_task), f'ERROR[machine.py -> execute()]: The machine {self.id} is already running a task'
