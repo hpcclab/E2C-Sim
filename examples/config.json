@@ -1,0 +1,76 @@
+{
+    "parameters": [
+        {
+            "machine_queue_size": 3000,
+            "batch_queue_size": 1,
+            "scheduling_method": "FCFS",
+            "fairness_factor": 1.0
+        }
+    ],
+    "settings": [
+        {
+            "path_to_output": "./output",
+            "path_to_workload": "./workload",
+            "verbosity": 3,
+            "gui": 1
+        }
+    ],
+    "task_types": [
+        {
+            "id": 1,
+            "name": "T1",
+            "urgency": "best_effort",
+            "deadline": 50.0
+        },
+        {
+            "id": 2,
+            "name": "T2",
+            "urgency": "best_effort",
+            "deadline": 50.0
+        },
+        {
+            "id": 3,
+            "name": "T3",
+            "urgency": "best_effort",
+            "deadline": 45.0
+        },
+        {
+            "id": 4,
+            "name": "T4",
+            "urgency": "best_effort",
+            "deadline": 45.0
+        }
+    ],
+    "battery": [
+        {
+            "capacity": 500.0
+        }
+    ],
+    "machines": [
+        {            
+            "name": "m1",
+            "power": 100,
+            "idle_power": 10,
+            "replicas": 1
+        },
+        {
+            "name": "m2",
+            "power": 300,
+            "idle_power": 5,
+            "replicas": 1
+        },
+        {
+            "name": "m3",
+            "power": 10,
+            "idle_power": 5,
+            "replicas": 1
+        }
+        
+    ],
+    "cloud": [
+        {
+            "bandwidth": 15000.0,
+            "network_latency": 0.015
+        }
+    ]
+}
