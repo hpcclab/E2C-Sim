@@ -26,6 +26,8 @@ class Task(BaseTask):
         
         self.estimated_time = est_exec_time
         self.execution_time = execution_time
+        self.start_time = 0
+        self.remaining_time = execution_time
         
         self.arrival_time = arrival_time
         self.start_time = float('inf')
@@ -48,6 +50,7 @@ class Task(BaseTask):
             'extended_deadline':self.deadline + self.devaluation_window,
             'estimated_time':self.est_exec_time,
             'execution_time': self.execution_time,
+            'remaining_time': self.remaining_time,
             'arrival_time':self.arrival_time,
             'start_time': self.start_time,
             'completion_time':self.completion_time,

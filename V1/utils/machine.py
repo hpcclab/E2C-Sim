@@ -12,6 +12,7 @@ from utils.task_type import UrgencyLevel
 from utils.event import Event, EventTypes
 from utils.queue import Queue
 import utils.config as config
+from utils.local_scheduler import LocalScheduler
 import time
 
 from PyQt5.QtCore import  pyqtSignal
@@ -28,6 +29,8 @@ class Machine(BaseMachine):
         self.type = type
         self.specs = specs
         self.status = MachineStatus.IDLE
+        self.burst_time = 0
+
 
         self.queue_size = config.machine_queue_size
         self.queue = Queue(maxsize = self.queue_size)
@@ -55,10 +58,16 @@ class Machine(BaseMachine):
             self.stats[f'{task_type.name}-energy_usage']=0
         
         self.sleep_time = 0.1
+
+        self.local_scheduler = LocalScheduler(self)
+        # print(self.local_scheduler.local_machine.id)
+
     
+    def set_burst_time(self, value):
+        self.burst_time = value
+
     def recreate_queue(self):
         self.queue = Queue(maxsize = self.queue_size)
-
 
             
     
@@ -111,6 +120,7 @@ class Machine(BaseMachine):
             task = self.queue.get()
 
             return task
+    # create new function that preempts
 
     def provisional_map(self,task):
         
@@ -146,11 +156,23 @@ class Machine(BaseMachine):
         return estimated_ct
 
 
-    def get_completion_time(self, task):
+    def get_completion_time(self, task, run_time):
         start_time = self.idle_time if self.is_working() else config.time.gct()
-        completion_time = start_time + task.execution_time[f'{self.type.name}-{self.replica_id}']
+        task.start_time = start_time
+        # if (run_time <= 0):
+        completion_time = start_time + task.remaining_time[f'{self.type.name}-{self.replica_id}']
+        #     task.remaining_time[f'{self.type.name}-{self.replica_id}'] = 0
+        # else:
+        #     if task.remaining_time[f'{self.type.name}-{self.replica_id}'] < run_time:
+        #         completion_time = start_time + task.remaining_time[f'{self.type.name}-{self.replica_id}']
+        #         task.remaining_time[f'{self.type.name}-{self.replica_id}'] = 0
+        #     else:
+        #         completion_time = start_time + run_time
+        #         task.remaining_time[f'{self.type.name}-{self.replica_id}'] -= run_time
         completed = True
-
+        # print("exc_time",task.remaining_time[f'{self.type.name}-{self.replica_id}'])
+        # print(start_time, completion_time, config.time.gct(), self.idle_time)
+        # print(start_time, task.deadline, start_time > task.deadline)
         if start_time > task.deadline:
             completion_time = start_time
             completed = False
@@ -166,6 +188,7 @@ class Machine(BaseMachine):
     def admit(self, task): 
         #print(self.queue.maxsize)       
         if not self.queue.full():
+            # Add task to queue and set to pending
             self.queue.put(task)            
             task.status = TaskStatus.PENDING                
             
@@ -179,39 +202,39 @@ class Machine(BaseMachine):
                                         
                                              })
                 time.sleep(self.sleep_time)
+                # Increment assigned tasks and find the completion (when it will be finished) and running (# of secs to complete) time of tasks.
             self.stats['assigned_tasks'] += 1
             self.stats[f'{task.type.name}-assigned'] += 1
-            completion_time,running_time,_ = self.get_completion_time(task)
+            completion_time,running_time,_ = self.get_completion_time(task, self.burst_time)
+            
+            # Will be idle at completion time
             self.idle_time = completion_time
+            # If a task is not currently running, then select a task and execute it.
             if not self.running_task:                
                 task = self.select()
-                self.execute(task)             
+                self.execute(task)         
+        # If the queue is full and the max queue size is 0 and no task is currently running
+        # execute the task (no need to select)         
         elif self.queue.full() and self.queue.maxsize == 0 and not self.running_task:
-            completion_time,running_time,_ = self.get_completion_time(task)
+            completion_time,running_time,_ = self.get_completion_time(task, self.burst_time)
             self.idle_time = completion_time                         
             self.execute(task)                        
         else:
             return 'notEmpty', None 
         
+
+
         g = self.gain(task, completion_time)
         l = self.loss(task, running_time)
         return g, l
+        #print(self.queue)
     
 
     def prune(self):
         for task in self.queue.list:
             if config.time.gct() > task.deadline :
                 self.cancel(task)
-
-### work in progress
-    def preempt(self, task):
-        #task.status = TaskStatus.PREEMPTED
-        preempted_task = self.running_task.pop()
-        preempted_task.status = TaskStatus.PREEMPTED
-        self.status = MachineStatus.IDLE
-        self.queue.put(preempted_task)
-    
-###    
+   
     def execute(self, task):                 
         try:
             assert(not self.running_task), f'ERROR[machine.py -> execute()]: The machine {self.id} is already running a task'
@@ -237,7 +260,7 @@ class Machine(BaseMachine):
         # rt: The time machine spent when it ran the task
         
         if task.urgency == UrgencyLevel.BESTEFFORT:
-
+            
             if task.completion_time <= task.deadline:
                 event_time = task.completion_time
                 event_type = EventTypes.COMPLETION
@@ -284,7 +307,10 @@ class Machine(BaseMachine):
             task.id, self.type.name,task.start_time, task.execution_time[f'{self.type.name}-{self.replica_id}'])
         self.machine_log = {"Task id":task.id,"Event Type":"RUNNING", "Time":event.time, "Execution time":task.execution_time[f'{self.type.name}-{self.replica_id}'],"Machine": self.id,"Type":'task'}
         config.log.write(s)
-        
+        # print(s)
+        # print(self.running_task[0])
+        # time.sleep(1)
+        # self.local_scheduler.preempt()
         # print(s)
         return running_time
     
