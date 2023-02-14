@@ -172,12 +172,12 @@ class Simulator(QObject):
             
             elif event.event_type == EventTypes.COMPLETION:               
                 machine = task.assigned_machine 
-                machine.terminate(task)                             
+                machine.local_scheduler.terminate(task)                             
                 self.scheduler.schedule()
                 
             elif event.event_type == EventTypes.DROPPED_RUNNING_TASK:
                 machine = task.assigned_machine
-                machine.drop()     
+                machine.local_scheduler.drop()     
                 self.scheduler.schedule()
             
             if self.pause:

@@ -49,7 +49,7 @@ class MEET(BaseScheduler):
     
     def map(self, machine):
         task = self.unmapped_task.pop()
-        machine.admit(task)        
+        machine.local_scheduler.admit(task)        
         task.assigned_machine = machine
         self.stats['mapped'].append(task)
         if config.gui==1:

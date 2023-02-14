@@ -100,7 +100,7 @@ class MM(BaseScheduler):
 
     def map(self, machine):
         task = self.unmapped_task.pop()
-        assignment,_ = machine.admit(task)
+        assignment,_ = machine.local_scheduler.admit(task)
         #print(assignment)
         if assignment != 'notEmpty':
             task.assigned_machine = machine

@@ -88,7 +88,7 @@ class FEE(BaseScheduler):
 
     def map(self, machine):
         task = self.unmapped_task.pop()
-        assignment = machine.admit(task)
+        assignment = machine.local_scheduler.admit(task)
         if assignment != 'notEmpty':
             task.assigned_machine = machine
             self.stats['mapped'].append(task)
@@ -170,7 +170,7 @@ class FEE(BaseScheduler):
                     
                     for candid_for_drop in reversed(fastest_machine.queue.list):
                         if candid_for_drop.type not in low_priority_tt:                                                      
-                            fastest_machine.cancel(candid_for_drop)
+                            fastest_machine.local_scheduler.cancel(candid_for_drop)
                         pct = fastest_machine.provisional_map(task)
                         if pct < task.deadline:                         
                             machines_met_deadline.append(machine)

@@ -614,6 +614,10 @@ class SimUi(QMainWindow):
             self.gv.connect_mapper_machine(m_id, QPen(Qt.red, 4), Qt.red)
             self.gv.machine_queues.m_queues[m_id].append(task)            
         
+        elif signal_type == 'preempted':
+            task = signal_data['task']
+            self.gv.batch_queue.tasks.append(task)
+
         elif signal_type == 'cancelled':
             # self.progress +=100*(1/self.simulator.total_no_of_tasks)  
             self.p_count +=1

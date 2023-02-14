@@ -156,23 +156,12 @@ class Machine(BaseMachine):
         return estimated_ct
 
 
-    def get_completion_time(self, task, run_time):
+    def get_completion_time(self, task):
         start_time = self.idle_time if self.is_working() else config.time.gct()
         task.start_time = start_time
-        # if (run_time <= 0):
-        completion_time = start_time + task.remaining_time[f'{self.type.name}-{self.replica_id}']
-        #     task.remaining_time[f'{self.type.name}-{self.replica_id}'] = 0
-        # else:
-        #     if task.remaining_time[f'{self.type.name}-{self.replica_id}'] < run_time:
-        #         completion_time = start_time + task.remaining_time[f'{self.type.name}-{self.replica_id}']
-        #         task.remaining_time[f'{self.type.name}-{self.replica_id}'] = 0
-        #     else:
-        #         completion_time = start_time + run_time
-        #         task.remaining_time[f'{self.type.name}-{self.replica_id}'] -= run_time
+        # remaining_time = task.remaining_time
+        completion_time = start_time + float(task.remaining_time[f'{self.type.name}-{self.replica_id}'])
         completed = True
-        # print("exc_time",task.remaining_time[f'{self.type.name}-{self.replica_id}'])
-        # print(start_time, completion_time, config.time.gct(), self.idle_time)
-        # print(start_time, task.deadline, start_time > task.deadline)
         if start_time > task.deadline:
             completion_time = start_time
             completed = False
@@ -185,55 +174,10 @@ class Machine(BaseMachine):
         return completion_time, running_time, completed
 
 
-    def admit(self, task): 
-        #print(self.queue.maxsize)       
-        if not self.queue.full():
-            # Add task to queue and set to pending
-            self.queue.put(task)            
-            task.status = TaskStatus.PENDING                
-            
-            if config.gui==1:                
-                self.machine_signal.emit({'type':'admitted',
-                                        'time': config.time.gct(),
-                                        'where':'machine: admit',
-                                        'data':{'task':task,
-                                                'assigned_machine':self,
-                                             },
-                                        
-                                             })
-                time.sleep(self.sleep_time)
-                # Increment assigned tasks and find the completion (when it will be finished) and running (# of secs to complete) time of tasks.
-            self.stats['assigned_tasks'] += 1
-            self.stats[f'{task.type.name}-assigned'] += 1
-            completion_time,running_time,_ = self.get_completion_time(task, self.burst_time)
-            
-            # Will be idle at completion time
-            self.idle_time = completion_time
-            # If a task is not currently running, then select a task and execute it.
-            if not self.running_task:                
-                task = self.select()
-                self.execute(task)         
-        # If the queue is full and the max queue size is 0 and no task is currently running
-        # execute the task (no need to select)         
-        elif self.queue.full() and self.queue.maxsize == 0 and not self.running_task:
-            completion_time,running_time,_ = self.get_completion_time(task, self.burst_time)
-            self.idle_time = completion_time                         
-            self.execute(task)                        
-        else:
-            return 'notEmpty', None 
-        
-
-
-        g = self.gain(task, completion_time)
-        l = self.loss(task, running_time)
-        return g, l
-        #print(self.queue)
-    
-
     def prune(self):
         for task in self.queue.list:
             if config.time.gct() > task.deadline :
-                self.cancel(task)
+                self.local_scheduler.cancel(task)
    
     def execute(self, task):                 
         try:
@@ -307,9 +251,7 @@ class Machine(BaseMachine):
             task.id, self.type.name,task.start_time, task.execution_time[f'{self.type.name}-{self.replica_id}'])
         self.machine_log = {"Task id":task.id,"Event Type":"RUNNING", "Time":event.time, "Execution time":task.execution_time[f'{self.type.name}-{self.replica_id}'],"Machine": self.id,"Type":'task'}
         config.log.write(s)
-        # print(s)
-        # print(self.running_task[0])
-        # time.sleep(1)
+        # time.sleep(self.sleep_time)
         # self.local_scheduler.preempt()
         # print(s)
         return running_time
@@ -349,146 +291,6 @@ class Machine(BaseMachine):
             l = beta * energy_consumption / config.available_energy
         
         return l
-    
-    
-                
-    def drop(self):
-        task = self.running_task.pop()               
-        task.status = TaskStatus.MISSED        
-        self.status = MachineStatus.IDLE
-
-        if config.gui == 1:
-            self.machine_signal.emit({  'type':'missed',
-                                        'where':'machine:drop',
-                                        'time': config.time.gct(),
-                                        'data':{'task':task,
-                                             'assigned_machine':self,
-                                             },                                        
-                                             })
-            time.sleep(self.sleep_time)
-                                             
-        energy_consumption = (config.time.gct() - task.start_time) * self.specs['power'] 
-        config.available_energy -= energy_consumption
-        task.energy_usage = energy_consumption
-        task.wasted_energy = energy_consumption
-
-        if task.urgency == UrgencyLevel.BESTEFFORT:            
-            self.stats['missed_BE_tasks'] += 1        
-        elif task.urgency == UrgencyLevel.URGENT:            
-            self.stats['missed_URG_tasks'] += 1
-        self.stats['energy_usage'] += energy_consumption
-        self.stats['wasted_energy'] += energy_consumption
-        self.stats[f'{task.type.name}-energy_usage'] += energy_consumption
-        self.stats[f'{task.type.name}-wasted_energy'] += energy_consumption
-
-        if not self.queue.empty() :
-            task = self.select()
-            self.execute(task)
-
-        s = '\n[ Task({:}), Machine({:}) ]: MISSED         @time({:3.3f})'.format(
-            task.id, self.type.name, task.missed_time  ) 
-        self.machine_log = {"Task id":task.id,"Event Type":"MISSED", "Time":task.missed_time, "Machine": self.id,"Type":'task'}
-
-        config.log.write(s)       
-        # print(s)
-        return energy_consumption
-
-    def cancel(self, task):
-        
-        task.status = TaskStatus.CANCELLED
-        task.drop_time = config.time.gct()
-
-        self.queue.remove(task)
-
-        if config.gui==1:
-            self.machine_signal.emit({'type':'cancelled_machine',
-                            'time':config.time.gct(),
-                            'where':'scheduelr: prune',
-                            'data': {'task':task,
-                                    'assigned_machine':self,                                                                                  
-                                    },                                        
-                                    })
-            time.sleep(self.sleep_time)
-        
-        if self.running_task:
-            if self.running_task[0].completion_time < self.running_task[0].deadline:
-                nxt_start_time = self.running_task[0].completion_time
-            else:
-                nxt_start_time = self.running_task[0].missed_time
-        else:
-            nxt_start_time = config.time.gct()
-
-        for task in self.queue.list:
-            if nxt_start_time < task.deadline:
-                completion_time = nxt_start_time + task.execution_time[f'{self.type.name}-{self.replica_id}']
-                nxt_start_time = completion_time if completion_time < task.deadline else task.deadline
-        self.idle_time = nxt_start_time
-
-        if task.urgency == UrgencyLevel.BESTEFFORT:            
-            self.stats['missed_BE_tasks'] += 1            
-        
-        if task.urgency == UrgencyLevel.URGENT:            
-            self.stats['missed_URG_tasks'] += 1        
-        
-        
-        s = '\n[ Task({:}), Machine({:}) ]: CANCELLED       @time({:3.3f})'.format(
-            task.id, self.type.name, task.missed_time  )  
-        self.machine_log = {"Task id":task.id,"Event Type":"CANCELLED", "Missed time":task.missed_time, "Machine": self.id,"Type":'task'}
-        
-        # print(s)
-        config.log.write(s)    
-        
-
-    def terminate(self, task):
-        #print(task.id, self.type.name, task.assigned_machine.type.name)
-        self.running_task.pop()
-
-        if config.gui == 1:
-            self.machine_signal.emit({'type':'completion',
-                                      'where':'machine:terminate',
-                                      'time': config.time.gct(),
-                                       'data':{'task':task,
-                                             'assigned_machine':self,
-                                             },
-                                             })
-            time.sleep(self.sleep_time)
-        
-        self.status = MachineStatus.IDLE        
-        energy_consumption = task.execution_time[f'{self.type.name}-{self.replica_id}'] * self.specs['power'] 
-        config.available_energy -= energy_consumption
-        self.stats['energy_usage'] += energy_consumption
-        self.stats[f'{task.type.name}-energy_usage'] += energy_consumption
-        task.energy_usage = energy_consumption
-        
-        if task.urgency == UrgencyLevel.BESTEFFORT:
-            if task.completion_time <= task.deadline-task.devaluation_window:                
-                task.status = TaskStatus.COMPLETED
-               
-                self.completed_tasks.append(task)
-                self.stats['completed_tasks'] += 1
-                self.stats[f'{task.type.name}-completed'] += 1                
-
-            elif task.completion_time > task.deadline - task.devaluation_window and task.completion_time <= task.deadline :
-                task.status = TaskStatus.XCOMPLETED                
-                self.xcompleted_tasks.append(task)
-                self.stats['xcompleted_tasks'] += 1
-                self.stats[f'{task.type.name}-completed'] += 1
-            
-        if task.urgency == UrgencyLevel.URGENT:            
-            task.status = TaskStatus.COMPLETED
-            self.completed_tasks.append(task)
-            self.stats['completed_tasks'] += 1
-            self.stats[f'{task.type.name}-completed'] += 1
-        s = '\n[ Task({:}), Machine({:}) ]: {:}      @time({:3.3f})'.format(
-           task.id, self.type.name, task.status.name, task.completion_time )
-        config.log.write(s)
-        # print(s)
-
-        if not self.queue.empty():
-            task = self.select()            
-            self.execute(task)  
-
-        return energy_consumption
 
     def shutdown(self):
         self.status = MachineStatus.OFF

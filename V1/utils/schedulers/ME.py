@@ -72,7 +72,7 @@ class ME(BaseScheduler):
         Config.log.write(s)
 
     def map(self, machine):
-        assignment = machine.admit(self.unmapped_task)
+        assignment = machine.local_scheduler.admit(self.unmapped_task)
 
         if assignment != 'notEmpty':
             self.unmapped_task.assigned_machine = machine

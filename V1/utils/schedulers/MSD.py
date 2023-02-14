@@ -96,7 +96,7 @@ class MSD(BaseScheduler):
 
     def map(self, machine):
         task = self.unmapped_task.pop()
-        assignment = machine.admit(task)
+        assignment = machine.local_scheduler.admit(task)
         if assignment != 'notEmpty':
             task.assigned_machine = machine
             self.stats['mapped'].append(task)

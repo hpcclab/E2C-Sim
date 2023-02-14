@@ -96,7 +96,7 @@ class FCFS(BaseScheduler):
 
     def map(self, machine):
         task = self.unmapped_task.pop()
-        assignment,_ = machine.admit(task)
+        assignment,_ = machine.local_scheduler.admit(task)
         if assignment != 'notEmpty':
             if config.gui==1:
                 self.decision.emit({'type':'map',

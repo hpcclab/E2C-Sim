@@ -1,0 +1,36 @@
+
+
+*****Task:0 		 ARRIVING  @time:2.467
+BQ = [0]
+
+MACHINES ==>>>
+	Machine m1 :	[[]]
+	Machine m2 :	[[]]
+	Machine m3 :	[[]]
+0 selected --> BQ = []
+executime: {'m1-1': 4.659, 'm2-1': 10.012, 'm3-1': 13.974}	estimeated_time{'m1': 5, 'm2': 10, 'm3': 15}
+[ Task(0), Machine(m1) ]: RUNNING        @time(2.467) exec:4.659 
+[ Task(0), Machine(m1) ]: RUNNING        @time(2.467) exec:3.659 
+[ Task(0), Machine(m1) ]: RUNNING        @time(2.467) exec:2.659 
+[ Task(0), Machine(m1) ]: RUNNING        @time(2.467) exec:1.659 
+[ Task(0), Machine(m1) ]: RUNNING        @time(2.467) exec:0.659 
+[ Task(0), Machine(m1) ]: RUNNING        @time(2.467) exec:0.000 
+[ Task(0), Machine(m1) ]: RUNNING        @time(2.467) exec:0.000 
+[ Task(0), Machine(m1) ]: RUNNING        @time(2.467) exec:0.000 
+[ Task(0), Machine(m1) ]: RUNNING        @time(2.467) exec:0.000 
+[ Task(0), Machine(m1) ]: RUNNING        @time(2.467) exec:0.000 
+[ Task(0), Machine(m1) ]: RUNNING        @time(2.467) exec:0.000 
+[ Task(0), Machine(m1) ]: RUNNING        @time(2.467) exec:0.000 
+[ Task(0), Machine(m1) ]: RUNNING        @time(2.467) exec:0.000 
+[ Task(0), Machine(m1) ]: RUNNING        @time(2.467) exec:0.000 
+[ Task(0), Machine(m1) ]: RUNNING        @time(2.467) exec:0.000 
+[ Task(0), Machine(m1) ]: RUNNING        @time(2.467) exec:0.000 
+[ Task(0), Machine(m1) ]: RUNNING        @time(2.467) exec:0.000 
+[ Task(0), Machine(m1) ]: RUNNING        @time(2.467) exec:0.000 
+[ Task(0), Machine(m1) ]: RUNNING        @time(2.467) exec:0.000 
+[ Task(0), Machine(m1) ]: RUNNING        @time(2.467) exec:0.000 
+[ Task(0), Machine(m1) ]: RUNNING        @time(2.467) exec:0.000 
+[ Task(0), Machine(m1) ]: RUNNING        @time(2.467) exec:0.000 
+[ Task(0), Machine(m1) ]: RUNNING        @time(2.467) exec:0.000 
+[ Task(0), Machine(m1) ]: RUNNING        @time(2.467) exec:0.000 
+[ Task(0), Machine(m1) ]: RUNNING        @time(2.467) exec:0.000 
