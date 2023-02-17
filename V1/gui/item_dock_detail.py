@@ -224,9 +224,11 @@ class ItemDockDetail(QMainWindow):
         with open(self.path_to_etc,'r') as workload:
             etc_reader = csv.reader(workload) 
             mt = next(etc_reader)[1:]
+            print(f"etc: {etc_reader}")
             for idx, row in enumerate(etc_reader):
-                tt.append(row[0])
-                etc.append(row[1:])          
+                if row:
+                    tt.append(row[0])
+                    etc.append(row[1:])          
 
         self.etc_matrix.setRowCount(len(tt)) 
         self.etc_matrix.setColumnCount(len(mt)) 

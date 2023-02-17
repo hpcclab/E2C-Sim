@@ -264,7 +264,10 @@ class SimUi(QMainWindow):
             msg.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
             msg.exec_()
         else:
-            mq_size = int(self.dock_right.mq_size.text())
+            try:
+                mq_size = int(self.dock_right.mq_size.text())
+            except:
+                 mq_size = 3
 
 
         config.machine_queue_size = mq_size

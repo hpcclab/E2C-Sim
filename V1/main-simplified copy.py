@@ -7,7 +7,7 @@ from utils.simulator import Simulator
 from utils.machine import Machine
 import utils.config as config
 
-rate = 'high'
+rate = 'low'
 hete_homo = 'heterogeneous'
 
 scenario = 'arrival_0_1'
