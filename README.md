@@ -14,6 +14,19 @@ Below, you can find the steps to execute the program:
    ```
    conda activate simulator
    ```
-4. Within the ``` V1 ``` directory, you can run ``` main.py ``` directly with a default configuration.
-5. To change the Config of the machines and task types, open ``` config.json ``` and add new task types in the same format present and increase or decrease the amount of each machine present as well as add new machine types etc also in the format present.
-6. Once the desired changes have been made, save the files changed and run ``` main_gui.py ``` to see the results in the window 
+4b. If steps 3 and 4 do not successfully work, then run the following commands in order.
+   ```
+   conda create --name simulator python=3.9
+   ```
+   ```
+   conda activate simulator
+   ```
+   ```
+   conda install -c anaconda pip
+   ```
+   ```
+   pip install -r requirements.txt
+   ```
+5. Within the ``` V1 ``` directory, you can run ``` main.py ``` directly with a default configuration.
+6. To change the Config of the machines and task types, open ``` config.json ``` and add new task types in the same format present and increase or decrease the amount of each machine present as well as add new machine types etc also in the format present.
+7. Once the desired changes have been made, save the files changed and run ``` main_gui.py ``` to see the results in the window 
