@@ -16,15 +16,15 @@ Below, you can find the steps to execute the program:
    conda activate simulator
    ```
 5. Install the latest version of pip in simulator environment as follows:
-```
-conda install -c anaconda pip
-```
+   ```
+   conda install -c anaconda pip
+   ```
 6. Then, you can use requirements.txt file to install required dependencies via pip:
-```
-pip install -r requirements.txt
-```
+   ```
+   pip install -r requirements.txt
+   ```
 7. Navigate to the E2C-Sim/V1 directory. Then, run the main.py within the V1 directory in simulator environemnt:
-```
-python main.py
-```
+   ```
+   python main.py
+   ```
 8. You can directly access the simulation environment from **config.json** file. Task types and machines are initially defined in that JSON file. Considering the JSON format, you can easily modify, add, or delete machines or task types. Once the desired changes have been made, save the changed files and run python main.py to see the results in the window.
