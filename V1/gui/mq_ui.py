@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import (QGraphicsView,QGraphicsPathItem, QGraphicsTextItem,
 QGraphicsEllipseItem, QLabel, QLineEdit, QGroupBox,QFormLayout,QPushButton,QWidget, QGraphicsPixmapItem)
 from PyQt5.QtGui import QBrush,  QPen, QFont, QPainterPath, QColor,QTransform, QFontMetrics,QPixmap, QPolygonF
 from PyQt5.QtCore import Qt, pyqtSignal, QSize, QPointF
+import random
 
 
 
@@ -18,7 +19,9 @@ class MachineUi(QGraphicsView):
         self.x_trash = x_machine_trash
         self.y_trash = y_trash
         self.trash_size = trash_size
-        self.machine_colors = [[82,126,191],[82,126,191],[82,126,191]] #default/homogeneous color
+        self.machine_colors = [[random.randint(0,255),random.randint(0,255),random.randint(0,255)],
+                               [random.randint(0,255),random.randint(0,255),random.randint(0,255)],
+                               [random.randint(0,255),random.randint(0,255),random.randint(0,255)]] #default color
         self.max_qsize = qsize
         self.machines = machines
         self.machine_circles = {}
