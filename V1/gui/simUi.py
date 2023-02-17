@@ -252,7 +252,7 @@ class SimUi(QMainWindow):
         
 
     def set_mq_size(self):
-        mq_size = int(self.dock_right.mq_size.text())
+        # mq_size = int(self.dock_right.mq_size.text())
         if self.configs['immediate_scheduling']:
             # print('here')
             mq_size = float('inf')
@@ -263,6 +263,9 @@ class SimUi(QMainWindow):
             msg.setWindowTitle("Warning MessageBox")
             msg.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
             msg.exec_()
+        else:
+            mq_size = int(self.dock_right.mq_size.text())
+
 
         config.machine_queue_size = mq_size
         for machine in config.machines:

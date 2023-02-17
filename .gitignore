@@ -4,13 +4,12 @@ node_modules/
 # Ignore the build directory
 /V1/task_machine_performance/SEP_test_arrival/
 /V1/task_machine_performance/temp/
-/V1/workloads/
-/V1/output/data/
 /V1/output/figures
 /V1/report/
 /V1/output/log.txt
 # The file containing pycache 
-**.pyc
+*.pyc
+ __pycache__/
 
 # Ignore IDE specific files
 .vscode/
