@@ -271,7 +271,8 @@ class MachineUi(QGraphicsView):
             self.machine_circles[m_id] = [x+length, y-self.machine_r]
             machine_circle = QGraphicsEllipseItem (x+length, y-self.machine_r, 2*self.machine_r,2*self.machine_r)
             
-            m_text = QGraphicsTextItem("M"+str(i+1), parent=machine_circle)
+            print(machine.type.name)
+            m_text = QGraphicsTextItem(machine.type.name, parent=machine_circle)
             m_text.setFont(QFont("Arial", 16))
             m_text.adjustSize()
             m_text.setFlag(m_text.ItemIsSelectable, False)

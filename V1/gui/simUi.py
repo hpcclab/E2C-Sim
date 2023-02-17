@@ -98,8 +98,8 @@ class SimUi(QMainWindow):
         self.report_menu.setStyleSheet("""QMenu::item::selected { background-color: blue; } """)
         self.help_menu.setStyleSheet("""QMenu::item::selected { background-color: blue; } """)
 
-        self.center()
-        #self.showMaximized()
+        #self.center()
+        self.showMaximized()
         
         self.initUI()
 

@@ -37,7 +37,7 @@ class MapperUi(QGraphicsView):
         self.mapper_item.setOffset(self.x_mapper, self.y_mapper)  
         self.mapper_item.setData(0, 'mapper')  
 
-        self.mapper_lbl = QGraphicsTextItem('Scheduler')
+        self.mapper_lbl = QGraphicsTextItem('Loadbalancer')
         self.mapper_lbl.setFont(QFont('Arial',16))
         self.mapper_lbl.setFlag(self.mapper_lbl.ItemIsSelectable, False) 
         w_lbl = self.mapper_lbl.boundingRect().width()                              
