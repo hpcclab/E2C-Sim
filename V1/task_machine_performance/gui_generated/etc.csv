@@ -1,5 +1,5 @@
-,cpu,m2,m3
-T1,1,2,5
-T2,5,10,15
-T3,7,12,18
-T4,15,20,25
+,cpu1,cpu2,cpu3
+face rec,3,3,3
+obj det,7,7,7
+txt det,2,2,2
+motion det,35,35,35
