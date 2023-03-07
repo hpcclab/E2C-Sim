@@ -4,12 +4,54 @@
 BQ = [0]
 
 MACHINES ==>>>
-	Machine cpu1 :	[[]]
-	Machine cpu2 :	[[]]
-	Machine cpu3 :	[[]]
+	Machine cpu :	[[]]
+	Machine gpu :	[[]]
+	Machine tpu :	[[]]
 0 selected --> BQ = []
-executime: {'cpu1-1': 6.522, 'cpu2-1': 7.008, 'cpu3-1': 6.521}	estimeated_time{'cpu1': 7, 'cpu2': 7, 'cpu3': 7}
-[ Task(0), Machine(cpu1) ]: RUNNING        @time(0.740) exec:6.522 
-task:0  assigned to:cpu1  delta:40.74
+executime: {'cpu-1': 9.318, 'gpu-1': 1.001, 'tpu-1': 0.466}	estimeated_time{'cpu': 10.0, 'gpu': 1.0, 'tpu': 0.5}
+[ Task(0), Machine(cpu) ]: RUNNING        @time(0.740) exec:9.318 
+task:0  assigned to:cpu  delta:40.74
 
 *****Task:1 		 ARRIVING  @time:0.916
+BQ = [1]
+
+MACHINES ==>>>
+	Machine cpu :	[0, []]
+	Machine gpu :	[[]]
+	Machine tpu :	[[]]
+1 selected --> BQ = []
+executime: {'cpu-1': 25.103, 'gpu-1': 3.037, 'tpu-1': 5.243}	estimeated_time{'cpu': 25.0, 'gpu': 3.0, 'tpu': 5.0}
+[ Task(1), Machine(gpu) ]: RUNNING        @time(0.916) exec:3.037 
+task:1  assigned to:gpu  delta:30.916
+
+*****Task:2 		 ARRIVING  @time:3.156
+BQ = [2]
+
+MACHINES ==>>>
+	Machine cpu :	[0, []]
+	Machine gpu :	[1, []]
+	Machine tpu :	[[]]
+2 selected --> BQ = []
+executime: {'cpu-1': 24.651, 'gpu-1': 2.82, 'tpu-1': 5.361}	estimeated_time{'cpu': 25.0, 'gpu': 3.0, 'tpu': 5.0}
+[ Task(2), Machine(tpu) ]: RUNNING        @time(3.156) exec:5.361 
+task:2  assigned to:tpu  delta:33.156
+
+*****Task:1 		 COMPLETION  @time:3.953
+[ Task(1), Machine(gpu) ]: COMPLETED      @time(3.953)
+BQ = []
+
+MACHINES ==>>>
+	Machine cpu :	[0, []]
+	Machine gpu :	[[]]
+	Machine tpu :	[2, []]
+
+*****Task:3 		 ARRIVING  @time:4.704
+BQ = [3]
+
+MACHINES ==>>>
+	Machine cpu :	[0, []]
+	Machine gpu :	[[]]
+	Machine tpu :	[2, []]
+3 selected --> BQ = []
+executime: {'cpu-1': 16.045, 'gpu-1': 1.999, 'tpu-1': 1.408}	estimeated_time{'cpu': 15.0, 'gpu': 2.0, 'tpu': 1.5}
+task:3  assigned to:cpu  delta:44.704

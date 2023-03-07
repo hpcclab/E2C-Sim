@@ -340,7 +340,7 @@ class MachineUi(QGraphicsView):
     
     def trash(self):
         self.trash_pix= QPixmap('./gui/icons/trash.png') 
-        self.trash_pix = self.trash_pix.scaled(QSize(self.trash_size,self.trash_size), Qt.IgnoreAspectRatio)
+        self.trash_pix = self.trash_pix.scaled(QSize(int(self.trash_size),int(self.trash_size)), Qt.IgnoreAspectRatio)
         self.trash_item = QGraphicsPixmapItem(self.trash_pix) 
         self.trash_item.setOffset(self.x_trash, self.y_trash)         
         self.trash_item.setData(0,'trash_missed')

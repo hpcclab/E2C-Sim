@@ -1,31 +1,31 @@
 task_type,arrival_time
-obj det,0.74
-txt det,0.916
-txt det,3.156
-face rec,4.704
-face rec,6.661
-obj det,7.186
-txt det,8.011
-txt det,8.818
-face rec,9.976
-obj det,10.012
-motion det,10.753
-txt det,12.904
-motion det,13.097
-obj det,15.704
-motion det,15.964
-motion det,18.16
-face rec,21.154
-face rec,21.182
-face rec,21.96
-obj det,22.531
-motion det,23.177
-txt det,28.144
-face rec,28.626
-obj det,29.414
-motion det,30.374
-txt det,31.01
-motion det,31.546
-txt det,31.822
-motion det,34.53
-motion det,36.694
+T1,0.74
+T4,0.916
+T4,3.156
+T2,4.704
+T2,6.661
+T1,7.186
+T4,8.011
+T4,8.818
+T2,9.976
+T1,10.012
+T3,10.753
+T4,12.904
+T3,13.097
+T1,15.704
+T3,15.964
+T3,18.16
+T2,21.154
+T2,21.182
+T2,21.96
+T1,22.531
+T3,23.177
+T4,28.144
+T2,28.626
+T1,29.414
+T3,30.374
+T4,31.01
+T3,31.546
+T4,31.822
+T3,34.53
+T3,36.694

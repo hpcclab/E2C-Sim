@@ -32,7 +32,7 @@ class MapperUi(QGraphicsView):
 
     def mapper(self):              
         self.mapper_pix= QPixmap('./gui/icons/mapper.png') 
-        self.mapper_pix = self.mapper_pix.scaled(QSize(self.mapper_size,self.mapper_size), Qt.IgnoreAspectRatio)
+        self.mapper_pix = self.mapper_pix.scaled(QSize(int(self.mapper_size),int(self.mapper_size)), Qt.IgnoreAspectRatio)
         self.mapper_item = QGraphicsPixmapItem(self.mapper_pix) 
         self.mapper_item.setOffset(self.x_mapper, self.y_mapper)  
         self.mapper_item.setData(0, 'mapper')  
@@ -50,7 +50,7 @@ class MapperUi(QGraphicsView):
 
     def trash(self):
         self.trash_pix= QPixmap('./gui/icons/trash.png') 
-        self.trash_pix = self.trash_pix.scaled(QSize(self.trash_size,self.trash_size), Qt.IgnoreAspectRatio)
+        self.trash_pix = self.trash_pix.scaled(QSize(int(self.trash_size),int(self.trash_size)), Qt.IgnoreAspectRatio)
         self.trash_item = QGraphicsPixmapItem(self.trash_pix) 
         self.trash_item.setOffset(self.x_trash, self.y_trash)         
         self.trash_item.setData(0,'trash')

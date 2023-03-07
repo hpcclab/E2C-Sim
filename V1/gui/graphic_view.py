@@ -149,7 +149,7 @@ class GraphicView(QGraphicsView):
         self.x_nsf_logo = 0
         self.y_nsf_logo = 70
         self.nsf_logo = QPixmap('./gui/icons/NSF.png') 
-        self.nsf_logo = self.nsf_logo.scaled(QSize(self.logo_size,self.logo_size), Qt.IgnoreAspectRatio)
+        self.nsf_logo = self.nsf_logo.scaled(QSize(int(self.logo_size),int(self.logo_size)), Qt.IgnoreAspectRatio)
         self.nsf_logo_item = QGraphicsPixmapItem(self.nsf_logo) 
         self.nsf_logo_item.setOffset(self.x_nsf_logo, self.y_nsf_logo) 
 

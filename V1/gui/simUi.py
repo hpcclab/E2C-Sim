@@ -45,8 +45,8 @@ class SimUi(QMainWindow):
         self.title = "E2C Simulator"
         self.top= 20
         self.left= 20      
-        self.width = w
-        self.height = h        
+        self.width = int(w)
+        self.height = int(h)        
         self.setWindowTitle(self.title)        
         self.setStyleSheet(f"background-color: rgb(217,217,217);")
         self.setGeometry(self.left, self.top, self.width, self.height)

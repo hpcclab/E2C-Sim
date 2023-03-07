@@ -32,8 +32,8 @@ for machine_type in config.machine_types:
 #makedirs(path_to_result, exist_ok = True)
 app = QApplication(sys.argv)   
 main_w_rect = app.desktop().screenGeometry()
-w = 0.95*main_w_rect.width()
-h = 0.95*main_w_rect.height()
+w = int(0.95*main_w_rect.width())
+h = int(0.95*main_w_rect.height())
 # w = 1200
 # h = 600
 path_to_arrivals = './workloads/default/workload.csv'
