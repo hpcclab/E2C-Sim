@@ -1,0 +1,15 @@
+
+
+*****Task:0 		 ARRIVING  @time:0.74
+BQ = [0]
+
+MACHINES ==>>>
+	Machine cpu1 :	[[]]
+	Machine cpu2 :	[[]]
+	Machine cpu3 :	[[]]
+0 selected --> BQ = []
+executime: {'cpu1-1': 6.522, 'cpu2-1': 7.008, 'cpu3-1': 6.521}	estimeated_time{'cpu1': 7, 'cpu2': 7, 'cpu3': 7}
+[ Task(0), Machine(cpu1) ]: RUNNING        @time(0.740) exec:6.522 
+task:0  assigned to:cpu1  delta:40.74
+
+*****Task:1 		 ARRIVING  @time:0.916
