@@ -1,0 +1,2 @@
+workload_path,total_no_of_tasks,mapped,cancelled,URG_missed,BE_missed,Completion%,xCompletion%,totalCompletion%,wasted_energy%,consumed_energy%,energy_per_completion%
+./workloads/default/workload.csv,30,30,0,0,7,76.6666666667,0,76.6666666667,0.1418222222,0.6721969444,0.0292259541

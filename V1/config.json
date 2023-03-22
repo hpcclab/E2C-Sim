@@ -51,19 +51,22 @@
             "name": "cpu",
             "power": 100,
             "idle_power": 10,
-            "replicas": 1
+            "replicas": 1,
+            "price": 10
         },
         {
             "name": "gpu",
             "power": 300,
             "idle_power": 5,
-            "replicas": 1
+            "replicas": 1,
+            "price": 20
         },
         {
             "name": "tpu",
             "power": 10,
             "idle_power": 5,
-            "replicas": 1
+            "replicas": 1,
+            "price": 30
         }
         
     ],

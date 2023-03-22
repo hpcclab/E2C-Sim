@@ -58,7 +58,8 @@ def create_machine_types(machines_info):
         power = machine_type['power']
         idle_power = machine_type['idle_power']
         replicas = machine_type['replicas']
-        type = MachineType(id, name, power,idle_power, replicas)
+        price = machine_type['price']
+        type = MachineType(id, name, power,idle_power, replicas, price)
         no_of_machines += replicas
         machine_types.append(type)
         machine_type_names.append(name)

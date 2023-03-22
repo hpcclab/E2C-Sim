@@ -5,6 +5,7 @@ Created on Nov., 15, 2021
 
 """
 import pandas as pd
+import numpy as np
 import csv
 import os
 import time
@@ -159,6 +160,7 @@ class Simulator(QObject):
             row =[config.time.gct(),config.available_energy]
             for machine in config.machines:                
                 row.append(machine.stats['energy_usage'])
+                machine.cost =  machine.price * config.time.current_time/3600.0
             self.energy_statistics.append(row)
   
             if event.event_type == EventTypes.ARRIVING:                
@@ -301,6 +303,37 @@ class Simulator(QObject):
         s += '\n%Total xCompletion: {:2.1f}'.format(total_xcompletion_percent)
         s += '\n%deferred: {:2.1f}'.format(len(self.scheduler.stats['deferred']))
         s += '\n%dropped: {:2.1f}'.format(len(self.scheduler.stats['dropped']))
+
+        #Utilization & Throughput
+        num_machines = 0.0
+        utilizations = []
+        for m in config.machines:
+            total_m_utilization = 0.0
+            num_machines += 1
+
+            machine_one_utilization_percent = 100 *(m.utilization_time / config.time.current_time)
+            utilizations.append(machine_one_utilization_percent)
+            machine_throughput = 100 * (m.stats['completed_tasks'] / config.time.current_time)
+            s+= f'\n%Machine {m.id} Utilization: {machine_one_utilization_percent}'
+            s+= f'\n%Machine {m.id} Throughput: {machine_throughput}'
+            s+= f'\n-----------------------------------'
+
+            
+            #s += f'\n%Machine {m.id} Utilization Amount: {total_m_utilization}'
+
+            #system_utilization_percent = 100 * (total_m_utilization / (config.time.current_time * num_machines))
+            system_throughput_percent = 100 * (total_completion / (config.time.current_time * num_machines))
+        utilizations = np.array(utilizations)
+        #print(f'**************** \n\n\n UTILIZAION: {utilizations} \n\n\n *******')
+        #s+= f'\n%Utilization array: {utilizations}' 
+
+        #print System Utilization & System Throughput
+        s+= '\n%System Utilization: {:2.1f}'.format(np.mean(utilizations))
+        #s+= '\n%System Utilization: {:2.1f}'.format(system_utilization_percent)
+        s+= '\n%System Throughput: {:2.1f}'.format(system_throughput_percent)
+
+
+        
         
         # if self.verbosity <= 3:
         print(s)

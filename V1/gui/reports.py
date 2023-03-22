@@ -1,5 +1,7 @@
 import pandas as pd
+import numpy as np
 import os, glob, pathlib
+import utils.config as config
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
@@ -301,17 +303,20 @@ class MachineReport(QMainWindow):
     def makeReport(df):
         df_machine = pd.DataFrame(
             index=set(df["assigned_machine"]),
-            columns=['machine', 'tasks_assigned', 'tasks_completed', 'tasks_missed']
+            columns=['machine', 'tasks_assigned', 'tasks_completed', 'tasks_missed','utilization','throughput','price', 'cost']
         )
 
         df_machine.sort_index(ascending=True).fillna(0)
 
-        assigned_t, complete_t, missed_t = 0, 0, 0
+        utilizations = []
+
+
+        assigned_t, complete_t, missed_t, utilization_t, throughput_t, price_t, cost_t = 0, 0, 0, 0, 0, 0, 0
 
         for machine in df_machine.index:
             df_machine.at[machine, 'machine'] = machine
 
-            assigned, complete, missed = 0, 0, 0
+            assigned, complete, missed, utilization, throughput, price, cost = 0, 0, 0, 0, 0, 0, 0
 
             subset = df.loc[df['assigned_machine'].isin([machine])]
 
@@ -328,12 +333,54 @@ class MachineReport(QMainWindow):
             df_machine.at[machine, 'tasks_assigned'] = assigned
             df_machine.at[machine, 'tasks_completed'] = complete
             df_machine.at[machine, 'tasks_missed'] = missed
+        
+
+        total_completion = 0.0
+        utilizations = []
+
+        for machine in config.machines:
+            print(machine.type)
+            #total_m_utilization = 0.0
+            machine_one_utilization_percent = 100*( machine.utilization_time / config.time.current_time)
+            df_machine.at[f'{machine.type.name}-{machine.replica_id}', 'utilization'] = (f"{machine_one_utilization_percent:6.3f}")
+            utilizations.append(machine_one_utilization_percent)
+            #total_m_utilization += machine.utilization_time
+        
+            #utilizations.append(machine_one_utilization_percent)
+
+
+            total_m_throughput = 0.0
+            total_completion += machine.stats['completed_tasks']
+            machine_throughput = 100 * (total_completion / (config.time.current_time ))
+            df_machine.at[f'{machine.type.name}-{machine.replica_id}', 'throughput'] = (f"{machine_throughput:6.3f}")
+            total_m_throughput += total_completion
+            throughput_t = 100 * (total_completion / (config.time.current_time * 3 ))
+
+
+            df_machine.at[f'{machine.type.name}-{machine.replica_id}', 'price'] = machine.price
+            price += machine.price
+            df_machine.at[f'{machine.type.name}-{machine.replica_id}', 'cost'] = (f"{machine.cost:6.3f}")
+            cost += machine.cost
+            
+        price_t = price
+        cost_t = (f"{cost:6.3f}")
+
+        utilizations = np.array(utilizations)
+        utilization_t = format(np.mean(utilizations))
+
+        
 
         df_machine.loc['total'] = {
             'machine': 'total',
             'tasks_assigned': assigned_t,
             'tasks_completed': complete_t,
-            'tasks_missed': missed_t
+            'tasks_missed': missed_t,
+            'utilization': utilization_t,
+            'throughput': throughput_t,
+            'price': price_t,
+            'cost': cost_t,
+
+
         }
         #df_machine = df_machine.drop(['machine'],axis=1)
 

@@ -376,6 +376,13 @@ class ItemDockDetail(QMainWindow):
         self.q_text.setText(f'{machine.queue_size}')
         self.q_text.setReadOnly(True)
         self.q_text.setAlignment(Qt.AlignLeft)
+
+        self.pr_lbl = QLabel('Price')
+        self.pr_text = QLineEdit()
+        self.pr_text.setText(f'{machine.price}')
+        self.pr_text.setReadOnly(True)
+        self.pr_text.setAlignment(Qt.AlignLeft)
+
         
         self.machine_grid.addWidget(self.id_lbl,0,0)
         self.machine_grid.addWidget(self.id_text,0,1)
@@ -383,6 +390,8 @@ class ItemDockDetail(QMainWindow):
         self.machine_grid.addWidget(self.p_text,1,1)
         self.machine_grid.addWidget(self.q_lbl,2,0)
         self.machine_grid.addWidget(self.q_text,2,1)
+        self.machine_grid.addWidget(self.pr_lbl,3,0)
+        self.machine_grid.addWidget(self.pr_text,3,1)
 
 
         self.perf_grid = QGridLayout(self)
@@ -423,6 +432,15 @@ class ItemDockDetail(QMainWindow):
         self.idle_text.setReadOnly(True)
         self.idle_text.setAlignment(Qt.AlignLeft)
 
+        self.cost_lbl = QLabel('Cost per hour')
+        self.cost_text = QLineEdit()
+        self.cost_text.setText(f"{machine.cost:6.3f}")
+        self.cost_text.setReadOnly(True)
+        self.cost_text.setAlignment(Qt.AlignLeft)
+        print(f'**** \n\n machine {machine.id} cost: {machine.cost}****\n\n')
+
+        
+
         self.perf_grid.addWidget(self.assigned_lbl,0,0)
         self.perf_grid.addWidget(self.assigned_text,0,1)
         self.perf_grid.addWidget(self.completed_lbl,1,0)
@@ -435,6 +453,8 @@ class ItemDockDetail(QMainWindow):
         self.perf_grid.addWidget(self.wasted_text,4,1)
         self.perf_grid.addWidget(self.idle_lbl,5,0)
         self.perf_grid.addWidget(self.idle_text,5,1)
+        self.perf_grid.addWidget(self.cost_lbl,6,0)
+        self.perf_grid.addWidget(self.cost_text,6,1)
 
         self.tab_machine.layout.addLayout(self.machine_grid)                
         self.tab_machine.layout.addStretch(1)

@@ -38,7 +38,17 @@ class Machine(BaseMachine):
         self.completed_tasks = []
         self.xcompleted_tasks = []        
         self.missed = []
-        
+        self.utilization_time = 0.0
+        self.price = type.price 
+
+        #needs time object to calculate cost using self.price
+        self.cost =  self.price * config.time.current_time
+    
+        for machine in config.machines:
+            total_m_utilization = 0.0
+            total_m_utilization += machine.utilization_time
+           
+            
         self.stats = {'assigned_tasks': 0,
                       'completed_tasks': 0,
                       'xcompleted_tasks': 0,
@@ -93,6 +103,7 @@ class Machine(BaseMachine):
         self.completed_tasks = []
         self.xcompleted_tasks = []        
         self.missed = []  
+        self.utilization_time = 0.0
        
         for key, _ in self.stats.items():
             self.stats[key] = 0
@@ -228,6 +239,7 @@ class Machine(BaseMachine):
         task.completion_time = task.start_time + task.execution_time[f'{self.type.name}-{self.replica_id}']
         # rt: The time machine spent when it ran the task
         
+
         if task.urgency == UrgencyLevel.BESTEFFORT:
 
             if task.completion_time <= task.deadline:
@@ -276,6 +288,8 @@ class Machine(BaseMachine):
             task.id, self.type.name,task.start_time, task.execution_time[f'{self.type.name}-{self.replica_id}'])
         self.machine_log = {"Task id":task.id,"Event Type":"RUNNING", "Time":event.time, "Execution time":task.execution_time[f'{self.type.name}-{self.replica_id}'],"Machine": self.id,"Type":'task'}
         config.log.write(s)
+
+        self.utilization_time += running_time
         
         # print(s)
         return running_time
