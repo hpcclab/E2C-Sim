@@ -204,7 +204,7 @@ class Simulator(QObject):
             self.simulation_done.emit()
             summary = self.report()
             with open(f'{self.path_to_reports}/{config.scheduling_method}/results-summary.csv','w')  as report_summary:
-                report_header = ['workload_path', 'total_no_of_tasks','mapped','cancelled','URG_missed','BE_missed','Completion%','xCompletion%','totalCompletion%','wasted_energy%','consumed_energy%','energy_per_completion%']
+                report_header = ['workload_path', 'total no of tasks','mapped','cancelled','urgency missed ','BE_missed','Completion%','xCompletion%','totalCompletion%','wasted energy%','consumed energy%','energy per completion%', 'total utilization', 'total throughput', 'total cost']
                 report = csv.writer(report_summary)  
                 report.writerow(report_header)
                 report.writerows(summary)
@@ -307,15 +307,18 @@ class Simulator(QObject):
         #Utilization & Throughput
         num_machines = 0.0
         utilizations = []
+        cost = 0.0
         for m in config.machines:
             total_m_utilization = 0.0
             num_machines += 1
+            cost += m.cost
 
             machine_one_utilization_percent = 100 *(m.utilization_time / config.time.current_time)
             utilizations.append(machine_one_utilization_percent)
             machine_throughput = 100 * (m.stats['completed_tasks'] / config.time.current_time)
-            s+= f'\n%Machine {m.id} Utilization: {machine_one_utilization_percent}'
-            s+= f'\n%Machine {m.id} Throughput: {machine_throughput}'
+            s+= f'\n%Machine {m.id} Utilization: {machine_one_utilization_percent:.2f}'
+
+            s+= f'\n%Machine {m.id} Throughput: {machine_throughput:.2f}'
             s+= f'\n-----------------------------------'
 
             
@@ -359,7 +362,7 @@ class Simulator(QObject):
             energy_per_completion = float('inf')
         else:
             energy_per_completion = 0.0
-
+        #Summarized Simulation Report Total Values Appended
         row.append(
             [self.path_to_arrivals,self.total_no_of_tasks ,
             total_assigned_tasks, len(self.scheduler.stats['dropped']),
@@ -369,7 +372,7 @@ class Simulator(QObject):
             total_completion_percent+total_xcompletion_percent,
             total_wasted_energy_percent,
             100*(consumed_energy/config.total_energy),            
-            energy_per_completion ])       
+            energy_per_completion,np.mean(utilizations), system_throughput_percent, cost])       
         config.log.close()
         #print(row)
         return row

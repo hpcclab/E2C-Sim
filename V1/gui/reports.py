@@ -354,7 +354,7 @@ class MachineReport(QMainWindow):
             machine_throughput = 100 * (total_completion / (config.time.current_time ))
             df_machine.at[f'{machine.type.name}-{machine.replica_id}', 'throughput'] = (f"{machine_throughput:6.3f}")
             total_m_throughput += total_completion
-            throughput_t = 100 * (total_completion / (config.time.current_time * 3 ))
+            throughput_t = '{:6.3f}'.format(100 * (total_completion / (config.time.current_time * 3 )))
 
 
             df_machine.at[f'{machine.type.name}-{machine.replica_id}', 'price'] = machine.price
@@ -366,7 +366,7 @@ class MachineReport(QMainWindow):
         cost_t = (f"{cost:6.3f}")
 
         utilizations = np.array(utilizations)
-        utilization_t = format(np.mean(utilizations))
+        utilization_t = '{:6.3f}'.format(np.mean(utilizations))
 
         
 

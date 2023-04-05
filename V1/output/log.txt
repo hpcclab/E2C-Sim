@@ -654,14 +654,14 @@ Machine: tpu (id#2)
 %Total xCompletion: 0.0
 %deferred: 0.0
 %dropped: 0.0
-%Machine 0 Utilization: 98.80568108457068
-%Machine 0 Throughput: 4.841833440929632
+%Machine 0 Utilization: 98.81
+%Machine 0 Throughput: 4.84
 -----------------------------------
-%Machine 1 Utilization: 29.041316978695935
-%Machine 1 Throughput: 16.139444803098772
+%Machine 1 Utilization: 29.04
+%Machine 1 Throughput: 16.14
 -----------------------------------
-%Machine 2 Utilization: 41.99806326662363
-%Machine 2 Throughput: 16.139444803098772
+%Machine 2 Utilization: 42.00
+%Machine 2 Throughput: 16.14
 -----------------------------------
 %System Utilization: 56.6
 %System Throughput: 12.4
