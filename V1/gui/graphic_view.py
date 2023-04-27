@@ -102,7 +102,7 @@ class GraphicView(QGraphicsView):
         self.machine_queues.outer_frame()
         self.machine_queues.draw_queues()
         self.machine_queues.fill_queues()
-        self.machine_queues.runnings()
+        self.machine_queues.runnings(machines)
         self.machine_queues.trash()
         self.display_time(0.0)
         #self.display_logos()
@@ -149,7 +149,7 @@ class GraphicView(QGraphicsView):
         self.x_nsf_logo = 0
         self.y_nsf_logo = 70
         self.nsf_logo = QPixmap('./gui/icons/NSF.png') 
-        self.nsf_logo = self.nsf_logo.scaled(QSize(int(self.logo_size),int(self.logo_size)), Qt.IgnoreAspectRatio)
+        self.nsf_logo = self.nsf_logo.scaled(QSize(self.logo_size,self.logo_size), Qt.IgnoreAspectRatio)
         self.nsf_logo_item = QGraphicsPixmapItem(self.nsf_logo) 
         self.nsf_logo_item.setOffset(self.x_nsf_logo, self.y_nsf_logo) 
 

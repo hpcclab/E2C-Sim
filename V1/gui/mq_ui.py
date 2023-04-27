@@ -101,7 +101,6 @@ class MachineUi(QGraphicsView):
     
 
     def draw_queues(self):
-        
         if self.no_of_machines==0:
             return
         q_xspace = 0.02 * self.w_outer
@@ -245,7 +244,7 @@ class MachineUi(QGraphicsView):
                     self.scene.addItem(text)
     
 
-    def runnings(self):
+    def runnings(self,machines):
         length = 1.0*self.h_q
         self.machine_r = 0.8*self.h_q
         gap = 0.05*length
@@ -255,6 +254,7 @@ class MachineUi(QGraphicsView):
                             2.5*self.machine_r, self.h_outer)       
         
         i = 0
+        self.machines = machines
 
         for machine in self.machines:
             m_id = machine.id
@@ -274,8 +274,7 @@ class MachineUi(QGraphicsView):
             self.machine_circles[m_id] = [x+length, y-self.machine_r]
             machine_circle = QGraphicsEllipseItem (x+length, y-self.machine_r, 2*self.machine_r,2*self.machine_r)
             
-            print(machine.type.name)
-            m_text = QGraphicsTextItem(machine.type.name, parent=machine_circle)
+            m_text = QGraphicsTextItem("M"+str(i+1), parent=machine_circle)
             m_text.setFont(QFont("Arial", 16))
             m_text.adjustSize()
             m_text.setFlag(m_text.ItemIsSelectable, False)

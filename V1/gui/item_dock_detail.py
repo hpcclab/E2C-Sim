@@ -3,7 +3,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 import sys,csv
-
+import utils.config as config
 
 
 class ItemDockDetail(QMainWindow):
@@ -16,7 +16,6 @@ class ItemDockDetail(QMainWindow):
         self.workload_path = './workloads/default/workload.csv'
         self.path_to_etc = './task_machine_performance/default/etc.csv'
         self.etc_editable = False
-        
 
         self.init_dock()
     
@@ -200,14 +199,14 @@ class ItemDockDetail(QMainWindow):
         self.etc_matrix.horizontalHeader().sectionDoubleClicked.connect(self.changeHorizontalHeader)
         self.etc_matrix.verticalHeader().sectionDoubleClicked.connect(self.changeVerticalHeader)
         # self.etc_generate = QPushButton('Submit')
-        self.etc_load = QPushButton('Load')
-        self.etc_edit = QPushButton('Edit')
-        self.etc_edit.clicked.connect(self.enable_etc_table)
-        self.etc_load.clicked.connect(self.get_etc_file)
+        # self.etc_load = QPushButton('Load')
+        # self.etc_edit = QPushButton('Edit EET and Workload')
+        # self.etc_edit.clicked.connect(self.enable_etc_table)
+        # self.etc_load.clicked.connect(self.get_etc_file)
        
         #self.etc_grid.addWidget(self.etc_matrix,0,0, len(tt),len(mt))
-        self.etc_grid.addWidget(self.etc_path_entry,0,0)
-        self.etc_grid.addWidget(self.etc_load,0,1)
+        # self.etc_grid.addWidget(self.etc_path_entry,0,0)
+        # self.etc_grid.addWidget(self.etc_load,0,1)
         # self.etc_grid.addWidget(self.etc_generate,2+len(tt),0,1,len(mt)) 
         self.tab_etc.layout.addWidget(self.etc_label)
         self.tab_etc.layout.addWidget(self.etc_matrix)
@@ -221,22 +220,21 @@ class ItemDockDetail(QMainWindow):
         etc = []
         mt = []
         tt = []
+        
         with open(self.path_to_etc,'r') as workload:
             etc_reader = csv.reader(workload) 
             mt = next(etc_reader)[1:]
-            print(f"etc: {etc_reader}")
             for idx, row in enumerate(etc_reader):
-                if row:
-                    tt.append(row[0])
-                    etc.append(row[1:])          
+                tt.append(row[0])
+                etc.append(row[1:]) 
 
         self.etc_matrix.setRowCount(len(tt)) 
         self.etc_matrix.setColumnCount(len(mt)) 
         
-        for i in range(len(tt)):                
+        for i in range(len(tt)):      
                 for j in range(len(mt)):        
                     cell_item = QTableWidgetItem(str(etc[i][j]))                    
-                    self.etc_matrix.setItem(i,j, cell_item) 
+                    self.etc_matrix.setItem(i,j, cell_item)
                     
         if not self.etc_editable:
             print(self.etc_editable)
@@ -259,15 +257,23 @@ class ItemDockDetail(QMainWindow):
             self.etc_editable = True
     
     def get_etc_file(self):     
-        path  = QFileDialog.getOpenFileName(self, caption='Choose File',
+        path  = QFileDialog.getOpenFileName(self, caption='Choose EET File',
                                                     directory=QDir.currentPath(),
-                                                    filter='*.csv')
+                                                    filter='*.csv.eet')
         if path[0]:
             self.path_to_etc = path[0]
 
-        self.etc_path_entry.setText(self.path_to_etc)
         self.write_etc_matrix()
 
+    
+    def get_eet_input(self):
+        self.path_to_etc = './task_machine_performance/gui_generated/etc.csv'
+
+        with open (self.path_to_etc) as f:
+            for line in f:
+                print(line)
+
+        self.write_etc_matrix()
 
 
     @pyqtSlot(int)
@@ -297,32 +303,6 @@ class ItemDockDetail(QMainWindow):
             QLineEdit.Normal, oldHeader)
         if okPressed:
             it.setText(newHeader)
-
-
-    # def set_mq(self):
-    #     self.tabs = QTabWidget()
-    #     self.tab_mq = QWidget()
-    #     self.tabs.addTab(self.tab_mq, "Machine Queue")        
-    #     self.tab_mq.layout = QVBoxLayout(self)        
-    #     self.mq_grid = QGridLayout(self)        
-        
-    #     self.mq_lbl = QLabel('Machine queue size')
-    #     self.mq_size = QLineEdit()
-    #     self.mq_size.setToolTip('The size of machine queues')
-    #     if self.configs['mapper']['immediate']:
-    #         self.mq_size.setText("unlimited")
-    #     else:
-    #         self.mq_size.setText("")
-    #     self.mq_size.setReadOnly(False)
-    #     self.mq_size.setAlignment(Qt.AlignLeft)
-        
-    #     self.mq_grid.addWidget(self.mq_lbl,0,0)
-    #     self.mq_grid.addWidget(self.mq_size,1,0)
-              
-    #     self.tab_mq.layout.addLayout(self.mq_grid)                
-    #     self.tab_mq.layout.addStretch(1)
-    #     self.tab_mq.setLayout(self.tab_mq.layout)
-    #     self.dock.setWidget(self.tabs)
 
 
     def set_bq(self):
@@ -693,7 +673,7 @@ class ItemDockDetail(QMainWindow):
                 self.mq_size.setText("")
                 self.mq_size.setDisabled(False)
     
-    def workload_data(self, enabled, tt, mt):
+    def workload_data(self, enabled, tt, mt, config_tt):
         self.tabs = QTabWidget()        
         self.tab_workload = QWidget()
 
@@ -711,45 +691,55 @@ class ItemDockDetail(QMainWindow):
 
         self.wl_label = QLabel('Workload')
 
-        self.load_wl_btn = QPushButton('Load', self)
-        self.load_wl_btn.clicked.connect(self.get_workload_file)
-
+        # self.load_wl_btn = QPushButton('Load', self)
+        # self.load_wl_btn.clicked.connect(self.get_workload_file)
 
         self.workload_table = QTableWidget() 
         delegate = MyDelegate()
         self.workload_table.setItemDelegate(delegate) 
         self.workload_table.setRowCount(0) 
-        self.workload_table.setColumnCount(2) 
+        self.workload_table.setColumnCount(4) 
 
-        self.workload_table.setHorizontalHeaderLabels(['Task Type', 'Arrival Time'])
+        self.workload_table.setHorizontalHeaderLabels(['Task Type','Data Size', 'Arrival Time', 'Deadline'])
         self.workload_table.horizontalHeader().setStretchLastSection(True)
         self.workload_table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)        
         with open(self.workload_path,'r') as workload:
+            print(self.workload_path)
             workload_reader = csv.reader(workload)     
             next(workload_reader)        
             for idx, row in enumerate(workload_reader):                 
                 self.workload_table.setRowCount(idx+1) 
                 type_item = QTableWidgetItem(row[0])       
                 arrival_item = QTableWidgetItem(str(row[1]))
+                deadline = 0
+                for tt in config_tt:
+                    if tt.name == row[0]:
+                        deadline = tt.deadline
+
                 self.workload_table.setItem(idx, 0, type_item)
-                self.workload_table.setItem(idx, 1, arrival_item )            
+                self.workload_table.setItem(idx,1,QTableWidgetItem("0"))
+                self.workload_table.setItem(idx, 2, arrival_item )
+                self.workload_table.setItem(idx,3,QTableWidgetItem(str(round(deadline + float(row[1]),3))))          
                 type_item.setFlags(type_item.flags() ^ Qt.ItemIsEditable)
                 arrival_item.setFlags(arrival_item.flags() ^ Qt.ItemIsEditable)
         self.workload_table.setStyleSheet("background-color: white; selection-background-color: #353535;")
         self.tab_etc  = self.machine_etc(tt,mt)
-        self.etc_generate = QPushButton('Submit')
+
+        self.workload_generator = QPushButton("Open Workload Generator")
+        self.dock_wkl_submit = QPushButton("Submit Current Workload and EET")
 
         self.tab_workload.layout.addWidget(self.tab_etc)
         
-        self.workload_grid.addWidget(self.path_entry,0,0)        
-        self.workload_grid.addWidget(self.load_wl_btn,0,1)   
+        # self.workload_grid.addWidget(self.path_entry,0,0)        
+        # self.workload_grid.addWidget(self.load_wl_btn,0,1)   
         
         self.tab_workload.layout.addWidget(self.wl_label)
         self.tab_workload.layout.addWidget(self.workload_table)
         self.tab_workload.layout.addLayout(self.workload_grid) 
 
-        self.btns_grid.addWidget(self.etc_edit, 0,0)
-        self.btns_grid.addWidget(self.etc_generate,0,1)
+        # self.btns_grid.addWidget(self.etc_edit, 0,0)
+        # self.btns_grid.addWidget(self.dock_wkl_submit,1,0)
+        self.btns_grid.addWidget(self.workload_generator,2,0)
 
         self.spaceItem = QSpacerItem(100, 25, QSizePolicy.Expanding)
         self.tab_workload.layout.addSpacerItem(self.spaceItem)
@@ -763,9 +753,9 @@ class ItemDockDetail(QMainWindow):
         
     
     def get_workload_file(self):     
-        loaded_path  = QFileDialog.getOpenFileName(self, caption='Choose File',
+        loaded_path  = QFileDialog.getOpenFileName(self, caption='Choose Workload File',
                                                     directory=QDir.currentPath(),
-                                                    filter='*.csv')
+                                                    filter='*.csv.wkl')
         if loaded_path[0]:
             self.workload_path = loaded_path[0]
         
@@ -775,25 +765,30 @@ class ItemDockDetail(QMainWindow):
             next(workload_reader)        
             for idx, row in enumerate(workload_reader):                                
                 self.workload_table.setRowCount(idx+1)
-                type_item = QTableWidgetItem(row[0])       
-                arrival_item = QTableWidgetItem(str(row[1]))
+                type_item = QTableWidgetItem(row[0])      
+                data_size = QTableWidgetItem(str(row[1]))
+                arrival_item = QTableWidgetItem(str(row[2]))
+                deadline = QTableWidgetItem(str(row[3]))
                 self.workload_table.setItem(idx, 0, type_item)
-                self.workload_table.setItem(idx, 1, arrival_item)
+                self.workload_table.setItem(idx, 1, data_size)
+                self.workload_table.setItem(idx, 2, arrival_item)
+                self.workload_table.setItem(idx, 3, deadline)
                 type_item.setFlags(type_item.flags() ^ Qt.ItemIsEditable)
                 arrival_item.setFlags(arrival_item.flags() ^ Qt.ItemIsEditable)
         #print('wl_path set in dock: ',self.workload_path)
-    def rewrite_workload_table(self):
-        with open(self.workload_path,'r') as workload:
-            workload_reader = csv.reader(workload)     
-            next(workload_reader)        
-            for idx, row in enumerate(workload_reader):                                
-                self.workload_table.setRowCount(idx+1)
-                type_item = QTableWidgetItem(row[0])       
-                arrival_item = QTableWidgetItem(str(row[1]))
-                self.workload_table.setItem(idx, 0, type_item)
-                self.workload_table.setItem(idx, 1, arrival_item)
-                type_item.setFlags(type_item.flags() ^ Qt.ItemIsEditable)
-                arrival_item.setFlags(arrival_item.flags() ^ Qt.ItemIsEditable)
+
+    
+    #function thats tied to the button from simui which repopulates wkload table based on db table
+    def rewrite_from_db(self, arrivals):
+
+        for idx, row in arrivals.iterrows():
+            self.workload_table.setRowCount(idx+1)
+            type_item = QTableWidgetItem(row["task_type"])       
+            arrival_item = QTableWidgetItem(str(row["arrival_time"]))
+            self.workload_table.setItem(idx, 0, type_item)
+            self.workload_table.setItem(idx, 2, arrival_item)
+            type_item.setFlags(type_item.flags() ^ Qt.ItemIsEditable)
+            arrival_item.setFlags(arrival_item.flags() ^ Qt.ItemIsEditable)
 
 
     

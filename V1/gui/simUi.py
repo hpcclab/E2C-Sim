@@ -2,6 +2,13 @@ import sys, time, csv
 from wsgiref.util import is_hop_by_hop
 from gui.reports import FullReport, MachineReport, TaskReport, SummaryReport
 from gui.help import HelpMenu
+from utils.db_workload import *
+from utils.utilities import *
+from utils.initTables import *
+from utils.initTables import initTables
+from utils.machine_type import MachineType
+from utils.machine import Machine
+from utils.task_type import TaskType, UrgencyLevel
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
@@ -27,11 +34,14 @@ from PyQt5.QtCore import Qt, QThread
 from utils.simulator import Simulator
 from gui.graphic_view import GraphicView
 from gui.item_dock_detail import ItemDockDetail
+from gui.workload_gen import WorkloadGenerator
 import utils.config as config
 from utils.task import Task
 from utils.event_queue import EventQueue
+from gui.gen_downloader import Downloader
 import pandas as pd
 import random
+import sqlite3 as sq
 
 
 class SimUi(QMainWindow):
@@ -42,11 +52,15 @@ class SimUi(QMainWindow):
         self.path_to_etc= path_to_etc
         self.path_to_reports = path_to_reports
 
+        db_path = './utils/e2cDB.db' 
+        self.conn = sq.connect(db_path)
+        self.cur = self.conn.cursor()
+
         self.title = "E2C Simulator"
         self.top= 20
         self.left= 20      
-        self.width = int(w)
-        self.height = int(h)        
+        self.width = w
+        self.height = h        
         self.setWindowTitle(self.title)        
         self.setStyleSheet(f"background-color: rgb(217,217,217);")
         self.setGeometry(self.left, self.top, self.width, self.height)
@@ -58,10 +72,32 @@ class SimUi(QMainWindow):
                         'etc':'default',
                          }
         self.sim_done = 0
-        self.etc_submitted = True
+        self.db_scens = []
+        self.db_scen = []
+
+        self.etc_submitted = False
+
         menu = self.menuBar()
         self.report_menu = menu.addMenu("Reports")
         self.help_menu = menu.addMenu("Help")
+
+        self.workload_gen_window = WorkloadGenerator()
+        self.workload_gen_window.add_scen_submit.clicked.connect(self.add_scen)
+        self.workload_gen_window.reset_scen_btn.clicked.connect(self.reset_scen)
+        self.workload_gen_window.generate_wkld_submit.clicked.connect(self.generate_workload)
+        self.workload_gen_window.eet_table_reset.clicked.connect(self.eet_table_reset)
+        self.workload_gen_window.eet_table_submit.clicked.connect(self.set_etc_generator)
+        self.workload_gen_window.add_tt_submit.clicked.connect(self.add_tt)
+        self.workload_gen_window.remove_tt_submit.clicked.connect(self.remove_tt)
+        self.workload_gen_window.add_mt_submit.clicked.connect(self.add_mt)
+        self.workload_gen_window.remove_mt_submit.clicked.connect(self.remove_mt)
+        self.workload_gen_window.edit_tt_submit.clicked.connect(self.edit_tt_submit)
+        self.workload_gen_window.edit_mt_submit.clicked.connect(self.edit_mt_submit)
+        self.workload_gen_window.save_eet.clicked.connect(self.save_eet_file)
+        self.workload_gen_window.save_wkld.clicked.connect(self.save_wkld_file)
+        self.workload_gen_window.save_scen.clicked.connect(self.save_scen_file)
+        self.workload_gen_window.add_new_di.clicked.connect(self.add_di)
+        self.workload_gen_window.close_window.clicked.connect(self.close_window)
 
         self.full_report = QAction("&Full Report", self)
         self.full_report.setToolTip("Display full report of simulation")
@@ -98,10 +134,14 @@ class SimUi(QMainWindow):
         self.report_menu.setStyleSheet("""QMenu::item::selected { background-color: blue; } """)
         self.help_menu.setStyleSheet("""QMenu::item::selected { background-color: blue; } """)
 
-        #self.center()
-        self.showMaximized()
+        self.center()
+        #self.showMaximized()
         
         self.initUI()
+
+    def closeEvent(self, event):
+        for window in QApplication.topLevelWidgets():
+            window.close()
 
     def full_report_action(self):
         self.report = FullReport(self.path_to_reports, config.scheduling_method)
@@ -130,7 +170,7 @@ class SimUi(QMainWindow):
         
         self.gv.machine_colors = []
         
-        self.dock_right = ItemDockDetail()        
+        self.dock_right = ItemDockDetail()    
         self.gv.itemClicked.connect(self.dock_update)     
         hlayout = QHBoxLayout()
         #hlayout.addWidget(self.dock_left)
@@ -152,7 +192,6 @@ class SimUi(QMainWindow):
        
 
     def dock_update(self,item):
-         
         if item.data(0) == 'task_in_bq' or item.data(0) == 'task_in_mq' or item.data(0)=='task_in_machine' :      
             self.dock_right.task_in_bq(item.data(1)) 
         elif item.data(0) == 'task_in_bq_others':            
@@ -169,7 +208,6 @@ class SimUi(QMainWindow):
             # tt = config.task_type_names
             # mt = config.machine_type_names            
             # self.dock_right.machine_etc(tt, mt)
-            # self.dock_right.etc_generate.clicked.connect(self.set_etc)
             pass
             
         # elif item.data(0) == 'machine_queues_frame': 
@@ -203,13 +241,14 @@ class SimUi(QMainWindow):
             tt = config.task_type_names
             mt = config.machine_type_names 
             self.etc_submitted = False 
-            self.dock_right.workload_data(0,tt, mt)
+            self.dock_right.workload_data(0,tt, mt, config.task_types)
             self.dock_right.path_entry.textChanged.connect(self.set_arrival_path)
-            self.dock_right.etc_generate.clicked.connect(self.set_etc)
+            self.dock_right.workload_generator.clicked.connect(self.workload_gen_show)
+            self.dock_right.dock_wkl_submit.clicked.connect(self.dock_right_set_etc)
+
             
             try:
                 self.simulator
-                self.dock_right.etc_generate.setEnabled(False)
                 self.dock_right.etc_load.setEnabled(False)
                 self.dock_right.etc_edit.setEnabled(False)
                 self.dock_right.load_wl_btn.setEnabled(False)
@@ -218,6 +257,10 @@ class SimUi(QMainWindow):
                 pass
             
         self.gv.scene.update()
+
+    def workload_gen_show(self):
+        self.workload_gen_window.show()
+        
 
     def rb_policy_state(self, rb):        
         if rb.isChecked():
@@ -243,32 +286,108 @@ class SimUi(QMainWindow):
         self.configs['immediate_scheduling'] = self.dock_right.configs['mapper']['immediate']        
         
             
+    def set_etc_generator(self):
+        self.set_etc()
+        msg = QMessageBox()
+        msg.setIcon(QMessageBox.Information)
+        msg.setText("EET has been successfully submitted.")
+        msg.setWindowTitle("EET Submitted")
+        msg.setStandardButtons(QMessageBox.Ok)
+        msg.exec_()
+
+
+    def dock_right_set_etc(self):
+
+        num_rows = self.dock_right.etc_matrix.rowCount()
+        num_cols = self.dock_right.etc_matrix.columnCount()
+        
+        eet_num_rows = self.workload_gen_window.eet_table.rowCount()
+        eet_num_cols = self.workload_gen_window.eet_table.columnCount()
+
+        if num_rows > eet_num_rows:
+            self.workload_gen_window.eet_table.setRowCount(num_rows)
+            for row in range(eet_num_rows, num_rows):
+                header_item = self.dock_right.etc_matrix.verticalHeaderItem(row)
+                self.workload_gen_window.eet_table.setVerticalHeaderItem(row, header_item)
+        elif num_rows < eet_num_rows:
+            self.workload_gen_window.eet_table.setRowCount(num_rows)
+
+        if num_cols > eet_num_cols:
+            self.workload_gen_window.eet_table.setColumnCount(num_cols)
+            for col in range(eet_num_cols, num_cols):
+                header_item = self.dock_right.etc_matrix.horizontalHeaderItem(col)
+                self.workload_gen_window.eet_table.setHorizontalHeaderItem(col, header_item)
+        elif num_cols < eet_num_cols:
+            self.workload_gen_window.eet_table.setColumnCount(num_cols)
     
+        for col in range(num_cols):
+            for row in range(num_rows):
+                item = self.dock_right.etc_matrix.item(row, col)
+                eet_item = self.workload_gen_window.eet_table.item(row, col)
+                if not item:
+                    continue
+                if not eet_item:
+                    eet_item = QTableWidgetItem()
+                    self.workload_gen_window.eet_table.setItem(row, col, eet_item)
+                eet_item.setText(item.text())
+                header_item = self.dock_right.etc_matrix.verticalHeaderItem(row)
+                self.workload_gen_window.eet_table.setVerticalHeaderItem(row, header_item)
+                header_item = self.dock_right.etc_matrix.horizontalHeaderItem(col)
+                self.workload_gen_window.eet_table.setHorizontalHeaderItem(col, header_item)
+
+        self.workload_gen_window.wkld_table.setRowCount(self.dock_right.workload_table.rowCount())
+        
+        for row in range(self.dock_right.workload_table.rowCount()):
+            for col in range(self.dock_right.workload_table.columnCount()):
+                item = self.dock_right.workload_table.item(row, col)
+                
+                new_item = QTableWidgetItem(item.text())
+                self.workload_gen_window.wkld_table.setItem(row, col, new_item)
+
+
+        self.set_etc()  
+        msg = QMessageBox()
+        msg.setIcon(QMessageBox.Information)
+        msg.setText("EET and Workload have been successfully submitted.")
+        msg.setWindowTitle("EET and Workload Submitted")
+        msg.setStandardButtons(QMessageBox.Ok)
+        msg.exec_()
+        self.workload_gen_window.workload_btn.setEnabled(True)
+
     def set_arrival_path(self):
         print(f'wlPath: {self.dock_right.workload_path}')
         print(f'txt_entry: {self.dock_right.path_entry.text()}')
         self.path_to_arrivals = self.dock_right.path_entry.text()
         #self.path_to_arrivals = self.dock_right.workload_path
         
-
-    def set_mq_size(self):
-        # mq_size = int(self.dock_right.mq_size.text())
-        if self.configs['immediate_scheduling']:
-            # print('here')
-            mq_size = float('inf')
-            config.machine_queue_size = mq_size
+    def close_window(self):
+        if self.workload_gen_window.wkld_table.rowCount() == 0:
             msg = QMessageBox()
             msg.setIcon(QMessageBox.Warning)
-            msg.setText("Machine queue size is unlimited for immediate scheduling!")
-            msg.setWindowTitle("Warning MessageBox")
+            msg.setText("Workload is empty. Are you sure you wish to close?")
+            msg.setWindowTitle("Close Window")
             msg.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
-            msg.exec_()
-        else:
-            try:
-                mq_size = int(self.dock_right.mq_size.text())
-            except:
-                 mq_size = 3
+            input = msg.exec_()
 
+            if input == QMessageBox.Ok:
+                self.workload_gen_window.close()
+
+        else: self.workload_gen_window.close()
+
+    def set_mq_size(self):
+        mq_size = float('inf')
+        if self.dock_right.rb_batch.isChecked():
+            mq_size = int(self.dock_right.mq_size.text())
+        # if self.configs['immediate_scheduling']:
+        #     # print('here')
+        #     mq_size = float('inf')
+        #     config.machine_queue_size = mq_size
+        #     msg = QMessageBox()
+        #     msg.setIcon(QMessageBox.Warning)
+        #     msg.setText("Machine queue size is unlimited for immediate scheduling!")
+        #     msg.setWindowTitle("Warning MessageBox")
+        #     msg.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
+        #     msg.exec_()
 
         config.machine_queue_size = mq_size
         for machine in config.machines:
@@ -381,13 +500,413 @@ class SimUi(QMainWindow):
         self.general_layout.addLayout(self.btn_layout) 
     
 
+    def save_eet_file(self):
+        eet_df = pd.DataFrame(columns=['task_type'])
+        eet = self.workload_gen_window.eet_table
+        data = []
+
+        for col in range(eet.columnCount()):
+            eet_df[f'{eet.horizontalHeaderItem(col).text()}'] = None
+
+        for row in range(eet.rowCount()):
+            data.append(eet.verticalHeaderItem(row).text())
+            for col in range(eet.columnCount()):
+                data.append(eet.item(row,col).text())
+            eet_df.loc[len(eet_df)] = data
+            data.clear()
+
+        self.dialog = Downloader(eet_df, "EET")
+        print(eet_df)
+    
+    def save_wkld_file(self):
+        wkld_df = pd.DataFrame(columns=['task_type','data_size','arrival_time','deadline'])
+        wkld = self.workload_gen_window.wkld_table
+        data = []
+
+        for row in range(wkld.rowCount()):
+            for col in range(wkld.columnCount()):
+                data.append(wkld.item(row,col).text())
+            wkld_df.loc[len(wkld_df)] = data
+            data.clear()
+
+        self.dialog = Downloader(wkld_df, "Workload")
+        print(wkld_df)
+
+    def save_scen_file(self):
+        scen_df = pd.DataFrame(columns=['task_type','num_of_tasks','start_time','end_time','distribution'])
+        scen = self.workload_gen_window.display_scen_table
+        data = []
+
+        for row in range(scen.rowCount()):
+            for col in range(scen.columnCount()):
+                data.append(scen.item(row,col).text())
+            scen_df.loc[len(scen_df)] = data
+            data.clear()
+        
+        self.dialog = Downloader(scen_df, "Scenario")
+        print(scen_df)
+
+    def add_di(self):
+        popup = QInputDialog(self, flags=Qt.Dialog | Qt.WindowTitleHint | Qt.WindowCloseButtonHint)
+        popup.setInputMode(QInputDialog.TextInput)
+        popup.setWindowTitle('Add New Data Type')
+        popup.setLabelText('Enter Data Type')
+        ok = popup.exec_()
+
+        if ok:
+            self.workload_gen_window.add_tt_dt.addItem(popup.textValue())
+
+    def edit_tt_submit(self):
+        table = self.workload_gen_window.display_tt_table
+
+        for row in range(table.rowCount()):
+            id = int(table.item(row,0).text())
+            name = table.item(row,1).text()
+            data_input = table.item(row,2).text()
+            data_size = float(table.item(row,3).text())
+            urgency = table.item(row,4).text()
+            deadline = float(table.item(row,5).text())
+
+            for tt in config.task_types:
+                if tt.id == id:
+                    for item in range(self.workload_gen_window.remove_tt_combo.count()):
+                        if tt.name == self.workload_gen_window.remove_tt_combo.itemText(item):
+                            self.workload_gen_window.remove_tt_combo.setItemText(item,name)
+                            self.workload_gen_window.add_scen_tt.setItemText(item,name)
+
+                    for header in range(self.workload_gen_window.eet_table.rowCount()):
+                        if tt.name == self.workload_gen_window.eet_table.verticalHeaderItem(header).text():
+                            self.workload_gen_window.eet_table.setVerticalHeaderItem(header, QTableWidgetItem(name))
+
+                    config.task_type_names[config.task_type_names.index(tt.name)] = name
+
+                    tt.name = name
+                    if urgency == "BestEffort":
+                        tt.urgency = UrgencyLevel.BESTEFFORT
+                    elif urgency == "Urgent":
+                        tt.urgency = UrgencyLevel.URGENT
+                    tt.deadline = deadline
+
+        # self.workload_gen_window.display_tt_table.setEditTriggers(QAbstractItemView.NoEditTriggers)
+
+        msg = QMessageBox()
+        msg.setIcon(QMessageBox.Information)
+        msg.setText("Task Type table successfully updated.")
+        msg.setWindowTitle("Task Types")
+        msg.setStandardButtons(QMessageBox.Ok)
+        msg.exec_()
+    
+    def edit_mt_submit(self):
+        table = self.workload_gen_window.display_mt_table
+        
+        for row in range(table.rowCount()):
+            name = table.item(row,0).text()
+            power = float(table.item(row,1).text())
+            idle = float(table.item(row,2).text())
+            replicas = int(table.item(row,3).text())
+            mt = config.machine_types
+
+            for item in range(self.workload_gen_window.remove_mt_combo.count()):
+                if mt[row].name == self.workload_gen_window.remove_mt_combo.itemText(item):
+                    self.workload_gen_window.remove_mt_combo.setItemText(item,name)
+
+            for header in range(self.workload_gen_window.eet_table.columnCount()):
+                if mt[row].name == self.workload_gen_window.eet_table.horizontalHeaderItem(header).text():
+                    self.workload_gen_window.eet_table.setHorizontalHeaderItem(header, QTableWidgetItem(name))
+
+            config.machine_type_names[config.machine_type_names.index(mt[row].name)] = name
+
+            mt[row].name = name
+            mt[row].power = power
+            mt[row].idle_power = idle
+            mt[row].replicas = replicas
+
+        # self.workload_gen_window.display_mt_table.setEditTriggers(QAbstractItemView.NoEditTriggers)
+
+        msg = QMessageBox()
+        msg.setIcon(QMessageBox.Information)
+        msg.setText("Machine Type table successfully updated.")
+        msg.setWindowTitle("Machine Types")
+        msg.setStandardButtons(QMessageBox.Ok)
+        msg.exec_()
+
+    def eet_table_reset(self):
+        msg = QMessageBox()
+        msg.setIcon(QMessageBox.Warning)
+        msg.setText("Are you sure you want to reset EET?")
+        msg.setWindowTitle("Confirm Reset EET")
+        msg.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
+        input = msg.exec_()
+
+        if input == QMessageBox.Cancel:
+            return
+        # self.workload_gen_window.eet_table.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        for i in range(self.workload_gen_window.eet_table.rowCount()):
+            for j in range(self.workload_gen_window.eet_table.columnCount()):
+                self.workload_gen_window.eet_table.setItem(i,j, QTableWidgetItem("0"))
+
+
+    def is_empty(self, val):
+        if val.strip() == '':
+            return True
+        return False
+
+
+    def add_tt(self):
+        tt_name = self.workload_gen_window.add_tt_name.text()
+        tt_dt = self.workload_gen_window.add_tt_dt.currentText()
+        tt_ds = self.workload_gen_window.add_tt_ds.text()
+        tt_urgency = self.workload_gen_window.add_tt_urgency.currentText()
+        tt_deadline = self.workload_gen_window.add_tt_deadline.text()
+
+        if (self.is_empty(tt_name) or self.is_empty(tt_dt) or self.is_empty(tt_ds)
+            or self.is_empty(tt_urgency) or self.is_empty(tt_deadline)):
+                msg = QMessageBox()
+                msg.setIcon(QMessageBox.Warning)
+                msg.setText("Please fill out all fields when adding a task type.")
+                msg.setWindowTitle("Incomplete Task Type")
+                msg.setStandardButtons(QMessageBox.Ok)
+                input = msg.exec_()
+
+                return
+
+
+        tt_ds = float(tt_ds)
+        tt_deadline = float(tt_deadline)
+
+        tt_id = (len(config.task_types)) + 1
+
+        if tt_urgency == "BestEffort":
+            urgency = UrgencyLevel.BESTEFFORT
+        elif tt_urgency == "Urgent":
+            urgency = UrgencyLevel.URGENT
+
+        config.task_types.append(TaskType(tt_id,tt_name,urgency,tt_deadline))
+        config.task_type_names.append(tt_name)
+
+        row_count = self.workload_gen_window.display_tt_table.rowCount()
+        self.workload_gen_window.display_tt_table.insertRow(row_count)
+
+        id = QTableWidgetItem(str(tt_id))
+        id.setFlags(id.flags() ^ Qt.ItemIsEditable)
+        self.workload_gen_window.display_tt_table.setItem(row_count,0,id)
+        self.workload_gen_window.display_tt_table.setItem(row_count,1,QTableWidgetItem(tt_name))
+        self.workload_gen_window.display_tt_table.setItem(row_count,2,QTableWidgetItem(tt_dt))
+        self.workload_gen_window.display_tt_table.setItem(row_count,3,QTableWidgetItem(str(tt_ds)))
+        self.workload_gen_window.display_tt_table.setItem(row_count,4,QTableWidgetItem(tt_urgency))
+        self.workload_gen_window.display_tt_table.setItem(row_count,5,QTableWidgetItem(str(tt_deadline)))
+
+        self.workload_gen_window.remove_tt_combo.addItem(tt_name)
+
+        #add to eet
+        row_count = self.workload_gen_window.eet_table.rowCount()
+        self.workload_gen_window.eet_table.insertRow(row_count)
+        self.workload_gen_window.eet_table.setVerticalHeaderItem(row_count,QTableWidgetItem(tt_name))
+        for i in range(self.workload_gen_window.eet_table.columnCount()):
+            self.workload_gen_window.eet_table.setItem(row_count,i,QTableWidgetItem("0"))
+
+        #add to scen combobox
+        self.workload_gen_window.add_scen_tt.addItem(tt_name)
+
+    def remove_tt(self):
+        if self.workload_gen_window.remove_tt_combo.count() == 0:
+            return
+        
+        msg = QMessageBox()
+        msg.setIcon(QMessageBox.Warning)
+        msg.setText("Are you sure you want to delete this task type?")
+        msg.setWindowTitle("Confirm Remove Task Type")
+        msg.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
+        input = msg.exec_()
+
+        if input == QMessageBox.Cancel:
+            return
+
+        tt_removed = self.workload_gen_window.remove_tt_combo.currentText()
+        for tt in config.task_types:
+            if tt_removed == tt.name:
+                for tt_id in config.task_types[config.task_types.index(tt):]:
+                    tt_id.id = tt_id.id - 1
+                config.task_types.remove(tt)
+        for tt in config.task_type_names:
+            if tt_removed == tt:
+                config.task_type_names.remove(tt)
+
+        print(config.task_type_names)
+
+        for row in range(self.workload_gen_window.display_tt_table.rowCount()):
+            if self.workload_gen_window.display_tt_table.item(row,1).text() == tt_removed:
+                self.workload_gen_window.display_tt_table.removeRow(row)
+
+                for row2 in range(self.workload_gen_window.display_tt_table.rowCount()):
+                    self.workload_gen_window.display_tt_table.setItem(row2,0,QTableWidgetItem(str(config.task_types[row2].id)))
+
+                self.workload_gen_window.eet_table.removeRow(row)
+                self.workload_gen_window.remove_tt_combo.removeItem(row)
+                self.workload_gen_window.add_scen_tt.removeItem(row)
+                self.workload_gen_window.remove_tt_combo.setCurrentIndex(0)
+                return
+
+    def add_mt(self):
+        mt_name = self.workload_gen_window.add_mt_name.text()
+        mt_power = self.workload_gen_window.add_mt_power.text()
+        mt_idle_power = self.workload_gen_window.add_mt_idle.text()
+        mt_replicas = self.workload_gen_window.add_mt_replicas.text()
+
+        if (self.is_empty(mt_name) or self.is_empty(mt_power)
+            or self.is_empty(mt_idle_power) or self.is_empty(mt_replicas)):
+                msg = QMessageBox()
+                msg.setIcon(QMessageBox.Warning)
+                msg.setText("Please fill out all fields when adding a machine type.")
+                msg.setWindowTitle("Incomplete Machine Type")
+                msg.setStandardButtons(QMessageBox.Ok)
+                input = msg.exec_()
+
+                return
+        
+        mt_id = (len(config.machine_types))
+
+        config.machine_types.append(MachineType(mt_id,mt_name,float(mt_power),
+                                    float(mt_idle_power),int(mt_replicas)))
+        
+        config.machine_type_names.append(mt_name)
+
+        # config.no_of_machines = config.no_of_machines + int(mt_replicas)
+        config.no_of_machines = config.no_of_machines + 1
+
+        # for r in range(int(mt_replicas)):
+        #     config.machines.append(Machine(len(config.machines), r+1, config.machine_types[-1],
+        #                                 {'power': float(mt_power), 'idle_power': float(mt_idle_power)}))
+
+        config.machines.append(Machine(len(config.machines), 1, config.machine_types[-1],
+                                        {'power': float(mt_power), 'idle_power': float(mt_idle_power)}))
+
+        self.gv.machine_queues.m_queues[mt_id] = []            
+        self.gv.machine_queues.m_runnings[mt_id] = []
+
+        #----------visual tables----------------------
+        row_count = self.workload_gen_window.display_mt_table.rowCount()
+        self.workload_gen_window.display_mt_table.insertRow(row_count)
+
+        self.workload_gen_window.display_mt_table.setItem(row_count,0,QTableWidgetItem(mt_name))
+        self.workload_gen_window.display_mt_table.setItem(row_count,1,QTableWidgetItem(str(mt_power)))
+        self.workload_gen_window.display_mt_table.setItem(row_count,2,QTableWidgetItem(str(mt_idle_power)))
+        self.workload_gen_window.display_mt_table.setItem(row_count,3,QTableWidgetItem(str(mt_replicas)))
+
+        self.workload_gen_window.remove_mt_combo.addItem(mt_name)
+
+        #add to eet
+        col_count = self.workload_gen_window.eet_table.columnCount()
+        self.workload_gen_window.eet_table.insertColumn(col_count)
+        self.workload_gen_window.eet_table.setHorizontalHeaderItem(col_count,QTableWidgetItem(mt_name))
+        header = self.workload_gen_window.eet_table.horizontalHeader()       
+        header.setSectionResizeMode(self.workload_gen_window.eet_table.columnCount()-1, QHeaderView.Stretch)
+        for i in range(self.workload_gen_window.eet_table.rowCount()):
+            self.workload_gen_window.eet_table.setItem(i,col_count,QTableWidgetItem("0"))
+
+
+    def remove_mt(self):
+        if self.workload_gen_window.remove_mt_combo.count() == 0:
+            return
+        
+        msg = QMessageBox()
+        msg.setIcon(QMessageBox.Warning)
+        msg.setText("Are you sure you want to delete this machine type?")
+        msg.setWindowTitle("Confirm Remove Machine Type")
+        msg.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
+        input = msg.exec_()
+
+        if input == QMessageBox.Cancel:
+            return
+
+        mt_removed = self.workload_gen_window.remove_mt_combo.currentText()
+
+        for mt in config.machine_types:
+            if mt_removed == mt.name:
+                for mt_id in config.machine_types[config.machine_types.index(mt):]:
+                    mt_id.id = mt_id.id - 1
+                # config.no_of_machines = config.no_of_machines - 1
+                config.machine_types.remove(mt)
+
+        config.no_of_machines = config.no_of_machines - 1
+
+        for mt in config.machine_type_names:
+            if mt_removed == mt:
+                config.machine_type_names.remove(mt)
+
+        for m in config.machines:
+            if mt_removed == m.type.name:
+                for m_id in config.machines[config.machines.index(m):]:
+                    m_id.id = m_id.id - 1
+                config.machines.remove(m)
+
+        print(config.machine_type_names)
+
+        for row in range(self.workload_gen_window.display_mt_table.rowCount()):
+            if self.workload_gen_window.display_mt_table.item(row,0).text() == mt_removed:
+                self.workload_gen_window.display_mt_table.removeRow(row)
+                self.workload_gen_window.remove_mt_combo.removeItem(row)
+                self.workload_gen_window.remove_mt_combo.setCurrentIndex(0)
+
+                for col in range(self.workload_gen_window.eet_table.columnCount()):
+                    if self.workload_gen_window.eet_table.horizontalHeaderItem(col).text() == mt_removed:
+                        self.workload_gen_window.eet_table.removeColumn(col)
+                        return
+
+    def add_scen(self):
+        self.db_scen = [str(self.workload_gen_window.add_scen_tt.currentText()),
+                        int(self.workload_gen_window.add_scen_num_tasks.text()),
+                        float(self.workload_gen_window.add_scen_start_time.text()),
+                        float(self.workload_gen_window.add_scen_end_time.text()),
+                        (self.workload_gen_window.add_scen_dist.currentText())]
+        
+        row_count = self.workload_gen_window.display_scen_table.rowCount()
+        self.workload_gen_window.display_scen_table.insertRow(row_count)
+
+        self.workload_gen_window.display_scen_table.setItem(row_count,0,QTableWidgetItem(self.db_scen[0]))
+        self.workload_gen_window.display_scen_table.setItem(row_count,1,QTableWidgetItem(str(self.db_scen[1])))
+        self.workload_gen_window.display_scen_table.setItem(row_count,2,QTableWidgetItem(str(self.db_scen[2])))
+        self.workload_gen_window.display_scen_table.setItem(row_count,3,QTableWidgetItem(str(self.db_scen[3])))
+        self.workload_gen_window.display_scen_table.setItem(row_count,4,
+                                            QTableWidgetItem(self.workload_gen_window.add_scen_dist.currentText()))
+    
+        self.db_scens.append(self.db_scen)
+
+    def reset_scen(self):
+        msg = QMessageBox()
+        msg.setIcon(QMessageBox.Warning)
+        msg.setText("Are you sure you want to reset scenario")
+        msg.setWindowTitle("Confirm Reset Scenario")
+        msg.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
+        input = msg.exec_()
+
+        if input == QMessageBox.Cancel:
+            return
+
+        self.workload_gen_window.add_scen_tt.setCurrentIndex(0)
+        self.workload_gen_window.add_scen_num_tasks.clear()
+        self.workload_gen_window.add_scen_start_time.clear()
+        self.workload_gen_window.add_scen_end_time.clear()
+        self.workload_gen_window.add_scen_dist.setCurrentIndex(0)
+
+        self.workload_gen_window.display_scen_table.setRowCount(0)
+
+        self.db_scens.clear()
+
+    def clear_scen_reset(self):
+        # self.reset_scen()
+        self.simulator.reset()
+
     def set_etc(self):
-        etc_matrix = self.dock_right.etc_matrix
-        not_matched_tt = self.check_etc_format()                
+        # self.workload_gen_window.eet_table.setEditTriggers(QAbstractItemView.NoEditTriggers)  
+
+        etc_matrix = self.workload_gen_window.eet_table
+        not_matched_tt = self.check_etc_format()      
+
         if not_matched_tt:
             return
         mt_etc = []
-        for clmn_idx in range(etc_matrix.columnCount()):                
+        for clmn_idx in range(etc_matrix.columnCount()):
                 mt_etc.append(etc_matrix.horizontalHeaderItem(clmn_idx).text())
         if len(mt_etc) != len(config.machine_type_names):
             print(mt_etc, config.machine_type_names)
@@ -395,12 +914,12 @@ class SimUi(QMainWindow):
             return
             
         self.dock_right.path_to_etc = './task_machine_performance/gui_generated/etc.csv'
-        with open(self.dock_right.path_to_etc,'w') as etc_file:
+        with open(self.dock_right.path_to_etc,'w',newline='') as etc_file:
             etc_writer = csv.writer(etc_file)
             machine_types = []
             for clmn_idx in range(etc_matrix.columnCount()):                
                 machine_types.append(etc_matrix.horizontalHeaderItem(clmn_idx).text())            
-            machine_types = [''] + machine_types
+            machine_types = ['idx'] + machine_types
             etc_writer.writerow(machine_types)
             task_types= []
             for row_count in range(etc_matrix.rowCount()):                
@@ -409,6 +928,7 @@ class SimUi(QMainWindow):
                 task_types.append(task_type_name)
                 row = [task_type_name] + row                
                 etc_writer.writerow(row) 
+            
         for idx, mt in enumerate(config.machine_types):
             mt.name = machine_types[idx+1]
         for idx, tt in enumerate(config.task_types):
@@ -419,17 +939,108 @@ class SimUi(QMainWindow):
         self.path_to_etc = f'./task_machine_performance/gui_generated/etc.csv'
 
         self.gv.machine_queues.machine_colors = self.is_heterogeneous()
-
-        self.dock_right.etc_matrix.setEditTriggers(QAbstractItemView.NoEditTriggers)        
+           
         self.dock_right.etc_editable = False  
         self.etc_submitted = True
 
-    
+        self.dock_right.get_eet_input()
+
+    def generate_workload(self):
+        #make sure scenario isnt empty
+        if self.workload_gen_window.display_scen_table.rowCount() <= 0:
+            msg = QMessageBox()
+            msg.setIcon(QMessageBox.Warning)
+            msg.setText("Error: Scenario is empty.")
+            msg.setWindowTitle("Workload Generate Error")
+            msg.setStandardButtons(QMessageBox.Ok)
+            msg.exec_()
+            return
+        
+
+        initTables(self.cur,self.conn)
+        self.cur.execute("DELETE FROM workload;")
+        self.arrivals = pd.DataFrame(columns=["task_type","arrival_time"])
+        self.arrival_times = []
+
+        for i in (self.db_scens):
+            self.db_task_id = i[0]
+            self.db_no_tasks = i[1]
+            self.db_start_time = i[2]
+            self.db_end_time = i[3]
+            self.db_dist = 0
+            if i[4] == "Normal":
+                self.db_dist = 1
+            elif i[4] == "Uniform":
+                self.db_dist = 2
+            elif i[4] == "Exponential":
+                self.db_dist = 3
+            elif i[4] == "Spiky":
+                self.db_dist = 4
+
+            self.arrival_times = fetchArrivals(self.db_start_time, self.db_end_time, self.db_no_tasks, self.db_dist, self.cur)
+
+            for j in range(self.db_no_tasks):
+                self.arrivals.loc[len(self.arrivals.index)] = [(self.db_task_id), self.arrival_times[j]]
+  
+        self.arrivals.sort_values("arrival_time",inplace=True)
+        self.arrivals.reset_index(drop=True,inplace=True)
+        self.arrivals.to_sql("workload",self.conn,if_exists="replace",index=False)
+        self.conn.commit() 
+
+        # workload = pd.read_sql_query("SELECT * FROM workload", self.conn)
+        self.dock_right.rewrite_from_db(self.arrivals)
+        self.rewrite_gen_window(self.arrivals)                   
+
+        msg = QMessageBox()
+        msg.setIcon(QMessageBox.Information)
+        msg.setText("The workload has been successfully generated.")
+        msg.setWindowTitle("Workload Generated")
+        msg.setStandardButtons(QMessageBox.Ok)
+        msg.exec_()
+
+        self.workload_gen_window.workload_btn.setEnabled(True)
+        self.workload_gen_window.workload_btn.setStyleSheet('''color:rgb(0,0,0)''')
+
     def check_etc_format(self):
         task_types_etc = []
-        workload = pd.read_csv(self.dock_right.workload_path)
+        
+        #submit button populates wkload table in db and connects to item_dock_detail which repopulates the visual table
+        initTables(self.cur,self.conn)
+        self.cur.execute("DELETE FROM workload;")
+        self.arrivals = pd.DataFrame(columns=["task_type","arrival_time"])
+        self.arrival_times = []
+
+        for i in (self.db_scens):
+            self.db_task_id = i[0]
+            self.db_no_tasks = i[1]
+            self.db_start_time = i[2]
+            self.db_end_time = i[3]
+            self.db_dist = 0
+            if i[4] == "Normal":
+                self.db_dist = 1
+            elif i[4] == "Uniform":
+                self.db_dist = 2
+            elif i[4] == "Exponential":
+                self.db_dist = 3
+            elif i[4] == "Spiky":
+                self.db_dist = 4
+
+            print(self.db_dist)
+
+            self.arrival_times = fetchArrivals(self.db_start_time, self.db_end_time, self.db_no_tasks, self.db_dist, self.cur)
+
+            for j in range(self.db_no_tasks):
+                self.arrivals.loc[len(self.arrivals.index)] = [(self.db_task_id), self.arrival_times[j]]
+        
+        self.arrivals.sort_values("arrival_time",inplace=True)
+        self.arrivals.reset_index(drop=True,inplace=True)
+        self.arrivals.to_sql("workload",self.conn,if_exists="replace",index=False)
+        self.conn.commit() 
+
+        workload = pd.read_sql_query("SELECT * FROM workload", self.conn)
+        
         try:
-            etc_matrix = self.dock_right.etc_matrix            
+            etc_matrix = self.workload_gen_window.eet_table         
             for row_count in range(etc_matrix.rowCount()):
                 task_type_name = etc_matrix.verticalHeaderItem(row_count).text()
                 task_types_etc.append(task_type_name)
@@ -444,20 +1055,59 @@ class SimUi(QMainWindow):
         task_types_wl = workload['task_type'].unique()           
         not_matched_tt = [tt for tt in task_types_wl if tt not in task_types_etc]
         if not_matched_tt:
+            self.cur.execute(f'DELETE FROM workload WHERE task_type = "{not_matched_tt[0]}";')
+            self.arrivals.drop(self.arrivals.loc[self.arrivals['task_type']==not_matched_tt[0]].index, inplace=True)
+            for i in self.db_scens:
+                if i[0] == int(not_matched_tt[0][1]):
+                    self.db_scens.remove(i)
+
             err_txt = f"Task type {not_matched_tt} in workload are not found in ETC"
             self.err_msg('Format Error', err_txt)
             return not_matched_tt
-        else: 
-            workload.to_csv(self.dock_right.workload_path, index = False)
-            try:   
-                self.dock_right.rewrite_workload_table()
-            except:
-                pass
-
+        # else: 
+        #     workload.to_csv(self.dock_right.workload_path, index = False)
+            # try:   
+            #     self.dock_right.rewrite_workload_table()
+            # except:
+            #     pass
         
-
+        # self.dock_right.rewrite_from_db(self.arrivals)
         
         return not_matched_tt
+    
+    def rewrite_gen_window(self, arrivals):
+        for idx, row in arrivals.iterrows():
+            self.workload_gen_window.wkld_table.setRowCount(idx+1)
+            type_item = QTableWidgetItem(row["task_type"])       
+            arrival_item = QTableWidgetItem(str(row["arrival_time"]))
+            self.workload_gen_window.wkld_table.setItem(idx, 0, type_item)
+            self.workload_gen_window.wkld_table.setItem(idx, 2, arrival_item)
+
+        for tt in range(self.workload_gen_window.display_tt_table.rowCount()):
+            if self.workload_gen_window.display_tt_table.item(tt,1).text() in set(arrivals['task_type']):
+                count = arrivals['task_type'].value_counts()[f'{self.workload_gen_window.display_tt_table.item(tt,1).text()}']
+                data_size = float(self.workload_gen_window.display_tt_table.item(tt,3).text())
+                #dynamically change stdev so we always get positive data size based on mean data size value? ----------------------------------fix this later--------------------------------------------
+                stdv = data_size / 6
+                #dist is a list of data sizes (KB) based around a mean value given as data_size for each task type
+                dist = get_data_sizes(data_size,stdv,count)
+
+                i = 0
+                for wkl_row in range(self.workload_gen_window.wkld_table.rowCount()):
+                    if self.workload_gen_window.wkld_table.item(wkl_row,0).text() == self.workload_gen_window.display_tt_table.item(tt,1).text():
+                        self.workload_gen_window.wkld_table.setItem(wkl_row,1,QTableWidgetItem(str(round(dist[i],3))))
+                        self.dock_right.workload_table.setItem(wkl_row,1,QTableWidgetItem(str(round(dist[i],3))))
+
+
+                        #for deadline
+                        arr_time = float(self.workload_gen_window.wkld_table.item(wkl_row,2).text())
+                        deadline = float(self.workload_gen_window.display_tt_table.item(tt,5).text())
+                        real_dl = round((deadline + arr_time),3)
+                        self.workload_gen_window.wkld_table.setItem(wkl_row,3,QTableWidgetItem(str(real_dl)))
+                        self.dock_right.workload_table.setItem(wkl_row,3,QTableWidgetItem(str(real_dl)))
+
+                        i = i + 1
+
     
     def err_msg(self, err_title, err_txt):
         msg = QMessageBox()
@@ -543,14 +1193,21 @@ class SimUi(QMainWindow):
         if not_matched_tt:
             return
         if not self.etc_submitted:
-            self.err_msg('EET Submision', 'First submit the changes made in profiling table and workload.')                                            
-            return 
+            if (self.workload_gen_window.wkld_table.rowCount() == 0):
+                self.err_msg('EET Submision', 'Must generate a workload and submit EET in the workload generator.')  
+            else:
+                self.err_msg('EET Submision', 'Must submit EET in the workload generator.')                                    
+            return
+        if self.workload_gen_window.wkld_table.rowCount() == 0:
+            self.err_msg('EET Submision', 'Must generate a workload in the workload generator.')  
+            return
+
         self.thread = QThread(parent=self) 
         self.simulator =  Simulator(self.path_to_arrivals,self.path_to_etc, self.path_to_reports,  seed=123)         
         
         self.setup_config(self.simulator)       
         self.simulator.moveToThread(self.thread)
-        self.thread.started.connect(self.simulator.reset)
+        self.thread.started.connect(self.clear_scen_reset)
         self.thread.started.connect(self.simulator.run)         
         self.thread.finished.connect(self.thread.deleteLater)  
         self.simulator.simulation_done.connect(self.simulation_done)         
@@ -581,16 +1238,13 @@ class SimUi(QMainWindow):
             self.dock_right.etc_edit
             self.dock_right.etc_load
             self.dock_right.load_wl_btn
-            self.dock_right.etc_generate
             self.simulator.simulation_done.connect(lambda: self.dock_right.etc_edit.setEnabled(True))
             self.simulator.simulation_done.connect(lambda: self.dock_right.etc_load.setEnabled(True))
             self.simulator.simulation_done.connect(lambda: self.dock_right.load_wl_btn.setEnabled(True))
-            self.simulator.simulation_done.connect(lambda: self.dock_right.etc_generate.setEnabled(True))
         except:
             pass
 
         try:            
-            self.dock_right.etc_generate.setEnabled(False)
             self.dock_right.etc_load.setEnabled(False)
             self.dock_right.etc_edit.setEnabled(False)
             self.dock_right.load_wl_btn.setEnabled(False)
@@ -636,6 +1290,9 @@ class SimUi(QMainWindow):
         self.task_report.setEnabled(False)
         self.mach_report.setEnabled(False)              
         self.summary_report.setEnabled(False)
+        self.workload_gen_window.workload_btn.setEnabled(False)
+        self.workload_gen_window.workload_btn.setStyleSheet("QPushButton{color:rgb(100,100,100);}")
+        self.workload_gen_window.wkld_table.setRowCount(0)
         self.progress=0
         self.p_count = 0        
         self.pbar.setFormat(f'{self.p_count}/0 tasks ({self.progress}%)')
@@ -665,11 +1322,10 @@ class SimUi(QMainWindow):
         self.gv.machine_queues.outer_frame()
         self.gv.machine_queues.draw_queues()
         self.gv.machine_queues.fill_queues()
-        self.gv.machine_queues.runnings()        
+        self.gv.machine_queues.runnings(config.machines)        
         self.gv.machine_queues.trash()
 
         try:
-            self.dock_right.etc_generate.setEnabled(True) #-----
             self.dock_right.etc_load.setEnabled(True)
             self.dock_right.etc_edit.setEnabled(True)
             self.dock_right.load_wl_btn.setEnabled(True)
@@ -792,7 +1448,7 @@ class SimUi(QMainWindow):
         self.gv.machine_queues.outer_frame()
         self.gv.machine_queues.draw_queues()
         self.gv.machine_queues.fill_queues()
-        self.gv.machine_queues.runnings()
+        self.gv.machine_queues.runnings(config.machines)
         self.gv.machine_queues.trash()
         self.update()
     
