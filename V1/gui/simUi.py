@@ -854,6 +854,24 @@ class SimUi(QMainWindow):
                         return
 
     def add_scen(self):
+
+        scen_tt = self.workload_gen_window.add_scen_tt.currentText()
+        scen_num_tasks = self.workload_gen_window.add_scen_num_tasks.text()
+        scen_start = self.workload_gen_window.add_scen_start_time.text()
+        scen_end = self.workload_gen_window.add_scen_end_time.text()
+        scen_dist = self.workload_gen_window.add_scen_dist.currentText()
+
+        if (self.is_empty(scen_tt) or self.is_empty(scen_num_tasks)
+            or self.is_empty(scen_start) or self.is_empty(scen_end) or self.is_empty(scen_dist)):
+                msg = QMessageBox()
+                msg.setIcon(QMessageBox.Warning)
+                msg.setText("Please fill out all fields when adding a scenario subset.")
+                msg.setWindowTitle("Incomplete Scenario")
+                msg.setStandardButtons(QMessageBox.Ok)
+                input = msg.exec_()
+
+                return
+
         self.db_scen = [str(self.workload_gen_window.add_scen_tt.currentText()),
                         int(self.workload_gen_window.add_scen_num_tasks.text()),
                         float(self.workload_gen_window.add_scen_start_time.text()),
