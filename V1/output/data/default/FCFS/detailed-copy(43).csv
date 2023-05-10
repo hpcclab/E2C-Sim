@@ -1,0 +1,4 @@
+id,type,urgency,status,assigned_machine,arrival_time,execution_time,energy_usage,start_time,completion_time,missed_time,deadline,extended_deadline
+0,T1,BESTEFFORT,COMPLETED,m1-1,1.575,"{'m1-1': 0.932, 'm2-1': 1.001, 'm3-1': 0.932}",93.2,1.575,2.507,inf,51.575,51.575
+1,T1,BESTEFFORT,COMPLETED,m2-1,4.415,"{'m1-1': 1.004, 'm2-1': 1.012, 'm3-1': 1.049}",303.6,4.415,5.427,inf,54.415,54.415
+2,T1,BESTEFFORT,COMPLETED,m3-1,7.961,"{'m1-1': 0.986, 'm2-1': 0.94, 'm3-1': 1.072}",10.72,7.961,9.033000000000001,inf,57.961,57.961

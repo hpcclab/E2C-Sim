@@ -1,5 +1,5 @@
-,cpu1,cpu2,cpu3
-face rec,3,3,3
-obj det,7,7,7
-txt det,2,2,2
-motion det,35,35,35
+idx,m1,m2,m3
+T1,0,0,0
+T2,0,0,0
+T3,0,0,0
+T4,0,0,0

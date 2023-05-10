@@ -1,5 +1,0 @@
-idx,cpu,gpu,tpu
-face rec,7,5,12
-obj det,5,8,10
-txt det,8,9,9
-motion det,6,7,8

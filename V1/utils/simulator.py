@@ -5,6 +5,7 @@ Created on Nov., 15, 2021
 
 """
 import pandas as pd
+import sqlite3 as sq
 import csv
 import os
 import time
@@ -25,6 +26,13 @@ from utils.schedulers.MEET import MEET
 from PyQt5.QtCore import pyqtSignal,QObject
 from PyQt5.QtCore import QTimer
 
+from utils.db_workload import *
+from utils.utilities import *
+from utils.initTables import *
+from utils.initTables import initTables
+import utils.workload as wl
+
+
 class Simulator(QObject):
     event_signal = pyqtSignal(dict)
     simulation_done = pyqtSignal()
@@ -32,8 +40,16 @@ class Simulator(QObject):
     
     def __init__(self, path_to_arrivals, path_to_etc, path_to_reports, seed=1):     
         super(Simulator, self).__init__()  
+
+        db_path = './utils/e2cDB.db' 
+        self.conn = sq.connect(db_path)
+        self.cur = self.conn.cursor()
+
         self.path_to_arrivals = path_to_arrivals
         self.path_to_etc= path_to_etc
+
+        self.arrivals = pd.read_sql_query("SELECT * FROM workload", self.conn)
+                                                                                
         self.path_to_reports = path_to_reports                
         self.seed = seed  
         self.execution_time_var = 0.05
@@ -45,7 +61,8 @@ class Simulator(QObject):
         self.set_scheduling_method(config.scheduling_method)
         self.pause = False
         self.is_incremented = False
-    
+
+                                      
     def reset(self):
         config.time.sct(0.0)
         config.available_energy = config.total_energy
@@ -59,10 +76,9 @@ class Simulator(QObject):
     
 
     def create_event_queue(self): 
-        print(self.path_to_arrivals)      
-        arrivals = pd.read_csv(self.path_to_arrivals) 
         etc = pd.read_csv(self.path_to_etc,index_col=0)
-                
+        arrivals = self.arrivals
+
         execution_time = ExecutionTime(self.seed)
         with open(f'{os.path.dirname(self.path_to_etc)}/execution_times.csv','w') as et_file:
             et_writer = csv.writer(et_file)
@@ -88,6 +104,8 @@ class Simulator(QObject):
                 et_writer.writerow( execution_times_li)
             
                 type = config.find_task_type(task_type_name)
+
+
                 self.tasks.append(Task(task_id, type, estimated_times,
                                         execution_times, arrival_time))
                

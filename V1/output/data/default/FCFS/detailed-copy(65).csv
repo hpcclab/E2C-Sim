@@ -1,0 +1,6 @@
+id,type,urgency,status,assigned_machine,arrival_time,execution_time,energy_usage,start_time,completion_time,missed_time,deadline,extended_deadline
+0,T1,BESTEFFORT,COMPLETED,m1-1,5.218,"{'m1-1': 0.0, 'm2-1': 0.0, 'm3-1': 0.0}",0.0,5.218,5.218,inf,55.218,55.218
+1,T1,BESTEFFORT,COMPLETED,m2-1,5.379,"{'m1-1': 0.0, 'm2-1': 0.0, 'm3-1': 0.0}",0.0,5.379,5.379,inf,55.379,55.379
+2,T1,BESTEFFORT,COMPLETED,m3-1,5.981,"{'m1-1': 0.0, 'm2-1': 0.0, 'm3-1': 0.0}",0.0,5.981,5.981,inf,55.981,55.981
+3,T1,BESTEFFORT,COMPLETED,m1-1,6.317,"{'m1-1': 0.0, 'm2-1': 0.0, 'm3-1': 0.0}",0.0,6.317,6.317,inf,56.317,56.317
+4,T1,BESTEFFORT,COMPLETED,m2-1,8.633,"{'m1-1': 0.0, 'm2-1': 0.0, 'm3-1': 0.0}",0.0,8.633,8.633,inf,58.632999999999996,58.632999999999996

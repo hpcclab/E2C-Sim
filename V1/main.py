@@ -9,12 +9,14 @@ import sys
 import csv
 import pandas as pd
 from os import makedirs
+import sqlite3 as sq
 
 
 
 heterogeneity_folder = 'homo'
 scenario = 'default'
 etc = 'etc-0'
+
 
 workload_id = 1
 
@@ -32,8 +34,8 @@ for machine_type in config.machine_types:
 #makedirs(path_to_result, exist_ok = True)
 app = QApplication(sys.argv)   
 main_w_rect = app.desktop().screenGeometry()
-w = int(0.95*main_w_rect.width())
-h = int(0.95*main_w_rect.height())
+w = main_w_rect.width()
+h = main_w_rect.height()
 # w = 1200
 # h = 600
 path_to_arrivals = './workloads/default/workload.csv'
