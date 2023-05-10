@@ -726,6 +726,7 @@ class ItemDockDetail(QMainWindow):
         self.tab_etc  = self.machine_etc(tt,mt)
 
         self.workload_generator = QPushButton("Open Workload Generator")
+        # self.workload_generator.setStyleSheet("background-color:rgb(200,210,220)")
         self.dock_wkl_submit = QPushButton("Submit Current Workload and EET")
 
         self.tab_workload.layout.addWidget(self.tab_etc)
