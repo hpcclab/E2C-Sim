@@ -33,6 +33,8 @@ class WorkloadGenerator(QMainWindow):
         self.workload_btn.setObjectName('left_button')
         self.eet_btn.setObjectName('left_button')
 
+        self.bg_color = "background-color:rgb(210,220,230)"
+
         self.workload_btn.setEnabled(False)
         self.workload_btn.setStyleSheet("QPushButton{color:rgb(100,100,100);}")
 
@@ -187,7 +189,9 @@ class WorkloadGenerator(QMainWindow):
 
         self.tt_h_layout = QHBoxLayout()
         self.edit_tt_table = QPushButton("Edit Table Values")
+        self.edit_tt_table.setStyleSheet(self.bg_color)
         self.edit_tt_submit = QPushButton("Submit Edit Changes")
+        self.edit_tt_submit.setStyleSheet(self.bg_color)
         # self.tt_h_layout.addWidget(self.edit_tt_table)
         self.tt_h_layout.addWidget(self.edit_tt_submit)
 
@@ -199,6 +203,7 @@ class WorkloadGenerator(QMainWindow):
         self.add_tt_dt = QComboBox()
         self.add_tt_dt.addItems(default_data_inputs)
         self.add_new_di = QPushButton("Create New Data Input")
+        self.add_new_di.setStyleSheet(self.bg_color)
         self.add_tt_ds_lbl = QLabel("Mean Data Size (KB)")
         self.add_tt_ds = QLineEdit()
 
@@ -214,6 +219,7 @@ class WorkloadGenerator(QMainWindow):
         self.add_tt_deadline.setValidator(QDoubleValidator(0.99, 99.99, 3))
 
         self.add_tt_submit = QPushButton("Add")
+        self.add_tt_submit.setStyleSheet(self.bg_color)
 
         self.di_h_layout = QHBoxLayout()
         self.di_h_layout.addWidget(self.add_tt_dt)
@@ -225,6 +231,7 @@ class WorkloadGenerator(QMainWindow):
         for i in range(len(config.task_type_names)):
             self.remove_tt_combo.addItem(f'{config.task_type_names[i]}')
         self.remove_tt_submit = QPushButton("Remove")
+        self.remove_tt_submit.setStyleSheet(self.bg_color)
 
         self.main_layout.addWidget(self.display_tt_lbl)
         self.main_layout.addWidget(self.display_tt_table)
@@ -276,7 +283,9 @@ class WorkloadGenerator(QMainWindow):
 
         self.mt_h_layout = QHBoxLayout()
         self.edit_mt_table = QPushButton("Edit Table Values")
+        self.edit_mt_table.setStyleSheet(self.bg_color)
         self.edit_mt_submit = QPushButton("Submit Edit Changes")
+        self.edit_mt_submit.setStyleSheet(self.bg_color)
         # self.mt_h_layout.addWidget(self.edit_mt_table)
         self.mt_h_layout.addWidget(self.edit_mt_submit)
 
@@ -302,6 +311,7 @@ class WorkloadGenerator(QMainWindow):
         self.add_mt_replicas.setValidator(self.onlyInt)
 
         self.add_mt_submit = QPushButton("Add")
+        self.add_mt_submit.setStyleSheet(self.bg_color)
         
         self.remove_mt_lbl = QLabel("Remove Machine Type")
         self.remove_mt_lbl.setStyleSheet("font-weight: bold")
@@ -309,6 +319,7 @@ class WorkloadGenerator(QMainWindow):
         for i in range(len(config.machine_types)):
             self.remove_mt_combo.addItem(f'{config.machine_type_names[i]}')
         self.remove_mt_submit = QPushButton("Remove")
+        self.remove_mt_submit.setStyleSheet(self.bg_color)
 
         self.main_layout.addWidget(self.display_mt_lbl)
         self.main_layout.addWidget(self.display_mt_table)
@@ -351,6 +362,9 @@ class WorkloadGenerator(QMainWindow):
         header.setSectionResizeMode(3, QHeaderView.Stretch)
         header.setSectionResizeMode(4, QHeaderView.Stretch)
 
+        self.scen_h_layout = QHBoxLayout()
+        self.scen_h_layout2 = QHBoxLayout()
+
         self.add_scen_lbl = QLabel("Add Scenario")
         self.add_scen_lbl.setStyleSheet('font-weight: bold')
         self.add_scen_tt_lbl = QLabel("Task Type")
@@ -360,7 +374,15 @@ class WorkloadGenerator(QMainWindow):
         self.add_scen_num_tasks_lbl = QLabel("# Tasks")
         self.add_scen_num_tasks = QLineEdit()
 
+        self.scen_h_layout.addWidget(self.add_scen_tt_lbl,2)
+        self.scen_h_layout.addWidget(self.add_scen_num_tasks_lbl,1)
+        self.scen_h_layout2.addWidget(self.add_scen_tt,2)
+        self.scen_h_layout2.addWidget(self.add_scen_num_tasks,1)
+
         self.add_scen_num_tasks.setValidator(self.onlyIntNoZero)
+
+        self.scen_h_layout3 = QHBoxLayout()
+        self.scen_h_layout4 = QHBoxLayout()
 
         self.add_scen_start_time_lbl = QLabel("Start Time")
         self.add_scen_start_time = QLineEdit()
@@ -379,42 +401,65 @@ class WorkloadGenerator(QMainWindow):
         self.add_scen_dist.addItem("Exponential")
         self.add_scen_dist.addItem("Spiky")
         self.add_scen_submit = QPushButton("Add")
+        self.add_scen_submit.setStyleSheet(self.bg_color)
         self.save_scen_lbl = QLabel("Save Scenario File")
         self.save_scen_lbl.setStyleSheet("font-weight: bold")
-        self.save_scen = QPushButton("Save as CSV File")
+        self.save_scen = QPushButton("Save as csv")
+        self.save_scen.setStyleSheet(self.bg_color)
+
+        self.scen_h_layout3.addWidget(self.add_scen_start_time_lbl,1)
+        self.scen_h_layout3.addWidget(self.add_scen_end_time_lbl,1)
+        self.scen_h_layout3.addWidget(self.add_scen_dist_lbl,1)
+
+        self.scen_h_layout4.addWidget(self.add_scen_start_time,1)
+        self.scen_h_layout4.addWidget(self.add_scen_end_time,1)
+        self.scen_h_layout4.addWidget(self.add_scen_dist,1)
 
         self.reset_scen_lbl = QLabel("Reset Scenario")
         self.reset_scen_lbl.setStyleSheet('font-weight: bold')
-        self.reset_scen_btn = QPushButton("Reset")
+        self.reset_scen_btn = QPushButton("Reset Scenario")
+        self.reset_scen_btn.setStyleSheet(self.bg_color)
 
         self.generate_wkld_lbl = QLabel("Generate Workload Using Current Scenario")
         self.generate_wkld_lbl.setStyleSheet('font-weight: bold')
         self.generate_wkld_submit = QPushButton("Generate Workload")
+        self.generate_wkld_submit.setStyleSheet(self.bg_color)
+
+        self.scen_h_layout5 = QHBoxLayout()
+        self.scen_h_layout5.addWidget(self.reset_scen_btn)
+        self.scen_h_layout5.addWidget(self.generate_wkld_submit)
+        self.scen_h_layout5.addWidget(self.save_scen)
+
+        spacer = QSpacerItem(20, 20)
 
         self.main_layout.addWidget(self.display_scen_lbl)
         self.main_layout.addWidget(self.display_scen_table)
-
         self.main_layout.addWidget(self.add_scen_lbl)
-        self.main_layout.addWidget(self.add_scen_tt_lbl)
-        self.main_layout.addWidget(self.add_scen_tt)
-        self.main_layout.addWidget(self.add_scen_num_tasks_lbl)
-        self.main_layout.addWidget(self.add_scen_num_tasks)
-        self.main_layout.addWidget(self.add_scen_start_time_lbl)
-        self.main_layout.addWidget(self.add_scen_start_time)
-        self.main_layout.addWidget(self.add_scen_end_time_lbl)
-        self.main_layout.addWidget(self.add_scen_end_time)
-        self.main_layout.addWidget(self.add_scen_dist_lbl)
-        self.main_layout.addWidget(self.add_scen_dist)
+        self.main_layout.addLayout(self.scen_h_layout)
+        self.main_layout.addLayout(self.scen_h_layout2)
+        self.main_layout.addSpacerItem(spacer)
+        # self.main_layout.addWidget(self.add_scen_tt_lbl)
+        # self.main_layout.addWidget(self.add_scen_tt)
+        # self.main_layout.addWidget(self.add_scen_num_tasks_lbl)
+        # self.main_layout.addWidget(self.add_scen_num_tasks)
+        # self.main_layout.addWidget(self.add_scen_start_time_lbl)
+        # self.main_layout.addWidget(self.add_scen_start_time)
+        # self.main_layout.addWidget(self.add_scen_end_time_lbl)
+        # self.main_layout.addWidget(self.add_scen_end_time)
+        # self.main_layout.addWidget(self.add_scen_dist_lbl)
+        # self.main_layout.addWidget(self.add_scen_dist)
+        self.main_layout.addLayout(self.scen_h_layout3)
+        self.main_layout.addLayout(self.scen_h_layout4)
+        self.main_layout.addSpacerItem(spacer)
         self.main_layout.addWidget(self.add_scen_submit)
-
-        self.main_layout.addWidget(self.reset_scen_lbl)
-        self.main_layout.addWidget(self.reset_scen_btn)
-
-        self.main_layout.addWidget(self.generate_wkld_lbl)
-        self.main_layout.addWidget(self.generate_wkld_submit)
-
-        self.main_layout.addWidget(self.save_scen_lbl)
-        self.main_layout.addWidget(self.save_scen)
+        self.main_layout.addSpacerItem(spacer)
+        self.main_layout.addLayout(self.scen_h_layout5)
+        # self.main_layout.addWidget(self.reset_scen_lbl)
+        # self.main_layout.addWidget(self.reset_scen_btn)
+        # self.main_layout.addWidget(self.generate_wkld_lbl)
+        # self.main_layout.addWidget(self.generate_wkld_submit)
+        # self.main_layout.addWidget(self.save_scen_lbl)
+        # self.main_layout.addWidget(self.save_scen)
 
         self.main = QWidget()
         self.main.setLayout(self.main_layout)
@@ -438,6 +483,7 @@ class WorkloadGenerator(QMainWindow):
         self.save_wkld_lbl = QLabel("Save Workload File")
         self.save_wkld_lbl.setStyleSheet('font-weight: bold')
         self.save_wkld = QPushButton("Save as CSV File")
+        self.save_wkld.setStyleSheet(self.bg_color)
                                                           #------------rows will only be set upon pressing submit for scenarios
 
         self.main_layout.addWidget(self.wkld_lbl)
@@ -473,8 +519,11 @@ class WorkloadGenerator(QMainWindow):
 
         self.horizontal_layout = QHBoxLayout()
         self.eet_table_edit = QPushButton("Edit EET")
+        self.eet_table_edit.setStyleSheet(self.bg_color)
         self.eet_table_submit = QPushButton("Submit EET")
+        self.eet_table_submit.setStyleSheet(self.bg_color)
         self.eet_table_reset = QPushButton("Reset")
+        self.eet_table_reset.setStyleSheet(self.bg_color)
         # self.horizontal_layout.addWidget(self.eet_table_edit)
         self.horizontal_layout.addWidget(self.eet_table_submit)
         self.horizontal_layout.addWidget(self.eet_table_reset)
@@ -482,10 +531,12 @@ class WorkloadGenerator(QMainWindow):
         self.save_eet_lbl = QLabel("Save EET File")
         self.save_eet_lbl.setStyleSheet('font-weight: bold')
         self.save_eet = QPushButton("Save as CSV File")
+        self.save_eet.setStyleSheet(self.bg_color)
 
         self.close_window_lbl = QLabel("Close Workload Generator")
         self.close_window_lbl.setStyleSheet('font-weight: bold')
         self.close_window = QPushButton("Close")
+        self.close_window.setStyleSheet(self.bg_color)
             
         self.main_layout.addWidget(self.eet_lbl)
         self.main_layout.addWidget(self.eet_table)
