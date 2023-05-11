@@ -199,14 +199,14 @@ class ItemDockDetail(QMainWindow):
         self.etc_matrix.horizontalHeader().sectionDoubleClicked.connect(self.changeHorizontalHeader)
         self.etc_matrix.verticalHeader().sectionDoubleClicked.connect(self.changeVerticalHeader)
         # self.etc_generate = QPushButton('Submit')
-        # self.etc_load = QPushButton('Load')
+        self.etc_load = QPushButton('Load')
         # self.etc_edit = QPushButton('Edit EET and Workload')
         # self.etc_edit.clicked.connect(self.enable_etc_table)
-        # self.etc_load.clicked.connect(self.get_etc_file)
+        self.etc_load.clicked.connect(self.get_etc_file)
        
         #self.etc_grid.addWidget(self.etc_matrix,0,0, len(tt),len(mt))
-        # self.etc_grid.addWidget(self.etc_path_entry,0,0)
-        # self.etc_grid.addWidget(self.etc_load,0,1)
+        self.etc_grid.addWidget(self.etc_path_entry,0,0)
+        self.etc_grid.addWidget(self.etc_load,0,1)
         # self.etc_grid.addWidget(self.etc_generate,2+len(tt),0,1,len(mt)) 
         self.tab_etc.layout.addWidget(self.etc_label)
         self.tab_etc.layout.addWidget(self.etc_matrix)
@@ -244,12 +244,13 @@ class ItemDockDetail(QMainWindow):
         
         self.etc_matrix.setHorizontalHeaderLabels(mt)        
         self.etc_matrix.setVerticalHeaderLabels(tt)
-        self.etc_matrix.horizontalHeader().setStretchLastSection(True)
+        # self.etc_matrix.horizontalHeader().setStretchLastSection(True)
         self.etc_matrix.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
 
         self.etc_matrix.verticalHeader().setStretchLastSection(False)
         self.etc_matrix.resizeRowsToContents()        
         self.etc_matrix.verticalHeader().setSectionResizeMode(QHeaderView.Stretch)
+
 
     def enable_etc_table(self):
         if not self.etc_editable:
@@ -691,8 +692,8 @@ class ItemDockDetail(QMainWindow):
 
         self.wl_label = QLabel('Workload')
 
-        # self.load_wl_btn = QPushButton('Load', self)
-        # self.load_wl_btn.clicked.connect(self.get_workload_file)
+        self.load_wl_btn = QPushButton('Load', self)
+        self.load_wl_btn.clicked.connect(self.get_workload_file)
 
         self.workload_table = QTableWidget() 
         delegate = MyDelegate()
@@ -726,21 +727,23 @@ class ItemDockDetail(QMainWindow):
         self.tab_etc  = self.machine_etc(tt,mt)
 
         self.workload_generator = QPushButton("Open Workload Generator")
+        self.load_config = QPushButton("Load Config")
         # self.workload_generator.setStyleSheet("background-color:rgb(200,210,220)")
-        self.dock_wkl_submit = QPushButton("Submit Current Workload and EET")
+        self.dock_wkl_submit = QPushButton("Submit Workload and EET")
 
         self.tab_workload.layout.addWidget(self.tab_etc)
         
-        # self.workload_grid.addWidget(self.path_entry,0,0)        
-        # self.workload_grid.addWidget(self.load_wl_btn,0,1)   
+        self.workload_grid.addWidget(self.path_entry,0,0)        
+        self.workload_grid.addWidget(self.load_wl_btn,0,1)   
         
         self.tab_workload.layout.addWidget(self.wl_label)
         self.tab_workload.layout.addWidget(self.workload_table)
         self.tab_workload.layout.addLayout(self.workload_grid) 
 
         # self.btns_grid.addWidget(self.etc_edit, 0,0)
-        # self.btns_grid.addWidget(self.dock_wkl_submit,1,0)
-        self.btns_grid.addWidget(self.workload_generator,2,0)
+        self.btns_grid.addWidget(self.dock_wkl_submit,1,0)
+        self.btns_grid.addWidget(self.load_config,2,0)
+        self.btns_grid.addWidget(self.workload_generator,3,0)
 
         self.spaceItem = QSpacerItem(100, 25, QSizePolicy.Expanding)
         self.tab_workload.layout.addSpacerItem(self.spaceItem)
