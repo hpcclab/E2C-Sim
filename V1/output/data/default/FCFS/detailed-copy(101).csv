@@ -1,0 +1,3 @@
+id,type,urgency,status,assigned_machine,arrival_time,execution_time,energy_usage,start_time,completion_time,missed_time,deadline,extended_deadline
+0,voice recognition,BESTEFFORT,COMPLETED,m1-1,4.611,"{'m1-1': 0.0, 'm2-1': 0.0, 'm3-1': 0.0}",0.0,4.611,4.611,inf,54.611,54.611
+1,voice recognition,BESTEFFORT,COMPLETED,m2-1,5.126,"{'m1-1': 0.0, 'm2-1': 0.0, 'm3-1': 0.0}",0.0,5.126,5.126,inf,55.126,55.126

@@ -47,7 +47,9 @@ class Simulator(QObject):
 
         self.path_to_arrivals = path_to_arrivals
         self.path_to_etc= path_to_etc
-
+        print("--------------------")
+        printTable(self.cur,"workload") 
+        print("--------------------")
         self.arrivals = pd.read_sql_query("SELECT * FROM workload", self.conn)
                                                                                 
         self.path_to_reports = path_to_reports                

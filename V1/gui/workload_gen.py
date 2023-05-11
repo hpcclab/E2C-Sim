@@ -160,8 +160,8 @@ class WorkloadGenerator(QMainWindow):
         self.display_tt_table = QTableWidget()
         self.display_tt_table.setColumnCount(6)
         self.display_tt_table.setRowCount(len(config.task_types))          #------------make sure to change this upon adding or removing tts
-        self.display_tt_table.setHorizontalHeaderLabels(["Id","Name","Data Input","Mean Data Size (KB)","Urgency","Deadline"])
-        default_data_inputs = ["png","mp3","jpg","csv","mp4"]
+        self.display_tt_table.setHorizontalHeaderLabels(["Id","Name","Data Input","Mean Data Size (KB)","Urgency","Slack"])
+        default_data_inputs = ["image","audio","text","video","biological","geographical","numeric"]
         default_data_sizes = ["10.0","5.5","7.0","2.8"]
         for i in range(len(config.task_types)):
             id = QTableWidgetItem(str(config.task_types[i].id))
@@ -213,7 +213,7 @@ class WorkloadGenerator(QMainWindow):
         self.add_tt_urgency = QComboBox()
         self.add_tt_urgency.addItem("BestEffort")
         self.add_tt_urgency.addItem("Urgent")
-        self.add_tt_deadline_lbl = QLabel("Deadline")
+        self.add_tt_deadline_lbl = QLabel("Slack")
         self.add_tt_deadline = QLineEdit()
 
         self.add_tt_deadline.setValidator(QDoubleValidator(0.99, 99.99, 3))
@@ -321,6 +321,9 @@ class WorkloadGenerator(QMainWindow):
         self.remove_mt_submit = QPushButton("Remove")
         self.remove_mt_submit.setStyleSheet(self.bg_color)
 
+        self.save_config = QPushButton("Save Config")
+        self.save_config.setStyleSheet(self.bg_color)
+
         self.main_layout.addWidget(self.display_mt_lbl)
         self.main_layout.addWidget(self.display_mt_table)
         self.main_layout.addLayout(self.mt_h_layout)
@@ -339,6 +342,7 @@ class WorkloadGenerator(QMainWindow):
         self.main_layout.addWidget(self.remove_mt_lbl)
         self.main_layout.addWidget(self.remove_mt_combo)
         self.main_layout.addWidget(self.remove_mt_submit)
+        self.main_layout.addWidget(self.save_config)
         
         self.main = QWidget()
         self.main.setLayout(self.main_layout)

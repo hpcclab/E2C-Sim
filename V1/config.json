@@ -18,25 +18,25 @@
     "task_types": [
         {
             "id": 1,
-            "name": "T1",
+            "name": "voice recognition",
             "urgency": "best_effort",
             "deadline": 50.0
         },
         {
             "id": 2,
-            "name": "T2",
+            "name": "audio recognition",
             "urgency": "best_effort",
             "deadline": 50.0
         },
         {
             "id": 3,
-            "name": "T3",
+            "name": "face recognition",
             "urgency": "best_effort",
             "deadline": 45.0
         },
         {
             "id": 4,
-            "name": "T4",
+            "name": "movement detection",
             "urgency": "best_effort",
             "deadline": 45.0
         }
