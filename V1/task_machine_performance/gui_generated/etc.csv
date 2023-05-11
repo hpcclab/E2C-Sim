@@ -1,5 +1,5 @@
 idx,m1,m2,m3
-voice recognition,0,0,0
-audio recognition,0,0,0
-face recognition,0,0,0
-movement detection,0,0,0
+T1,7,5,12
+T2,5,8,10
+T3,8,9,9
+T4,6,7,8

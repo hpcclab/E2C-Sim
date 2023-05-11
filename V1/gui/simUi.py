@@ -328,7 +328,9 @@ class SimUi(QMainWindow):
 
         self.rewrite_gen_window(self.arrivals)                   
 
-        self.set_etc()  
+        not_matched = self.set_etc()       #optionally, catch if tt/mts in eet dont match in config instead of auto changing them in set_etc
+        if not_matched: return
+
         msg = QMessageBox()
         msg.setIcon(QMessageBox.Information)
         msg.setText("EET and Workload have been successfully submitted.")
@@ -895,7 +897,7 @@ class SimUi(QMainWindow):
         not_matched_tt = self.check_etc_format()      
 
         if not_matched_tt:
-            return
+            return not_matched_tt
         mt_etc = []
         for clmn_idx in range(etc_matrix.columnCount()):
                 mt_etc.append(etc_matrix.horizontalHeaderItem(clmn_idx).text())
@@ -994,39 +996,6 @@ class SimUi(QMainWindow):
 
     def check_etc_format(self):
         task_types_etc = []
-        
-        #submit button populates wkload table in db and connects to item_dock_detail which repopulates the visual table
-        # initTables(self.cur,self.conn)
-        # self.cur.execute("DELETE FROM workload;")
-        # self.arrivals = pd.DataFrame(columns=["task_type","arrival_time"])
-        # self.arrival_times = []
-
-        # for i in (self.db_scens):
-        #     self.db_task_id = i[0]
-        #     self.db_no_tasks = i[1]
-        #     self.db_start_time = i[2]
-        #     self.db_end_time = i[3]
-        #     self.db_dist = 0
-        #     if i[4] == "Normal":
-        #         self.db_dist = 1
-        #     elif i[4] == "Uniform":
-        #         self.db_dist = 2
-        #     elif i[4] == "Exponential":
-        #         self.db_dist = 3
-        #     elif i[4] == "Spiky":
-        #         self.db_dist = 4
-
-        #     print(self.db_dist)
-
-        #     self.arrival_times = fetchArrivals(self.db_start_time, self.db_end_time, self.db_no_tasks, self.db_dist, self.cur)
-
-        #     for j in range(self.db_no_tasks):
-        #         self.arrivals.loc[len(self.arrivals.index)] = [(self.db_task_id), self.arrival_times[j]]
-        
-        # self.arrivals.sort_values("arrival_time",inplace=True)
-        # self.arrivals.reset_index(drop=True,inplace=True)
-        # self.arrivals.to_sql("workload",self.conn,if_exists="replace",index=False)
-        # self.conn.commit() 
 
         workload = pd.read_sql_query("SELECT * FROM workload", self.conn)
         
@@ -1046,6 +1015,10 @@ class SimUi(QMainWindow):
         task_types_wl = workload['task_type'].unique()
 
         not_matched_tt = [tt for tt in task_types_wl if tt not in task_types_etc]
+        # print("----1-----")
+        # print([tt for tt in task_types_wl])
+        # print("----2-----")
+        print(task_types_etc)
         if not_matched_tt:
             self.cur.execute(f'DELETE FROM workload WHERE task_type = "{not_matched_tt[0]}";')
             self.arrivals.drop(self.arrivals.loc[self.arrivals['task_type']==not_matched_tt[0]].index, inplace=True)
@@ -1056,14 +1029,6 @@ class SimUi(QMainWindow):
             err_txt = f"Task type {not_matched_tt} in workload are not found in ETC"
             self.err_msg('Format Error', err_txt)
             return not_matched_tt
-        # else: 
-        #     workload.to_csv(self.dock_right.workload_path, index = False)
-            # try:   
-            #     self.dock_right.rewrite_workload_table()
-            # except:
-            #     pass
-        
-        # self.dock_right.rewrite_from_db(self.arrivals)
         
         return not_matched_tt
     

@@ -267,6 +267,9 @@ class ItemDockDetail(QMainWindow):
         self.write_etc_matrix()
 
     
+    def get_config_file(self):
+        print('loading config file')
+
     def get_eet_input(self):
         self.path_to_etc = './task_machine_performance/gui_generated/etc.csv'
 
@@ -728,6 +731,7 @@ class ItemDockDetail(QMainWindow):
 
         self.workload_generator = QPushButton("Open Workload Generator")
         self.load_config = QPushButton("Load Config")
+        self.load_config.clicked.connect(self.get_config_file)
         # self.workload_generator.setStyleSheet("background-color:rgb(200,210,220)")
         self.dock_wkl_submit = QPushButton("Submit Workload and EET")
 
