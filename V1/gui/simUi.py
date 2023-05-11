@@ -652,15 +652,15 @@ class SimUi(QMainWindow):
         tt_ds = float(tt_ds)
         tt_deadline = float(tt_deadline)
 
-        tt_id = (len(config.task_types)) + 1
+        tt_id = self.workload_gen_window.display_tt_table.rowCount() + 1
 
-        if tt_urgency == "BestEffort":
-            urgency = UrgencyLevel.BESTEFFORT
-        elif tt_urgency == "Urgent":
-            urgency = UrgencyLevel.URGENT
+        # if tt_urgency == "BestEffort":
+        #     urgency = UrgencyLevel.BESTEFFORT
+        # elif tt_urgency == "Urgent":
+        #     urgency = UrgencyLevel.URGENT
 
-        config.task_types.append(TaskType(tt_id,tt_name,urgency,tt_deadline))
-        config.task_type_names.append(tt_name)
+        # config.task_types.append(TaskType(tt_id,tt_name,urgency,tt_deadline))
+        # config.task_type_names.append(tt_name)
 
         row_count = self.workload_gen_window.display_tt_table.rowCount()
         self.workload_gen_window.display_tt_table.insertRow(row_count)
@@ -701,16 +701,14 @@ class SimUi(QMainWindow):
             return
 
         tt_removed = self.workload_gen_window.remove_tt_combo.currentText()
-        for tt in config.task_types:
-            if tt_removed == tt.name:
-                for tt_id in config.task_types[config.task_types.index(tt):]:
-                    tt_id.id = tt_id.id - 1
-                config.task_types.remove(tt)
-        for tt in config.task_type_names:
-            if tt_removed == tt:
-                config.task_type_names.remove(tt)
-
-        print(config.task_type_names)
+        # for tt in config.task_types:
+        #     if tt_removed == tt.name:
+        #         for tt_id in config.task_types[config.task_types.index(tt):]:
+        #             tt_id.id = tt_id.id - 1
+        #         config.task_types.remove(tt)
+        # for tt in config.task_type_names:
+        #     if tt_removed == tt:
+        #         config.task_type_names.remove(tt)
 
         for row in range(self.workload_gen_window.display_tt_table.rowCount()):
             if self.workload_gen_window.display_tt_table.item(row,1).text() == tt_removed:
@@ -744,23 +742,23 @@ class SimUi(QMainWindow):
         
         mt_id = (len(config.machine_types))
 
-        config.machine_types.append(MachineType(mt_id,mt_name,float(mt_power),
-                                    float(mt_idle_power),int(mt_replicas)))
+        # config.machine_types.append(MachineType(mt_id,mt_name,float(mt_power),
+        #                             float(mt_idle_power),int(mt_replicas)))
         
-        config.machine_type_names.append(mt_name)
+        # config.machine_type_names.append(mt_name)
 
-        # config.no_of_machines = config.no_of_machines + int(mt_replicas)
-        config.no_of_machines = config.no_of_machines + 1
+        # # config.no_of_machines = config.no_of_machines + int(mt_replicas)
+        # config.no_of_machines = config.no_of_machines + 1
 
         # for r in range(int(mt_replicas)):
         #     config.machines.append(Machine(len(config.machines), r+1, config.machine_types[-1],
         #                                 {'power': float(mt_power), 'idle_power': float(mt_idle_power)}))
 
-        config.machines.append(Machine(len(config.machines), 1, config.machine_types[-1],
-                                        {'power': float(mt_power), 'idle_power': float(mt_idle_power)}))
+        # config.machines.append(Machine(len(config.machines), 1, config.machine_types[-1],
+        #                                 {'power': float(mt_power), 'idle_power': float(mt_idle_power)}))
 
-        self.gv.machine_queues.m_queues[mt_id] = []            
-        self.gv.machine_queues.m_runnings[mt_id] = []
+        # self.gv.machine_queues.m_queues[mt_id] = []            
+        # self.gv.machine_queues.m_runnings[mt_id] = []
 
         #----------visual tables----------------------
         row_count = self.workload_gen_window.display_mt_table.rowCount()
@@ -799,26 +797,24 @@ class SimUi(QMainWindow):
 
         mt_removed = self.workload_gen_window.remove_mt_combo.currentText()
 
-        for mt in config.machine_types:
-            if mt_removed == mt.name:
-                for mt_id in config.machine_types[config.machine_types.index(mt):]:
-                    mt_id.id = mt_id.id - 1
-                # config.no_of_machines = config.no_of_machines - 1
-                config.machine_types.remove(mt)
+        # for mt in config.machine_types:
+        #     if mt_removed == mt.name:
+        #         for mt_id in config.machine_types[config.machine_types.index(mt):]:
+        #             mt_id.id = mt_id.id - 1
+        #         # config.no_of_machines = config.no_of_machines - 1
+        #         config.machine_types.remove(mt)
 
-        config.no_of_machines = config.no_of_machines - 1
+        # config.no_of_machines = config.no_of_machines - 1
 
-        for mt in config.machine_type_names:
-            if mt_removed == mt:
-                config.machine_type_names.remove(mt)
+        # for mt in config.machine_type_names:
+        #     if mt_removed == mt:
+        #         config.machine_type_names.remove(mt)
 
-        for m in config.machines:
-            if mt_removed == m.type.name:
-                for m_id in config.machines[config.machines.index(m):]:
-                    m_id.id = m_id.id - 1
-                config.machines.remove(m)
-
-        print(config.machine_type_names)
+        # for m in config.machines:
+        #     if mt_removed == m.type.name:
+        #         for m_id in config.machines[config.machines.index(m):]:
+        #             m_id.id = m_id.id - 1
+        #         config.machines.remove(m)
 
         for row in range(self.workload_gen_window.display_mt_table.rowCount()):
             if self.workload_gen_window.display_mt_table.item(row,0).text() == mt_removed:
@@ -921,10 +917,12 @@ class SimUi(QMainWindow):
                 task_types.append(task_type_name)
                 row = [task_type_name] + row                
                 etc_writer.writerow(row) 
-        
+        # print("----------------")
         for idx, mt in enumerate(config.machine_types):
             mt.name = machine_types[idx+1]
         for idx, tt in enumerate(config.task_types):
+            # print(idx)
+            # print(tt)
             tt.name = task_types[idx]
 
         for machine in config.machines:
@@ -950,8 +948,8 @@ class SimUi(QMainWindow):
             return
         
 
-        initTables(self.cur,self.conn)
-        self.cur.execute("DELETE FROM workload;")
+        # initTables(self.cur,self.conn)
+        # self.cur.execute("DELETE FROM workload;")
         self.arrivals = pd.DataFrame(columns=["task_type","arrival_time"])
         self.arrival_times = []
 
@@ -975,13 +973,13 @@ class SimUi(QMainWindow):
             for j in range(self.db_no_tasks):
                 self.arrivals.loc[len(self.arrivals.index)] = [(self.db_task_id), self.arrival_times[j]]
   
-        self.arrivals.sort_values("arrival_time",inplace=True)
-        self.arrivals.reset_index(drop=True,inplace=True)
-        self.arrivals.to_sql("workload",self.conn,if_exists="replace",index=False)
-        self.conn.commit() 
+        # self.arrivals.sort_values("arrival_time",inplace=True)
+        # self.arrivals.reset_index(drop=True,inplace=True)
+        # self.arrivals.to_sql("workload",self.conn,if_exists="replace",index=False)
+        # self.conn.commit() 
 
         # workload = pd.read_sql_query("SELECT * FROM workload", self.conn)
-        self.dock_right.rewrite_from_db(self.arrivals)
+        # self.dock_right.rewrite_from_db(self.arrivals)
         self.rewrite_gen_window(self.arrivals)                   
 
         msg = QMessageBox()
@@ -1018,12 +1016,12 @@ class SimUi(QMainWindow):
         # print("----1-----")
         # print([tt for tt in task_types_wl])
         # print("----2-----")
-        print(task_types_etc)
+        # print(task_types_etc)
         if not_matched_tt:
             self.cur.execute(f'DELETE FROM workload WHERE task_type = "{not_matched_tt[0]}";')
             self.arrivals.drop(self.arrivals.loc[self.arrivals['task_type']==not_matched_tt[0]].index, inplace=True)
             for i in self.db_scens:
-                if i[0] == int(not_matched_tt[0][1]):
+                if i[0] == not_matched_tt[0]:
                     self.db_scens.remove(i)
 
             err_txt = f"Task type {not_matched_tt} in workload are not found in ETC"

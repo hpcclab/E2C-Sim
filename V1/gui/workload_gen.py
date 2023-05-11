@@ -193,7 +193,7 @@ class WorkloadGenerator(QMainWindow):
         self.edit_tt_submit = QPushButton("Submit Edit Changes")
         self.edit_tt_submit.setStyleSheet(self.bg_color)
         # self.tt_h_layout.addWidget(self.edit_tt_table)
-        self.tt_h_layout.addWidget(self.edit_tt_submit)
+        # self.tt_h_layout.addWidget(self.edit_tt_submit)
 
         self.add_tt_lbl = QLabel("Add Task Type")
         self.add_tt_lbl.setStyleSheet("font-weight: bold")
@@ -287,7 +287,7 @@ class WorkloadGenerator(QMainWindow):
         self.edit_mt_submit = QPushButton("Submit Edit Changes")
         self.edit_mt_submit.setStyleSheet(self.bg_color)
         # self.mt_h_layout.addWidget(self.edit_mt_table)
-        self.mt_h_layout.addWidget(self.edit_mt_submit)
+        # self.mt_h_layout.addWidget(self.edit_mt_submit)
 
         self.add_mt_lbl = QLabel("Add Machine Type")
         self.add_mt_lbl.setStyleSheet("font-weight: bold")
@@ -432,7 +432,7 @@ class WorkloadGenerator(QMainWindow):
         self.scen_h_layout5 = QHBoxLayout()
         self.scen_h_layout5.addWidget(self.reset_scen_btn)
         self.scen_h_layout5.addWidget(self.generate_wkld_submit)
-        self.scen_h_layout5.addWidget(self.save_scen)
+        # self.scen_h_layout5.addWidget(self.save_scen)
 
         spacer = QSpacerItem(20, 20)
 
@@ -529,7 +529,7 @@ class WorkloadGenerator(QMainWindow):
         self.eet_table_reset = QPushButton("Reset")
         self.eet_table_reset.setStyleSheet(self.bg_color)
         # self.horizontal_layout.addWidget(self.eet_table_edit)
-        self.horizontal_layout.addWidget(self.eet_table_submit)
+        # self.horizontal_layout.addWidget(self.eet_table_submit)
         self.horizontal_layout.addWidget(self.eet_table_reset)
 
         self.save_eet_lbl = QLabel("Save EET File")
