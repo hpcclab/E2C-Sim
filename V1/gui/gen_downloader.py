@@ -27,11 +27,9 @@ class Downloader(QMainWindow):
             self.saveFileDialogSCEN()
 
     def saveFileDialogEET(self):
-        # Get user's Downloads dir
-        if os.name == "nt":
-            DL_DIR = f"{os.getenv('USERPROFILE')}\\Downloads"            
-        else:
-            DL_DIR = f"{os.getenv('HOME')}/Downloads"
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        parent_dir = os.path.dirname(script_dir)
+        DL_DIR = parent_dir
 
         # Initialize dialog
         self.dialog = QFileDialog.Options()
@@ -59,11 +57,9 @@ class Downloader(QMainWindow):
             print("ERROR:", e)
 
     def saveFileDialogWKL(self):
-        # Get user's Downloads dir
-        if os.name == "nt":
-            DL_DIR = f"{os.getenv('USERPROFILE')}\\Downloads"            
-        else:
-            DL_DIR = f"{os.getenv('HOME')}/Downloads"
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        parent_dir = os.path.dirname(script_dir)
+        DL_DIR = parent_dir
 
         # Initialize dialog
         self.dialog = QFileDialog.Options()
@@ -91,11 +87,9 @@ class Downloader(QMainWindow):
             print("ERROR:", e)
 
     def saveFileDialogSCEN(self):
-        # Get user's Downloads dir
-        if os.name == "nt":
-            DL_DIR = f"{os.getenv('USERPROFILE')}\\Downloads"            
-        else:
-            DL_DIR = f"{os.getenv('HOME')}/Downloads"
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        parent_dir = os.path.dirname(script_dir)
+        DL_DIR = parent_dir
 
         # Initialize dialog
         self.dialog = QFileDialog.Options()

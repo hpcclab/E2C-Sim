@@ -81,7 +81,7 @@ class SimUi(QMainWindow):
         self.report_menu = menu.addMenu("Reports")
         self.help_menu = menu.addMenu("Help")
 
-        self.workload_gen_window = WorkloadGenerator()
+        self.workload_gen_window = WorkloadGenerator(parent=self)
         self.workload_gen_window.add_scen_submit.clicked.connect(self.add_scen)
         self.workload_gen_window.reset_scen_btn.clicked.connect(self.reset_scen)
         self.workload_gen_window.generate_wkld_submit.clicked.connect(self.generate_workload)
@@ -260,7 +260,7 @@ class SimUi(QMainWindow):
         self.gv.scene.update()
 
     def workload_gen_show(self):
-        self.workload_gen_window.show()
+        self.workload_gen_window.showMaximized()
 
 
     def rb_policy_state(self, rb):
@@ -724,6 +724,13 @@ class SimUi(QMainWindow):
         self.workload_gen_window.display_tt_table.setItem(row_count,4,QTableWidgetItem(tt_urgency))
         self.workload_gen_window.display_tt_table.setItem(row_count,5,QTableWidgetItem(str(tt_deadline)))
 
+        #clear input fields
+        self.workload_gen_window.add_tt_name.clear()
+        self.workload_gen_window.add_tt_dt.setCurrentIndex(0)
+        self.workload_gen_window.add_tt_ds.clear()
+        self.workload_gen_window.add_tt_urgency.setCurrentIndex(0)
+        self.workload_gen_window.add_tt_deadline.clear()
+
         self.workload_gen_window.remove_tt_combo.addItem(tt_name)
 
         #add to eet
@@ -819,6 +826,12 @@ class SimUi(QMainWindow):
         self.workload_gen_window.display_mt_table.setItem(row_count,2,QTableWidgetItem(str(mt_idle_power)))
         self.workload_gen_window.display_mt_table.setItem(row_count,3,QTableWidgetItem(str(mt_replicas)))
 
+        #clear input fields
+        self.workload_gen_window.add_mt_name.clear()
+        self.workload_gen_window.add_mt_power.clear()
+        self.workload_gen_window.add_mt_idle.clear()
+        self.workload_gen_window.add_mt_replicas.clear()
+
         self.workload_gen_window.remove_mt_combo.addItem(mt_name)
 
         #add to eet
@@ -913,6 +926,13 @@ class SimUi(QMainWindow):
                                             QTableWidgetItem(self.workload_gen_window.add_scen_dist.currentText()))
 
         self.db_scens.append(self.db_scen)
+
+        #clear input fields
+        self.workload_gen_window.add_scen_tt.setCurrentIndex(0)
+        self.workload_gen_window.add_scen_num_tasks.clear()
+        self.workload_gen_window.add_scen_start_time.clear()
+        self.workload_gen_window.add_scen_end_time.clear()
+        self.workload_gen_window.add_scen_dist.setCurrentIndex(0)
 
     def reset_scen(self):
         msg = QMessageBox()

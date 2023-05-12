@@ -9,16 +9,14 @@ import random
 
 
 class WorkloadGenerator(QMainWindow):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, parent=None):
+        super().__init__(parent=parent)
+
+        # self.setWindowFlags(Qt.WindowStaysOnTopHint)
 
         # set the title of self.main window
         self.setWindowTitle('Workload Generator')
-
-        # set the size of window
-        self.Width = 750
-        self.height = int(1.200 * self.Width)
-        self.resize(self.Width, self.height)
+        self.setStyleSheet('background-color: white;')
 
         # add all widgets
         self.task_types_btn = QPushButton('Task Types', self)
@@ -159,7 +157,7 @@ class WorkloadGenerator(QMainWindow):
         self.display_tt_lbl.setStyleSheet('font-weight: bold')
         self.display_tt_table = QTableWidget()
         self.display_tt_table.setColumnCount(6)
-        self.display_tt_table.setRowCount(len(config.task_types))          #------------make sure to change this upon adding or removing tts
+        self.display_tt_table.setRowCount(len(config.task_types))         
         self.display_tt_table.setHorizontalHeaderLabels(["Id","Name","Data Input","Mean Data Size (KB)","Urgency","Slack"])
         default_data_inputs = ["image","audio","text","video","biological","geographical","numeric"]
         default_data_sizes = ["10.0","5.5","7.0","2.8"]
@@ -201,6 +199,7 @@ class WorkloadGenerator(QMainWindow):
         self.add_tt_name = QLineEdit()
         self.add_tt_dt_lbl = QLabel("Data Input")
         self.add_tt_dt = QComboBox()
+        self.add_tt_dt.setFocusPolicy(Qt.NoFocus)
         self.add_tt_dt.addItems(default_data_inputs)
         self.add_new_di = QPushButton("Create New Data Input")
         self.add_new_di.setStyleSheet(self.bg_color)
@@ -211,6 +210,7 @@ class WorkloadGenerator(QMainWindow):
 
         self.add_tt_urgency_lbl = QLabel("Urgency")
         self.add_tt_urgency = QComboBox()
+        self.add_tt_urgency.setFocusPolicy(Qt.NoFocus)
         self.add_tt_urgency.addItem("BestEffort")
         self.add_tt_urgency.addItem("Urgent")
         self.add_tt_deadline_lbl = QLabel("Slack")
@@ -228,6 +228,7 @@ class WorkloadGenerator(QMainWindow):
         self.remove_tt_lbl = QLabel("Remove Task Type")
         self.remove_tt_lbl.setStyleSheet("font-weight: bold")
         self.remove_tt_combo = QComboBox()
+        self.remove_tt_combo.setFocusPolicy(Qt.NoFocus)
         for i in range(len(config.task_type_names)):
             self.remove_tt_combo.addItem(f'{config.task_type_names[i]}')
         self.remove_tt_submit = QPushButton("Remove")
@@ -261,11 +262,11 @@ class WorkloadGenerator(QMainWindow):
     def mt_ui(self):
         self.main_layout = QVBoxLayout()
 
-        self.display_mt_lbl = QLabel("Existing Machine Types")     #------------make sure to change this upon adding or removing mts
+        self.display_mt_lbl = QLabel("Existing Machine Types")   
         self.display_mt_lbl.setStyleSheet('font-weight: bold')
         self.display_mt_table = QTableWidget()
         self.display_mt_table.setColumnCount(4)
-        self.display_mt_table.setRowCount(len(config.machine_types))          #------------make sure to change this upon adding or removing tts
+        self.display_mt_table.setRowCount(len(config.machine_types))   
         self.display_mt_table.setHorizontalHeaderLabels(["Name","Power","Idle Power","# Replicas"])
         for i in range(len(config.machine_types)):
             self.display_mt_table.setItem(i,0,QTableWidgetItem(str(config.machine_types[i].name)))
@@ -316,6 +317,7 @@ class WorkloadGenerator(QMainWindow):
         self.remove_mt_lbl = QLabel("Remove Machine Type")
         self.remove_mt_lbl.setStyleSheet("font-weight: bold")
         self.remove_mt_combo = QComboBox()
+        self.remove_mt_combo.setFocusPolicy(Qt.NoFocus)
         for i in range(len(config.machine_types)):
             self.remove_mt_combo.addItem(f'{config.machine_type_names[i]}')
         self.remove_mt_submit = QPushButton("Remove")
@@ -373,6 +375,7 @@ class WorkloadGenerator(QMainWindow):
         self.add_scen_lbl.setStyleSheet('font-weight: bold')
         self.add_scen_tt_lbl = QLabel("Task Type")
         self.add_scen_tt = QComboBox()
+        self.add_scen_tt.setFocusPolicy(Qt.NoFocus)
         for i in range(len(config.task_types)):
             self.add_scen_tt.addItem(f'{config.task_type_names[i]}')
         self.add_scen_num_tasks_lbl = QLabel("# Tasks")
@@ -400,6 +403,7 @@ class WorkloadGenerator(QMainWindow):
 
         self.add_scen_dist_lbl = QLabel("Distribution")
         self.add_scen_dist = QComboBox()
+        self.add_scen_dist.setFocusPolicy(Qt.NoFocus)
         self.add_scen_dist.addItem("Normal")
         self.add_scen_dist.addItem("Uniform")
         self.add_scen_dist.addItem("Exponential")
@@ -426,7 +430,7 @@ class WorkloadGenerator(QMainWindow):
 
         self.generate_wkld_lbl = QLabel("Generate Workload Using Current Scenario")
         self.generate_wkld_lbl.setStyleSheet('font-weight: bold')
-        self.generate_wkld_submit = QPushButton("Generate Workload")
+        self.generate_wkld_submit = QPushButton("Generate Workload for this Scenario")
         self.generate_wkld_submit.setStyleSheet(self.bg_color)
 
         self.scen_h_layout5 = QHBoxLayout()
@@ -488,7 +492,7 @@ class WorkloadGenerator(QMainWindow):
         self.save_wkld_lbl.setStyleSheet('font-weight: bold')
         self.save_wkld = QPushButton("Save as CSV File")
         self.save_wkld.setStyleSheet(self.bg_color)
-                                                          #------------rows will only be set upon pressing submit for scenarios
+                                                      
 
         self.main_layout.addWidget(self.wkld_lbl)
         self.main_layout.addWidget(self.wkld_table)
@@ -499,7 +503,7 @@ class WorkloadGenerator(QMainWindow):
         self.main.setLayout(self.main_layout)
         return self.main
     
-    def eet_ui(self):                                        #-----------make sure to remove or add rows/columns when adding/removing tts or mts
+    def eet_ui(self):                                   
         self.main_layout = QVBoxLayout()
 
         self.eet_lbl = QLabel("Expected Execution Times")

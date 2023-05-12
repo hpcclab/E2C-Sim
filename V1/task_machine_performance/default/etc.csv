@@ -1,5 +1,2 @@
-,m1,m2,m3
-voice recognition,0,0,0
-audio recognition,0,0,0
-face recognition,0,0,0
-movement detection,0,0,0
+,gpu
+object det.,5

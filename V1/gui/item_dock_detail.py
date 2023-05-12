@@ -795,7 +795,7 @@ class ItemDockDetail(QMainWindow):
         self.workload_table.setStyleSheet("background-color: white; selection-background-color: #353535;")
         self.tab_etc  = self.machine_etc(tt,mt)
 
-        self.workload_generator = QPushButton("Open Workload Generator")
+        self.workload_generator = QPushButton("Generate New Workload")
         self.load_config = QPushButton("Load Config")
         self.load_config.clicked.connect(self.get_config_file)
         # self.workload_generator.setStyleSheet("background-color:rgb(200,210,220)")
@@ -812,8 +812,8 @@ class ItemDockDetail(QMainWindow):
         self.tab_workload.layout.addLayout(self.workload_grid)
 
         # self.btns_grid.addWidget(self.etc_edit, 0,0)
-        self.btns_grid.addWidget(self.dock_wkl_submit,1,0)
-        self.btns_grid.addWidget(self.load_config,2,0)
+        self.btns_grid.addWidget(self.load_config,1,0)
+        self.btns_grid.addWidget(self.dock_wkl_submit,2,0)
         self.btns_grid.addWidget(self.workload_generator,3,0)
 
         self.spaceItem = QSpacerItem(100, 25, QSizePolicy.Expanding)
