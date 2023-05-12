@@ -1,41 +1,31 @@
-task_type,cpu_1,gpu_1,arm_1
-face recognition,93.177,10.012,74.529
-face recognition,100.413,10.122,83.892
-face recognition,98.606,9.399,85.783
-face recognition,106.964,9.997,75.118
-face recognition,100.134,10.5,81.355
-face recognition,102.937,10.523,80.592
-face recognition,98.615,10.81,80.041
-face recognition,93.261,9.196,83.9
-face recognition,97.005,10.199,74.244
-face recognition,103.295,9.581,80.738
-movement detection,119.524,11.898,96.016
-movement detection,113.259,11.456,93.48
-movement detection,119.255,12.355,87.008
-movement detection,109.27,12.718,84.787
-movement detection,116.79,12.351,92.398
-movement detection,115.466,12.403,92.959
-movement detection,113.185,11.061,95.465
-movement detection,107.606,11.249,89.154
-movement detection,114.013,11.604,95.667
-movement detection,123.178,12.035,86.758
-object det,92.818,15.656,71.903
-object det,89.971,16.531,76.797
-object det,83.905,16.298,76.036
-object det,86.885,17.279,80.379
-object det,92.302,16.694,74.775
-object det,89.484,17.054,76.184
-object det,86.766,16.402,69.067
-object det,85.979,14.852,75.026
-object det,92.688,14.733,77.58
-object det,82.864,16.795,70.779
-speech rec,122.695,19.778,107.035
-speech rec,120.566,18.718,107.17
-speech rec,137.538,18.727,109.219
-speech rec,127.109,19.645,113.624
-speech rec,133.827,17.651,113.343
-speech rec,122.92,18.399,105.322
-speech rec,140.699,18.329,106.725
-speech rec,137.056,18.887,101.934
-speech rec,131.134,18.083,116.046
-speech rec,131.346,18.643,113.16
+task_type,gpu_1,cpu_1
+object det,4.659,8.009
+object det,4.658,8.508
+object det,5.061,8.389
+object det,4.93,8.615
+object det,5.216,8.329
+object det,4.648,8.566
+object det,5.234,7.441
+object det,5.25,8.552
+object det,5.085,8.004
+object det,5.021,8.017
+speech rec,6.906,10.775
+speech rec,6.532,9.512
+speech rec,6.452,9.355
+speech rec,6.908,10.32
+speech rec,6.646,9.281
+speech rec,7.231,9.891
+speech rec,7.562,10.547
+speech rec,7.204,9.509
+speech rec,6.594,10.724
+speech rec,7.052,9.889
+face,12.481,14.229
+face,11.801,15.627
+face,11.74,14.343
+face,11.661,14.516
+face,12.159,13.822
+face,11.618,15.503
+face,11.392,14.438
+face,11.43,16.064
+face,11.213,14.883
+face,11.423,13.817

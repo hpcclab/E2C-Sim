@@ -1211,12 +1211,12 @@ class SimUi(QMainWindow):
             return
         if not self.etc_submitted:
             if (self.workload_gen_window.wkld_table.rowCount() == 0):
-                self.err_msg('EET Submision', 'Must generate a workload and submit EET in the workload generator.')
+                self.err_msg('EET Submision', 'Must load the workload csv file')
             else:
-                self.err_msg('EET Submision', 'Must submit EET in the workload generator.')
+                self.err_msg('EET Submision', 'Must load the EET csv file.')
             return
         if self.workload_gen_window.wkld_table.rowCount() == 0:
-            self.err_msg('EET Submision', 'Must generate a workload in the workload generator.')
+            self.err_msg('EET Submision', 'Must load the workload csv file')
             return
 
         self.thread = QThread(parent=self)
@@ -1344,8 +1344,13 @@ class SimUi(QMainWindow):
 
         try:
             self.dock_right.etc_load.setEnabled(True)
-            self.dock_right.etc_edit.setEnabled(True)
+            # self.dock_right.etc_edit.setEnabled(True)
             self.dock_right.load_wl_btn.setEnabled(True)
+            self.dock_right.dock_wkl_submit.setEnabled(False)
+            print("submit is set to false")
+            self.dock_right.workload_loaded = False
+            self.dock_right.config_loaded = False
+            self.dock_right.eet_loaded = False
             self.dock_right.etc_matrix.setEditTriggers(QAbstractItemView.NoEditTriggers)
         except:
             pass
@@ -1465,6 +1470,7 @@ class SimUi(QMainWindow):
         self.gv.machine_queues.outer_frame()
         self.gv.machine_queues.draw_queues()
         self.gv.machine_queues.fill_queues()
+        print(m.type.name for m in config.machines)
         self.gv.machine_queues.runnings(config.machines)
         self.gv.machine_queues.trash()
         self.update()

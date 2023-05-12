@@ -1,0 +1,11 @@
+id,type,urgency,status,assigned_machine,arrival_time,execution_time,energy_usage,start_time,completion_time,missed_time,deadline,extended_deadline
+0,object det,BESTEFFORT,COMPLETED,gpu-1,0.178,"{'gpu-1': 9.318, 'arm-1': 30.035}",931.8,0.178,9.496,inf,50.178,50.178
+1,object det,BESTEFFORT,COMPLETED,arm-1,0.822,"{'gpu-1': 9.316, 'arm-1': 31.905}",319.05,0.822,32.727000000000004,inf,50.822,50.822
+2,object det,BESTEFFORT,COMPLETED,gpu-1,0.91,"{'gpu-1': 10.122, 'arm-1': 31.46}",1012.2,9.496,19.618000000000002,inf,50.91,50.91
+3,object det,BESTEFFORT,COMPLETED,gpu-1,1.363,"{'gpu-1': 9.861, 'arm-1': 32.306}",986.1,24.852000000000004,34.71300000000001,inf,51.363,51.363
+4,object det,BESTEFFORT,COMPLETED,gpu-1,1.682,"{'gpu-1': 10.432, 'arm-1': 31.235}",1043.2,34.71300000000001,45.14500000000001,inf,51.682,51.682
+5,speech rec,BESTEFFORT,MISSED,arm-1,0.964,"{'gpu-1': 4.648, 'arm-1': 21.415}",82.36999999999995,32.727000000000004,inf,40.964,40.964,40.964
+6,speech rec,BESTEFFORT,COMPLETED,gpu-1,1.055,"{'gpu-1': 5.234, 'arm-1': 18.601}",523.4,19.618000000000002,24.852000000000004,inf,41.055,41.055
+7,speech rec,BESTEFFORT,MISSED,arm-1,1.149,"{'gpu-1': 5.25, 'arm-1': 21.38}",1.8500000000000227,40.964,inf,41.149,41.149,41.149
+8,speech rec,BESTEFFORT,MISSED,arm-1,1.483,"{'gpu-1': 5.085, 'arm-1': 20.01}",3.339999999999961,41.149,inf,41.483,41.483,41.483
+9,speech rec,BESTEFFORT,MISSED,arm-1,1.735,"{'gpu-1': 5.021, 'arm-1': 20.041}",2.5200000000000244,41.483,inf,41.735,41.735,41.735

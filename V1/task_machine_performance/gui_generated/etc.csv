@@ -1,5 +1,4 @@
-idx,cpu,gpu,arm
-face recognition,100,10,80
-movement detection,115,12,90
-object det,90,16,75
-speech rec,130,19,110
+idx,gpu,cpu
+object det,5,8
+speech rec,7,10
+face,12,15

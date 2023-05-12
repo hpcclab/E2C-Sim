@@ -316,10 +316,10 @@ class ItemDockDetail(QMainWindow):
 
             if not matched:
                 error_msg = QMessageBox()
-                error_msg.setIcon(QMessageBox.Information)
+                error_msg.setIcon(QMessageBox.Critical)
                 error_msg.setText(msg)
                 error_msg.setWindowTitle("Config file error")
-                error_msg.setStandardButtons(QMessageBox.Ok)
+                error_msg.setStandardButtons(QMessageBox.Cancel)
                 error_msg.exec_()
             else:
                 with open('config.json', 'w', encoding='utf-8') as f:
