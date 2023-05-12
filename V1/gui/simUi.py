@@ -28,7 +28,7 @@ from PyQt5.QtWidgets import (
     QSlider,
     QVBoxLayout,
     QWidget,
-    
+
 )
 from PyQt5.QtCore import Qt, QThread
 from utils.simulator import Simulator
@@ -42,26 +42,26 @@ from gui.gen_downloader import Downloader
 import pandas as pd
 import random
 import sqlite3 as sq
-
+import json
 
 class SimUi(QMainWindow):
-    
+
     def __init__(self,w,h,path_to_arrivals, path_to_etc, path_to_reports):
         super().__init__()
         self.path_to_arrivals = path_to_arrivals
         self.path_to_etc= path_to_etc
         self.path_to_reports = path_to_reports
 
-        db_path = './utils/e2cDB.db' 
+        db_path = './utils/e2cDB.db'
         self.conn = sq.connect(db_path)
         self.cur = self.conn.cursor()
 
         self.title = "E2C Simulator"
         self.top= 20
-        self.left= 20      
+        self.left= 20
         self.width = w
-        self.height = h        
-        self.setWindowTitle(self.title)        
+        self.height = h
+        self.setWindowTitle(self.title)
         self.setStyleSheet(f"background-color: rgb(217,217,217);")
         self.setGeometry(self.left, self.top, self.width, self.height)
         self.configs ={ 'scheduler': 'default',
@@ -137,7 +137,7 @@ class SimUi(QMainWindow):
 
         self.center()
         #self.showMaximized()
-        
+
         self.initUI()
 
     def closeEvent(self, event):
@@ -152,27 +152,27 @@ class SimUi(QMainWindow):
 
     def mach_report_action(self):
         self.report = MachineReport(self.path_to_reports, config.scheduling_method)
-    
+
     def summary_report_action(self):
         self.report = SummaryReport(self.path_to_reports, config.scheduling_method)
-    
+
     def help_menu_action(self):
         self.simulate_pause = True
         self.help_menu = HelpMenu()
 
     def initUI(self):
-        self.general_layout = QVBoxLayout() 
+        self.general_layout = QVBoxLayout()
         self._centralWidget = QWidget(self)
         self.setCentralWidget(self._centralWidget)
         self._centralWidget.setLayout(self.general_layout)
         #self.label = QLabel('simulator')
         #self.general_layout.addWidget(self.label)
-        self.gv = GraphicView(self.width, self.height)   
-        
+        self.gv = GraphicView(self.width, self.height)
+
         self.gv.machine_colors = []
-        
-        self.dock_right = ItemDockDetail()    
-        self.gv.itemClicked.connect(self.dock_update)     
+
+        self.dock_right = ItemDockDetail()
+        self.gv.itemClicked.connect(self.dock_update)
         hlayout = QHBoxLayout()
         #hlayout.addWidget(self.dock_left)
 
@@ -183,39 +183,39 @@ class SimUi(QMainWindow):
         self.general_layout.addLayout(hlayout)
         self.create_ctrl_buttons()
         self.connect_signals()
-        
+
     def center(self):
         qr = self.frameGeometry()
         cp = QDesktopWidget().availableGeometry().center()
         qr.moveCenter(cp)
         self.move(qr.topLeft())
 
-       
+
 
     def dock_update(self,item):
-        if item.data(0) == 'task_in_bq' or item.data(0) == 'task_in_mq' or item.data(0)=='task_in_machine' :      
-            self.dock_right.task_in_bq(item.data(1)) 
-        elif item.data(0) == 'task_in_bq_others':            
+        if item.data(0) == 'task_in_bq' or item.data(0) == 'task_in_mq' or item.data(0)=='task_in_machine' :
+            self.dock_right.task_in_bq(item.data(1))
+        elif item.data(0) == 'task_in_bq_others':
             self.dock_right.task_others(self.gv.batch_queue.tasks[self.gv.batch_queue.size-1:])
 
-        elif item.data(0) == 'task_in_mq_others':           
+        elif item.data(0) == 'task_in_mq_others':
             m_id = item.data(1)
             self.dock_right.task_others(self.gv.machine_queues.m_queues[m_id][self.gv.machine_queues.max_qsize-1:])
 
-        elif item.data(0) == 'machine':            
+        elif item.data(0) == 'machine':
             self.dock_right.machine_data(item.data(1))
 
-        elif item.data(0) == 'machines_frame':            
+        elif item.data(0) == 'machines_frame':
             # tt = config.task_type_names
-            # mt = config.machine_type_names            
+            # mt = config.machine_type_names
             # self.dock_right.machine_etc(tt, mt)
             pass
-            
-        # elif item.data(0) == 'machine_queues_frame': 
+
+        # elif item.data(0) == 'machine_queues_frame':
         #     self.dock_right.set_mq()
         #     self.dock_right.mq_size.returnPressed.connect(self.set_mq_size)
-        
-        # elif item.data(0) == 'batch_queue_frame': 
+
+        # elif item.data(0) == 'batch_queue_frame':
         #     self.dock_right.set_bq()
         #     self.dock_right.bq_size.returnPressed.connect(self.set_bq_size)
 
@@ -225,7 +225,7 @@ class SimUi(QMainWindow):
         elif item.data(0) == 'trash_missed':
             self.dock_right.trash__missed_data(self.gv.machine_queues.missed_tasks_machines)
 
-        elif item.data(0) == 'mapper':                        
+        elif item.data(0) == 'mapper':
             try:
                 scheduler = self.simulator.scheduler.name
                 self.dock_right.mapper_data(0)
@@ -238,16 +238,16 @@ class SimUi(QMainWindow):
                 # self.dock_right.mq_size.returnPressed.connect(self.set_mq_size)
                 self.dock_right.mq_size_gen.clicked.connect(self.set_mq_size)
 
-        elif item.data(0) == 'workload':   
+        elif item.data(0) == 'workload':
             tt = config.task_type_names
-            mt = config.machine_type_names 
-            self.etc_submitted = False 
+            mt = config.machine_type_names
+            self.etc_submitted = False
             self.dock_right.workload_data(0,tt, mt, config.task_types)
             self.dock_right.path_entry.textChanged.connect(self.set_arrival_path)
             self.dock_right.workload_generator.clicked.connect(self.workload_gen_show)
             self.dock_right.dock_wkl_submit.clicked.connect(self.dock_right_set_etc)
 
-            
+
             try:
                 self.simulator
                 self.dock_right.etc_load.setEnabled(False)
@@ -256,14 +256,14 @@ class SimUi(QMainWindow):
                 self.dock_right.etc_matrix.setEditTriggers(QAbstractItemView.NoEditTriggers)
             except:
                 pass
-            
+
         self.gv.scene.update()
 
     def workload_gen_show(self):
         self.workload_gen_window.show()
-        
 
-    def rb_policy_state(self, rb):        
+
+    def rb_policy_state(self, rb):
         if rb.isChecked():
             if rb.text() == 'Immediate Scheduling':
                 self.dock_right.configs['mapper']['immediate'] = True
@@ -279,14 +279,14 @@ class SimUi(QMainWindow):
                 for machine in config.machines:
                     machine.queue_size = config.machine_queue_size
                     machine.recreate_queue()
-                self.gv.machine_queues.max_qsize = 5        
+                self.gv.machine_queues.max_qsize = 5
                 self.gv.machine_queues.draw_queues()
                 self.gv.scene.update()
             else:
-                self.dock_right.configs['mapper']['immediate'] = False        
-        self.configs['immediate_scheduling'] = self.dock_right.configs['mapper']['immediate']        
-        
-            
+                self.dock_right.configs['mapper']['immediate'] = False
+        self.configs['immediate_scheduling'] = self.dock_right.configs['mapper']['immediate']
+
+
     def set_etc_generator(self):
         self.set_etc()
         msg = QMessageBox()
@@ -326,7 +326,7 @@ class SimUi(QMainWindow):
         self.arrivals.to_sql("workload",self.conn,if_exists="replace",index=False)
         self.conn.commit()
 
-        self.rewrite_gen_window(self.arrivals)                   
+        self.rewrite_gen_window(self.arrivals)
 
         not_matched = self.set_etc()       #optionally, catch if tt/mts in eet dont match in config instead of auto changing them in set_etc
         if not_matched: return
@@ -344,7 +344,7 @@ class SimUi(QMainWindow):
         print(f'wlPath: {self.dock_right.workload_path}')
         print(f'txt_entry: {self.dock_right.path_entry.text()}')
         self.path_to_arrivals = self.dock_right.path_entry.text()
-        
+
     def close_window(self):
         if self.workload_gen_window.wkld_table.rowCount() == 0:
             msg = QMessageBox()
@@ -360,7 +360,57 @@ class SimUi(QMainWindow):
         else: self.workload_gen_window.close()
 
     def save_config(self):
-        print("save config here")
+        machine_table = self.workload_gen_window.display_mt_table
+        task_table = self.workload_gen_window.display_tt_table
+        # Retrieving table rows
+        machines = []
+        tasks = []
+        for row in range(machine_table.rowCount()):
+            current_row = []
+            for column in range(machine_table.columnCount()):
+                if column == 3:
+                    item = int(machine_table.item(row, column).text())
+                elif column in [1,2]:
+                    item = float(machine_table.item(row, column).text())
+                else:
+                    item = machine_table.item(row, column).text()
+
+                current_row.append(item if item else '')
+            print(f'machine {row}: {current_row}')
+            machines.append(current_row)
+
+        for row in range(task_table.rowCount()):
+            current_row = []
+            for column in range(task_table.columnCount()):
+                if column ==0:
+                    item = int(task_table.item(row, column).text())
+                elif column in [3,5]:
+                    item = float(task_table.item(row, column).text())
+                else:
+                    item = task_table.item(row, column).text()
+                current_row.append(item if item else '')
+            print(f'task {row}: {current_row}')
+            tasks.append(current_row)
+        config_data = config.load_config()
+        config_data['machines'] = []
+        config_data['task_types'] = []
+
+        for machine in machines:
+            config_data['machines'].append({'name': machine[0],
+                                            'power': machine[1],
+                                            'idle_power': machine[2],
+                                            'replicas': machine[3]})
+        for task in tasks:
+            config_data['task_types'].append({'id': task[0],
+                                        'name': task[1],
+                                        'urgency': task[4],
+                                        'deadline': task[-1]})
+        path  = QFileDialog.getSaveFileName(self, caption='Save Config File',
+                                                    directory=QDir.currentPath(),
+                                                    filter='*.json')
+        if path[0]:
+            with open(f'{path[0]}.json', 'w', encoding='utf-8') as f:
+                json.dump(config_data, f, ensure_ascii=False, indent=4)
 
     def set_mq_size(self):
         mq_size = float('inf')
@@ -372,23 +422,23 @@ class SimUi(QMainWindow):
             machine.queue_size = config.machine_queue_size
             machine.recreate_queue()
         if mq_size >5 :
-            mq_size = 5        
+            mq_size = 5
         self.gv.machine_queues.max_qsize = mq_size
         # self.dock_right.mq_size.setReadOnly(True)
         self.gv.machine_queues.draw_queues()
         self.gv.scene.update()
-    
+
     def set_bq_size(self):
         bq_size = int(self.dock_right.bq_size.text())
-        config.batch_queue_size = bq_size        
+        config.batch_queue_size = bq_size
         if bq_size >5 :
-            bq_size = 5        
+            bq_size = 5
         self.gv.batch_queue.size = bq_size
         self.dock_right.bq_size.setReadOnly(True)
         self.gv.batch_queue.inner_frame()
         self.gv.scene.update()
 
-    
+
     def activate_mapper(self, enabled):
         if enabled:
             self.dock_right.mapper_enabled = True
@@ -404,22 +454,22 @@ class SimUi(QMainWindow):
         pixmap = QPixmap(f'./gui/icons/hpccLogo.png')
         hpcc_label.setPixmap(pixmap)
         hlayout_btns.addWidget(hpcc_label,Qt.AlignLeft)
-        hlayout_btns.addWidget(logo_dummy) 
+        hlayout_btns.addWidget(logo_dummy)
 
         ull_label = QLabel(self)
         pixmap = QPixmap(f'./gui/icons/ullLogo.png')
         ull_label.setPixmap(pixmap)
         hlayout_btns.addWidget(ull_label,Qt.AlignLeft)
-        hlayout_btns.addWidget(logo_dummy) 
+        hlayout_btns.addWidget(logo_dummy)
 
         nsf_label = QLabel(self)
         pixmap = QPixmap(f'./gui/icons/nsfLogo.png')
         nsf_label.setPixmap(pixmap)
         hlayout_btns.addWidget(nsf_label,Qt.AlignLeft)
 
-        
+
         right_dummy.setMinimumWidth(20)
-        hlayout_btns.addWidget(right_dummy) 
+        hlayout_btns.addWidget(right_dummy)
         #--------------------------------------------
 
 
@@ -430,7 +480,7 @@ class SimUi(QMainWindow):
         bcg_style = "{color: #333; border: 1 px solid #555; \
                     border-radius: 12px; border-style: outset; \
                     background: qradialgradient( cx: 0.3, cy: -0.4, fx: 0.3, fy: -0.4, radius: 1.35, stop: 0 #fff, stop: 1 #888 ); \
-                    padding: 5px;}"         
+                    padding: 5px;}"
         self.btn_layout =  QHBoxLayout()
         hlayout_btns = QHBoxLayout()
         vlayout_pbar = QVBoxLayout()
@@ -438,29 +488,29 @@ class SimUi(QMainWindow):
         # dummy.setMinimumWidth(70)
         # hlayout_btns.addWidget(dummy)
         self.create_logos(hlayout_btns)
-        for btn_text, _ in self.buttons.items():           
+        for btn_text, _ in self.buttons.items():
             self.buttons[btn_text] = QPushButton('',self)
             self.buttons[btn_text].setIcon(QIcon(f'./gui/icons/{btn_text}.png'))
             self.buttons[btn_text].setIconSize(QSize(128,24))
             self.buttons[btn_text].setGeometry(0,0,128,24)
             self.buttons[btn_text].setStyleSheet(f"QPushButton {bcg_style}")
-            self.buttons[btn_text].setToolTip(btn_text)              
-            hlayout_btns.addWidget(self.buttons[btn_text],Qt.AlignTop)        
+            self.buttons[btn_text].setToolTip(btn_text)
+            hlayout_btns.addWidget(self.buttons[btn_text],Qt.AlignTop)
         dummy = QLabel('         ')
         dummy.setMinimumWidth(20)
-        hlayout_btns.addWidget(dummy)        
+        hlayout_btns.addWidget(dummy)
         self.progress_bar()
         vlayout_pbar.addLayout(self.pbar_layout)
         vlayout_pbar.addLayout(hlayout_btns)
-        self.btn_layout.addLayout(vlayout_pbar)  
-        self.buttons['increment'].setEnabled(False)          
-        self.buttons['speed'] = QDial(self)                  
+        self.btn_layout.addLayout(vlayout_pbar)
+        self.buttons['increment'].setEnabled(False)
+        self.buttons['speed'] = QDial(self)
         self.buttons['speed'].setNotchesVisible(True)
         self.buttons['speed'].setEnabled(False)
         self.buttons['speed'].setValue(95)
         self.speed_label = QLabel('speed')
         self.speed_label.setFont( QFont('Arial',12))
-        self.speed_label.setAlignment(Qt.AlignHCenter )              
+        self.speed_label.setAlignment(Qt.AlignHCenter )
         self.min_label = QLabel('Min')
         self.min_label.setFont( QFont('Arial',12))
         self.min_label.setAlignment(Qt.AlignRight | Qt.AlignBottom )
@@ -475,8 +525,8 @@ class SimUi(QMainWindow):
         vlayout.addWidget(self.speed_label)
         vlayout.addLayout(hlayout)
         self.btn_layout.addLayout(vlayout)
-        self.general_layout.addLayout(self.btn_layout) 
-    
+        self.general_layout.addLayout(self.btn_layout)
+
 
     def save_eet_file(self):
         eet_df = pd.DataFrame(columns=['task_type'])
@@ -495,7 +545,7 @@ class SimUi(QMainWindow):
 
         self.dialog = Downloader(eet_df, "EET")
         print(eet_df)
-    
+
     def save_wkld_file(self):
         wkld_df = pd.DataFrame(columns=['task_type','data_size','arrival_time','deadline'])
         wkld = self.workload_gen_window.wkld_table
@@ -520,7 +570,7 @@ class SimUi(QMainWindow):
                 data.append(scen.item(row,col).text())
             scen_df.loc[len(scen_df)] = data
             data.clear()
-        
+
         self.dialog = Downloader(scen_df, "Scenario")
         print(scen_df)
 
@@ -573,10 +623,10 @@ class SimUi(QMainWindow):
         msg.setWindowTitle("Task Types")
         msg.setStandardButtons(QMessageBox.Ok)
         msg.exec_()
-    
+
     def edit_mt_submit(self):
         table = self.workload_gen_window.display_mt_table
-        
+
         for row in range(table.rowCount()):
             name = table.item(row,0).text()
             power = float(table.item(row,1).text())
@@ -689,7 +739,7 @@ class SimUi(QMainWindow):
     def remove_tt(self):
         if self.workload_gen_window.remove_tt_combo.count() == 0:
             return
-        
+
         msg = QMessageBox()
         msg.setIcon(QMessageBox.Warning)
         msg.setText("Are you sure you want to delete this task type?")
@@ -739,12 +789,12 @@ class SimUi(QMainWindow):
                 input = msg.exec_()
 
                 return
-        
+
         mt_id = (len(config.machine_types))
 
         # config.machine_types.append(MachineType(mt_id,mt_name,float(mt_power),
         #                             float(mt_idle_power),int(mt_replicas)))
-        
+
         # config.machine_type_names.append(mt_name)
 
         # # config.no_of_machines = config.no_of_machines + int(mt_replicas)
@@ -757,7 +807,7 @@ class SimUi(QMainWindow):
         # config.machines.append(Machine(len(config.machines), 1, config.machine_types[-1],
         #                                 {'power': float(mt_power), 'idle_power': float(mt_idle_power)}))
 
-        # self.gv.machine_queues.m_queues[mt_id] = []            
+        # self.gv.machine_queues.m_queues[mt_id] = []
         # self.gv.machine_queues.m_runnings[mt_id] = []
 
         #----------visual tables----------------------
@@ -775,7 +825,7 @@ class SimUi(QMainWindow):
         col_count = self.workload_gen_window.eet_table.columnCount()
         self.workload_gen_window.eet_table.insertColumn(col_count)
         self.workload_gen_window.eet_table.setHorizontalHeaderItem(col_count,QTableWidgetItem(mt_name))
-        header = self.workload_gen_window.eet_table.horizontalHeader()       
+        header = self.workload_gen_window.eet_table.horizontalHeader()
         header.setSectionResizeMode(self.workload_gen_window.eet_table.columnCount()-1, QHeaderView.Stretch)
         for i in range(self.workload_gen_window.eet_table.rowCount()):
             self.workload_gen_window.eet_table.setItem(i,col_count,QTableWidgetItem("0"))
@@ -784,7 +834,7 @@ class SimUi(QMainWindow):
     def remove_mt(self):
         if self.workload_gen_window.remove_mt_combo.count() == 0:
             return
-        
+
         msg = QMessageBox()
         msg.setIcon(QMessageBox.Warning)
         msg.setText("Are you sure you want to delete this machine type?")
@@ -851,7 +901,7 @@ class SimUi(QMainWindow):
                         float(self.workload_gen_window.add_scen_start_time.text()),
                         float(self.workload_gen_window.add_scen_end_time.text()),
                         (self.workload_gen_window.add_scen_dist.currentText())]
-        
+
         row_count = self.workload_gen_window.display_scen_table.rowCount()
         self.workload_gen_window.display_scen_table.insertRow(row_count)
 
@@ -861,7 +911,7 @@ class SimUi(QMainWindow):
         self.workload_gen_window.display_scen_table.setItem(row_count,3,QTableWidgetItem(str(self.db_scen[3])))
         self.workload_gen_window.display_scen_table.setItem(row_count,4,
                                             QTableWidgetItem(self.workload_gen_window.add_scen_dist.currentText()))
-    
+
         self.db_scens.append(self.db_scen)
 
     def reset_scen(self):
@@ -890,7 +940,7 @@ class SimUi(QMainWindow):
 
     def set_etc(self):
         etc_matrix = self.workload_gen_window.eet_table
-        not_matched_tt = self.check_etc_format()      
+        not_matched_tt = self.check_etc_format()
 
         if not_matched_tt:
             return not_matched_tt
@@ -901,22 +951,22 @@ class SimUi(QMainWindow):
             print(mt_etc, config.machine_type_names)
             self.err_msg("Machine Types", f'Profiling table has {len(mt_etc)} while {len(config.machine_type_names)} machine types are defined in config.json')
             return
-            
+
         self.dock_right.path_to_etc = './task_machine_performance/gui_generated/etc.csv'
         with open(self.dock_right.path_to_etc,'w',newline='') as etc_file:
             etc_writer = csv.writer(etc_file)
             machine_types = []
-            for clmn_idx in range(etc_matrix.columnCount()):                
-                machine_types.append(etc_matrix.horizontalHeaderItem(clmn_idx).text())            
+            for clmn_idx in range(etc_matrix.columnCount()):
+                machine_types.append(etc_matrix.horizontalHeaderItem(clmn_idx).text())
             machine_types = ['idx'] + machine_types
             etc_writer.writerow(machine_types)
             task_types= []
-            for row_count in range(etc_matrix.rowCount()):                
-                row = [etc_matrix.item(row_count, column_count).text() for column_count in range(etc_matrix.columnCount())]                                
+            for row_count in range(etc_matrix.rowCount()):
+                row = [etc_matrix.item(row_count, column_count).text() for column_count in range(etc_matrix.columnCount())]
                 task_type_name = etc_matrix.verticalHeaderItem(row_count).text()
                 task_types.append(task_type_name)
-                row = [task_type_name] + row                
-                etc_writer.writerow(row) 
+                row = [task_type_name] + row
+                etc_writer.writerow(row)
         # print("----------------")
         for idx, mt in enumerate(config.machine_types):
             mt.name = machine_types[idx+1]
@@ -930,8 +980,8 @@ class SimUi(QMainWindow):
         self.path_to_etc = f'./task_machine_performance/gui_generated/etc.csv'
 
         self.gv.machine_queues.machine_colors = self.is_heterogeneous()
-           
-        self.dock_right.etc_editable = False  
+
+        self.dock_right.etc_editable = False
         self.etc_submitted = True
 
         self.dock_right.get_eet_input()
@@ -946,7 +996,7 @@ class SimUi(QMainWindow):
             msg.setStandardButtons(QMessageBox.Ok)
             msg.exec_()
             return
-        
+
 
         # initTables(self.cur,self.conn)
         # self.cur.execute("DELETE FROM workload;")
@@ -972,15 +1022,15 @@ class SimUi(QMainWindow):
 
             for j in range(self.db_no_tasks):
                 self.arrivals.loc[len(self.arrivals.index)] = [(self.db_task_id), self.arrival_times[j]]
-  
+
         # self.arrivals.sort_values("arrival_time",inplace=True)
         # self.arrivals.reset_index(drop=True,inplace=True)
         # self.arrivals.to_sql("workload",self.conn,if_exists="replace",index=False)
-        # self.conn.commit() 
+        # self.conn.commit()
 
         # workload = pd.read_sql_query("SELECT * FROM workload", self.conn)
         # self.dock_right.rewrite_from_db(self.arrivals)
-        self.rewrite_gen_window(self.arrivals)                   
+        self.rewrite_gen_window(self.arrivals)
 
         msg = QMessageBox()
         msg.setIcon(QMessageBox.Information)
@@ -996,16 +1046,16 @@ class SimUi(QMainWindow):
         task_types_etc = []
 
         workload = pd.read_sql_query("SELECT * FROM workload", self.conn)
-        
+
         try:
-            etc_matrix = self.workload_gen_window.eet_table         
+            etc_matrix = self.workload_gen_window.eet_table
             for row_count in range(etc_matrix.rowCount()):
                 task_type_name = etc_matrix.verticalHeaderItem(row_count).text()
                 task_types_etc.append(task_type_name)
                 workload = workload.replace(to_replace=f'T{row_count+1}', value = task_type_name)
         except:
-            etc_file = pd.read_csv(self.path_to_etc)        
-            for row_count, row in etc_file.iterrows():                
+            etc_file = pd.read_csv(self.path_to_etc)
+            for row_count, row in etc_file.iterrows():
                 task_type_name = row[0]
                 task_types_etc.append(task_type_name)
                 workload = workload.replace(to_replace=f'T{row_count+1}', value = task_type_name)
@@ -1027,13 +1077,13 @@ class SimUi(QMainWindow):
             err_txt = f"Task type {not_matched_tt} in workload are not found in ETC"
             self.err_msg('Format Error', err_txt)
             return not_matched_tt
-        
+
         return not_matched_tt
-    
+
     def rewrite_gen_window(self, arrivals):
         for idx, row in arrivals.iterrows():
             self.workload_gen_window.wkld_table.setRowCount(idx+1)
-            type_item = QTableWidgetItem(row["task_type"])       
+            type_item = QTableWidgetItem(row["task_type"])
             arrival_item = QTableWidgetItem(str(row["arrival_time"]))
             self.workload_gen_window.wkld_table.setItem(idx, 0, type_item)
             self.workload_gen_window.wkld_table.setItem(idx, 2, arrival_item)
@@ -1047,7 +1097,7 @@ class SimUi(QMainWindow):
 
                 i = 0
                 for wkl_row in range(self.workload_gen_window.wkld_table.rowCount()):
-                    
+
                     if self.workload_gen_window.wkld_table.item(wkl_row,0).text() == self.workload_gen_window.display_tt_table.item(tt,1).text():
                         self.workload_gen_window.wkld_table.setItem(wkl_row,1,QTableWidgetItem(str(round(dist[i],3))))
                         self.dock_right.workload_table.setItem(wkl_row,1,QTableWidgetItem(str(round(dist[i],3))))
@@ -1060,7 +1110,7 @@ class SimUi(QMainWindow):
                         self.dock_right.workload_table.setItem(wkl_row,3,QTableWidgetItem(str(real_dl)))
 
                         i = i + 1
-                    
+
             else:
                 i = 0
                 for wkl_row in range(self.workload_gen_window.wkld_table.rowCount()):
@@ -1075,7 +1125,7 @@ class SimUi(QMainWindow):
                     i = i + 1
 
 
-    
+
     def err_msg(self, err_title, err_txt):
         msg = QMessageBox()
         msg.setIcon(QMessageBox.Critical)
@@ -1091,9 +1141,9 @@ class SimUi(QMainWindow):
         else:
             self.dock_right.configs['mapper']['policy'] = self.dock_right.batch_cb.currentText()
             # self.dock_right.configs['mapper']['immediate'] = False
-        
+
         self.policy = self.dock_right.configs['mapper']['policy']
-        
+
         if self.policy ==   'MinCompletion-MinCompletion':
             self.policy = 'MM'
         elif self.policy ==   'MinCompletion-SoonestDeadline':
@@ -1144,42 +1194,42 @@ class SimUi(QMainWindow):
 
         return colors
 
-        
-        
+
+
 
     def setup_config(self, simulator):
         if self.configs['scheduler'] == 'default':
-            self.policy = 'FCFS'                      
+            self.policy = 'FCFS'
         else:
-            self.policy = self.configs['scheduler']                    
+            self.policy = self.configs['scheduler']
         simulator.set_scheduling_method(self.policy)
 
-            
+
     def simulate_start(self):
         not_matched_tt = self.check_etc_format()
         if not_matched_tt:
             return
         if not self.etc_submitted:
             if (self.workload_gen_window.wkld_table.rowCount() == 0):
-                self.err_msg('EET Submision', 'Must generate a workload and submit EET in the workload generator.')  
+                self.err_msg('EET Submision', 'Must generate a workload and submit EET in the workload generator.')
             else:
-                self.err_msg('EET Submision', 'Must submit EET in the workload generator.')                                    
+                self.err_msg('EET Submision', 'Must submit EET in the workload generator.')
             return
         if self.workload_gen_window.wkld_table.rowCount() == 0:
-            self.err_msg('EET Submision', 'Must generate a workload in the workload generator.')  
+            self.err_msg('EET Submision', 'Must generate a workload in the workload generator.')
             return
 
-        self.thread = QThread(parent=self) 
-        self.simulator =  Simulator(self.path_to_arrivals,self.path_to_etc, self.path_to_reports,  seed=123)         
-        
-        self.setup_config(self.simulator)       
+        self.thread = QThread(parent=self)
+        self.simulator =  Simulator(self.path_to_arrivals,self.path_to_etc, self.path_to_reports,  seed=123)
+
+        self.setup_config(self.simulator)
         self.simulator.moveToThread(self.thread)
         self.thread.started.connect(self.clear_scen_reset)
-        self.thread.started.connect(self.simulator.run)         
-        self.thread.finished.connect(self.thread.deleteLater)  
-        self.simulator.simulation_done.connect(self.simulation_done)         
-        self.simulator.simulation_done.connect(self.simulator.deleteLater) 
-        
+        self.thread.started.connect(self.simulator.run)
+        self.thread.finished.connect(self.thread.deleteLater)
+        self.simulator.simulation_done.connect(self.simulation_done)
+        self.simulator.simulation_done.connect(self.simulator.deleteLater)
+
 
         self.simulator.event_signal.connect(self.msg_handler)
         self.simulator.scheduler.decision.connect(self.msg_handler)
@@ -1189,15 +1239,15 @@ class SimUi(QMainWindow):
         self.simulator.simulation_done.connect(lambda: self.buttons['simulate'].setEnabled(False))
         self.simulator.simulation_done.connect(lambda: self.buttons['speed'].setEnabled(False))
         self.simulator.simulation_done.connect(lambda: self.buttons['simulate'].setIcon(QIcon(f'./gui/icons/simulate.png')))
-        
-        
+
+
         #self.simulator.simulation_done.connect(lambda: self.report_menu.setEnabled(True))
         self.simulator.simulation_done.connect(lambda: self.full_report.setEnabled(True))
         self.simulator.simulation_done.connect(lambda: self.mach_report.setEnabled(True))
         self.simulator.simulation_done.connect(lambda: self.task_report.setEnabled(True))
         self.simulator.simulation_done.connect(lambda: self.summary_report.setEnabled(True))
         self.simulator.simulation_done.connect(lambda: self.activate_mapper(1))
-        
+
         self.buttons['speed'].setEnabled(True)
         self.dock_right.etc_editable = False
 
@@ -1211,61 +1261,61 @@ class SimUi(QMainWindow):
         except:
             pass
 
-        try:            
+        try:
             self.dock_right.etc_load.setEnabled(False)
             self.dock_right.etc_edit.setEnabled(False)
             self.dock_right.load_wl_btn.setEnabled(False)
             self.dock_right.etc_matrix.setEditTriggers(QAbstractItemView.NoEditTriggers)
         except:
             pass
-        
+
         for machine in config.machines:
             machine.machine_signal.connect(self.msg_handler)
         self.buttons['simulate'].clicked.disconnect()
         self.buttons['simulate'].clicked.connect(self.simulate_start_pause)
-        self.buttons['simulate'].setIcon(QIcon(f'./gui/icons/pause.png')) 
-        
+        self.buttons['simulate'].setIcon(QIcon(f'./gui/icons/pause.png'))
+
 
         self.simulator.pause = False
         self.buttons['reset'].setEnabled(False)
-        self.thread.start() 
-        
+        self.thread.start()
 
-    def simulate_start_pause(self):          
+
+    def simulate_start_pause(self):
         if self.simulator.pause:
-            self.buttons['simulate'].setIcon(QIcon(f'./gui/icons/pause.png'))  
+            self.buttons['simulate'].setIcon(QIcon(f'./gui/icons/pause.png'))
             self.buttons['increment'].setEnabled(False)
             self.buttons['reset'].setEnabled(False)
-            self.simulator.pause = False           
-        else:            
-            self.buttons['simulate'].setIcon(QIcon(f'./gui/icons/simulate.png')) 
-            self.buttons['increment'].setEnabled(True) 
+            self.simulator.pause = False
+        else:
+            self.buttons['simulate'].setIcon(QIcon(f'./gui/icons/simulate.png'))
+            self.buttons['increment'].setEnabled(True)
             self.buttons['reset'].setEnabled(True)
             self.simulator.pause = True
-            
+
 
     def reset(self):
-        try:            
+        try:
             del self.simulator
         except:
-            pass        
+            pass
         try:
             config.log = open(f"{config.settings['path_to_output']}/log.txt",'w')
         except OSError as err:
-            print(err)  
+            print(err)
         self.full_report.setEnabled(False)
         self.task_report.setEnabled(False)
-        self.mach_report.setEnabled(False)              
+        self.mach_report.setEnabled(False)
         self.summary_report.setEnabled(False)
         self.workload_gen_window.workload_btn.setEnabled(False)
         self.workload_gen_window.workload_btn.setStyleSheet("QPushButton{color:rgb(100,100,100);}")
         self.workload_gen_window.wkld_table.setRowCount(0)
         self.progress=0
-        self.p_count = 0        
+        self.p_count = 0
         self.pbar.setFormat(f'{self.p_count}/0 tasks ({self.progress}%)')
-        self.pbar.setValue(self.progress)        
+        self.pbar.setValue(self.progress)
         self.gv.batch_queue.reset()
-        self.gv.machine_queues.reset()        
+        self.gv.machine_queues.reset()
         self.buttons['simulate'].setEnabled(True)
         self.buttons['speed'].setEnabled(False)
         config.event_queue = EventQueue()
@@ -1289,7 +1339,7 @@ class SimUi(QMainWindow):
         self.gv.machine_queues.outer_frame()
         self.gv.machine_queues.draw_queues()
         self.gv.machine_queues.fill_queues()
-        self.gv.machine_queues.runnings(config.machines)        
+        self.gv.machine_queues.runnings(config.machines)
         self.gv.machine_queues.trash()
 
         try:
@@ -1301,103 +1351,103 @@ class SimUi(QMainWindow):
             pass
 
         self.update()
-        
-         
-        
-        
-        
-   
+
+
+
+
+
+
 
     def msg_handler(self,d):
         signal_type = d['type']
         signal_data = d['data']
-        time = d['time']       
+        time = d['time']
         location = d['where']
         self.gv.scene.clear()
         self.gv.display_time(time)
         #self.gv.display_logos()
         selected_task = None
-        
-        if signal_type =='arriving':            
+
+        if signal_type =='arriving':
             task = signal_data['task']
-            #print(f'{location} @{time} Task {task.id} arrived')                     
+            #print(f'{location} @{time} Task {task.id} arrived')
             self.gv.batch_queue.tasks.append(task)
 
-        
+
         elif signal_type == 'choose':
-            task = signal_data['task']            
+            task = signal_data['task']
             selected_task = task
-            
+
         elif signal_type == 'admitted':
             task = signal_data['task']
             machine = signal_data['assigned_machine']
-            m_id = machine.id            
+            m_id = machine.id
             #print(f'@{location} {time} Task {task.id} map to Machine {m_id}')
-            self.gv.batch_queue.tasks.remove(task)               
+            self.gv.batch_queue.tasks.remove(task)
             self.gv.connect_mapper_machine(m_id, QPen(Qt.red, 4), Qt.red)
-            self.gv.machine_queues.m_queues[m_id].append(task)            
-        
+            self.gv.machine_queues.m_queues[m_id].append(task)
+
         elif signal_type == 'cancelled':
-            # self.progress +=100*(1/self.simulator.total_no_of_tasks)  
+            # self.progress +=100*(1/self.simulator.total_no_of_tasks)
             self.p_count +=1
             self.progress = round(100*self.p_count/self.simulator.total_no_of_tasks)
             self.pbar.setFormat(f'{self.p_count}/{self.simulator.total_no_of_tasks} tasks ({self.progress}%)')
             self.pbar.setValue(self.progress)
-            task = signal_data['task']             
+            task = signal_data['task']
             self.gv.connect_to_trash(QPen(Qt.red, 4), Qt.red)
             print(f'{location} @{time} Task {task.id} cacncelled')
             self.gv.batch_queue.tasks.remove(task)
             self.gv.mapper_ui.cancelled_tasks.append(task)
-                    
+
         elif signal_type == 'running':
             task = signal_data['task']
-            machine = signal_data['assigned_machine']             
+            machine = signal_data['assigned_machine']
             m_id = machine.id
-            #print(f'{location} @{time} Task {task.id} start running at Machine {m_id}')            
-            self.gv.machine_queues.m_queues[m_id].remove(task)            
+            #print(f'{location} @{time} Task {task.id} start running at Machine {m_id}')
+            self.gv.machine_queues.m_queues[m_id].remove(task)
             self.gv.machine_queues.m_runnings[m_id].append(task)
             #print(f'RUNNING@ {m_id}:\n{[t.id for t in self.gv.machine_queues.m_runnings[m_id]]}')
-        
+
         elif signal_type == 'completion':
-            # self.progress +=100*(1/self.simulator.total_no_of_tasks)  
+            # self.progress +=100*(1/self.simulator.total_no_of_tasks)
             self.p_count +=1
             self.progress = round(100*self.p_count/self.simulator.total_no_of_tasks)
             self.pbar.setFormat(f'{self.p_count}/{self.simulator.total_no_of_tasks} tasks ({self.progress}%)')
             self.pbar.setValue(self.progress)
             task = signal_data['task']
-            machine= signal_data['assigned_machine']   
+            machine= signal_data['assigned_machine']
             m_id = machine.id
-            #print(f'{location} @{time} Task {task.id} completed at Machine {m_id}')  
-            #print(f'RUNNING@ {m_id}:{self.gv.machine_queues.m_runnings[m_id][0].id}\n{task.id}')                               
+            #print(f'{location} @{time} Task {task.id} completed at Machine {m_id}')
+            #print(f'RUNNING@ {m_id}:{self.gv.machine_queues.m_runnings[m_id][0].id}\n{task.id}')
             self.gv.machine_queues.m_runnings[m_id].remove(task)
 
         elif signal_type == 'missed':
             task = signal_data['task']
-            machine = signal_data['assigned_machine'] 
-            # self.progress +=100*(1/self.simulator.total_no_of_tasks) 
+            machine = signal_data['assigned_machine']
+            # self.progress +=100*(1/self.simulator.total_no_of_tasks)
             self.p_count +=1
             self.progress = round(100*self.p_count/self.simulator.total_no_of_tasks)
             self.pbar.setFormat(f'{self.p_count}/{self.simulator.total_no_of_tasks} tasks ({self.progress}%)')
             self.pbar.setValue(self.progress)
             task = signal_data['task']
-            machine= signal_data['assigned_machine']   
-            m_id = machine.id   
-            #print(f'{location} @{time} Task {task.id} dropped from Machine {m_id}')                      
+            machine= signal_data['assigned_machine']
+            m_id = machine.id
+            #print(f'{location} @{time} Task {task.id} dropped from Machine {m_id}')
             self.gv.machine_queues.m_runnings[m_id].remove(task)
             self.gv.machine_queues.missed_tasks_machines.append([task, machine])
             self.gv.machine_queues.connect_machine_running_to_trash(task, machine,QPen(Qt.red, 4), Qt.red)
 
         elif signal_type == 'cancelled_machine':
-            # self.progress +=100*(1/self.simulator.total_no_of_tasks)  
+            # self.progress +=100*(1/self.simulator.total_no_of_tasks)
             self.p_count +=1
-            self.progress = round(100*self.p_count/self.simulator.total_no_of_tasks)           
+            self.progress = round(100*self.p_count/self.simulator.total_no_of_tasks)
             self.pbar.setFormat(f'{self.p_count}/{self.simulator.total_no_of_tasks} tasks ({self.progress}%)')
             self.pbar.setValue(self.progress)
             task = signal_data['task']
-            machine= signal_data['assigned_machine']   
-            m_id = machine.id   
+            machine= signal_data['assigned_machine']
+            m_id = machine.id
             self.gv.connect_machine_to_trash(QPen(Qt.red, 4), Qt.red)
-            #print(f'{location} @{time} Task {task.id} dropped from Machine {m_id}')                      
+            #print(f'{location} @{time} Task {task.id} dropped from Machine {m_id}')
             self.gv.machine_queues.m_queues[m_id].remove(task)
             self.gv.mapper_ui.cancelled_tasks.append(task)
         #print(self.p_count,self.progress)
@@ -1408,7 +1458,7 @@ class SimUi(QMainWindow):
         self.gv.workload_ui.draw_frame()
         self.gv.connect_workload(QPen(Qt.red, 4), Qt.red)
         self.gv.connecting_lines()
-        
+
         # print(self.gv.machine_colors)
 
         self.gv.batch_queue.draw_tasks(selected_task)
@@ -1418,12 +1468,12 @@ class SimUi(QMainWindow):
         self.gv.machine_queues.runnings(config.machines)
         self.gv.machine_queues.trash()
         self.update()
-    
-    def simulation_done(self):        
-        self.simulate_pause = True        
-               
-        
-        
+
+    def simulation_done(self):
+        self.simulate_pause = True
+
+
+
 
     def set_timer(self,value):
        sleep_time = 0.01*(100-value)*2
@@ -1431,28 +1481,27 @@ class SimUi(QMainWindow):
        self.simulator.scheduler.sleep_time = sleep_time
        for machine in config.machines:
             machine.sleep_time = sleep_time
-        
+
 
     def progress_bar(self):
         self.pbar_layout = QHBoxLayout()
         self.pbar_label = QLabel('progress')
         self.pbar_label.setFont(QFont('Arial',12))
-        
-        self.pbar = QProgressBar(self)        
-        self.progress = 0       
+
+        self.pbar = QProgressBar(self)
+        self.progress = 0
         self.p_count = 0
         self.pbar.setFormat(f'0/0 task {self.progress}%')
-        self.pbar.setValue(self.progress)        
+        self.pbar.setValue(self.progress)
         self.pbar_layout.addWidget(self.pbar_label)
         self.pbar_layout.addWidget(self.pbar)
-    
-    def increment(self):       
+
+    def increment(self):
         self.pause = True
         self.simulator.is_incremented = False
 
-    def connect_signals(self):        
+    def connect_signals(self):
         self.buttons['simulate'].clicked.connect(self.simulate_start)
         self.buttons['reset'].clicked.connect(self.reset)
         self.buttons['speed'].valueChanged.connect(self.set_timer)
         self.buttons['increment'].clicked.connect(self.increment)
-        

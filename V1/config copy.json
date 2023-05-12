@@ -18,27 +18,27 @@
     "task_types": [
         {
             "id": 1,
-            "name": "face recognition",
-            "urgency": "BestEffort",
-            "deadline": 45.0
-        },
-        {
-            "id": 2,
-            "name": "movement detection",
-            "urgency": "BestEffort",
-            "deadline": 45.0
-        },
-        {
-            "id": 3,
-            "name": "object det",
-            "urgency": "BestEffort",
+            "name": "voice recognition",
+            "urgency": "best_effort",
             "deadline": 50.0
         },
         {
+            "id": 2,
+            "name": "audio recognition",
+            "urgency": "best_effort",
+            "deadline": 50.0
+        },
+        {
+            "id": 3,
+            "name": "face recognition",
+            "urgency": "best_effort",
+            "deadline": 45.0
+        },
+        {
             "id": 4,
-            "name": "speech rec",
-            "urgency": "BestEffort",
-            "deadline": 40.0
+            "name": "movement detection",
+            "urgency": "best_effort",
+            "deadline": 45.0
         }
     ],
     "battery": [
@@ -47,24 +47,25 @@
         }
     ],
     "machines": [
-        {
-            "name": "cpu",
-            "power": 10.0,
-            "idle_power": 2.0,
+        {            
+            "name": "m1",
+            "power": 100,
+            "idle_power": 10,
             "replicas": 1
         },
         {
-            "name": "gpu",
-            "power": 100.0,
-            "idle_power": 10.0,
+            "name": "m2",
+            "power": 300,
+            "idle_power": 5,
             "replicas": 1
         },
         {
-            "name": "arm",
-            "power": 10.0,
-            "idle_power": 1.0,
+            "name": "m3",
+            "power": 10,
+            "idle_power": 5,
             "replicas": 1
         }
+        
     ],
     "cloud": [
         {

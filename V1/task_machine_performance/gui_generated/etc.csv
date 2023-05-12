@@ -1,5 +1,5 @@
-idx,m1,m2,m3
-voice recognition,0,0,0
-audio recognition,0,0,0
-face recognition,0,0,0
-movement detection,0,0,0
+idx,cpu,gpu,arm
+face recognition,100,10,80
+movement detection,115,12,90
+object det,90,16,75
+speech rec,130,19,110

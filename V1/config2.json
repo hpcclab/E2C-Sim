@@ -27,18 +27,6 @@
             "name": "movement detection",
             "urgency": "BestEffort",
             "deadline": 45.0
-        },
-        {
-            "id": 3,
-            "name": "object det",
-            "urgency": "BestEffort",
-            "deadline": 50.0
-        },
-        {
-            "id": 4,
-            "name": "speech rec",
-            "urgency": "BestEffort",
-            "deadline": 40.0
         }
     ],
     "battery": [
@@ -57,12 +45,6 @@
             "name": "gpu",
             "power": 100.0,
             "idle_power": 10.0,
-            "replicas": 1
-        },
-        {
-            "name": "arm",
-            "power": 10.0,
-            "idle_power": 1.0,
             "replicas": 1
         }
     ],
