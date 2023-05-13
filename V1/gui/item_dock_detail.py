@@ -335,6 +335,7 @@ class ItemDockDetail(QMainWindow):
                         machine = Machine(id,r, machine_type, specs)
                         config.machines.append(machine)
                         id += 1
+                print(f'config.machines: {config.machines}')
 
     def get_eet_input(self):
         self.path_to_etc = './task_machine_performance/gui_generated/etc.csv'

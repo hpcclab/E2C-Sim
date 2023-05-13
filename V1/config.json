@@ -21,6 +21,12 @@
             "name": "object det.",
             "urgency": "BestEffort",
             "deadline": 50.0
+        },
+        {
+            "id": 2,
+            "name": "face rec",
+            "urgency": "BestEffort",
+            "deadline": 50.0
         }
     ],
     "battery": [
@@ -30,10 +36,16 @@
     ],
     "machines": [
         {
+            "name": "cpu",
+            "power": 10.0,
+            "idle_power": 1.0,
+            "replicas": 3
+        },
+        {
             "name": "gpu",
             "power": 100.0,
             "idle_power": 10.0,
-            "replicas": 1
+            "replicas": 2
         }
     ],
     "cloud": [

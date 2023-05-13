@@ -1,0 +1,21 @@
+task_type,data_size,arrival_time,deadline
+object det.,12.49,0.796,50.796
+object det.,9.658,2.052,52.052
+object det.,10.522,2.975,52.975
+object det.,8.577,3.762,53.762
+object det.,5.745,4.313,54.313
+object det.,11.089,5.351,55.351
+object det.,11.441,5.927,55.927
+object det.,8.763,8.15,58.15
+object det.,13.783,11.465,61.465
+object det.,7.576,11.949,61.949
+face rec,10.076,0.157,50.157
+face rec,9.688,0.232,50.232
+face rec,12.555,0.316,50.316
+face rec,12.449,0.576,50.576
+face rec,10.258,0.583,50.583
+face rec,10.63,0.592,50.592
+face rec,8.52,0.594,50.594
+face rec,6.699,0.773,50.773
+face rec,9.42,0.924,50.924
+face rec,10.261,1.128,51.128

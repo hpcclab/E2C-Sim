@@ -167,9 +167,13 @@ class SimUi(QMainWindow):
         self._centralWidget.setLayout(self.general_layout)
         #self.label = QLabel('simulator')
         #self.general_layout.addWidget(self.label)
-        self.gv = GraphicView(self.width, self.height)
+        colors= self.is_heterogeneous()
+        self.gv = GraphicView(self.width, self.height, colors)
 
         self.gv.machine_colors = []
+        self.gv.machine_queues.machine_colors = self.is_heterogeneous()
+        print(80*'*=!')
+        print(self.gv.machine_queues.machine_colors)
 
         self.dock_right = ItemDockDetail()
         self.gv.itemClicked.connect(self.dock_update)
@@ -339,6 +343,7 @@ class SimUi(QMainWindow):
         msg.exec_()
         self.workload_gen_window.workload_btn.setEnabled(True)
         self.workload_gen_window.workload_btn.setStyleSheet('''color:rgb(0,0,0)''')
+        self.gv.machine_queues.update_machines(config.machines)
 
     def set_arrival_path(self):
         print(f'wlPath: {self.dock_right.workload_path}')
@@ -1000,6 +1005,7 @@ class SimUi(QMainWindow):
         self.path_to_etc = f'./task_machine_performance/gui_generated/etc.csv'
 
         self.gv.machine_queues.machine_colors = self.is_heterogeneous()
+        print(f'\t\t Machine Colors: \n {self.gv.machine_queues.machine_colors}')
 
         self.dock_right.etc_editable = False
         self.etc_submitted = True
@@ -1189,6 +1195,10 @@ class SimUi(QMainWindow):
         hets = []
         etc_file = pd.read_csv(self.path_to_etc)
         etc_file = etc_file.iloc[:,1:]
+        replicas = []
+        for m in config.machines:
+           replicas.append(m.type.replicas)
+
 
         for i in range(len(etc_file.columns)):
             colors.extend([[82,126,191]]) #homogeneous colors
@@ -1211,8 +1221,12 @@ class SimUi(QMainWindow):
                 colors[i] = [random.randint(0,255),random.randint(0,255),random.randint(0,255)]
             for i in range(len(hets)):
                 colors[hets[i][0]] = colors[hets[i][1]]
+        extended_colors = []
+        for i in range(len(colors)):
+            for r in range(replicas[i]):
+                extended_colors.append(colors[i])
 
-        return colors
+        return extended_colors
 
 
 
@@ -1359,6 +1373,9 @@ class SimUi(QMainWindow):
         self.gv.machine_queues.outer_frame()
         self.gv.machine_queues.draw_queues()
         self.gv.machine_queues.fill_queues()
+        print(40*'=!')
+        print(f'\t\t\SimUI')
+        print([f'{m.type.name}:{m.id}' for m in config.machines])
         self.gv.machine_queues.runnings(config.machines)
         self.gv.machine_queues.trash()
 
@@ -1490,7 +1507,9 @@ class SimUi(QMainWindow):
         self.gv.machine_queues.outer_frame()
         self.gv.machine_queues.draw_queues()
         self.gv.machine_queues.fill_queues()
-        print(m.type.name for m in config.machines)
+        print(40*'=!')
+        print(f'\t\t\SimUI line 1499')
+        print([f'{m.type.name}:{m.id}' for m in config.machines])
         self.gv.machine_queues.runnings(config.machines)
         self.gv.machine_queues.trash()
         self.update()

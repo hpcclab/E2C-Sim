@@ -1,4 +1,3 @@
-idx,gpu,cpu
-object det,5,8
-speech rec,7,10
-face,12,15
+idx,cpu,gpu
+object det.,10,1
+face rec,15,3

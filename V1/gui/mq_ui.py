@@ -9,7 +9,7 @@ import numpy as np
 
 class MachineUi(QGraphicsView):
 
-    def __init__(self, scene,machines, qsize, x_outer, y_outer, w_outer, h_outer, max_h_q, x_machine_trash, y_trash, trash_size):
+    def __init__(self, scene,machines, qsize, colors, x_outer, y_outer, w_outer, h_outer, max_h_q, x_machine_trash, y_trash, trash_size):
         super().__init__()
         self.scene = scene
         self.max_h_q = max_h_q
@@ -20,18 +20,16 @@ class MachineUi(QGraphicsView):
         self.x_trash = x_machine_trash
         self.y_trash = y_trash
         self.trash_size = trash_size
-        self.machine_colors = [[random.randint(0,255),random.randint(0,255),random.randint(0,255)],
-                               [random.randint(0,255),random.randint(0,255),random.randint(0,255)],
-                               [random.randint(0,255),random.randint(0,255),random.randint(0,255)]] #default color
         self.machine_colors = []
-        np.random.seed(0)
+
+        if colors:
+            self.machine_colors = colors
+        else:
+            np.random.seed(0)
         for m in range(len(machines)):
             c = [random.randint(0,255),random.randint(0,255),random.randint(0,255)]
             self.machine_colors.append(c)
 
-        # self.machine_colors = [[random.randint(0,255),random.randint(0,255),random.randint(0,255)],
-        #                        [random.randint(0,255),random.randint(0,255),random.randint(0,255)],
-        #                        [random.randint(0,255),random.randint(0,255),random.randint(0,255)]]
 
         self.max_qsize = qsize
         self.machines = machines
@@ -58,11 +56,23 @@ class MachineUi(QGraphicsView):
         self.m_runnings = {}
         self.m_queues={}
         self.missed_tasks_machines = []
+        np.random.seed(0)
+        for m in range(len(self.machines)):
+            c = [random.randint(0,255),random.randint(0,255),random.randint(0,255)]
+            self.machine_colors.append(c)
+
         for machine in self.machines:
             m_id = machine.id
             self.m_queues[m_id] = []
             self.m_runnings[m_id] = []
         self.queue_frames = {}
+
+    def update_machines(self, machines):
+        self.machines = machines
+        self.reset()
+        self.draw_queues()
+        self.fill_queues()
+
 
 
 
@@ -263,9 +273,17 @@ class MachineUi(QGraphicsView):
         self.machines_frame(x+self.w_q+length+self.machine_r-0.5*2.5*self.machine_r,
                             self.y_outer,
                             2.5*self.machine_r, self.h_outer)
+        # self.machine_colors = []
+        # np.random.seed(0)
+        # for m in range(len(machines)):
+        #     c = [random.randint(0,255),random.randint(0,255),random.randint(0,255)]
+        #     self.machine_colors.append(c)
 
         i = 0
         self.machines = machines
+        print(40*'=!')
+        print(f'\t\t\mq_ui.py id 263')
+        print([f'{m.type.name}:{m.id}' for m in self.machines])
 
         for machine in self.machines:
             m_id = machine.id
@@ -275,7 +293,8 @@ class MachineUi(QGraphicsView):
 
             pen = QPen(QColor(72,72,72),  4, Qt.SolidLine)
             connecting_line = self.scene.addLine(x,y,x+length,y,pen)
-
+            print([f'{self.machine_colors}'])
+            print(f'\t\t i = {i}')
             c_1 = self.machine_colors[i][0]
             c_2 = self.machine_colors[i][1]
             c_3 = self.machine_colors[i][2]
