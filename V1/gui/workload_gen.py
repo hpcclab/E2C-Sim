@@ -51,6 +51,11 @@ class WorkloadGenerator(QMainWindow):
 
         self.initUI()
 
+
+    def on_button_key_press(self, event, button):
+        if event.key() == Qt.Key_Return and button.hasFocus():
+            button.click()
+
     def initUI(self):
         self.left_layout = QVBoxLayout()
         self.left_layout.addWidget(self.task_types_btn)
@@ -157,22 +162,22 @@ class WorkloadGenerator(QMainWindow):
         self.display_tt_lbl.setStyleSheet('font-weight: bold')
         self.display_tt_table = QTableWidget()
         self.display_tt_table.setColumnCount(6)
-        self.display_tt_table.setRowCount(len(config.task_types))         
+        # self.display_tt_table.setRowCount(len(config.task_types))         
         self.display_tt_table.setHorizontalHeaderLabels(["Id","Name","Data Input","Mean Data Size (KB)","Urgency","Slack"])
         default_data_inputs = ["image","audio","text","video","biological","geographical","numeric"]
         default_data_sizes = ["10.0","5.5","7.0","2.8"]
-        for i in range(len(config.task_types)):
-            id = QTableWidgetItem(str(config.task_types[i].id))
-            id.setFlags(id.flags() ^ Qt.ItemIsEditable)
-            self.display_tt_table.setItem(i,0,id)
-            self.display_tt_table.setItem(i,1,QTableWidgetItem(str(config.task_types[i].name)))
-            self.display_tt_table.setItem(i,2,QTableWidgetItem(random.choice(default_data_inputs)))
-            self.display_tt_table.setItem(i,3,QTableWidgetItem(random.choice(default_data_sizes)))
-            if config.task_types[i].urgency == UrgencyLevel.BESTEFFORT:
-                self.display_tt_table.setItem(i,4,QTableWidgetItem("BestEffort"))
-            elif config.task_types[i].urgency == UrgencyLevel.URGENT:
-                self.display_tt_table.setItem(i,4,QTableWidgetItem("Urgent"))
-            self.display_tt_table.setItem(i,5,QTableWidgetItem(str(config.task_types[i].deadline)))
+        # for i in range(len(config.task_types)):
+        #     id = QTableWidgetItem(str(config.task_types[i].id))
+        #     id.setFlags(id.flags() ^ Qt.ItemIsEditable)
+        #     self.display_tt_table.setItem(i,0,id)
+        #     self.display_tt_table.setItem(i,1,QTableWidgetItem(str(config.task_types[i].name)))
+        #     self.display_tt_table.setItem(i,2,QTableWidgetItem(random.choice(default_data_inputs)))
+        #     self.display_tt_table.setItem(i,3,QTableWidgetItem(random.choice(default_data_sizes)))
+        #     if config.task_types[i].urgency == UrgencyLevel.BESTEFFORT:
+        #         self.display_tt_table.setItem(i,4,QTableWidgetItem("BestEffort"))
+        #     elif config.task_types[i].urgency == UrgencyLevel.URGENT:
+        #         self.display_tt_table.setItem(i,4,QTableWidgetItem("Urgent"))
+        #     self.display_tt_table.setItem(i,5,QTableWidgetItem(str(config.task_types[i].deadline)))
         self.display_tt_table.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.display_tt_table.verticalHeader().setVisible(False)
 
@@ -199,9 +204,11 @@ class WorkloadGenerator(QMainWindow):
         self.add_tt_name = QLineEdit()
         self.add_tt_dt_lbl = QLabel("Data Input")
         self.add_tt_dt = QComboBox()
-        self.add_tt_dt.setFocusPolicy(Qt.NoFocus)
+        # self.add_tt_dt.setFocusPolicy(Qt.TabFocus) 
+        # self.add_tt_dt.setFocusPolicy(Qt.NoFocus)
         self.add_tt_dt.addItems(default_data_inputs)
         self.add_new_di = QPushButton("Create New Data Input")
+        self.add_new_di.keyPressEvent = lambda event: self.on_button_key_press(event, self.add_new_di)
         self.add_new_di.setStyleSheet(self.bg_color)
         self.add_tt_ds_lbl = QLabel("Mean Data Size (KB)")
         self.add_tt_ds = QLineEdit()
@@ -210,7 +217,7 @@ class WorkloadGenerator(QMainWindow):
 
         self.add_tt_urgency_lbl = QLabel("Urgency")
         self.add_tt_urgency = QComboBox()
-        self.add_tt_urgency.setFocusPolicy(Qt.NoFocus)
+        # self.add_tt_urgency.setFocusPolicy(Qt.NoFocus)
         self.add_tt_urgency.addItem("BestEffort")
         self.add_tt_urgency.addItem("Urgent")
         self.add_tt_deadline_lbl = QLabel("Slack")
@@ -219,7 +226,12 @@ class WorkloadGenerator(QMainWindow):
         self.add_tt_deadline.setValidator(QDoubleValidator(0.99, 99.99, 3))
 
         self.add_tt_submit = QPushButton("Add")
+        self.add_tt_submit.keyPressEvent = lambda event: self.on_button_key_press(event, self.add_tt_submit)
         self.add_tt_submit.setStyleSheet(self.bg_color)
+
+        self.tt_next = QPushButton("Next >>")
+        self.tt_next.keyPressEvent = lambda event: self.on_button_key_press(event, self.tt_next)
+        self.tt_next.setStyleSheet(self.bg_color)
 
         self.di_h_layout = QHBoxLayout()
         self.di_h_layout.addWidget(self.add_tt_dt)
@@ -228,10 +240,11 @@ class WorkloadGenerator(QMainWindow):
         self.remove_tt_lbl = QLabel("Remove Task Type")
         self.remove_tt_lbl.setStyleSheet("font-weight: bold")
         self.remove_tt_combo = QComboBox()
-        self.remove_tt_combo.setFocusPolicy(Qt.NoFocus)
-        for i in range(len(config.task_type_names)):
-            self.remove_tt_combo.addItem(f'{config.task_type_names[i]}')
+        # self.remove_tt_combo.setFocusPolicy(Qt.NoFocus)
+        # for i in range(len(config.task_type_names)):
+        #     self.remove_tt_combo.addItem(f'{config.task_type_names[i]}')
         self.remove_tt_submit = QPushButton("Remove")
+        self.remove_tt_submit.keyPressEvent = lambda event: self.on_button_key_press(event, self.remove_tt_submit)
         self.remove_tt_submit.setStyleSheet(self.bg_color)
 
         self.main_layout.addWidget(self.display_tt_lbl)
@@ -255,6 +268,8 @@ class WorkloadGenerator(QMainWindow):
         self.main_layout.addWidget(self.remove_tt_combo)
         self.main_layout.addWidget(self.remove_tt_submit)
 
+        self.main_layout.addWidget(self.tt_next)
+
         self.main = QWidget()
         self.main.setLayout(self.main_layout)
         return self.main
@@ -266,13 +281,13 @@ class WorkloadGenerator(QMainWindow):
         self.display_mt_lbl.setStyleSheet('font-weight: bold')
         self.display_mt_table = QTableWidget()
         self.display_mt_table.setColumnCount(4)
-        self.display_mt_table.setRowCount(len(config.machine_types))   
+        # self.display_mt_table.setRowCount(len(config.machine_types))   
         self.display_mt_table.setHorizontalHeaderLabels(["Name","Power","Idle Power","# Replicas"])
-        for i in range(len(config.machine_types)):
-            self.display_mt_table.setItem(i,0,QTableWidgetItem(str(config.machine_types[i].name)))
-            self.display_mt_table.setItem(i,1,QTableWidgetItem(str(config.machine_types[i].power)))
-            self.display_mt_table.setItem(i,2,QTableWidgetItem(str(config.machine_types[i].idle_power)))
-            self.display_mt_table.setItem(i,3,QTableWidgetItem(str(config.machine_types[i].replicas)))
+        # for i in range(len(config.machine_types)):
+        #     self.display_mt_table.setItem(i,0,QTableWidgetItem(str(config.machine_types[i].name)))
+        #     self.display_mt_table.setItem(i,1,QTableWidgetItem(str(config.machine_types[i].power)))
+        #     self.display_mt_table.setItem(i,2,QTableWidgetItem(str(config.machine_types[i].idle_power)))
+        #     self.display_mt_table.setItem(i,3,QTableWidgetItem(str(config.machine_types[i].replicas)))
         self.display_mt_table.setEditTriggers(QAbstractItemView.NoEditTriggers)
 
         header = self.display_mt_table.horizontalHeader()       
@@ -312,18 +327,25 @@ class WorkloadGenerator(QMainWindow):
         self.add_mt_replicas.setValidator(self.onlyInt)
 
         self.add_mt_submit = QPushButton("Add")
+        self.add_mt_submit.keyPressEvent = lambda event: self.on_button_key_press(event, self.add_mt_submit)
         self.add_mt_submit.setStyleSheet(self.bg_color)
+
+        self.mt_next = QPushButton("Next >>")
+        self.mt_next.keyPressEvent = lambda event: self.on_button_key_press(event, self.mt_next)
+        self.mt_next.setStyleSheet(self.bg_color)
         
         self.remove_mt_lbl = QLabel("Remove Machine Type")
         self.remove_mt_lbl.setStyleSheet("font-weight: bold")
         self.remove_mt_combo = QComboBox()
-        self.remove_mt_combo.setFocusPolicy(Qt.NoFocus)
-        for i in range(len(config.machine_types)):
-            self.remove_mt_combo.addItem(f'{config.machine_type_names[i]}')
+        # self.remove_mt_combo.setFocusPolicy(Qt.NoFocus)
+        # for i in range(len(config.machine_types)):
+        #     self.remove_mt_combo.addItem(f'{config.machine_type_names[i]}')
         self.remove_mt_submit = QPushButton("Remove")
+        self.remove_mt_submit.keyPressEvent = lambda event: self.on_button_key_press(event, self.remove_mt_submit)
         self.remove_mt_submit.setStyleSheet(self.bg_color)
 
         self.save_config = QPushButton("Save Config")
+        self.save_config.keyPressEvent = lambda event: self.on_button_key_press(event, self.save_config)
         self.save_config.setStyleSheet(self.bg_color)
 
         self.main_layout.addWidget(self.display_mt_lbl)
@@ -345,6 +367,7 @@ class WorkloadGenerator(QMainWindow):
         self.main_layout.addWidget(self.remove_mt_combo)
         self.main_layout.addWidget(self.remove_mt_submit)
         self.main_layout.addWidget(self.save_config)
+        self.main_layout.addWidget(self.mt_next)
         
         self.main = QWidget()
         self.main.setLayout(self.main_layout)
@@ -375,9 +398,9 @@ class WorkloadGenerator(QMainWindow):
         self.add_scen_lbl.setStyleSheet('font-weight: bold')
         self.add_scen_tt_lbl = QLabel("Task Type")
         self.add_scen_tt = QComboBox()
-        self.add_scen_tt.setFocusPolicy(Qt.NoFocus)
-        for i in range(len(config.task_types)):
-            self.add_scen_tt.addItem(f'{config.task_type_names[i]}')
+        # self.add_scen_tt.setFocusPolicy(Qt.NoFocus)
+        # for i in range(len(config.task_types)):
+        #     self.add_scen_tt.addItem(f'{config.task_type_names[i]}')
         self.add_scen_num_tasks_lbl = QLabel("# Tasks")
         self.add_scen_num_tasks = QLineEdit()
 
@@ -391,6 +414,10 @@ class WorkloadGenerator(QMainWindow):
         self.scen_h_layout3 = QHBoxLayout()
         self.scen_h_layout4 = QHBoxLayout()
 
+        self.scen_next = QPushButton("Next >>")
+        self.scen_next.keyPressEvent = lambda event: self.on_button_key_press(event, self.scen_next)
+        self.scen_next.setStyleSheet(self.bg_color)
+
         self.add_scen_start_time_lbl = QLabel("Start Time")
         self.add_scen_start_time = QLineEdit()
 
@@ -403,12 +430,13 @@ class WorkloadGenerator(QMainWindow):
 
         self.add_scen_dist_lbl = QLabel("Distribution")
         self.add_scen_dist = QComboBox()
-        self.add_scen_dist.setFocusPolicy(Qt.NoFocus)
+        # self.add_scen_dist.setFocusPolicy(Qt.NoFocus)
         self.add_scen_dist.addItem("Normal")
         self.add_scen_dist.addItem("Uniform")
         self.add_scen_dist.addItem("Exponential")
         self.add_scen_dist.addItem("Spiky")
         self.add_scen_submit = QPushButton("Add")
+        self.add_scen_submit.keyPressEvent = lambda event: self.on_button_key_press(event, self.add_scen_submit)
         self.add_scen_submit.setStyleSheet(self.bg_color)
         self.save_scen_lbl = QLabel("Save Scenario File")
         self.save_scen_lbl.setStyleSheet("font-weight: bold")
@@ -426,16 +454,19 @@ class WorkloadGenerator(QMainWindow):
         self.reset_scen_lbl = QLabel("Reset Scenario")
         self.reset_scen_lbl.setStyleSheet('font-weight: bold')
         self.reset_scen_btn = QPushButton("Reset Scenario")
+        self.reset_scen_btn.keyPressEvent = lambda event: self.on_button_key_press(event, self.reset_scen_btn)
         self.reset_scen_btn.setStyleSheet(self.bg_color)
 
         self.generate_wkld_lbl = QLabel("Generate Workload Using Current Scenario")
         self.generate_wkld_lbl.setStyleSheet('font-weight: bold')
         self.generate_wkld_submit = QPushButton("Generate Workload for this Scenario")
+        self.generate_wkld_submit.keyPressEvent = lambda event: self.on_button_key_press(event, self.generate_wkld_submit)
         self.generate_wkld_submit.setStyleSheet(self.bg_color)
 
         self.scen_h_layout5 = QHBoxLayout()
         self.scen_h_layout5.addWidget(self.reset_scen_btn)
         self.scen_h_layout5.addWidget(self.generate_wkld_submit)
+
         # self.scen_h_layout5.addWidget(self.save_scen)
 
         spacer = QSpacerItem(20, 20)
@@ -468,6 +499,7 @@ class WorkloadGenerator(QMainWindow):
         # self.main_layout.addWidget(self.generate_wkld_submit)
         # self.main_layout.addWidget(self.save_scen_lbl)
         # self.main_layout.addWidget(self.save_scen)
+        self.main_layout.addWidget(self.scen_next)
 
         self.main = QWidget()
         self.main.setLayout(self.main_layout)
@@ -491,13 +523,18 @@ class WorkloadGenerator(QMainWindow):
         self.save_wkld_lbl = QLabel("Save Workload File")
         self.save_wkld_lbl.setStyleSheet('font-weight: bold')
         self.save_wkld = QPushButton("Save as CSV File")
+        self.save_wkld.keyPressEvent = lambda event: self.on_button_key_press(event, self.save_wkld)
         self.save_wkld.setStyleSheet(self.bg_color)
                                                       
+        self.wkl_next = QPushButton("Next >>")
+        self.wkl_next.keyPressEvent = lambda event: self.on_button_key_press(event, self.wkl_next)
+        self.wkl_next.setStyleSheet(self.bg_color)
 
         self.main_layout.addWidget(self.wkld_lbl)
         self.main_layout.addWidget(self.wkld_table)
         self.main_layout.addWidget(self.save_wkld_lbl)
         self.main_layout.addWidget(self.save_wkld)
+        self.main_layout.addWidget(self.wkl_next)
 
         self.main = QWidget()
         self.main.setLayout(self.main_layout)
@@ -509,19 +546,19 @@ class WorkloadGenerator(QMainWindow):
         self.eet_lbl = QLabel("Expected Execution Times")
         self.eet_lbl.setStyleSheet('font-weight: bold')
         self.eet_table = QTableWidget()
-        self.eet_table.setColumnCount(len(config.machine_types))       
-        self.eet_table.setRowCount(len(config.task_types))
-        header = self.eet_table.horizontalHeader()
-        for i in range(len(config.machine_types)):   
-            header.setSectionResizeMode(i, QHeaderView.Stretch)
-        self.eet_table.setHorizontalHeaderLabels(config.machine_type_names)
-        self.eet_table.setVerticalHeaderLabels(config.task_type_names)
+        # self.eet_table.setColumnCount(len(config.machine_types))       
+        # self.eet_table.setRowCount(len(config.task_types))
+        # header = self.eet_table.horizontalHeader()
+        # for i in range(len(config.machine_types)):   
+        #     header.setSectionResizeMode(i, QHeaderView.Stretch)
+        # self.eet_table.setHorizontalHeaderLabels(config.machine_type_names)
+        # self.eet_table.setVerticalHeaderLabels(config.task_type_names)
         self.eet_table.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.eet_table.setEditTriggers(QAbstractItemView.DoubleClicked | QAbstractItemView.SelectedClicked)
 
-        for i in range(self.eet_table.rowCount()):
-            for j in range(self.eet_table.columnCount()):
-                self.eet_table.setItem(i,j, QTableWidgetItem("0"))
+        # for i in range(self.eet_table.rowCount()):
+        #     for j in range(self.eet_table.columnCount()):
+        #         self.eet_table.setItem(i,j, QTableWidgetItem("0"))
 
         self.eet_table.cellChanged.connect(self.validate_cell)
 
@@ -531,6 +568,7 @@ class WorkloadGenerator(QMainWindow):
         self.eet_table_submit = QPushButton("Submit EET")
         self.eet_table_submit.setStyleSheet(self.bg_color)
         self.eet_table_reset = QPushButton("Reset")
+        self.eet_table_reset.keyPressEvent = lambda event: self.on_button_key_press(event, self.eet_table_reset)
         self.eet_table_reset.setStyleSheet(self.bg_color)
         # self.horizontal_layout.addWidget(self.eet_table_edit)
         # self.horizontal_layout.addWidget(self.eet_table_submit)
@@ -539,11 +577,13 @@ class WorkloadGenerator(QMainWindow):
         self.save_eet_lbl = QLabel("Save EET File")
         self.save_eet_lbl.setStyleSheet('font-weight: bold')
         self.save_eet = QPushButton("Save as CSV File")
+        self.save_eet.keyPressEvent = lambda event: self.on_button_key_press(event, self.save_eet)
         self.save_eet.setStyleSheet(self.bg_color)
 
         self.close_window_lbl = QLabel("Close Workload Generator")
         self.close_window_lbl.setStyleSheet('font-weight: bold')
-        self.close_window = QPushButton("Close")
+        self.close_window = QPushButton("Done")
+        self.close_window.keyPressEvent = lambda event: self.on_button_key_press(event, self.close_window)
         self.close_window.setStyleSheet(self.bg_color)
             
         self.main_layout.addWidget(self.eet_lbl)
