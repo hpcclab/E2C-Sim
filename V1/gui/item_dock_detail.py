@@ -297,13 +297,14 @@ class ItemDockDetail(QMainWindow):
                 config_machine_types.append(machine_type['name'])
 
 
-            if set(config_task_types) != set(etc_tt):
+            if not set(etc_tt).issubset(set(config_task_types)):
                 matched = False
                 msg = "Task types in config file does not match with the ones in EET file"
-            elif set(config_task_types) != set(self.task_types):
+            elif not set(self.task_types).issubset(set(config_task_types)):
                 matched = False
+                print(set(config_task_types), set(self.task_types))
                 msg = "Task types in config file does not match with the ones in workload"
-            elif set(config_machine_types) != set(etc_mt):
+            elif not set(etc_mt).issubset(set(config_machine_types)):
                 matched = False
                 msg = "Machine types in workload does not match with the ones in EET file"
 
