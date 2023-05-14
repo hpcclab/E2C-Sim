@@ -99,6 +99,10 @@ class SimUi(QMainWindow):
         self.workload_gen_window.add_new_di.clicked.connect(self.add_di)
         self.workload_gen_window.close_window.clicked.connect(self.close_window)
         self.workload_gen_window.save_config.clicked.connect(self.save_config)
+        self.workload_gen_window.tt_next.clicked.connect(self.tt_next)
+        self.workload_gen_window.mt_next.clicked.connect(self.mt_next)
+        self.workload_gen_window.scen_next.clicked.connect(self.scen_next)
+        self.workload_gen_window.wkl_next.clicked.connect(self.wkl_next)
 
         self.full_report = QAction("&Full Report", self)
         self.full_report.setToolTip("Display full report of simulation")
@@ -265,6 +269,7 @@ class SimUi(QMainWindow):
 
     def workload_gen_show(self):
         self.workload_gen_window.showMaximized()
+        self.workload_gen_window.task_types_btn.click()
 
 
     def rb_policy_state(self, rb):
@@ -300,6 +305,26 @@ class SimUi(QMainWindow):
         msg.setStandardButtons(QMessageBox.Ok)
         msg.exec_()
 
+    def tt_next(self):
+        self.workload_gen_window.machine_types_btn.click()
+
+    def mt_next(self):
+        self.workload_gen_window.scenario_btn.click()
+        
+    def scen_next(self):
+        if self.workload_gen_window.wkld_table.rowCount() == 0:
+            msg = QMessageBox()
+            msg.setIcon(QMessageBox.Warning)
+            msg.setText("A Workload must be generated first.")
+            msg.setWindowTitle("Workload Empty")
+            msg.setStandardButtons(QMessageBox.Ok)
+            msg.exec_()
+            return
+        self.workload_gen_window.workload_btn.click()
+        
+    def wkl_next(self):
+        self.workload_gen_window.eet_btn.click()
+        
 
     def dock_right_set_etc(self):
         self.workload_gen_window.eet_table.setRowCount(self.dock_right.etc_matrix.rowCount())
