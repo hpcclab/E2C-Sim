@@ -1,0 +1,71 @@
+
+
+*****Task:10 		 ARRIVING  @time:0.157
+BQ = [10]
+
+MACHINES ==>>>
+	Machine cpu :	[[]]
+	Machine cpu :	[[]]
+	Machine cpu :	[[]]
+	Machine gpu :	[[]]
+	Machine gpu :	[[]]
+10 selected --> BQ = []
+executime: {'cpu-1': 14.784, 'cpu-2': 14.455, 'cpu-3': 15.748, 'gpu-1': 3.111, 'gpu-2': 3.217}	estimeated_time{'cpu': 15, 'gpu': 3}
+[ Task(10), Machine(cpu) ]: RUNNING        @time(0.157) exec:14.784 
+task:10  assigned to:cpu  delta:50.157
+
+*****Task:11 		 ARRIVING  @time:0.232
+BQ = [11]
+
+MACHINES ==>>>
+	Machine cpu :	[10, []]
+	Machine cpu :	[[]]
+	Machine cpu :	[[]]
+	Machine gpu :	[[]]
+	Machine gpu :	[[]]
+11 selected --> BQ = []
+executime: {'cpu-1': 15.112, 'cpu-2': 15.677, 'cpu-3': 14.006, 'gpu-1': 2.965, 'gpu-2': 2.795}	estimeated_time{'cpu': 15, 'gpu': 3}
+[ Task(11), Machine(cpu) ]: RUNNING        @time(0.232) exec:15.677 
+task:11  assigned to:cpu  delta:50.232
+
+*****Task:12 		 ARRIVING  @time:0.316
+BQ = [12]
+
+MACHINES ==>>>
+	Machine cpu :	[10, []]
+	Machine cpu :	[11, []]
+	Machine cpu :	[[]]
+	Machine gpu :	[[]]
+	Machine gpu :	[[]]
+12 selected --> BQ = []
+executime: {'cpu-1': 14.806, 'cpu-2': 13.973, 'cpu-3': 15.39, 'gpu-1': 3.132, 'gpu-2': 2.9}	estimeated_time{'cpu': 15, 'gpu': 3}
+[ Task(12), Machine(cpu) ]: RUNNING        @time(0.316) exec:15.390 
+task:12  assigned to:cpu  delta:50.316
+
+*****Task:13 		 ARRIVING  @time:0.576
+BQ = [13]
+
+MACHINES ==>>>
+	Machine cpu :	[10, []]
+	Machine cpu :	[11, []]
+	Machine cpu :	[12, []]
+	Machine gpu :	[[]]
+	Machine gpu :	[[]]
+13 selected --> BQ = []
+executime: {'cpu-1': 14.253, 'cpu-2': 14.675, 'cpu-3': 13.833, 'gpu-1': 2.936, 'gpu-2': 3.221}	estimeated_time{'cpu': 15, 'gpu': 3}
+[ Task(13), Machine(gpu) ]: RUNNING        @time(0.576) exec:2.936 
+task:13  assigned to:gpu  delta:50.576
+
+*****Task:14 		 ARRIVING  @time:0.583
+BQ = [14]
+
+MACHINES ==>>>
+	Machine cpu :	[10, []]
+	Machine cpu :	[11, []]
+	Machine cpu :	[12, []]
+	Machine gpu :	[13, []]
+	Machine gpu :	[[]]
+14 selected --> BQ = []
+executime: {'cpu-1': 16.049, 'cpu-2': 14.619, 'cpu-3': 15.099, 'gpu-1': 3.201, 'gpu-2': 2.794}	estimeated_time{'cpu': 15, 'gpu': 3}
+[ Task(14), Machine(gpu) ]: RUNNING        @time(0.583) exec:2.794 
+task:14  assigned to:gpu  delta:50.583

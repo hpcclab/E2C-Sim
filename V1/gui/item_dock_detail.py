@@ -281,7 +281,7 @@ class ItemDockDetail(QMainWindow):
                                                     directory=QDir.currentPath(),
                                                     filter='*.json')
         if path[0]:
-            self.configs = config.load_config(path[0])
+            self.config_data = config.load_config(path[0])
             etc_mt = []
             etc_tt = []
             for t_id in range(self.etc_matrix.rowCount()):
@@ -291,10 +291,10 @@ class ItemDockDetail(QMainWindow):
 
             matched = True
             config_task_types = []
-            for task_type in self.configs['task_types']:
+            for task_type in self.config_data['task_types']:
                 config_task_types.append(task_type['name'])
             config_machine_types = []
-            for machine_type in self.configs['machines']:
+            for machine_type in self.config_data['machines']:
                 config_machine_types.append(machine_type['name'])
 
 
@@ -323,7 +323,7 @@ class ItemDockDetail(QMainWindow):
                 error_msg.exec_()
             else:
                 with open('config.json', 'w', encoding='utf-8') as f:
-                    json.dump(self.configs, f, ensure_ascii=False, indent=4)
+                    json.dump(self.config_data, f, ensure_ascii=False, indent=4)
                 self.config_loaded = True
                 if (self.workload_loaded and self.eet_loaded) and self.config_loaded:
                     self.dock_wkl_submit.setEnabled(True)
