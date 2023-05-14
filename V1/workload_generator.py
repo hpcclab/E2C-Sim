@@ -10,7 +10,7 @@ scenarios = []
 for rate in rates:
     rate = str(rate).replace('.','_')
     scenarios.append(f'SEP_test_arrival_one_type_{rate}')
-print(scenarios)
+
 
 
 for scenario in scenarios:

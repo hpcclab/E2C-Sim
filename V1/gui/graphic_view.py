@@ -94,8 +94,6 @@ class GraphicView(QGraphicsView):
         self.workload_ui.draw_frame()
         self.connect_workload(QPen(Qt.red, 4), Qt.red)
         machines = config.machines
-        print(f'\t\tgraphic_view.py')
-        print([f'{m.type.name} {m.id}' for m in machines])
         self.machine_queues = MachineUi(self.scene,machines = machines, qsize = 5,
                                         colors = self.colors, x_outer =  self.x_mq, y_outer = self.y_mq ,
                                         w_outer = self.mq_w_outer,h_outer = self.mq_h_outer,
@@ -105,9 +103,6 @@ class GraphicView(QGraphicsView):
         self.machine_queues.outer_frame()
         self.machine_queues.draw_queues()
         self.machine_queues.fill_queues()
-        print(40*'=!')
-        print(f'\t\t\graphic_view.py id 100')
-        print([f'{m.type.name}:{m.id}' for m in config.machines])
         self.machine_queues.runnings(machines)
         self.machine_queues.trash()
         self.display_time(0.0)

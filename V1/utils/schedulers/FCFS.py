@@ -159,9 +159,6 @@ class FCFS(BaseScheduler):
             return None
 
         machine_index = (self.prev_assignment_idx+1) % config.no_of_machines
-        print(50*'*')
-        print(config.machines)
-        print(m.type.name for m in config.machines)
         machine = config.machines[machine_index]
         self.prev_assignment_idx = machine_index
         #available_machine = self.first_available_machine()

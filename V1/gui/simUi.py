@@ -176,8 +176,6 @@ class SimUi(QMainWindow):
 
         self.gv.machine_colors = []
         self.gv.machine_queues.machine_colors = self.is_heterogeneous()
-        print(80*'*=!')
-        print(self.gv.machine_queues.machine_colors)
 
         self.dock_right = ItemDockDetail()
         self.gv.itemClicked.connect(self.dock_update)
@@ -310,7 +308,7 @@ class SimUi(QMainWindow):
 
     def mt_next(self):
         self.workload_gen_window.scenario_btn.click()
-        
+
     def scen_next(self):
         if self.workload_gen_window.wkld_table.rowCount() == 0:
             msg = QMessageBox()
@@ -321,10 +319,10 @@ class SimUi(QMainWindow):
             msg.exec_()
             return
         self.workload_gen_window.workload_btn.click()
-        
+
     def wkl_next(self):
         self.workload_gen_window.eet_btn.click()
-        
+
 
     def dock_right_set_etc(self):
         self.workload_gen_window.eet_table.setRowCount(self.dock_right.etc_matrix.rowCount())
@@ -371,8 +369,6 @@ class SimUi(QMainWindow):
         self.gv.machine_queues.update_machines(config.machines)
 
     def set_arrival_path(self):
-        print(f'wlPath: {self.dock_right.workload_path}')
-        print(f'txt_entry: {self.dock_right.path_entry.text()}')
         self.path_to_arrivals = self.dock_right.path_entry.text()
 
     def close_window(self):
@@ -574,7 +570,7 @@ class SimUi(QMainWindow):
             data.clear()
 
         self.dialog = Downloader(eet_df, "EET")
-        print(eet_df)
+
 
     def save_wkld_file(self):
         wkld_df = pd.DataFrame(columns=['task_type','data_size','arrival_time','deadline'])
@@ -588,7 +584,7 @@ class SimUi(QMainWindow):
             data.clear()
 
         self.dialog = Downloader(wkld_df, "Workload")
-        print(wkld_df)
+
 
     def save_scen_file(self):
         scen_df = pd.DataFrame(columns=['task_type','num_of_tasks','start_time','end_time','distribution'])
@@ -602,7 +598,7 @@ class SimUi(QMainWindow):
             data.clear()
 
         self.dialog = Downloader(scen_df, "Scenario")
-        print(scen_df)
+
 
     def add_di(self):
         popup = QInputDialog(self, flags=Qt.Dialog | Qt.WindowTitleHint | Qt.WindowCloseButtonHint)
@@ -998,7 +994,7 @@ class SimUi(QMainWindow):
         for clmn_idx in range(etc_matrix.columnCount()):
                 mt_etc.append(etc_matrix.horizontalHeaderItem(clmn_idx).text())
         if len(mt_etc) != len(config.machine_type_names):
-            print(mt_etc, config.machine_type_names)
+
             self.err_msg("Machine Types", f'Profiling table has {len(mt_etc)} while {len(config.machine_type_names)} machine types are defined in config.json')
             return
 
@@ -1030,7 +1026,7 @@ class SimUi(QMainWindow):
         self.path_to_etc = f'./task_machine_performance/gui_generated/etc.csv'
 
         self.gv.machine_queues.machine_colors = self.is_heterogeneous()
-        print(f'\t\t Machine Colors: \n {self.gv.machine_queues.machine_colors}')
+
 
         self.dock_right.etc_editable = False
         self.etc_submitted = True
@@ -1398,9 +1394,7 @@ class SimUi(QMainWindow):
         self.gv.machine_queues.outer_frame()
         self.gv.machine_queues.draw_queues()
         self.gv.machine_queues.fill_queues()
-        print(40*'=!')
-        print(f'\t\t\SimUI')
-        print([f'{m.type.name}:{m.id}' for m in config.machines])
+
         self.gv.machine_queues.runnings(config.machines)
         self.gv.machine_queues.trash()
 
@@ -1409,7 +1403,7 @@ class SimUi(QMainWindow):
             # self.dock_right.etc_edit.setEnabled(True)
             self.dock_right.load_wl_btn.setEnabled(True)
             self.dock_right.dock_wkl_submit.setEnabled(False)
-            print("submit is set to false")
+
             self.dock_right.workload_loaded = False
             self.dock_right.config_loaded = False
             self.dock_right.eet_loaded = False
@@ -1532,9 +1526,7 @@ class SimUi(QMainWindow):
         self.gv.machine_queues.outer_frame()
         self.gv.machine_queues.draw_queues()
         self.gv.machine_queues.fill_queues()
-        print(40*'=!')
-        print(f'\t\t\SimUI line 1499')
-        print([f'{m.type.name}:{m.id}' for m in config.machines])
+
         self.gv.machine_queues.runnings(config.machines)
         self.gv.machine_queues.trash()
         self.update()

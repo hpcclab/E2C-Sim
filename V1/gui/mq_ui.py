@@ -281,9 +281,6 @@ class MachineUi(QGraphicsView):
 
         i = 0
         self.machines = machines
-        print(40*'=!')
-        print(f'\t\t\mq_ui.py id 263')
-        print([f'{m.type.name}:{m.id}' for m in self.machines])
 
         for machine in self.machines:
             m_id = machine.id
@@ -293,8 +290,7 @@ class MachineUi(QGraphicsView):
 
             pen = QPen(QColor(72,72,72),  4, Qt.SolidLine)
             connecting_line = self.scene.addLine(x,y,x+length,y,pen)
-            print([f'{self.machine_colors}'])
-            print(f'\t\t i = {i}')
+
             c_1 = self.machine_colors[i][0]
             c_2 = self.machine_colors[i][1]
             c_3 = self.machine_colors[i][2]

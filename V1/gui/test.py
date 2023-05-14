@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import QWidget, QApplication, qApp, QMainWindow, QGraphicsS
 from PyQt5.QtCore    import Qt, QSizeF, pyqtSignal
 
 class Square(QGraphicsWidget) :
- 
+
  def __init__(self,*args, name = None, **kvps) :
     super().__init__(*args, **kvps)
     self.radius = 5
@@ -34,7 +34,7 @@ class GraphicsScene(QGraphicsScene) :
 
 class MainWindow(QMainWindow):
 
- def __init__(self, *args, **kvps) : 
+ def __init__(self, *args, **kvps) :
     super().__init__(*args, **kvps)
     # Status bar
     self.stat = QStatusBar(self)

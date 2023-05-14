@@ -243,7 +243,6 @@ class ItemDockDetail(QMainWindow):
                     self.etc_matrix.setItem(i,j, cell_item)
 
         if not self.etc_editable:
-            print(self.etc_editable)
             self.etc_matrix.setEditTriggers(QAbstractItemView.NoEditTriggers)
 
         self.etc_matrix.setStyleSheet("background-color: white; selection-background-color: #353535;")
@@ -307,12 +306,6 @@ class ItemDockDetail(QMainWindow):
             elif set(config_machine_types) != set(etc_mt):
                 matched = False
                 msg = "Machine types in workload does not match with the ones in EET file"
-            print(40*'&')
-            print(f'config_task_types: {config_task_types}')
-            print(f'etc_tt: {etc_tt}')
-            print(f'workload task_types: {self.task_types}')
-            print(f'config_machine_types: {config_machine_types}')
-            print(f'etc_mt: {etc_mt}')
 
             if not matched:
                 error_msg = QMessageBox()
@@ -335,14 +328,14 @@ class ItemDockDetail(QMainWindow):
                         machine = Machine(id,r, machine_type, specs)
                         config.machines.append(machine)
                         id += 1
-                print(f'config.machines: {config.machines}')
+
 
     def get_eet_input(self):
         self.path_to_etc = './task_machine_performance/gui_generated/etc.csv'
 
         with open (self.path_to_etc) as f:
             for line in f:
-                print(line)
+                pass
 
         self.write_etc_matrix()
 
@@ -775,7 +768,6 @@ class ItemDockDetail(QMainWindow):
         self.workload_table.horizontalHeader().setStretchLastSection(True)
         self.workload_table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         with open(self.workload_path,'r') as workload:
-            print(self.workload_path)
             workload_reader = csv.reader(workload)
             next(workload_reader)
             for idx, row in enumerate(workload_reader):
