@@ -1,0 +1,21 @@
+id,type,urgency,status,assigned_machine,arrival_time,execution_time,energy_usage,start_time,completion_time,missed_time,deadline,extended_deadline
+0,object det.,BESTEFFORT,COMPLETED,cpu-1,0.796,"{'cpu-1': 9.318, 'cpu-2': 9.316, 'cpu-3': 10.122, 'gpu-1': 0.938, 'gpu-2': 1.049}",93.17999999999999,0.796,10.113999999999999,inf,50.796,50.796
+1,object det.,BESTEFFORT,COMPLETED,cpu-2,2.052,"{'cpu-1': 9.861, 'cpu-2': 10.279, 'cpu-3': 10.432, 'gpu-1': 1.043, 'gpu-2': 1.041}",102.78999999999999,2.052,12.331,inf,52.052,52.052
+2,object det.,BESTEFFORT,COMPLETED,cpu-3,2.975,"{'cpu-1': 9.296, 'cpu-2': 9.997, 'cpu-3': 10.66, 'gpu-1': 1.078, 'gpu-2': 0.968}",106.6,2.975,13.635,inf,52.975,52.975
+3,object det.,BESTEFFORT,COMPLETED,gpu-2,3.762,"{'cpu-1': 10.515, 'cpu-2': 10.5, 'cpu-3': 9.69, 'gpu-1': 0.965, 'gpu-2': 1.027}",102.69999999999999,14.893,15.92,inf,53.762,53.762
+4,object det.,BESTEFFORT,COMPLETED,gpu-1,4.313,"{'cpu-1': 9.393, 'cpu-2': 9.931, 'cpu-3': 10.005, 'gpu-1': 1.065, 'gpu-2': 1.002}",106.5,15.903,16.968,inf,54.313,54.313
+5,object det.,BESTEFFORT,COMPLETED,gpu-2,5.351,"{'cpu-1': 9.866, 'cpu-2': 10.072, 'cpu-3': 10.81, 'gpu-1': 1.078, 'gpu-2': 1.001}",100.1,15.92,16.921,inf,55.351,55.351
+6,object det.,BESTEFFORT,COMPLETED,gpu-1,5.927,"{'cpu-1': 9.326, 'cpu-2': 9.307, 'cpu-3': 9.512, 'gpu-1': 0.976, 'gpu-2': 0.987}",97.6,16.968,17.944,inf,55.927,55.927
+7,object det.,BESTEFFORT,COMPLETED,gpu-2,8.15,"{'cpu-1': 9.302, 'cpu-2': 10.488, 'cpu-3': 9.188, 'gpu-1': 1.032, 'gpu-2': 1.024}",102.4,16.921,17.945,inf,58.15,58.15
+8,object det.,BESTEFFORT,COMPLETED,gpu-1,11.465,"{'cpu-1': 9.143, 'cpu-2': 10.021, 'cpu-3': 10.744, 'gpu-1': 0.927, 'gpu-2': 1.08}",92.7,17.944,18.871,inf,61.465,61.465
+9,object det.,BESTEFFORT,COMPLETED,gpu-2,11.949,"{'cpu-1': 9.973, 'cpu-2': 10.149, 'cpu-3': 9.772, 'gpu-1': 0.957, 'gpu-2': 1.043}",104.3,17.945,18.988,inf,61.949,61.949
+10,face rec,BESTEFFORT,COMPLETED,gpu-1,0.157,"{'cpu-1': 14.784, 'cpu-2': 14.455, 'cpu-3': 15.748, 'gpu-1': 3.111, 'gpu-2': 3.217}",311.1,0.157,3.2680000000000002,inf,50.157,50.157
+11,face rec,BESTEFFORT,COMPLETED,gpu-2,0.232,"{'cpu-1': 15.112, 'cpu-2': 15.677, 'cpu-3': 14.006, 'gpu-1': 2.965, 'gpu-2': 2.795}",279.5,0.232,3.027,inf,50.232,50.232
+12,face rec,BESTEFFORT,COMPLETED,gpu-1,0.316,"{'cpu-1': 14.806, 'cpu-2': 13.973, 'cpu-3': 15.39, 'gpu-1': 3.132, 'gpu-2': 2.9}",313.2,3.2680000000000002,6.4,inf,50.316,50.316
+13,face rec,BESTEFFORT,COMPLETED,gpu-2,0.576,"{'cpu-1': 14.253, 'cpu-2': 14.675, 'cpu-3': 13.833, 'gpu-1': 2.936, 'gpu-2': 3.221}",322.1,3.027,6.248,inf,50.576,50.576
+14,face rec,BESTEFFORT,COMPLETED,gpu-1,0.583,"{'cpu-1': 16.049, 'cpu-2': 14.619, 'cpu-3': 15.099, 'gpu-1': 3.201, 'gpu-2': 2.794}",320.1,6.4,9.601,inf,50.583,50.583
+15,face rec,BESTEFFORT,COMPLETED,gpu-2,0.592,"{'cpu-1': 15.497, 'cpu-2': 15.224, 'cpu-3': 14.522, 'gpu-1': 3.055, 'gpu-2': 2.748}",274.8,6.248,8.996,inf,50.592,50.592
+16,face rec,BESTEFFORT,COMPLETED,gpu-1,0.594,"{'cpu-1': 14.546, 'cpu-2': 15.155, 'cpu-3': 13.958, 'gpu-1': 3.161, 'gpu-2': 2.973}",316.1,9.601,12.762,inf,50.594,50.594
+17,face rec,BESTEFFORT,COMPLETED,gpu-2,0.773,"{'cpu-1': 13.827, 'cpu-2': 15.364, 'cpu-3': 14.838, 'gpu-1': 3.006, 'gpu-2': 3.033}",303.3,8.996,12.029,inf,50.773,50.773
+18,face rec,BESTEFFORT,COMPLETED,gpu-1,0.924,"{'cpu-1': 14.033, 'cpu-2': 14.283, 'cpu-3': 15.542, 'gpu-1': 3.141, 'gpu-2': 2.972}",314.1,12.762,15.903,inf,50.924,50.924
+19,face rec,BESTEFFORT,COMPLETED,gpu-2,1.128,"{'cpu-1': 14.871, 'cpu-2': 14.778, 'cpu-3': 15.094, 'gpu-1': 2.759, 'gpu-2': 2.864}",286.4,12.029,14.893,inf,51.128,51.128

@@ -402,7 +402,7 @@ class SimUi(QMainWindow):
                     item = machine_table.item(row, column).text()
 
                 current_row.append(item if item else '')
-            print(f'machine {row}: {current_row}')
+
             machines.append(current_row)
 
         for row in range(task_table.rowCount()):
@@ -415,7 +415,7 @@ class SimUi(QMainWindow):
                 else:
                     item = task_table.item(row, column).text()
                 current_row.append(item if item else '')
-            print(f'task {row}: {current_row}')
+
             tasks.append(current_row)
         config_data = config.load_config()
         config_data['machines'] = []
@@ -441,7 +441,18 @@ class SimUi(QMainWindow):
     def set_mq_size(self):
         mq_size = float('inf')
         if self.dock_right.rb_batch.isChecked():
-            mq_size = int(self.dock_right.mq_size.text())
+            if self.dock_right.mq_size.text():
+                mq_size = int(self.dock_right.mq_size.text())
+            else:
+                msg = QMessageBox()
+                msg.setIcon(QMessageBox.Warning)
+                msg.setText("Please enter a value for the machine queue size.")
+                msg.setWindowTitle("Machine Queue Size")
+                msg.setStandardButtons(QMessageBox.Ok)
+                msg.exec_()
+                return
+
+
 
         config.machine_queue_size = mq_size
         for machine in config.machines:
