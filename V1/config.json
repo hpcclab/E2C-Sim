@@ -18,15 +18,27 @@
     "task_types": [
         {
             "id": 1,
-            "name": "tt1",
+            "name": "T1",
             "urgency": "BestEffort",
-            "deadline": 10.0
+            "deadline": 50.0
         },
         {
             "id": 2,
-            "name": "tt2",
+            "name": "T2",
             "urgency": "BestEffort",
-            "deadline": 30.0
+            "deadline": 50.0
+        },
+        {
+            "id": 3,
+            "name": "T3",
+            "urgency": "BestEffort",
+            "deadline": 40.0
+        },
+        {
+            "id": 4,
+            "name": "T4",
+            "urgency": "BestEffort",
+            "deadline": 40.0
         }
     ],
     "battery": [
@@ -36,13 +48,19 @@
     ],
     "machines": [
         {
-            "name": "cpu",
+            "name": "m1",
             "power": 10.0,
             "idle_power": 1.0,
             "replicas": 1
         },
         {
-            "name": "gpu",
+            "name": "m2",
+            "power": 100.0,
+            "idle_power": 10.0,
+            "replicas": 1
+        },
+        {
+            "name": "m3",
             "power": 100.0,
             "idle_power": 10.0,
             "replicas": 1

@@ -268,6 +268,7 @@ class ItemDockDetail(QMainWindow):
                                                     filter='*.csv.eet')
         if path[0]:
             self.path_to_etc = path[0]
+            self.etc_path_entry.setText(self.path_to_etc)
 
         self.write_etc_matrix()
         self.eet_loaded = True
