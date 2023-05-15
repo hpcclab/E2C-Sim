@@ -1376,6 +1376,8 @@ class SimUi(QMainWindow):
         self.workload_gen_window.workload_btn.setEnabled(False)
         self.workload_gen_window.workload_btn.setStyleSheet("QPushButton{color:rgb(100,100,100);}")
         self.workload_gen_window.wkld_table.setRowCount(0)
+        self.workload_gen_window.eet_table.setRowCount(0)
+        self.workload_gen_window.eet_table.setColumnCount(0)
         self.progress=0
         self.p_count = 0
         self.pbar.setFormat(f'{self.p_count}/0 tasks ({self.progress}%)')
