@@ -254,6 +254,7 @@ class SimUi(QMainWindow):
             self.dock_right.dock_wkl_submit.clicked.connect(self.dock_right_set_etc)
 
 
+
             try:
                 self.simulator
                 self.dock_right.etc_load.setEnabled(False)
@@ -367,6 +368,7 @@ class SimUi(QMainWindow):
         self.workload_gen_window.workload_btn.setEnabled(True)
         self.workload_gen_window.workload_btn.setStyleSheet('''color:rgb(0,0,0)''')
         self.gv.machine_queues.update_machines(config.machines)
+        self.buttons['simulate'].setEnabled(True)
 
     def set_arrival_path(self):
         self.path_to_arrivals = self.dock_right.path_entry.text()
@@ -1272,9 +1274,7 @@ class SimUi(QMainWindow):
 
 
     def simulate_start(self):
-        not_matched_tt = self.check_etc_format()
-        if not_matched_tt:
-            return
+
         if not self.etc_submitted:
             if (self.workload_gen_window.wkld_table.rowCount() == 0):
                 self.err_msg('EET Submision', 'Must load the workload csv file')
@@ -1284,6 +1284,9 @@ class SimUi(QMainWindow):
         if self.workload_gen_window.wkld_table.rowCount() == 0:
             self.err_msg('EET Submision', 'Must load the workload csv file')
             return
+        not_matched_tt = self.check_etc_format()
+        if not_matched_tt:
+            return
 
         self.thread = QThread(parent=self)
         self.simulator =  Simulator(self.path_to_arrivals,self.path_to_etc, self.path_to_reports,  seed=123)
@@ -1292,6 +1295,7 @@ class SimUi(QMainWindow):
         self.simulator.moveToThread(self.thread)
         self.thread.started.connect(self.clear_scen_reset)
         self.thread.started.connect(self.simulator.run)
+        self.thread.started.connect(lambda: self.buttons['simulate'].setEnabled(False))
         self.thread.finished.connect(self.thread.deleteLater)
         self.simulator.simulation_done.connect(self.simulation_done)
         self.simulator.simulation_done.connect(self.simulator.deleteLater)
@@ -1384,7 +1388,7 @@ class SimUi(QMainWindow):
         self.pbar.setValue(self.progress)
         self.gv.batch_queue.reset()
         self.gv.machine_queues.reset()
-        self.buttons['simulate'].setEnabled(True)
+        self.buttons['simulate'].setEnabled(False)
         self.buttons['speed'].setEnabled(False)
         config.event_queue = EventQueue()
         config.time.sct(0.0)
