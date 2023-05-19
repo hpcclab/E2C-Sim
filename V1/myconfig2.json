@@ -18,15 +18,15 @@
     "task_types": [
         {
             "id": 1,
-            "name": "T1",
+            "name": "obj det",
             "urgency": "BestEffort",
             "deadline": 10.0
         },
         {
             "id": 2,
-            "name": "T2",
+            "name": "speech rec",
             "urgency": "BestEffort",
-            "deadline": 25.0
+            "deadline": 30.0
         }
     ],
     "battery": [
@@ -36,15 +36,21 @@
     ],
     "machines": [
         {
-            "name": "cpu",
+            "name": "m1",
             "power": 10.0,
             "idle_power": 1.0,
             "replicas": 1
         },
         {
-            "name": "gpu",
+            "name": "m2",
             "power": 100.0,
-            "idle_power": 10.0,
+            "idle_power": 11.0,
+            "replicas": 1
+        },
+        {
+            "name": "m3",
+            "power": 200.0,
+            "idle_power": 25.0,
             "replicas": 1
         }
     ],

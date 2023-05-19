@@ -1,9 +1,0 @@
-id,type,urgency,status,assigned_machine,arrival_time,execution_time,energy_usage,start_time,completion_time,missed_time,deadline,extended_deadline
-0,T1,BESTEFFORT,COMPLETED,m1-1,1.241,"{'m1-1': 0.932, 'm2-1': 2.002, 'm3-1': 4.658}",93.2,1.241,2.173,inf,51.241,51.241
-1,T2,BESTEFFORT,COMPLETED,m2-1,2.113,"{'m1-1': 7.029, 'm2-1': 10.122, 'm3-1': 15.73}",3036.6,2.113,12.235,inf,52.113,52.113
-2,T2,BESTEFFORT,COMPLETED,m3-1,2.766,"{'m1-1': 6.902, 'm2-1': 9.399, 'm3-1': 16.084}",160.84,2.766,18.85,inf,52.766,52.766
-3,T2,BESTEFFORT,COMPLETED,m1-1,4.295,"{'m1-1': 7.487, 'm2-1': 9.997, 'm3-1': 14.085}",748.7,4.295,11.782,inf,54.295,54.295
-4,T1,BESTEFFORT,COMPLETED,m2-1,4.428,"{'m1-1': 1.001, 'm2-1': 2.1, 'm3-1': 5.085}",630.0,12.235,14.334999999999999,inf,54.428,54.428
-5,T1,BESTEFFORT,COMPLETED,m3-1,7.71,"{'m1-1': 1.029, 'm2-1': 2.105, 'm3-1': 5.037}",50.37,18.85,23.887,inf,57.71,57.71
-6,T1,BESTEFFORT,COMPLETED,m1-1,7.942,"{'m1-1': 0.986, 'm2-1': 2.162, 'm3-1': 5.003}",98.6,11.782,12.768,inf,57.942,57.942
-7,T1,BESTEFFORT,COMPLETED,m2-1,10.359,"{'m1-1': 0.933, 'm2-1': 1.839, 'm3-1': 5.244}",551.7,14.334999999999999,16.174,inf,60.359,60.359

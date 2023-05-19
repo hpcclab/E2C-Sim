@@ -103,6 +103,8 @@ def init():
     global log
 
 
+
+
     data = load_config()
 
     time = Time()

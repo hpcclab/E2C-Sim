@@ -1,6 +1,0 @@
-id,type,urgency,status,assigned_machine,arrival_time,execution_time,energy_usage,start_time,completion_time,missed_time,deadline,extended_deadline
-0,voice recognition,BESTEFFORT,COMPLETED,m1-1,4.739,"{'m1-1': 6.522, 'm2-1': 5.006, 'm3-1': 11.179}",652.2,4.739,11.261,inf,54.739,54.739
-1,voice recognition,BESTEFFORT,COMPLETED,m2-1,5.206,"{'m1-1': 7.029, 'm2-1': 5.061, 'm3-1': 12.584}",1518.3,5.206,10.267,inf,55.206,55.206
-2,voice recognition,BESTEFFORT,COMPLETED,m3-1,6.335,"{'m1-1': 6.902, 'm2-1': 4.7, 'm3-1': 12.868}",128.68,6.335,19.203,inf,56.335,56.335
-3,voice recognition,BESTEFFORT,COMPLETED,m1-1,7.59,"{'m1-1': 7.487, 'm2-1': 4.998, 'm3-1': 11.268}",748.7,11.261,18.747999999999998,inf,57.59,57.59
-4,voice recognition,BESTEFFORT,COMPLETED,m2-1,7.811,"{'m1-1': 7.009, 'm2-1': 5.25, 'm3-1': 12.203}",1575.0,10.267,15.517,inf,57.811,57.811

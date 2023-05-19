@@ -1,2 +1,0 @@
-workload_path,total_no_of_tasks,mapped,cancelled,URG_missed,BE_missed,Completion%,xCompletion%,totalCompletion%,wasted_energy%,consumed_energy%,energy_per_completion%
-/home/alimokhtari/Ali/projects/E2C/stable/V1/mywkl.csv.wkl,20,20,0,0,12,40.0,0.0,40.0,0.017422222222222224,0.03106219999999222,0.0038827749999990275

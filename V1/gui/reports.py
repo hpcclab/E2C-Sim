@@ -7,8 +7,8 @@ from PyQt5.QtGui import *
 from gui.downloader import Downloader
 
 def fetchReport(path_to_reports):
-    files = []    
-    for i, file in enumerate(os.listdir(path_to_reports)):                
+    files = []
+    for i, file in enumerate(os.listdir(path_to_reports)):
         if file.startswith('detailed'):
             files.append(path_to_reports + file)
     file = max(files, key=os.path.getctime)
@@ -28,14 +28,14 @@ class FullReport(QMainWindow):
 
         # Reorder columns
         df = df.reindex(columns=[
-            'id', 
+            'id',
             'type',
-            'urgency', 
-            'status', 
-            'assigned_machine', 
-            'arrival_time', 
-            'start_time', 
-            'completion_time', 
+            'urgency',
+            'status',
+            'assigned_machine',
+            'arrival_time',
+            'start_time',
+            'completion_time',
             'missed_time',
             'execution_time',
             'energy_usage',
@@ -70,10 +70,10 @@ class FullReport(QMainWindow):
         # Format floating points to 3 decimal places
         for col in list(df.select_dtypes(include=['float64']).columns):
             df.loc[:, col] = df[col].map('{:.3f}'.format)
-        
+
         df = df.replace(to_replace="inf",
            value="N/A")
-        # Populate cells with values from CSV    
+        # Populate cells with values from CSV
         for r in range(df.shape[0]):
             for c in range(df.shape[1]):
                 if not str(df.values[r][c]).isdigit():
@@ -99,9 +99,9 @@ class FullReport(QMainWindow):
         self._centralWidget = QWidget(self)
         self.setCentralWidget(self._centralWidget)
         self._centralWidget.setLayout(self.report_layout)
-        
+
         self.report_layout.addWidget(scheduling_lbl)
-        self.report_layout.addWidget(self.tableWidget)        
+        self.report_layout.addWidget(self.tableWidget)
         self.resize(1200, 800)
         self.show()
 
@@ -119,16 +119,16 @@ class TaskReport(QMainWindow):
 
         # Fetch CSV file
         df = pd.read_csv(fetchReport(path_to_reports + "/" + method + "/"), usecols=[
-            'id', 
-            'type', 
-            'status', 
-            'assigned_machine', 
-            'arrival_time', 
-            'start_time', 
-            'completion_time', 
+            'id',
+            'type',
+            'status',
+            'assigned_machine',
+            'arrival_time',
+            'start_time',
+            'completion_time',
             'missed_time'])
 
-        
+
         # Initialize save action
         save_report = QAction("&Save", self)
         save_report.setIcon(QIcon("./gui/icons/save.png"))
@@ -158,7 +158,7 @@ class TaskReport(QMainWindow):
         df = df.replace(to_replace="inf",
            value="N/A")
 
-        # Populate cells with values from CSV    
+        # Populate cells with values from CSV
         for r in range(df.shape[0]):
             for c in range(df.shape[1]):
                 if not str(df.values[r][c]).isdigit():
@@ -191,9 +191,9 @@ class TaskReport(QMainWindow):
         self._centralWidget = QWidget(self)
         self.setCentralWidget(self._centralWidget)
         self._centralWidget.setLayout(self.report_layout)
-        
+
         self.report_layout.addWidget(scheduling_lbl)
-        self.report_layout.addWidget(self.tableWidget)        
+        self.report_layout.addWidget(self.tableWidget)
         self.resize(1200, 800)
         self.show()
 
@@ -233,7 +233,7 @@ class MachineReport(QMainWindow):
         # Fetch CSV file
         df = pd.read_csv(fetchReport(path_to_reports + "/" + method + "/"))
         df = MachineReport.makeReport(df).sort_index(ascending=True)
-        print('Machine Report:')
+        print(f'Machine Report: @{path_to_reports}/{method}/')
         print(df)
 
         # Initialize save action
@@ -259,7 +259,7 @@ class MachineReport(QMainWindow):
             selection-background-color:lightblue;
         """)
 
-        # Populate cells with values from CSV    
+        # Populate cells with values from CSV
         for r in range(df.shape[0]):
             for c in range(df.shape[1]):
                 if not str(df.values[r][c]).isdigit():
@@ -285,9 +285,9 @@ class MachineReport(QMainWindow):
         self._centralWidget = QWidget(self)
         self.setCentralWidget(self._centralWidget)
         self._centralWidget.setLayout(self.report_layout)
-        
+
         self.report_layout.addWidget(scheduling_lbl)
-        self.report_layout.addWidget(self.tableWidget)        
+        self.report_layout.addWidget(self.tableWidget)
         self.resize(600, 200)
         self.show()
 
@@ -384,7 +384,7 @@ class SummaryReport(QMainWindow):
             selection-background-color:lightblue;
         """)
 
-        # Populate cells with values from CSV    
+        # Populate cells with values from CSV
         for r in range(df.shape[0]):
             for c in range(df.shape[1]):
                 if not str(df.values[r][c]).isdigit():
@@ -412,12 +412,12 @@ class SummaryReport(QMainWindow):
         self._centralWidget = QWidget(self)
         self.setCentralWidget(self._centralWidget)
         self._centralWidget.setLayout(self.report_layout)
-        
+
         self.report_layout.addWidget(scheduling_lbl)
-        self.report_layout.addWidget(self.tableWidget)        
+        self.report_layout.addWidget(self.tableWidget)
         self.resize(600, 200)
         self.show()
-        
+
         # Go live
         # self.layout = QVBoxLayout(self)
         # self.setCentralWidget(self.tableWidget)
@@ -425,9 +425,9 @@ class SummaryReport(QMainWindow):
         # self.resize(600, 200)
         # self.show()
 
-    
 
-        
+
+
 
     def summary_report_save(self, df):
         self.dialog= Downloader(df, "Summary")

@@ -1,2 +1,0 @@
-id,type,urgency,status,assigned_machine,arrival_time,execution_time,energy_usage,start_time,completion_time,missed_time,deadline,extended_deadline
-0,T1,BESTEFFORT,COMPLETED,m1-1,1.0,"{'m1-1': 0.0, 'm2-1': 0.0, 'm3-1': 0.0}",0.0,1.0,1.0,inf,51.0,51.0

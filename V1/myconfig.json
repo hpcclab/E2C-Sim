@@ -18,15 +18,15 @@
     "task_types": [
         {
             "id": 1,
-            "name": "tt1",
+            "name": "T1",
             "urgency": "BestEffort",
             "deadline": 10.0
         },
         {
             "id": 2,
-            "name": "tt2",
+            "name": "T2",
             "urgency": "BestEffort",
-            "deadline": 30.0
+            "deadline": 25.0
         }
     ],
     "battery": [

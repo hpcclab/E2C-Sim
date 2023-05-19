@@ -322,7 +322,14 @@ class ItemDockDetail(QMainWindow):
                 self.config_loaded = True
                 if (self.workload_loaded and self.eet_loaded) and self.config_loaded:
                     self.dock_wkl_submit.setEnabled(True)
+                scheduling_method = config.scheduling_method
+                mq_size = config.machine_queue_size
+                print(30*'--')
+                print(scheduling_method, mq_size)
                 config.init()
+                config.scheduling_method = scheduling_method
+                config.machine_queue_size = mq_size
+
                 id = 0
                 for machine_type in config.machine_types:
                     for r in range(1,machine_type.replicas+1):
@@ -674,11 +681,12 @@ class ItemDockDetail(QMainWindow):
 
         self.batch_lbl = QLabel('Policy')
         self.batch_cb = QComboBox(self)
-        self.batch_policies = ['FELARE',
-                            'ELARE',
+        self.batch_policies = [
                             'MinCompletion-MinCompletion',
                             'MinCompletion-SoonestDeadline',
                             'MinCompletion-MaxUrgency',
+                            'FELARE',
+                            'ELARE',
                         ]
         self.batch_cb.addItems(self.batch_policies)
         self.batch_cb.setEnabled(self.rb_batch.isChecked())

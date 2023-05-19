@@ -1,0 +1,21 @@
+task_type,data_size,arrival_time,deadline
+obj det,1.249,0.159,10.159
+obj det,0.966,0.41,10.41
+obj det,1.052,0.595,10.595
+obj det,0.858,0.752,10.752
+obj det,0.575,0.863,10.863
+speech rec,22.179,0.069,30.069
+speech rec,22.881,0.108,30.108
+speech rec,17.526,0.256,30.256
+speech rec,27.566,0.477,30.477
+speech rec,15.152,0.509,30.509
+speech rec,20.153,0.614,30.614
+speech rec,19.376,0.664,30.664
+speech rec,25.109,0.72,30.72
+speech rec,24.898,0.893,30.893
+speech rec,20.516,0.898,30.898
+speech rec,21.261,0.904,30.904
+speech rec,17.041,0.905,30.905
+speech rec,13.397,1.025,31.025
+speech rec,18.84,1.125,31.125
+speech rec,20.521,1.261,31.261

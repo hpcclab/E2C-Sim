@@ -277,6 +277,7 @@ class SimUi(QMainWindow):
                 self.dock_right.configs['mapper']['immediate'] = True
                 mq_size = float('inf')
                 config.machine_queue_size = mq_size
+
                 msg = QMessageBox()
                 msg.setIcon(QMessageBox.Warning)
                 msg.setText("Machine queue size is unlimited for immediate scheduling!")
@@ -292,6 +293,7 @@ class SimUi(QMainWindow):
                 self.gv.scene.update()
             else:
                 self.dock_right.configs['mapper']['immediate'] = False
+        self.set_scheduler()
         self.configs['immediate_scheduling'] = self.dock_right.configs['mapper']['immediate']
 
 
@@ -433,6 +435,7 @@ class SimUi(QMainWindow):
                                         'name': task[1],
                                         'urgency': task[4],
                                         'deadline': task[-1]})
+        config_data['parameters'][0]['scheduling_method'] = config.scheduling_method
         path  = QFileDialog.getSaveFileName(self, caption='Save Config File',
                                                     directory=QDir.currentPath(),
                                                     filter='*.json')
@@ -1222,6 +1225,10 @@ class SimUi(QMainWindow):
             self.policy = 'MEET'
         self.configs['scheduler'] = self.policy
         config.scheduling_method = self.policy
+
+
+
+
 
     def is_heterogeneous(self):
         colors = []
