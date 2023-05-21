@@ -232,7 +232,8 @@ class MachineReport(QMainWindow):
 
         # Fetch CSV file
         df = pd.read_csv(fetchReport(path_to_reports + "/" + method + "/"))
-        df = MachineReport.makeReport(df).sort_index(ascending=True)
+        #df = MachineReport.makeReport(df).sort_index(ascending=True)
+        df = MachineReport.makeReport(df)
         print(f'Machine Report: @{path_to_reports}/{method}/')
         print(df)
 
@@ -336,7 +337,8 @@ class MachineReport(QMainWindow):
             'tasks_missed': missed_t
         }
         #df_machine = df_machine.drop(['machine'],axis=1)
-
+        print(20*'-')
+        print(df_machine)
         return df_machine
 
     def mach_report_save(self, df):

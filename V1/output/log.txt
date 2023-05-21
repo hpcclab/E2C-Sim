@@ -1,399 +1,401 @@
 
 
-*****Task:10 		 ARRIVING  @time:0.037
-BQ = [10]
-
-MACHINES ==>>>
-	Machine cpu :	[[]]
-	Machine gpu :	[[]]
-10 selected --> BQ = []
-executime: {'cpu-1': 14.799, 'gpu-1': 3.233}	estimeated_time{'cpu': 15, 'gpu': 3}
-[ Task(10), Machine(cpu) ]: RUNNING        @time(0.037) exec:14.799 
-task:10  assigned to:cpu  delta:25.037
-
-*****Task:11 		 ARRIVING  @time:0.052
-BQ = [11]
-
-MACHINES ==>>>
-	Machine cpu :	[10, []]
-	Machine gpu :	[[]]
-11 selected --> BQ = []
-executime: {'cpu-1': 13.997, 'gpu-1': 2.854}	estimeated_time{'cpu': 15, 'gpu': 3}
-[ Task(11), Machine(gpu) ]: RUNNING        @time(0.052) exec:2.854 
-task:11  assigned to:gpu  delta:25.052
-
-*****Task:0 		 ARRIVING  @time:0.06
-BQ = [0]
-
-MACHINES ==>>>
-	Machine cpu :	[10, []]
-	Machine gpu :	[11, []]
-0 selected --> BQ = []
-executime: {'cpu-1': 9.318, 'gpu-1': 1.001}	estimeated_time{'cpu': 10, 'gpu': 1}
-task:0  assigned to:cpu  delta:10.06
-
-*****Task:1 		 ARRIVING  @time:0.083
-BQ = [1]
-
-MACHINES ==>>>
-	Machine cpu :	[10, [0]]
-	Machine gpu :	[11, []]
-1 selected --> BQ = []
-executime: {'cpu-1': 9.316, 'gpu-1': 1.064}	estimeated_time{'cpu': 10, 'gpu': 1}
-task:1  assigned to:gpu  delta:10.083
-
-*****Task:12 		 ARRIVING  @time:0.115
-BQ = [12]
-
-MACHINES ==>>>
-	Machine cpu :	[10, [0]]
-	Machine gpu :	[11, [1]]
-12 selected --> BQ = []
-executime: {'cpu-1': 13.826, 'gpu-1': 2.806}	estimeated_time{'cpu': 15, 'gpu': 3}
-task:12  assigned to:cpu  delta:25.115
-
-*****Task:13 		 ARRIVING  @time:0.127
-BQ = [13]
-
-MACHINES ==>>>
-	Machine cpu :	[10, [0, 12]]
-	Machine gpu :	[11, [1]]
-13 selected --> BQ = []
-executime: {'cpu-1': 14.802, 'gpu-1': 3.096}	estimeated_time{'cpu': 15, 'gpu': 3}
-task:13  assigned to:gpu  delta:25.127
-
-*****Task:14 		 ARRIVING  @time:0.261
-BQ = [14]
-
-MACHINES ==>>>
-	Machine cpu :	[10, [0, 12]]
-	Machine gpu :	[11, [1, 13]]
-14 selected --> BQ = []
-executime: {'cpu-1': 14.24, 'gpu-1': 2.784}	estimeated_time{'cpu': 15, 'gpu': 3}
-task:14  assigned to:cpu  delta:25.261
-
-*****Task:15 		 ARRIVING  @time:0.264
-BQ = [15]
-
-MACHINES ==>>>
-	Machine cpu :	[10, [0, 12, 14]]
-	Machine gpu :	[11, [1, 13]]
-15 selected --> BQ = []
-executime: {'cpu-1': 15.494, 'gpu-1': 2.967}	estimeated_time{'cpu': 15, 'gpu': 3}
-task:15  assigned to:gpu  delta:25.264
-
-*****Task:16 		 ARRIVING  @time:0.404
-BQ = [16]
-
-MACHINES ==>>>
-	Machine cpu :	[10, [0, 12, 14]]
-	Machine gpu :	[11, [1, 13, 15]]
-16 selected --> BQ = []
-executime: {'cpu-1': 16.205, 'gpu-1': 3.164}	estimeated_time{'cpu': 15, 'gpu': 3}
-task:16  assigned to:cpu  delta:25.404
-
-*****Task:2 		 ARRIVING  @time:0.501
-BQ = [2]
-
-MACHINES ==>>>
-	Machine cpu :	[10, [0, 12, 14, 16]]
-	Machine gpu :	[11, [1, 13, 15]]
-2 selected --> BQ = []
-executime: {'cpu-1': 10.122, 'gpu-1': 1.049}	estimeated_time{'cpu': 10, 'gpu': 1}
-task:2  assigned to:gpu  delta:10.501
-
-*****Task:17 		 ARRIVING  @time:0.588
-BQ = [17]
-
-MACHINES ==>>>
-	Machine cpu :	[10, [0, 12, 14, 16]]
-	Machine gpu :	[11, [1, 13, 15, 2]]
-17 selected --> BQ = []
-executime: {'cpu-1': 15.437, 'gpu-1': 2.853}	estimeated_time{'cpu': 15, 'gpu': 3}
-task:17  assigned to:cpu  delta:25.588
-
-*****Task:3 		 ARRIVING  @time:0.617
-BQ = [3]
-
-MACHINES ==>>>
-	Machine cpu :	[10, [0, 12, 14, 16, 17]]
-	Machine gpu :	[11, [1, 13, 15, 2]]
-3 selected --> BQ = []
-executime: {'cpu-1': 9.861, 'gpu-1': 1.077}	estimeated_time{'cpu': 10, 'gpu': 1}
-task:3  assigned to:gpu  delta:10.617
-
-*****Task:18 		 ARRIVING  @time:0.629
-BQ = [18]
-
-MACHINES ==>>>
-	Machine cpu :	[10, [0, 12, 14, 16, 17]]
-	Machine gpu :	[11, [1, 13, 15, 2, 3]]
-18 selected --> BQ = []
-executime: {'cpu-1': 14.131, 'gpu-1': 3.217}	estimeated_time{'cpu': 15, 'gpu': 3}
-task:18  assigned to:cpu  delta:25.629
-
-*****Task:19 		 ARRIVING  @time:0.66
-BQ = [19]
-
-MACHINES ==>>>
-	Machine cpu :	[10, [0, 12, 14, 16, 17, 18]]
-	Machine gpu :	[11, [1, 13, 15, 2, 3]]
-19 selected --> BQ = []
-executime: {'cpu-1': 15.112, 'gpu-1': 2.967}	estimeated_time{'cpu': 15, 'gpu': 3}
-task:19  assigned to:gpu  delta:25.66
-
-*****Task:4 		 ARRIVING  @time:0.763
-BQ = [4]
-
-MACHINES ==>>>
-	Machine cpu :	[10, [0, 12, 14, 16, 17, 18]]
-	Machine gpu :	[11, [1, 13, 15, 2, 3, 19]]
-4 selected --> BQ = []
-executime: {'cpu-1': 10.432, 'gpu-1': 1.041}	estimeated_time{'cpu': 10, 'gpu': 1}
-task:4  assigned to:cpu  delta:10.763
-
-*****Task:5 		 ARRIVING  @time:0.859
+*****Task:5 		 ARRIVING  @time:1.374
 BQ = [5]
 
 MACHINES ==>>>
-	Machine cpu :	[10, [0, 12, 14, 16, 17, 18, 4]]
-	Machine gpu :	[11, [1, 13, 15, 2, 3, 19]]
+	Machine q :	[[]]
+	Machine w :	[[]]
+	Machine e :	[[]]
+	Machine e :	[[]]
 5 selected --> BQ = []
-executime: {'cpu-1': 9.296, 'gpu-1': 1.071}	estimeated_time{'cpu': 10, 'gpu': 1}
-task:5  assigned to:gpu  delta:10.859
+executime: {'q-1': 3.08, 'w-1': 2.159, 'e-1': 0.92, 'e-2': 0.987}	estimeated_time{'q': 3, 'w': 2, 'e': 1}
+[ Task(5), Machine(q) ]: RUNNING        @time(1.374) exec:3.080 
+task:5  assigned to:q  delta:12.374
 
-*****Task:6 		 ARRIVING  @time:0.888
+*****Task:6 		 ARRIVING  @time:2.968
 BQ = [6]
 
 MACHINES ==>>>
-	Machine cpu :	[10, [0, 12, 14, 16, 17, 18, 4]]
-	Machine gpu :	[11, [1, 13, 15, 2, 3, 19, 5]]
+	Machine q :	[5, []]
+	Machine w :	[[]]
+	Machine e :	[[]]
+	Machine e :	[[]]
 6 selected --> BQ = []
-executime: {'cpu-1': 10.467, 'gpu-1': 0.93}	estimeated_time{'cpu': 10, 'gpu': 1}
-task:6  assigned to:cpu  delta:10.888
+executime: {'q-1': 2.791, 'w-1': 1.854, 'e-1': 1.003, 'e-2': 1.013}	estimeated_time{'q': 3, 'w': 2, 'e': 1}
+[ Task(6), Machine(w) ]: RUNNING        @time(2.968) exec:1.854 
+task:6  assigned to:w  delta:13.968
 
-*****Task:7 		 ARRIVING  @time:1.067
+*****Task:3 		 ARRIVING  @time:3.248
+BQ = [3]
+
+MACHINES ==>>>
+	Machine q :	[5, []]
+	Machine w :	[6, []]
+	Machine e :	[[]]
+	Machine e :	[[]]
+3 selected --> BQ = []
+executime: {'q-1': 1.001, 'w-1': 1.86, 'e-1': 2.113, 'e-2': 1.859}	estimeated_time{'q': 1, 'w': 2, 'e': 2}
+[ Task(3), Machine(e) ]: RUNNING        @time(3.248) exec:2.113 
+task:3  assigned to:e  delta:4.248
+
+*****Task:0 		 ARRIVING  @time:3.997
+BQ = [0]
+
+MACHINES ==>>>
+	Machine q :	[5, []]
+	Machine w :	[6, []]
+	Machine e :	[3, []]
+	Machine e :	[[]]
+0 selected --> BQ = []
+executime: {'q-1': 0.932, 'w-1': 2.002, 'e-1': 1.863, 'e-2': 2.127}	estimeated_time{'q': 1, 'w': 2, 'e': 2}
+[ Task(0), Machine(e) ]: RUNNING        @time(3.997) exec:2.127 
+task:0  assigned to:e  delta:4.997
+
+*****Task:1 		 ARRIVING  @time:4.21
+BQ = [1]
+
+MACHINES ==>>>
+	Machine q :	[5, []]
+	Machine w :	[6, []]
+	Machine e :	[3, []]
+	Machine e :	[0, []]
+1 selected --> BQ = []
+executime: {'q-1': 1.012, 'w-1': 2.052, 'e-1': 2.108, 'e-2': 2.086}	estimeated_time{'q': 1, 'w': 2, 'e': 2}
+task:1  assigned to:q  delta:5.21
+
+*****Task:3 		 DROPPED_RUNNING_TASK  @time:4.248
+[ Task(3), Machine(e) ]: MISSED         @time(4.248)
+BQ = []
+
+MACHINES ==>>>
+	Machine q :	[5, [1]]
+	Machine w :	[6, []]
+	Machine e :	[[]]
+	Machine e :	[0, []]
+
+*****Task:2 		 ARRIVING  @time:4.423
+BQ = [2]
+
+MACHINES ==>>>
+	Machine q :	[5, [1]]
+	Machine w :	[6, []]
+	Machine e :	[[]]
+	Machine e :	[0, []]
+2 selected --> BQ = []
+executime: {'q-1': 0.998, 'w-1': 2.139, 'e-1': 1.954, 'e-2': 1.878}	estimeated_time{'q': 1, 'w': 2, 'e': 2}
+task:2  assigned to:w  delta:5.423
+
+*****Task:5 		 COMPLETION  @time:4.454000000000001
+[ Task(5), Machine(q) ]: COMPLETED      @time(4.454)
+[ Task(1), Machine(q) ]: RUNNING        @time(4.454) exec:1.012 
+BQ = []
+
+MACHINES ==>>>
+	Machine q :	[1, []]
+	Machine w :	[6, [2]]
+	Machine e :	[[]]
+	Machine e :	[0, []]
+
+*****Task:7 		 ARRIVING  @time:4.667
 BQ = [7]
 
 MACHINES ==>>>
-	Machine cpu :	[10, [0, 12, 14, 16, 17, 18, 4, 6]]
-	Machine gpu :	[11, [1, 13, 15, 2, 3, 19, 5]]
+	Machine q :	[1, []]
+	Machine w :	[6, [2]]
+	Machine e :	[[]]
+	Machine e :	[0, []]
 7 selected --> BQ = []
-executime: {'cpu-1': 10.5, 'gpu-1': 1.069}	estimeated_time{'cpu': 10, 'gpu': 1}
-task:7  assigned to:gpu  delta:11.067
+executime: {'q-1': 3.144, 'w-1': 1.913, 'e-1': 0.938, 'e-2': 1.043}	estimeated_time{'q': 3, 'w': 2, 'e': 1}
+[ Task(7), Machine(e) ]: RUNNING        @time(4.667) exec:0.938 
+task:7  assigned to:e  delta:15.667
 
-*****Task:8 		 ARRIVING  @time:1.071
+*****Task:6 		 COMPLETION  @time:4.822
+[ Task(6), Machine(w) ]: COMPLETED      @time(4.822)
+[ Task(2), Machine(w) ]: RUNNING        @time(4.822) exec:2.139 
+BQ = []
+
+MACHINES ==>>>
+	Machine q :	[1, []]
+	Machine w :	[2, []]
+	Machine e :	[7, []]
+	Machine e :	[0, []]
+
+*****Task:0 		 DROPPED_RUNNING_TASK  @time:4.997
+[ Task(0), Machine(e) ]: MISSED         @time(4.997)
+BQ = []
+
+MACHINES ==>>>
+	Machine q :	[1, []]
+	Machine w :	[2, []]
+	Machine e :	[7, []]
+	Machine e :	[[]]
+
+*****Task:1 		 DROPPED_RUNNING_TASK  @time:5.21
+[ Task(1), Machine(q) ]: MISSED         @time(5.210)
+BQ = []
+
+MACHINES ==>>>
+	Machine q :	[[]]
+	Machine w :	[2, []]
+	Machine e :	[7, []]
+	Machine e :	[[]]
+
+*****Task:2 		 DROPPED_RUNNING_TASK  @time:5.423
+[ Task(2), Machine(w) ]: MISSED         @time(5.423)
+BQ = []
+
+MACHINES ==>>>
+	Machine q :	[[]]
+	Machine w :	[[]]
+	Machine e :	[7, []]
+	Machine e :	[[]]
+
+*****Task:7 		 COMPLETION  @time:5.6049999999999995
+[ Task(7), Machine(e) ]: COMPLETED      @time(5.605)
+BQ = []
+
+MACHINES ==>>>
+	Machine q :	[[]]
+	Machine w :	[[]]
+	Machine e :	[[]]
+	Machine e :	[[]]
+
+*****Task:8 		 ARRIVING  @time:7.89
 BQ = [8]
 
 MACHINES ==>>>
-	Machine cpu :	[10, [0, 12, 14, 16, 17, 18, 4, 6]]
-	Machine gpu :	[11, [1, 13, 15, 2, 3, 19, 5, 7]]
+	Machine q :	[[]]
+	Machine w :	[[]]
+	Machine e :	[[]]
+	Machine e :	[[]]
 8 selected --> BQ = []
-executime: {'cpu-1': 10.169, 'gpu-1': 1.0}	estimeated_time{'cpu': 10, 'gpu': 1}
-task:8  assigned to:cpu  delta:11.071
+executime: {'q-1': 2.957, 'w-1': 1.884, 'e-1': 0.999, 'e-2': 0.961}	estimeated_time{'q': 3, 'w': 2, 'e': 1}
+[ Task(8), Machine(e) ]: RUNNING        @time(7.890) exec:0.961 
+task:8  assigned to:e  delta:18.89
 
-*****Task:9 		 ARRIVING  @time:1.099
+*****Task:8 		 COMPLETION  @time:8.850999999999999
+[ Task(8), Machine(e) ]: COMPLETED      @time(8.851)
+BQ = []
+
+MACHINES ==>>>
+	Machine q :	[[]]
+	Machine w :	[[]]
+	Machine e :	[[]]
+	Machine e :	[[]]
+
+*****Task:9 		 ARRIVING  @time:9.736
 BQ = [9]
 
 MACHINES ==>>>
-	Machine cpu :	[10, [0, 12, 14, 16, 17, 18, 4, 6, 8]]
-	Machine gpu :	[11, [1, 13, 15, 2, 3, 19, 5, 7]]
+	Machine q :	[[]]
+	Machine w :	[[]]
+	Machine e :	[[]]
+	Machine e :	[[]]
 9 selected --> BQ = []
-executime: {'cpu-1': 10.043, 'gpu-1': 1.002}	estimeated_time{'cpu': 10, 'gpu': 1}
-task:9  assigned to:gpu  delta:11.099
+executime: {'q-1': 2.851, 'w-1': 2.131, 'e-1': 1.016, 'e-2': 1.042}	estimeated_time{'q': 3, 'w': 2, 'e': 1}
+[ Task(9), Machine(q) ]: RUNNING        @time(9.736) exec:2.851 
+task:9  assigned to:q  delta:20.736
 
-*****Task:11 		 COMPLETION  @time:2.906
-[ Task(11), Machine(gpu) ]: COMPLETED      @time(2.906)
-[ Task(1), Machine(gpu) ]: RUNNING        @time(2.906) exec:1.064 
+*****Task:10 		 ARRIVING  @time:10.236
+BQ = [10]
+
+MACHINES ==>>>
+	Machine q :	[9, []]
+	Machine w :	[[]]
+	Machine e :	[[]]
+	Machine e :	[[]]
+10 selected --> BQ = []
+executime: {'q-1': 2.935, 'w-1': 2.134, 'e-1': 1.074, 'e-2': 1.069}	estimeated_time{'q': 3, 'w': 2, 'e': 1}
+[ Task(10), Machine(w) ]: RUNNING        @time(10.236) exec:2.134 
+task:10  assigned to:w  delta:21.236
+
+*****Task:11 		 ARRIVING  @time:10.764
+BQ = [11]
+
+MACHINES ==>>>
+	Machine q :	[9, []]
+	Machine w :	[10, []]
+	Machine e :	[[]]
+	Machine e :	[[]]
+11 selected --> BQ = []
+executime: {'q-1': 3.088, 'w-1': 1.972, 'e-1': 1.083, 'e-2': 0.931}	estimeated_time{'q': 3, 'w': 2, 'e': 1}
+[ Task(11), Machine(e) ]: RUNNING        @time(10.764) exec:1.083 
+task:11  assigned to:e  delta:21.764
+
+*****Task:12 		 ARRIVING  @time:10.971
+BQ = [12]
+
+MACHINES ==>>>
+	Machine q :	[9, []]
+	Machine w :	[10, []]
+	Machine e :	[11, []]
+	Machine e :	[[]]
+12 selected --> BQ = []
+executime: {'q-1': 2.988, 'w-1': 2.171, 'e-1': 0.924, 'e-2': 1.066}	estimeated_time{'q': 3, 'w': 2, 'e': 1}
+[ Task(12), Machine(e) ]: RUNNING        @time(10.971) exec:1.066 
+task:12  assigned to:e  delta:21.971
+
+*****Task:4 		 ARRIVING  @time:11.358
+BQ = [4]
+
+MACHINES ==>>>
+	Machine q :	[9, []]
+	Machine w :	[10, []]
+	Machine e :	[11, []]
+	Machine e :	[12, []]
+4 selected --> BQ = []
+executime: {'q-1': 1.986, 'w-1': 2.156, 'e-1': 3.006, 'e-2': 3.057}	estimeated_time{'q': 2, 'w': 2, 'e': 3}
+task:4  assigned to:q  delta:13.358
+
+*****Task:11 		 COMPLETION  @time:11.847
+[ Task(11), Machine(e) ]: COMPLETED      @time(11.847)
 BQ = []
 
 MACHINES ==>>>
-	Machine cpu :	[10, [0, 12, 14, 16, 17, 18, 4, 6, 8]]
-	Machine gpu :	[1, [13, 15, 2, 3, 19, 5, 7, 9]]
+	Machine q :	[9, [4]]
+	Machine w :	[10, []]
+	Machine e :	[[]]
+	Machine e :	[12, []]
 
-*****Task:1 		 COMPLETION  @time:3.97
-[ Task(1), Machine(gpu) ]: COMPLETED      @time(3.970)
-[ Task(13), Machine(gpu) ]: RUNNING        @time(3.970) exec:3.096 
+*****Task:12 		 COMPLETION  @time:12.037
+[ Task(12), Machine(e) ]: COMPLETED      @time(12.037)
 BQ = []
 
 MACHINES ==>>>
-	Machine cpu :	[10, [0, 12, 14, 16, 17, 18, 4, 6, 8]]
-	Machine gpu :	[13, [15, 2, 3, 19, 5, 7, 9]]
+	Machine q :	[9, [4]]
+	Machine w :	[10, []]
+	Machine e :	[[]]
+	Machine e :	[[]]
 
-*****Task:13 		 COMPLETION  @time:7.066000000000001
-[ Task(13), Machine(gpu) ]: COMPLETED      @time(7.066)
-[ Task(15), Machine(gpu) ]: RUNNING        @time(7.066) exec:2.967 
+*****Task:10 		 COMPLETION  @time:12.370000000000001
+[ Task(10), Machine(w) ]: COMPLETED      @time(12.370)
 BQ = []
 
 MACHINES ==>>>
-	Machine cpu :	[10, [0, 12, 14, 16, 17, 18, 4, 6, 8]]
-	Machine gpu :	[15, [2, 3, 19, 5, 7, 9]]
+	Machine q :	[9, [4]]
+	Machine w :	[[]]
+	Machine e :	[[]]
+	Machine e :	[[]]
 
-*****Task:15 		 COMPLETION  @time:10.033000000000001
-[ Task(15), Machine(gpu) ]: COMPLETED      @time(10.033)
-[ Task(2), Machine(gpu) ]: RUNNING        @time(10.033) exec:1.049 
+*****Task:9 		 COMPLETION  @time:12.587
+[ Task(9), Machine(q) ]: COMPLETED      @time(12.587)
+[ Task(4), Machine(q) ]: RUNNING        @time(12.587) exec:1.986 
 BQ = []
 
 MACHINES ==>>>
-	Machine cpu :	[10, [0, 12, 14, 16, 17, 18, 4, 6, 8]]
-	Machine gpu :	[2, [3, 19, 5, 7, 9]]
+	Machine q :	[4, []]
+	Machine w :	[[]]
+	Machine e :	[[]]
+	Machine e :	[[]]
 
-*****Task:2 		 DROPPED_RUNNING_TASK  @time:10.501
-[ Task(3), Machine(gpu) ]: RUNNING        @time(10.501) exec:1.077 
-[ Task(3), Machine(gpu) ]: MISSED         @time(10.617)
+*****Task:13 		 ARRIVING  @time:13.249
+BQ = [13]
+
+MACHINES ==>>>
+	Machine q :	[4, []]
+	Machine w :	[[]]
+	Machine e :	[[]]
+	Machine e :	[[]]
+13 selected --> BQ = []
+executime: {'q-1': 2.956, 'w-1': 1.868, 'e-1': 1.053, 'e-2': 0.983}	estimeated_time{'q': 3, 'w': 2, 'e': 1}
+[ Task(13), Machine(w) ]: RUNNING        @time(13.249) exec:1.868 
+task:13  assigned to:w  delta:24.249000000000002
+
+*****Task:4 		 DROPPED_RUNNING_TASK  @time:13.358
+[ Task(4), Machine(q) ]: MISSED         @time(13.358)
 BQ = []
 
 MACHINES ==>>>
-	Machine cpu :	[10, [0, 12, 14, 16, 17, 18, 4, 6, 8]]
-	Machine gpu :	[3, [19, 5, 7, 9]]
+	Machine q :	[[]]
+	Machine w :	[13, []]
+	Machine e :	[[]]
+	Machine e :	[[]]
 
-*****Task:3 		 DROPPED_RUNNING_TASK  @time:10.617
-[ Task(19), Machine(gpu) ]: RUNNING        @time(10.617) exec:2.967 
-[ Task(19), Machine(gpu) ]: MISSED         @time(inf)
+*****Task:14 		 ARRIVING  @time:13.525
+BQ = [14]
+
+MACHINES ==>>>
+	Machine q :	[[]]
+	Machine w :	[13, []]
+	Machine e :	[[]]
+	Machine e :	[[]]
+14 selected --> BQ = []
+executime: {'q-1': 2.77, 'w-1': 1.937, 'e-1': 1.063, 'e-2': 0.952}	estimeated_time{'q': 3, 'w': 2, 'e': 1}
+[ Task(14), Machine(e) ]: RUNNING        @time(13.525) exec:1.063 
+task:14  assigned to:e  delta:24.525
+
+*****Task:14 		 COMPLETION  @time:14.588000000000001
+[ Task(14), Machine(e) ]: COMPLETED      @time(14.588)
 BQ = []
 
 MACHINES ==>>>
-	Machine cpu :	[10, [0, 12, 14, 16, 17, 18, 4, 6, 8]]
-	Machine gpu :	[19, [5, 7, 9]]
+	Machine q :	[[]]
+	Machine w :	[13, []]
+	Machine e :	[[]]
+	Machine e :	[[]]
 
-*****Task:19 		 COMPLETION  @time:13.584000000000001
-[ Task(19), Machine(gpu) ]: COMPLETED      @time(13.584)
-[ Task(5), Machine(gpu) ]: RUNNING        @time(13.584) exec:1.071 
+*****Task:13 		 COMPLETION  @time:15.117
+[ Task(13), Machine(w) ]: COMPLETED      @time(15.117)
 BQ = []
 
 MACHINES ==>>>
-	Machine cpu :	[10, [0, 12, 14, 16, 17, 18, 4, 6, 8]]
-	Machine gpu :	[5, [7, 9]]
+	Machine q :	[[]]
+	Machine w :	[[]]
+	Machine e :	[[]]
+	Machine e :	[[]]
 
-*****Task:5 		 DROPPED_RUNNING_TASK  @time:13.584000000000001
-[ Task(7), Machine(gpu) ]: RUNNING        @time(13.584) exec:1.069 
-[ Task(7), Machine(gpu) ]: MISSED         @time(13.584)
+*****Task:15 		 ARRIVING  @time:17.509
+BQ = [15]
+
+MACHINES ==>>>
+	Machine q :	[[]]
+	Machine w :	[[]]
+	Machine e :	[[]]
+	Machine e :	[[]]
+15 selected --> BQ = []
+executime: {'q-1': 3.201, 'w-1': 2.028, 'e-1': 0.979, 'e-2': 0.945}	estimeated_time{'q': 3, 'w': 2, 'e': 1}
+[ Task(15), Machine(e) ]: RUNNING        @time(17.509) exec:0.945 
+task:15  assigned to:e  delta:28.509
+
+*****Task:15 		 COMPLETION  @time:18.454
+[ Task(15), Machine(e) ]: COMPLETED      @time(18.454)
 BQ = []
 
 MACHINES ==>>>
-	Machine cpu :	[10, [0, 12, 14, 16, 17, 18, 4, 6, 8]]
-	Machine gpu :	[7, [9]]
-
-*****Task:7 		 DROPPED_RUNNING_TASK  @time:13.584000000000001
-[ Task(9), Machine(gpu) ]: RUNNING        @time(13.584) exec:1.002 
-[ Task(9), Machine(gpu) ]: MISSED         @time(13.584)
-BQ = []
-
-MACHINES ==>>>
-	Machine cpu :	[10, [0, 12, 14, 16, 17, 18, 4, 6, 8]]
-	Machine gpu :	[9, []]
-
-*****Task:9 		 DROPPED_RUNNING_TASK  @time:13.584000000000001
-[ Task(9), Machine(gpu) ]: MISSED         @time(13.584)
-BQ = []
-
-MACHINES ==>>>
-	Machine cpu :	[10, [0, 12, 14, 16, 17, 18, 4, 6, 8]]
-	Machine gpu :	[[]]
-
-*****Task:10 		 COMPLETION  @time:14.836
-[ Task(10), Machine(cpu) ]: COMPLETED      @time(14.836)
-[ Task(0), Machine(cpu) ]: RUNNING        @time(14.836) exec:9.318 
-BQ = []
-
-MACHINES ==>>>
-	Machine cpu :	[0, [12, 14, 16, 17, 18, 4, 6, 8]]
-	Machine gpu :	[[]]
-
-*****Task:0 		 DROPPED_RUNNING_TASK  @time:14.836
-[ Task(12), Machine(cpu) ]: RUNNING        @time(14.836) exec:13.826 
-[ Task(12), Machine(cpu) ]: MISSED         @time(25.115)
-BQ = []
-
-MACHINES ==>>>
-	Machine cpu :	[12, [14, 16, 17, 18, 4, 6, 8]]
-	Machine gpu :	[[]]
-
-*****Task:12 		 DROPPED_RUNNING_TASK  @time:25.115
-[ Task(14), Machine(cpu) ]: RUNNING        @time(25.115) exec:14.240 
-[ Task(14), Machine(cpu) ]: MISSED         @time(25.261)
-BQ = []
-
-MACHINES ==>>>
-	Machine cpu :	[14, [16, 17, 18, 4, 6, 8]]
-	Machine gpu :	[[]]
-
-*****Task:14 		 DROPPED_RUNNING_TASK  @time:25.261
-[ Task(16), Machine(cpu) ]: RUNNING        @time(25.261) exec:16.205 
-[ Task(16), Machine(cpu) ]: MISSED         @time(25.404)
-BQ = []
-
-MACHINES ==>>>
-	Machine cpu :	[16, [17, 18, 4, 6, 8]]
-	Machine gpu :	[[]]
-
-*****Task:16 		 DROPPED_RUNNING_TASK  @time:25.404
-[ Task(17), Machine(cpu) ]: RUNNING        @time(25.404) exec:15.437 
-[ Task(17), Machine(cpu) ]: MISSED         @time(25.588)
-BQ = []
-
-MACHINES ==>>>
-	Machine cpu :	[17, [18, 4, 6, 8]]
-	Machine gpu :	[[]]
-
-*****Task:17 		 DROPPED_RUNNING_TASK  @time:25.588
-[ Task(18), Machine(cpu) ]: RUNNING        @time(25.588) exec:14.131 
-[ Task(18), Machine(cpu) ]: MISSED         @time(25.629)
-BQ = []
-
-MACHINES ==>>>
-	Machine cpu :	[18, [4, 6, 8]]
-	Machine gpu :	[[]]
-
-*****Task:18 		 DROPPED_RUNNING_TASK  @time:25.629
-[ Task(4), Machine(cpu) ]: RUNNING        @time(25.629) exec:10.432 
-[ Task(4), Machine(cpu) ]: MISSED         @time(25.629)
-BQ = []
-
-MACHINES ==>>>
-	Machine cpu :	[4, [6, 8]]
-	Machine gpu :	[[]]
-
-*****Task:4 		 DROPPED_RUNNING_TASK  @time:25.629
-[ Task(6), Machine(cpu) ]: RUNNING        @time(25.629) exec:10.467 
-[ Task(6), Machine(cpu) ]: MISSED         @time(25.629)
-BQ = []
-
-MACHINES ==>>>
-	Machine cpu :	[6, [8]]
-	Machine gpu :	[[]]
-
-*****Task:6 		 DROPPED_RUNNING_TASK  @time:25.629
-[ Task(8), Machine(cpu) ]: RUNNING        @time(25.629) exec:10.169 
-[ Task(8), Machine(cpu) ]: MISSED         @time(25.629)
-BQ = []
-
-MACHINES ==>>>
-	Machine cpu :	[8, []]
-	Machine gpu :	[[]]
-
-*****Task:8 		 DROPPED_RUNNING_TASK  @time:25.629
-[ Task(8), Machine(cpu) ]: MISSED         @time(25.629)
-BQ = []
-
-MACHINES ==>>>
-	Machine cpu :	[[]]
-	Machine gpu :	[[]]
-Machine: cpu (id#0)  
-	%Completion: 10.0 #: 1
+	Machine q :	[[]]
+	Machine w :	[[]]
+	Machine e :	[[]]
+	Machine e :	[[]]
+Machine: q (id#0)  
+	%Completion: 50.0 #: 2
 	%XCompletion:0.0 #: 0
 	#Missed URG:0.00
-	Missed BE:9
+	Missed BE:2
 	%Energy: 0.0
 	%Wasted Energy: 0.0 
-Machine: gpu (id#1)  
-	%Completion: 50.0 #: 5
+Machine: w (id#1)  
+	%Completion: 75.0 #: 3
 	%XCompletion:0.0 #: 0
 	#Missed URG:0.00
-	Missed BE:5
+	Missed BE:1
 	%Energy: 0.0
 	%Wasted Energy: 0.0 
-%Total Completion: 30.0
+Machine: e (id#2)  
+	%Completion: 75.0 #: 3
+	%XCompletion:0.0 #: 0
+	#Missed URG:0.00
+	Missed BE:1
+	%Energy: 0.0
+	%Wasted Energy: 0.0 
+Machine: e (id#3)  
+	%Completion: 75.0 #: 3
+	%XCompletion:0.0 #: 0
+	#Missed URG:0.00
+	Missed BE:1
+	%Energy: 0.0
+	%Wasted Energy: 0.0 
+%Total Completion: 68.8
 %Total xCompletion: 0.0
 %deferred: 0.0
 %dropped: 0.0
