@@ -18,46 +18,40 @@
     "task_types": [
         {
             "id": 1,
-            "name": "a",
+            "name": "obj det",
             "urgency": "BestEffort",
-            "deadline": 1.0
+            "deadline": 10.0
         },
         {
             "id": 2,
-            "name": "b",
+            "name": "speech rec",
             "urgency": "BestEffort",
-            "deadline": 2.0
-        },
-        {
-            "id": 3,
-            "name": "c",
-            "urgency": "BestEffort",
-            "deadline": 11.0
+            "deadline": 30.0
         }
     ],
     "battery": [
         {
-            "capacity": 500.0
+            "capacity": 5000.0
         }
     ],
     "machines": [
         {
-            "name": "q",
-            "power": 1.0,
+            "name": "m1",
+            "power": 10.0,
             "idle_power": 1.0,
             "replicas": 1
         },
         {
-            "name": "w",
-            "power": 1.0,
-            "idle_power": 2.0,
+            "name": "m2",
+            "power": 100.0,
+            "idle_power": 11.0,
             "replicas": 1
         },
         {
-            "name": "e",
-            "power": 2.0,
-            "idle_power": 2.0,
-            "replicas": 2
+            "name": "m3",
+            "power": 200.0,
+            "idle_power": 25.0,
+            "replicas": 1
         }
     ],
     "cloud": [

@@ -69,9 +69,15 @@ class MachineUi(QGraphicsView):
 
     def update_machines(self, machines):
         self.machines = machines
+        self.no_of_machines = len(self.machines)
         self.reset()
-        self.draw_queues()
-        self.fill_queues()
+        # #self.draw_queues()
+        # #self.fill_queues()
+        # self.outer_frame()
+        # self.draw_queues()
+        # self.fill_queues()
+        # self.runnings(machines)
+        # self.trash()
 
 
 
