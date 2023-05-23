@@ -27,6 +27,12 @@
             "name": "speech rec",
             "urgency": "BestEffort",
             "deadline": 30.0
+        },
+        {
+            "id": 3,
+            "name": "face rec",
+            "urgency": "BestEffort",
+            "deadline": 20.0
         }
     ],
     "battery": [
@@ -51,6 +57,12 @@
             "name": "m3",
             "power": 200.0,
             "idle_power": 25.0,
+            "replicas": 1
+        },
+        {
+            "name": "m4",
+            "power": 15.0,
+            "idle_power": 12.0,
             "replicas": 1
         }
     ],

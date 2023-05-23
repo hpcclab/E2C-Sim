@@ -1,3 +1,4 @@
-idx,m1,m2,m3
-obj det,20,5,1
-speech rec,15,3,2
+idx,m1,m2,m3,m4
+obj det,20,5,1,5
+speech rec,15,3,2,6
+face rec,25,7,3,7

@@ -3,6 +3,7 @@ import os, glob, pathlib
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
+import utils.config as config
 
 from gui.downloader import Downloader
 
@@ -302,12 +303,14 @@ class MachineReport(QMainWindow):
     def makeReport(df):
         df_machine = pd.DataFrame(
             index=set(df["assigned_machine"]),
-            columns=['machine', 'tasks_assigned', 'tasks_completed', 'tasks_missed']
+            columns=['machine', 'tasks_assigned', 'tasks_completed', 'tasks_missed',
+                     'throughput', 'utilization']
         )
 
         df_machine.sort_index(ascending=True).fillna(0)
 
         assigned_t, complete_t, missed_t = 0, 0, 0
+        throughputs_t, utilizations_t = [], []
 
         for machine in df_machine.index:
             df_machine.at[machine, 'machine'] = machine
@@ -330,15 +333,24 @@ class MachineReport(QMainWindow):
             df_machine.at[machine, 'tasks_completed'] = complete
             df_machine.at[machine, 'tasks_missed'] = missed
 
+        for m in config.machines:
+            utilization = round(100*m.busy_time / config.time.gct(),2)
+            throughput = round((m.stats['completed_tasks'] + m.stats['xcompleted_tasks']) / config.time.gct(),2)
+            utilizations_t.append(utilization)
+            throughputs_t.append(throughput)
+            df_machine.at[f'{m.type.name}-{m.replica_id}', 'throughput'] = throughput
+            df_machine.at[f'{m.type.name}-{m.replica_id}', 'utilization'] = utilization
+
         df_machine.loc['total'] = {
             'machine': 'total',
             'tasks_assigned': assigned_t,
             'tasks_completed': complete_t,
-            'tasks_missed': missed_t
+            'tasks_missed': missed_t,
+            'throughput': round(sum(throughputs_t), 2),
+            'utilization': round(sum(utilizations_t)/ len(utilizations_t),2)
         }
-        #df_machine = df_machine.drop(['machine'],axis=1)
-        print(20*'-')
-        print(df_machine)
+
+
         return df_machine
 
     def mach_report_save(self, df):

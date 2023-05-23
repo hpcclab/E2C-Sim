@@ -457,6 +457,26 @@ class ItemDockDetail(QMainWindow):
         self.missed_text.setReadOnly(True)
         self.missed_text.setAlignment(Qt.AlignLeft)
 
+        self.throughput_lbl = QLabel('Throughput')
+        self.throughput_text = QLineEdit()
+        if config.time.gct() == 0:
+            throughput = 0
+        else:
+            throughput = (machine.stats['completed_tasks']+machine.stats['xcompleted_tasks'])/ config.time.gct()
+        self.throughput_text.setText(f"{throughput:6.3f}")
+        self.throughput_text.setReadOnly(True)
+        self.throughput_text.setAlignment(Qt.AlignLeft)
+
+        self.utilization_lbl = QLabel('Utilization %')
+        self.utilization_text = QLineEdit()
+        if config.time.gct() == 0:
+            utilization = 0
+        else:
+            utilization = 100*(machine.busy_time)/ config.time.gct()
+        self.utilization_text.setText(f"{utilization:6.3f}")
+        self.utilization_text.setReadOnly(True)
+        self.utilization_text.setAlignment(Qt.AlignLeft)
+
         self.energy_lbl = QLabel('Energy Usage')
         self.energy_text = QLineEdit()
         self.energy_text.setText(f"{machine.stats['energy_usage']:6.3f}")
@@ -482,12 +502,16 @@ class ItemDockDetail(QMainWindow):
         self.perf_grid.addWidget(self.completed_text,1,1)
         self.perf_grid.addWidget(self.missed_lbl,2,0)
         self.perf_grid.addWidget(self.missed_text,2,1)
-        self.perf_grid.addWidget(self.energy_lbl,3,0)
-        self.perf_grid.addWidget(self.energy_text,3,1)
-        self.perf_grid.addWidget(self.wasted_lbl,4,0)
-        self.perf_grid.addWidget(self.wasted_text,4,1)
-        self.perf_grid.addWidget(self.idle_lbl,5,0)
-        self.perf_grid.addWidget(self.idle_text,5,1)
+        self.perf_grid.addWidget(self.throughput_lbl,3,0)
+        self.perf_grid.addWidget(self.throughput_text,3,1)
+        self.perf_grid.addWidget(self.utilization_lbl,4,0)
+        self.perf_grid.addWidget(self.utilization_text,4,1)
+        self.perf_grid.addWidget(self.energy_lbl,5,0)
+        self.perf_grid.addWidget(self.energy_text,5,1)
+        self.perf_grid.addWidget(self.wasted_lbl,6,0)
+        self.perf_grid.addWidget(self.wasted_text,6,1)
+        self.perf_grid.addWidget(self.idle_lbl,7,0)
+        self.perf_grid.addWidget(self.idle_text,7,1)
 
         self.tab_machine.layout.addLayout(self.machine_grid)
         self.tab_machine.layout.addStretch(1)
