@@ -1,7 +1,7 @@
 # E2C-Sim
 ## Introduction
-This project simualtes the heterogeneous Edge-to-Cloud (E2C) environment and this document focuses on the E2C installation. You can find more extensive documentation and tutorial of this project at: https://hpcclab.github.io/E2C-Sim-docs/#/
-Also, you can refer to [E2C YouTube channel to watch its tutorial videos](https://youtube.com/playlist?list=PL7jhdCPVrCHh49PvIglDEY2Xs4v2ivrsw&si=S3m-nZetf96BBmks). 
+This project simualtes the heterogeneous Edge-to-Cloud (E2C) environment and this document focuses on the E2C installation. You can find more extensive documentation and tutorial of this project at: https://hpcclab.github.io/E2C-Sim-docs/#/.
+Also, you can refer to [E2C YouTube channel to watch its tutorial videos]:(https://youtube.com/playlist?list=PL7jhdCPVrCHh49PvIglDEY2Xs4v2ivrsw&si=S3m-nZetf96BBmks). 
 ## How to Install and Execute the Project
 Below, you can find the steps to execute the program:
 1. Download Anaconda from ``` https://www.anaconda.com/products/distribution ``` and install it based on the instruction in Anaconda Webpage (https://docs.anaconda.com/anaconda/install/). Once the installation is done successfully, make sure to restart your terminal.
